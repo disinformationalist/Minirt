@@ -49,7 +49,7 @@ typedef struct s_sphere
 	int				id;
 	t_vec3			center;
 	double			radius;
-	t_color 		color;
+	t_norm_color 	color;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -59,21 +59,21 @@ typedef struct s_plane
 	int				id;
 	t_vec3			point;
 	t_vec3			norm_vector;
-	t_color			color;
+	t_norm_color	color;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
 
 typedef struct s_cylinder
 {
-	int		id;
-	t_vec3	center;
-	t_vec3	norm_vector;
-	double	radius;
-	double	height;
-	t_color	color;
-	struct s_cylinder *prev;
-	struct s_cylinder *next;
+	int					id;
+	t_vec3				center;
+	t_vec3				norm_vector;
+	double				radius;
+	double				height;
+	t_norm_color		color;
+	struct s_cylinder	*prev;
+	struct s_cylinder	*next;
 }	t_cylinder;
 
 /***MAIN STRUCT***/
@@ -150,7 +150,7 @@ typedef struct s_trace
 
 }	t_trace;
 
-typedef struct s_piece
+typedef struct s_piece //for threads
 {
 	int			x_s;
 	int			x_e;
@@ -202,7 +202,9 @@ void			init_viewing(t_trace *trace);
 
 
 t_vec3			get_coordinates(char *coord_str);
-t_color			get_color(char *color_str);
+//t_color			get_color(char *color_str);
+t_norm_color	get_color(char *color_str, float val);
+
 double			get_double(char **str);
 
 bool			set_amb(t_amb **amb, char **line);
@@ -246,8 +248,9 @@ t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 
 /***COLOR UTILS***/
-t_color			apply_amb(t_amb *amb, t_color obj_color);
-unsigned int 	get_final_color(t_trace *trace, t_color color, double light_intensity);
+//t_color			apply_amb(t_amb *amb, t_color obj_color);
+unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
+
 
 unsigned int	get_diffuse_color(double light_intensity, t_color color);
 

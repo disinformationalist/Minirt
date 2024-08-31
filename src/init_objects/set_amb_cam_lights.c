@@ -14,10 +14,10 @@ bool	set_amb(t_amb **amb, char **line)
 		return (1);
 	ratio_str = line[1];
 	(*amb)->ratio = get_double(&ratio_str);
-	(*amb)->amb_color = get_color(line[2]);
-	(*amb)->amb_color.r = round_c((*amb)->ratio * (double)(*amb)->amb_color.r);
-	(*amb)->amb_color.g = round_c((*amb)->ratio * (double)(*amb)->amb_color.g);
-	(*amb)->amb_color.b = round_c((*amb)->ratio * (double)(*amb)->amb_color.b);
+	(*amb)->color = get_color(line[2], 255.0);
+	(*amb)->color.r = (*amb)->ratio * (*amb)->color.r;
+	(*amb)->color.g = (*amb)->ratio * (*amb)->color.g;
+	(*amb)->color.b = (*amb)->ratio * (*amb)->color.b;
 
 	return (0);
 }
@@ -44,6 +44,6 @@ bool	set_light(t_light **light, char **line)
 	(*light)->center = get_coordinates(line[1]);
 	(*light)->brightness = get_double(&bright_ratio);
 	if (line[3])
-		(*light)->light_color = get_color(line[3]);
+		(*light)->light_color = get_color(line[3], 255.0);//used in bonus
 	return (0);
 }

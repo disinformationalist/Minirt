@@ -4,7 +4,7 @@ void	set_pl_vals(t_plane *new, char **line)
 {
 	new->point = get_coordinates(line[1]);
 	new->norm_vector = get_coordinates(line[2]);
-	new->color = get_color(line[3]);	
+	new->color = get_color(line[3], 1.0);	
 }
 
 t_plane	*create_plane(char **line)

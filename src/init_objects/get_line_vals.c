@@ -23,11 +23,12 @@ double	get_double(char **doub_str)
 	return (ret);
 }
 
-uint8_t get_rgb(char **s)
+float get_rgb(char **s, float val)
 {
 	int 	i;
 	char 	str[3];
 	int		chan_color;
+	float	norm_color;
 
 	i = -1;
 	while (**s != ',' && **s != '\0')
@@ -37,19 +38,20 @@ uint8_t get_rgb(char **s)
 	}
 	str[++i] = '\0';
 	chan_color = ft_atoi(str);
+	norm_color = (float)chan_color / val;//val is 255.0 or 1.0 
 //	printf("chan_color: %d\n", chan_color);
-	return (chan_color);
+	return (norm_color);
 }
 
-t_color	get_color(char *color_str)
+t_norm_color	get_color(char *color_str, float val)
 {
-	t_color color;
+	t_norm_color color;
 
-	color.r = get_rgb(&color_str);
+	color.r = get_rgb(&color_str, val);
 	color_str++;
-	color.g = get_rgb(&color_str);
+	color.g = get_rgb(&color_str, val);
 	color_str++;
-	color.b = get_rgb(&color_str);
+	color.b = get_rgb(&color_str, val);
 	return (color);
 }
 

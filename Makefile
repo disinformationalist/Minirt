@@ -27,7 +27,7 @@ SRCS := ./src/main.c ./src/init.c ./src/minirt.c ./src/events.c \
 ./src/free_all_objects.c \
 ./src/color_utils.c
 
-CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -march=native
+CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -march=native
 #-Iincludes
 RM := rm -f
 

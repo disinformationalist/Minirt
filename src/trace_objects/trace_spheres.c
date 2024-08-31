@@ -33,7 +33,7 @@ static inline bool check_solutions(double a, double b, double c, double *t)
 bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
 	t_vec3 oc;//ray origin to center
-	double	a;
+	double	a;//coefficients of quadratic
 	double	b;
 	double	c;
 	
@@ -49,7 +49,6 @@ bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, doub
 void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t)
 {
 	t_sphere		*curr_sp;
-
 
 	if (spheres == NULL)
 		return ;
@@ -73,7 +72,6 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 
 unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 {
-	t_color			color;
 	t_vec3			intersect_pnt;//light intersect with surface
 	t_vec3			normal;
 	t_vec3			light_dir; 
@@ -82,15 +80,18 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	t_sphere		*sphere;
 
 	sphere = (t_sphere *)closest->object;
-	intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
-	normal = normalize_vec(subtract_vec(intersect_pnt, sphere->center));
-	light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-	cos_angle = dot_product(normal, light_dir);
-	light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
-	
-	if (trace->amb)
-		color = apply_amb(trace->amb, sphere->color);//perhaps if amb, apply amb to all obj colors before trace! much speed, such fast
+
+	if (trace->lights)
+	{
+		//plug closest->t back into ray eq for intersect point;
+		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
+		normal = normalize_vec(subtract_vec(intersect_pnt, sphere->center));
+		light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
+		cos_angle = dot_product(normal, light_dir);
+		light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+	}
 	else
-		color = sphere->color;
-	return (get_diffuse_color(light_intensity, color));
+		light_intensity = 0;
+	return (get_final_color(trace, sphere->color, light_intensity));
+	
 }

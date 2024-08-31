@@ -3,6 +3,13 @@
 
 # include "minirt.h"
 
+typedef struct s_norm_color
+{
+	float r;
+	float g;
+	float b;
+}	t_norm_color;
+
 typedef struct s_vec2
 {
 	double x;
@@ -21,7 +28,8 @@ typedef struct s_vec3
 typedef struct s_amb
 {
 	double	ratio;
-	t_color	amb_color;
+	//t_color	amb_color;
+	t_norm_color	color;
 }	t_amb;
 
 typedef struct s_cam
@@ -33,9 +41,9 @@ typedef struct s_cam
 
 typedef struct s_light
 {
-	t_vec3 center;
-	double	brightness;
-	t_color	light_color;//rbg colors t_color for the bones
+	t_vec3			center;
+	double			brightness;
+	t_norm_color	light_color;//rbg colors t_color for the bones
 }	t_light;
 
 

@@ -49,24 +49,23 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_vec3	intersect_pnt;
-	t_color	color;
 	t_vec3	light_dir; 
 	double	light_intensity;
 	double	cos_angle;
 	t_plane	*plane;
 
 
-	//plug back into ray eq;
-	intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
-	
 	plane = (t_plane *)closest->object;
-	light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-	cos_angle = dot_product(plane->norm_vector, light_dir);
-	light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
-	light_intensity = fmin(light_intensity, 1.0);
-	if (trace->amb)
-		color = apply_amb(trace->amb, plane->color);//see render function for when to change this..
+	if (trace->lights)
+	{
+		//plug closest->t back into ray eq for intersect point;
+		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
+		light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
+		cos_angle = dot_product(plane->norm_vector, light_dir);
+		light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+		light_intensity = fmin(light_intensity, 1.0);
+	}
 	else
-		color = plane->color;
-	return (get_diffuse_color(light_intensity, color));
+		light_intensity = 0;
+	return (get_final_color(trace, plane->color, light_intensity));
 }

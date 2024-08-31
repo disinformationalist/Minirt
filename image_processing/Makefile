@@ -8,7 +8,7 @@ set_color_wheel.c get_next_name.c libft_utils.c interpolate_two_colors.c \
 color_source_wheel.c threading_tools.c non_local_means.c pad_mirror_circle.c \
 
 
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -fPIE
 
 CC := cc
 

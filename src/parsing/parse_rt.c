@@ -90,8 +90,8 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 {
 	init_counts(trace);
 	count_ids(trace, rt_file);
-	//check_counts(); //make function here checking things like at least one cam, at least one object, etc... custom error msgs.
 	check_ids(rt_file);
+	//check_counts(); //make function here checking things like at least one cam, at least one object, etc... custom error msgs.
 	init_obs(trace);
 	if (build_lists(trace, rt_file))
 	{

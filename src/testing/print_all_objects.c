@@ -14,7 +14,7 @@ void	print_cylinders(t_cylinder *cylinder)
 	printf("norm_vecz: %f\n", cylinder->norm_vector.z);
 	printf("cylinder diam: %f\n", cylinder->radius * 2);
 	printf("cylinder height: %f\n", cylinder->height);
-	printf("cylinder color rgb: r: %d, g: %d, b %d\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
+	printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
 	cylinder = cylinder->next;
 	while (cylinder->id != start_id)
 	{
@@ -27,7 +27,7 @@ void	print_cylinders(t_cylinder *cylinder)
 		printf("norm_vecz: %f\n", cylinder->norm_vector.z);
 		printf("cylinder diam: %f\n", cylinder->radius * 2);
 		printf("cylinder height: %f\n", cylinder->height);
-		printf("cylinder color rgb: r: %d, g: %d, b %d\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
+		printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
 		cylinder = cylinder->next;
 	}
 }
@@ -44,7 +44,7 @@ void	print_planes(t_plane *plane)
 	printf("norm_vecx: %f\n", plane->norm_vector.x);
 	printf("norm_vecy: %f\n", plane->norm_vector.y);
 	printf("norm_vecz: %f\n", plane->norm_vector.z);
-	printf("plane color rgb: r: %d, g: %d, b %d\n", plane->color.r, plane->color.g, plane->color.b);
+	printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
 	plane = plane->next;
 	while (plane->id != start_id)
 	{
@@ -55,7 +55,7 @@ void	print_planes(t_plane *plane)
 		printf("norm_vecx: %f\n", plane->norm_vector.x);
 		printf("norm_vecy: %f\n", plane->norm_vector.y);
 		printf("norm_vecz: %f\n", plane->norm_vector.z);
-		printf("plane color rgb: r: %d, g: %d, b %d\n", plane->color.r, plane->color.g, plane->color.b);
+		printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
 		plane = plane->next;
 	}
 }
@@ -70,7 +70,7 @@ void	print_spheres(t_sphere *sphere)
 	printf("centery: %f\n", sphere->center.y);
 	printf("centerz: %f\n", sphere->center.z);
 	printf("sphere diam: %f\n", sphere->radius * 2);
-	printf("sphere color rgb: r: %d, g: %d, b %d\n", sphere->color.r, sphere->color.g, sphere->color.b);
+	printf("sphere color rgb: r: %f, g: %f, b %f\n", sphere->color.r, sphere->color.g, sphere->color.b);
 	sphere = sphere->next;
 	while (sphere->id != start_id)
 	{
@@ -79,7 +79,7 @@ void	print_spheres(t_sphere *sphere)
 		printf("centery: %f\n", sphere->center.y);
 		printf("centerz: %f\n", sphere->center.z);
 			printf("sphere diam: %f\n", sphere->radius * 2);
-	printf("sphere color rgb: r: %d, g: %d, b %d\n", sphere->color.r, sphere->color.g, sphere->color.b);
+	printf("sphere color rgb: r: %f, g: %f, b %f\n", sphere->color.r, sphere->color.g, sphere->color.b);
 		sphere = sphere->next;
 	}
 }
@@ -88,7 +88,7 @@ void	print_amb(t_amb *amb)
 {
 	printf("----------------------------amb-----------------------------\n");
 	printf("intensity ratio:%f\n", amb->ratio);
-	printf("sphere color rgb: r: %d, g: %d, b %d\n", amb->amb_color.r, amb->amb_color.g, amb->amb_color.b);
+	printf("sphere color rgb: r: %f, g: %f, b %f\n", amb->color.r, amb->color.g, amb->color.b);
 }
 
 void	print_cam(t_cam *cam)
@@ -111,7 +111,7 @@ void	print_lights(t_light *lights)
 	printf("centerz: %f\n\n", lights->center.z);
 	printf("brightness ratio:%f\n", lights->brightness);
 	if (lights->light_color.r)
-		printf("sphere color rgb: r: %d, g: %d, b %d\n", lights->light_color.r, lights->light_color.g, lights->light_color.b);
+		printf("sphere color rgb: r: %f, g: %f, b %f\n", lights->light_color.r, lights->light_color.g, lights->light_color.b);
 }
 
 void	print_all_objects(t_trace *trace)

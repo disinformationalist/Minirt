@@ -20,7 +20,7 @@
 	return (res);
 } */
 
-void	apply_ambient_light(t_trace *trace)
+/* void	apply_ambient_light(t_trace *trace)
 {
 	t_sphere	*curr_sp;
 	t_plane		*curr_pl;
@@ -48,7 +48,7 @@ void	apply_ambient_light(t_trace *trace)
 				break ;
 		}
 	}
-}
+} */
 
 void	render(t_trace *trace)
 {

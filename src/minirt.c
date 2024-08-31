@@ -78,9 +78,6 @@ void	*ray_trace(void *arg)
 	pthread_exit(NULL);
 }
 
-//without a light, segfaults, should still work with just amb. fix after reworking..
-
-
 
 
 //sphere
