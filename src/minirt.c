@@ -60,23 +60,27 @@ void	*ray_trace(void *arg)
 	if (!closest)
 		clear_all(trace);
 
+	r.origin = trace->cam->center;
 	j = piece->y_s - 1;//each thread is working within its limits in piece structs
 	while (++j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = subtract_vec(current_pixel, scalar_mult_vec(j * trace->pixel_height, trace->v_vec));
+		current_pixel.y -= j * trace->pixel_height;
 		i = piece->x_s - 1;
 		while (++i < piece->x_e)
 		{
-			r.origin = trace->cam->center;
 			r.direction = subtract_vec(current_pixel, r.origin);
 			check_intersects(trace, r, i, j, closest);
-			current_pixel = add_vec(current_pixel, trace->pix_delta_u);//move along width to next pixel
+			current_pixel.x += trace->pixel_width;
 		}
 	}
 	free(closest);
 	pthread_exit(NULL);
 }
+
+		//current_pixel = subtract_vec(current_pixel, scalar_mult_vec(j * trace->pixel_height, trace->v_vec));//old y shift
+
+			//current_pixel = add_vec(current_pixel, trace->pix_delta_u);//move along width to next pixel//old x shift
 
 
 

@@ -248,7 +248,6 @@ t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 
 /***COLOR UTILS***/
-//t_color			apply_amb(t_amb *amb, t_color obj_color);
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
 
 

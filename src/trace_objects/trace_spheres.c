@@ -30,7 +30,7 @@ static inline bool check_solutions(double a, double b, double c, double *t)
 	return (false);
 }
 
-bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+static inline bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
 	t_vec3 oc;//ray origin to center
 	double	a;//coefficients of quadratic

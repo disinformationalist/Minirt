@@ -1,26 +1,27 @@
 #caps can only be once
 
-A 0.5 255,255,255
+#A .9 255,255,255
 #C -50.0,0.234,20     0,0,1     70
 #L -40.0,50.0,0.0   0.6      10,0,255
 
 
-L 3,3,3  .75
+L 3,1,-4 .75
 
 #sp   -40,0.0,20.6  12.6  10,0,255
 
-sp   0.0,0.0,-5.0  2.0  200,30,255
+sp   0.0,-1,-5.0  2.0  200,30,255
 
-#sp   -2.0,0.0,-4.0 1.0  0,0,255
-sp   -2.0,1.0,-3.0 1.0  0,255,0
+sp   -2.0,0.0,-4.0 1.0  0,0,255
 
-C    0,0,0  0,0,1    70
+sp   1.5,0.5,-5 1.0  0,255,0
 
-# add check in parser for normalized norm vec., force normalize for forge., same for cylinder and cam...
-pl  0,0,-7   0,.78,.2   55,75,200
+C    0,0,0  0,0,-1    70
+
+# add check in parser for normalized norm vec., same for cylinder and cam...
+pl  0,-1,-1   0,1,0   55,75,200
 
 
-pl  -2,0,-7   1,0,0   125,20,78
+pl  -2,0,-1   1,0,0   125,20,78
 
 
 

@@ -34,7 +34,6 @@ unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_in
 	return (r << 16 | g << 8 | b);
 }
 //full phong: total_light = ambient + diff + specular
-//THINKING ABOUT HOW TO MOVE OUTSIDE AND ONLY NEED LIGHT INTENSITY(S) HERE!
 
 	/* //original for clarity
 	r = clamp_color((color.r * light_intensity + color.r * trace->amb->color.r) * 255.0);

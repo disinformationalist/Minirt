@@ -35,19 +35,19 @@ void	set_vectors(t_trace *trace, double focal_len)
 	up_vec.z = 0;
 
 	//right and up basis vecs
-	trace->u_vec = normalize_vec(cross_prod(up_vec, trace->cam->orient));
-	trace->v_vec = normalize_vec(cross_prod(trace->cam->orient, trace->u_vec));
+	trace->u_vec = normalize_vec(cross_prod(trace->cam->orient, up_vec));
+	trace->v_vec = normalize_vec(cross_prod(trace->u_vec, trace->cam->orient));
 
 
 	//for set view center
 	horizontal = scalar_mult_vec(trace->view_width / 2.0, trace->u_vec);
 	vertical = scalar_mult_vec(trace->view_height / 2.0, trace->v_vec);
 
-	view_center = subtract_vec(trace->cam->center, scalar_mult_vec(1.0 / focal_len, trace->cam->orient));
+	view_center = add_vec(trace->cam->center, scalar_mult_vec(1.0 / focal_len, trace->cam->orient));
 	trace->view_topleft = add_vec(view_center, vertical);//move up 
 	trace->view_topleft = subtract_vec(trace->view_topleft, horizontal);//move_left
 
-	//set pix00 location
+	//set change in u/v per pixel
 	trace->pix_delta_u = scalar_mult_vec(trace->pixel_width, trace->u_vec);
 	trace->pix_delta_v = scalar_mult_vec(trace->pixel_height, trace->v_vec);
 

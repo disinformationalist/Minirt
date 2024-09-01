@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+static inline bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
 	double	denom;
 	double	sol;
@@ -53,7 +53,6 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	double	light_intensity;
 	double	cos_angle;
 	t_plane	*plane;
-
 
 	plane = (t_plane *)closest->object;
 	if (trace->lights)
