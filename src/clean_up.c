@@ -25,6 +25,8 @@ void	clear_all(t_trace *trace)
 	free_all_objects(trace);
 	if (trace->closest)
 		free(trace->closest);
+	if (trace->on)
+		free(trace->on);
 	if (trace->img.img_ptr)
 		mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
 	if (trace->mlx_win)

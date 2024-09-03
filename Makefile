@@ -5,7 +5,7 @@ SRC_DIR = ./src
 OBJ_DIR = ./obj
 INC_DIR = ./includes
 
-SRCS := ./src/main.c ./src/init.c ./src/minirt.c ./src/events.c \
+SRCS := ./src/main.c ./src/init.c ./src/minirt.c \
 ./src/render.c ./src/threader.c ./src/clean_up.c \
 ./src/math_utils.c \
 ./src/parsing/split_file.c \
@@ -27,6 +27,8 @@ SRCS := ./src/main.c ./src/init.c ./src/minirt.c ./src/events.c \
 ./src/testing/print_utils.c \
 ./src/free_all_objects.c \
 ./src/color_utils.c \
+./src/events/main_events.c \
+./src/events/traverse_lists.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \
 ./src/forge/write_planes.c \

@@ -73,7 +73,7 @@
 # define I 105
 # define O 111
 # define P 112
-# define Ü 91 // ADD TO PRINT BOARD
+# define Ü 91
 # define A 97
 # define S 115
 # define D 100

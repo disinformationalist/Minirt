@@ -68,13 +68,12 @@
 # define E 101
 # define R 114
 # define T 116
-//# define Z 121 //home
-# define Z 122 //school
+# define Z 122 
 # define U 117
 # define I 105
 # define O 111
 # define P 112
-# define Ü 91 // ADD TO PRINT BOARD
+# define Ü 91
 # define A 97
 # define S 115
 # define D 100
@@ -86,8 +85,7 @@
 # define L 108
 # define Ö 59
 # define Ä 39
-//# define Y 122//home
-# define Y 121//school
+# define Y 121
 # define X 120
 # define C 99
 # define V 118
@@ -97,12 +95,9 @@
 
 /****OTHER****/
 # define ESC 65307
-//# define UP_CARET 96//home
-# define UP_CARET 65106//school
-//# define PLUS 93//home
-# define PLUS 43//school
-//# define MINUS 47//home
-# define MINUS 45//school
+# define UP_CARET 65106
+# define PLUS 43
+# define MINUS 45
 # define SPACE 32
 # define STRG 65507
 # define RGHT_STRG 65508

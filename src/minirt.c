@@ -22,7 +22,7 @@ void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 
 }
 
-void	check_intersects(t_trace *trace, t_ray r, int i, int j, t_track_hits *closest)
+void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *closest)
 {
 	unsigned int	final_color;
 	
@@ -37,7 +37,7 @@ void	check_intersects(t_trace *trace, t_ray r, int i, int j, t_track_hits *close
 		final_color = color_cylinder(trace, r, closest);//todo */
 	else
 		final_color = 0x000000;//background color here
-	put_pixel(i, j, trace, final_color);
+	put_pixel(pos.i, pos.j, trace, final_color);
 }
 
 
@@ -45,12 +45,11 @@ void	check_intersects(t_trace *trace, t_ray r, int i, int j, t_track_hits *close
 
 void	*ray_trace(void *arg)
 {
-	t_piece	*piece;
-	t_trace	*trace;
-	int		i;
-	int		j;
-	t_point	current_pixel;
-	t_ray			r;
+	t_piece		*piece;
+	t_trace		*trace;
+	t_position	pos;
+	t_point		current_pixel;
+	t_ray		r;
 
 	piece = (t_piece *)arg;
 	trace = piece->trace;
@@ -61,16 +60,16 @@ void	*ray_trace(void *arg)
 		clear_all(trace);
 
 	r.origin = trace->cam->center;
-	j = piece->y_s - 1;//each thread is working within its limits in piece structs
-	while (++j < piece->y_e)
+	pos.j = piece->y_s - 1;//each thread is working within its limits in piece structs
+	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel.y -= j * trace->pixel_height;
-		i = piece->x_s - 1;
-		while (++i < piece->x_e)
+		current_pixel.y -= pos.j * trace->pixel_height;
+		pos.i = piece->x_s - 1;
+		while (++pos.i < piece->x_e)
 		{
 			r.direction = subtract_vec(current_pixel, r.origin);
-			check_intersects(trace, r, i, j, closest);
+			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}
 	}

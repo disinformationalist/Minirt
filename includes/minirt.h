@@ -1,41 +1,14 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include <stdio.h>
-# include <stddef.h>
-# include <stdlib.h>
-# include <stdbool.h>
-# include <unistd.h>
-# include <math.h>
-# include "../minilibx-linux/mlx.h"
-# include "../libft/libft.h"
-# include <X11/X.h>
-# include <X11/keysym.h>
+
 //# include "../image_processing/image_processing.h"
-# include "ansi_colors.h"
-# include <pthread.h>
 # include "tools.h"
-# include "limits.h"
+# include "keyboard.h"
+//# include "keyboard (42).h"
 
-# include <png.h>//for export/import bones only
-# include <stdint.h>//uint8_t
+# include "extras.h"
 
-//# include "keyboard.h"
-# include "keyboard (42).h"
-
-
-typedef struct s_ray
-{
-	t_point origin;
-	t_vec3 direction;
-}	t_ray;
-
-typedef enum e_type
-{
-	SPHERE,
-	PLANE,
-	CYLINDER
-} 	t_type;
 
 typedef struct s_track_hits
 {
@@ -78,45 +51,10 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 }	t_cylinder;
 
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*pixels_ptr;
-	int		bpp;
-	int		endian;
-	int		line_len;
-}	t_img;
-
-typedef struct s_pixel
-{
-	uint8_t alpha;
-	uint8_t red;
-	uint8_t green;
-	uint8_t blue;
-}	t_pixel;
-
-typedef struct s_color
-{
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-}	t_color;
-
-typedef struct s_png_io
-{
-	int			y;
-	int			x;
-	int			pixel_size;
-	int			depth;
-	t_pixel		temp_pixel;
-	png_byte	**row_pointers;
-	png_infop	info;
-	png_structp	png_ptr;
-	FILE		*fp;
-	png_text	*text;
-}	t_png_io;
 
 /***MAIN STRUCT***/
+
+//TODO: go through trace struct and see what can be removed, broken up, etc to improve speed
 
 typedef struct s_trace
 {
@@ -128,22 +66,24 @@ typedef struct s_trace
 	t_light			*lights;
 
 	t_track_hits	*closest;
+
+	t_on			*on;//current object for manipulating
 	
 	//linked list objects
 	t_sphere		*spheres;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
+	//for traversing during events
+	t_sphere		*curr_sp;
+	t_plane 		*curr_pl;
+	t_cylinder		*curr_cy;
+
 	//mlx
 	char			*name;
 	void			*mlx_connect;
 	void			*mlx_win;
 	
-	// move
-	double			move_x;
-	double			move_y;
-	double			move_z;
-
 	//other
 	double			zoom;
 	bool			layer;
@@ -153,20 +93,20 @@ typedef struct s_trace
 	int				width;
 	int 			height_orig;
 	int				width_orig;
-	double			aspect_r;
+
+
 	double			view_width;
 	double			view_height;
-	double			deg_to_rad;
+	double			aspect_r;
+
 	double			pixel_width;
 	double			pixel_height;
-	t_point			view_topleft;
 	t_point			pixel00;//changed to t_point
+
 	t_vec3			u_vec;
 	t_vec3			v_vec;
 	t_vec3			pix_delta_u;
 	t_vec3			pix_delta_v;
-
-
 	
 	//for supersampling
 	bool			supersample;
@@ -199,23 +139,6 @@ typedef struct s_piece //for threads
 	t_trace		*trace;
 }	t_piece;
 
-typedef struct s_filter// for downsample
-{
-	int				half_k;
-	int				x;
-	int				y;
-	int				i;
-	int				j;
-	double			red;
-	double			green;
-	double			blue;
-	int				avg_r;
-	int				avg_g;
-	int				avg_b;
-	unsigned int	pixel;
-	int				pix_x;
-	int				pix_y;
-}		t_filter;
 
 /***PARSING***/
 
@@ -279,7 +202,7 @@ bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
 
-//bool			insert_sp_after(t_sphere **head, char **line); //check/fix
+//bool			insert_sp_after(t_sphere **head, char **line); //check/fix mayve just use append?
 
 void 			trace_init(t_trace *trace);
 
@@ -319,6 +242,13 @@ unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_i
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
 
+//traverse lists
+void	switch_list(int keycode, t_trace *trace, t_on *on);
+void	next_list_ob(t_trace *trace, t_on *on);
+void	prev_list_ob(t_trace *trace, t_on *on);
+
+
+
 
 /***CLEAN_UP***/
 void			clear_all(t_trace *trace);
@@ -328,7 +258,7 @@ void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
 void			free_all_objects(t_trace *trace);
 
-/***EXTRAS ***/
+/***EXTRAS ***/ //extras only remain in bonus version here or in extras header.
 
 //forge rt file, builds rt file from current scene.
 void			forge_rt(const char *path, t_trace *trace);
@@ -337,43 +267,6 @@ void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
 int				count_chars(int num);
 char			*get_nxt_name_rt(char *name);
-
-//export lossless png image
-int				export_png(const char *filename, t_img *img, int width, int height, png_text *text);
-void			get_pixel(t_pixel *pix_t, t_img *img, int x, int y);
-void			clean_memory(t_png_io *png_img, int j, bool export);
-char 			*get_nxt_name(char *name);
-
-//export/import utils
-int				error_1(t_png_io *png_img, const char *msg);
-void			free_png_rows(png_structp png_ptr, png_byte **row_pointers, int j);
-void			clean_memory(t_png_io *png_img, int j, bool export);
-void			init_vars(t_png_io *png_img);
-
-//import png img.
-t_img			*import_png(void *mlx_ptr, const char *file, int *width, int *height);
-void			*error_2(t_png_io *png_img, const char *msg);
-int				error_3(t_png_io *png_img, const char *msg);
-
-
-
-
-//sampling
-void			downsample_xl(int width, int height, t_img *img, unsigned int **pixels_xl, int kern_size);
-
-
-//mthread
-int				get_num_cores(void);
-
-
-
-
-
-
-
-
-
-
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
