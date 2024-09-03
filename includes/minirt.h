@@ -9,14 +9,16 @@
 # include <math.h>
 # include "../minilibx-linux/mlx.h"
 # include "../libft/libft.h"
- # include <X11/X.h>
+# include <X11/X.h>
 # include <X11/keysym.h>
-# include "../image_processing/image_processing.h"
+//# include "../image_processing/image_processing.h"
 # include "ansi_colors.h"
 # include <pthread.h>
 # include "tools.h"
 # include "limits.h"
 
+# include <png.h>//for export/import bones only
+# include <stdint.h>//uint8_t
 
 //# include "keyboard.h"
 # include "keyboard (42).h"
@@ -24,7 +26,7 @@
 
 typedef struct s_ray
 {
-	t_vec3 origin;
+	t_point origin;
 	t_vec3 direction;
 }	t_ray;
 
@@ -47,7 +49,7 @@ typedef struct s_track_hits
 typedef struct s_sphere
 {
 	int				id;
-	t_vec3			center;
+	t_point			center;
 	double			radius;
 	t_norm_color 	color;
 	struct s_sphere	*next;
@@ -57,7 +59,7 @@ typedef struct s_sphere
 typedef struct s_plane 
 {
 	int				id;
-	t_vec3			point;
+	t_point			point;
 	t_vec3			norm_vector;
 	t_norm_color	color;
 	struct s_plane	*next;
@@ -67,7 +69,7 @@ typedef struct s_plane
 typedef struct s_cylinder
 {
 	int					id;
-	t_vec3				center;
+	t_point				center;
 	t_vec3				norm_vector;
 	double				radius;
 	double				height;
@@ -75,6 +77,44 @@ typedef struct s_cylinder
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
+
+typedef struct s_img
+{
+	void	*img_ptr;
+	char	*pixels_ptr;
+	int		bpp;
+	int		endian;
+	int		line_len;
+}	t_img;
+
+typedef struct s_pixel
+{
+	uint8_t alpha;
+	uint8_t red;
+	uint8_t green;
+	uint8_t blue;
+}	t_pixel;
+
+typedef struct s_color
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+}	t_color;
+
+typedef struct s_png_io
+{
+	int			y;
+	int			x;
+	int			pixel_size;
+	int			depth;
+	t_pixel		temp_pixel;
+	png_byte	**row_pointers;
+	png_infop	info;
+	png_structp	png_ptr;
+	FILE		*fp;
+	png_text	*text;
+}	t_png_io;
 
 /***MAIN STRUCT***/
 
@@ -119,8 +159,8 @@ typedef struct s_trace
 	double			deg_to_rad;
 	double			pixel_width;
 	double			pixel_height;
-	t_vec3			view_topleft;
-	t_vec3			pixel00;
+	t_point			view_topleft;
+	t_point			pixel00;//changed to t_point
 	t_vec3			u_vec;
 	t_vec3			v_vec;
 	t_vec3			pix_delta_u;
@@ -158,6 +198,24 @@ typedef struct s_piece //for threads
 	int			y_e;
 	t_trace		*trace;
 }	t_piece;
+
+typedef struct s_filter// for downsample
+{
+	int				half_k;
+	int				x;
+	int				y;
+	int				i;
+	int				j;
+	double			red;
+	double			green;
+	double			blue;
+	int				avg_r;
+	int				avg_g;
+	int				avg_b;
+	unsigned int	pixel;
+	int				pix_x;
+	int				pix_y;
+}		t_filter;
 
 /***PARSING***/
 
@@ -197,12 +255,17 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
 /***INIT***/
 
+int				new_img_init(void *mlx_con, t_img *img, int width, int height);
+void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
+unsigned int	**malloc_ui_matrix(int width, int height);
+void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
+void			free_ui_matrix(unsigned int **matrix, int j);
+
+
 //get and set vals
 void			init_viewing(t_trace *trace);
 
-
 t_vec3			get_coordinates(char *coord_str);
-//t_color			get_color(char *color_str);
 t_norm_color	get_color(char *color_str, float val);
 
 double			get_double(char **str);
@@ -251,18 +314,11 @@ t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
 
 
-unsigned int	get_diffuse_color(double light_intensity, t_color color);
-
-
-
-
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
 
-/***UTILS***/
-char			*ft_strjoin_png(char const *s1, char const *s2);
 
 /***CLEAN_UP***/
 void			clear_all(t_trace *trace);
@@ -272,11 +328,63 @@ void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
 void			free_all_objects(t_trace *trace);
 
+/***EXTRAS ***/
+
+//forge rt file, builds rt file from current scene.
+void			forge_rt(const char *path, t_trace *trace);
+void			write_spheres(t_sphere *spheres, int fd);
+void			write_planes(t_plane *plane, int fd);
+void			write_cylinders(t_cylinder *cylinders, int fd);
+int				count_chars(int num);
+char			*get_nxt_name_rt(char *name);
+
+//export lossless png image
+int				export_png(const char *filename, t_img *img, int width, int height, png_text *text);
+void			get_pixel(t_pixel *pix_t, t_img *img, int x, int y);
+void			clean_memory(t_png_io *png_img, int j, bool export);
+char 			*get_nxt_name(char *name);
+
+//export/import utils
+int				error_1(t_png_io *png_img, const char *msg);
+void			free_png_rows(png_structp png_ptr, png_byte **row_pointers, int j);
+void			clean_memory(t_png_io *png_img, int j, bool export);
+void			init_vars(t_png_io *png_img);
+
+//import png img.
+t_img			*import_png(void *mlx_ptr, const char *file, int *width, int *height);
+void			*error_2(t_png_io *png_img, const char *msg);
+int				error_3(t_png_io *png_img, const char *msg);
+
+
+
+
+//sampling
+void			downsample_xl(int width, int height, t_img *img, unsigned int **pixels_xl, int kern_size);
+
+
+//mthread
+int				get_num_cores(void);
+
+
+
+
+
+
+
+
+
+
+
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);
+
+void			print_obj_nums(t_trace *trace);
+void			print_3d_array(char ***array);
+
+
 
 
 #endif

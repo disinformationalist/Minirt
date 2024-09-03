@@ -88,7 +88,7 @@ void	print_amb(t_amb *amb)
 {
 	printf("----------------------------amb-----------------------------\n");
 	printf("intensity ratio:%f\n", amb->ratio);
-	printf("sphere color rgb: r: %f, g: %f, b %f\n", amb->color.r, amb->color.g, amb->color.b);
+	printf("ambient color rgb: r: %f, g: %f, b %f\n", amb->color.r, amb->color.g, amb->color.b);
 }
 
 void	print_cam(t_cam *cam)
@@ -111,7 +111,7 @@ void	print_lights(t_light *lights)
 	printf("centerz: %f\n\n", lights->center.z);
 	printf("brightness ratio:%f\n", lights->brightness);
 	if (lights->light_color.r)
-		printf("sphere color rgb: r: %f, g: %f, b %f\n", lights->light_color.r, lights->light_color.g, lights->light_color.b);
+		printf("light color rgb: r: %f, g: %f, b %f\n", lights->light_color.r, lights->light_color.g, lights->light_color.b);
 }
 
 void	print_all_objects(t_trace *trace)

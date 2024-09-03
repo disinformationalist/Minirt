@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-int	ft_3darray_len(char ***array)//ft_matrix len?
+int	ft_3darray_len(char ***array)
 {
 	int	i;
 
@@ -8,24 +8,6 @@ int	ft_3darray_len(char ***array)//ft_matrix len?
 	while (array[i])
 		i++;
 	return (i);
-}
-
-void	print_3d_array(char ***array)//testing
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (array[i])
-	{
-		j = 0;
-		while (array[i][j])
-		{
-			printf("%s\n", array[i][j]);
-			j++;
-		}
-		i++;
-	}
 }
 
 int	main(int ac, char **av)

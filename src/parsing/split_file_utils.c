@@ -26,10 +26,9 @@ int	count_lines(int fd)
 char *remove_new_line(char *line)
 {
     char *newline_pos = strchr(line, '\n');
-    if (newline_pos) {
+    if (newline_pos)
         *newline_pos = '\0';
-    }
-    return line;
+    return (line);
 }
 
 int	strlen_no_whitespace(char *s)

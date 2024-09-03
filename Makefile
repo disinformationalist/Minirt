@@ -7,7 +7,7 @@ INC_DIR = ./includes
 
 SRCS := ./src/main.c ./src/init.c ./src/minirt.c ./src/events.c \
 ./src/render.c ./src/threader.c ./src/clean_up.c \
-./src/math_utils.c ./src/directions.c \
+./src/math_utils.c \
 ./src/parsing/split_file.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \
@@ -24,8 +24,21 @@ SRCS := ./src/main.c ./src/init.c ./src/minirt.c ./src/events.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
 ./src/testing/print_all_objects.c \
+./src/testing/print_utils.c \
 ./src/free_all_objects.c \
-./src/color_utils.c
+./src/color_utils.c \
+./src/forge/forge_rt.c \
+./src/forge/write_spheres.c \
+./src/forge/write_planes.c \
+./src/forge/write_cylinders.c \
+./src/forge/get_rt_name.c \
+./src/png/export_png.c \
+./src/png/export_png_utils.c \
+./src/png/import_png.c \
+./src/png/import_png_utils.c \
+./src/png/get_png_name.c \
+./src/downsample.c \
+
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -march=native
 #-Iincludes
@@ -41,8 +54,8 @@ CC := cc
 
 OBS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-IMG_PATH = image_processing
-IMG_ARCH = $(IMG_PATH)/libimage_processing.a
+#IMG_PATH = image_processing
+#IMG_ARCH = $(IMG_PATH)/libimage_processing.a
 
 COLOR_RESET = \033[0m
 COLOR_GREEN = \033[1;92m
@@ -56,11 +69,14 @@ endef
 
 .SILENT:
 
-all:  $(LIBFT_ARCH) $(IMG_ARCH) $(NAME)
+all:  $(LIBFT_ARCH) $(NAME)
 
 $(NAME): $(OBS)
-	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -L$(IMG_PATH) -limage_processing -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
 	$(call print_colored, "[SUCCESS]", "./$(NAME)", "Ready")
+
+#	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -L$(IMG_PATH) -limage_processing -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
@@ -69,18 +85,16 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT_ARCH):
 	$(MAKE) -C $(LIBFT_PATH)
 
-$(IMG_ARCH):
-	$(MAKE) -C $(IMG_PATH)
+#$(IMG_ARCH):
+#	$(MAKE) -C $(IMG_PATH)
 
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean
 	$(RM) $(OBS)
-	cd image_processing && make clean
 
 fclean: clean
 	$(MAKE) -C $(LIBFT_PATH) clean
 	$(RM) $(NAME)
-	cd image_processing && make fclean
 	
 re: fclean all
 

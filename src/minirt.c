@@ -49,7 +49,7 @@ void	*ray_trace(void *arg)
 	t_trace	*trace;
 	int		i;
 	int		j;
-	t_vec3	current_pixel;
+	t_point	current_pixel;
 	t_ray			r;
 
 	piece = (t_piece *)arg;

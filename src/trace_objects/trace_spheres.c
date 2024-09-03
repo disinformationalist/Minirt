@@ -5,10 +5,10 @@
 static inline bool check_solutions(double a, double b, double c, double *t)
 {
 	double	discrim;
-	double sol_1;
-	double sol_2;
-	double sqr_discrim;
-	double inv_2a;
+	double	sol_1;
+	double	sol_2;
+	double	sqr_discrim;
+	double	inv_2a;
 
 	discrim = b * b - 4 * a * c;
 	if (discrim < 0)
@@ -32,11 +32,11 @@ static inline bool check_solutions(double a, double b, double c, double *t)
 
 static inline bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
-	t_vec3 oc;//ray origin to center
+	t_vec3	oc;//ray origin to center
 	double	a;//coefficients of quadratic
 	double	b;
 	double	c;
-	
+
 	oc = subtract_vec(ray_orig, sphere.center);
 	a = dot_product(ray_dir, ray_dir);
 	b = 2.0 * dot_product(oc, ray_dir);
@@ -48,7 +48,7 @@ static inline bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 
 
 void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t)
 {
-	t_sphere		*curr_sp;
+	t_sphere	*curr_sp;
 
 	if (spheres == NULL)
 		return ;
@@ -72,7 +72,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 
 unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 {
-	t_vec3			intersect_pnt;//light intersect with surface
+	t_point			intersect_pnt;//light intersect with surface
 	t_vec3			normal;
 	t_vec3			light_dir; 
 	double			light_intensity;
@@ -81,7 +81,7 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 
 	sphere = (t_sphere *)closest->object;
 
-	if (trace->lights)
+	if (trace->lights)// getting the light intensity at each intersection point
 	{
 		//plug closest->t back into ray eq for intersect point;
 		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));

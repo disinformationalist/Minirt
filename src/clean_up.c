@@ -1,5 +1,25 @@
 #include "minirt.h"
 
+int	new_img_init(void *mlx_con, t_img *img, int width, int height)
+{
+	img->img_ptr = mlx_new_image(mlx_con,
+			width, height);
+	if (img->img_ptr == NULL)
+		return (-1);
+	img->pixels_ptr = mlx_get_data_addr(img->img_ptr,
+			&img->bpp, &img->line_len,
+			&img->endian);
+	return (0);
+}
+
+void	my_pixel_put(int x, int y, t_img *img, unsigned int color)
+{
+	int	offset;
+
+	offset = (y * img->line_len) + (x * (img->bpp / 8));
+	*(unsigned int *)(img->pixels_ptr + offset) = color;
+}
+
 void	clear_all(t_trace *trace)
 {
 	free_all_objects(trace);

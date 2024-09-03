@@ -44,7 +44,7 @@ int	supersample_handle(int keycode, t_trace *trace)
 
 int	key_press_2(int keycode, t_trace *trace)
 {
-	if (keycode == XK_Left)
+	/* if (keycode == XK_Left)//these arnt doing anything yet...
 		trace->move_x = -1;
 	else if (keycode == XK_Right)
 		trace->move_x = 1;
@@ -52,30 +52,41 @@ int	key_press_2(int keycode, t_trace *trace)
 		trace->move_y = -1;
 	else if (keycode == XK_Down)
 		trace->move_y = 1;
-	else
+	else */
 		supersample_handle(keycode, trace);
 	render(trace);
 	return (0);
 }
 
-int	key_press(int keycode, t_trace *trace)
+int	key_press(int keycode, t_trace *trace)//first function is for things that do not rerender the scene. key_press_2 and on will rerender.
 {
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == UP_CARET)
 		trace->layer = !trace->layer;
-	else if (keycode == F3)
+	else if ((keycode == F1) | (keycode == F3))
 	{
-		char *name;
+		char *name;// easily make name select function for norm
 
-		name = get_nxt_name("scene_");
+		if (keycode == F3)
+			name = get_nxt_name("scene_");
+		else if (keycode == F1)
+			name = get_nxt_name_rt("forged_");
 		if (!name)
 			clear_all(trace);
-		if (export_png(name, &trace->img, trace->width_orig, trace->height_orig, NULL) == -1)
-			close_win(trace);
-		ft_putstr_color_fd(1, "EXPORT COMPLETE\n", BOLD_BRIGHT_BLUE);
-		if (name)
-			free(name);
+		
+		if (keycode == F1)
+			forge_rt(name, trace);// bones only, uses snprintf
+		else if (keycode == F3)//bones, uses png functions
+		{
+			if (export_png(name, &trace->img, trace->width_orig, trace->height_orig, NULL) == -1)
+			{
+				free(name);
+				close_win(trace);
+			}
+			ft_putstr_color_fd(1, "EXPORT COMPLETE\n", BOLD_BRIGHT_BLUE);
+		}
+		free(name);
 	}
 	else
 		key_press_2(keycode, trace);

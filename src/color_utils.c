@@ -36,6 +36,7 @@ unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_in
 //full phong: total_light = ambient + diff + specular
 
 	/* //original for clarity
+	//					diffuse component		+		ambient component
 	r = clamp_color((color.r * light_intensity + color.r * trace->amb->color.r) * 255.0);
 	g = clamp_color((color.g * light_intensity + color.g * trace->amb->color.g) * 255.0);
 	b = clamp_color((color.b * light_intensity + color.b * trace->amb->color.b) * 255.0); */

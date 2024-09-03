@@ -23,6 +23,8 @@ typedef struct s_vec3
 	double z;
 }	t_vec3;
 
+typedef t_vec3 t_point;
+
 /***SINGLE OBJECTS***/
 
 typedef struct s_amb
