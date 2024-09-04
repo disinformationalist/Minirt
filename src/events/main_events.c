@@ -5,8 +5,9 @@
 F1 => forge rt file from current scene
 F3 => save current scene to png
 
+SPACE => supersample mode
 
-//list traversal
+//LIST TRAVERSAL
 
 1 => 3: switch between object lists (spheres, planes, etc...)
 
@@ -17,30 +18,60 @@ F3 => save current scene to png
 num pad + => next object on current list
 num pad - => prev object on current list
 
+//TRANSLATION
+
+J,L => x directions
+I,K => y directions
+U,O => z directions
+
+-----------------TODO--------------------
+
+//ROTATION
+
+J,L => x directions
+I,K => y directions
+U,O => z directions
+
+//RESIZE
+
+//OTHER TRANSFORMATIONS?
 
 */
 
 
-//dummy test, later pass vector translation in place of double move. apply vector move op
+//makes a vector and returns it
+t_vec3	vec(double x, double y, double z)
+{
+	t_vec3	v;
 
-void	translate_object(t_on *on, double move)
+	v.x = x;
+	v.y = y;
+	v.z = z;
+
+	return (v);
+}
+
+void	translate_object(t_on *on, t_vec3 vec)
 {
 	t_sphere	*sphere;
 	t_plane		*plane;
+	t_cylinder	*cylinder;
 
 	if (on->type == SPHERE)
 	{
-		//later simply apply translation vector with translation function
 		sphere = (t_sphere *)on->object;
-		sphere->center.x += move;
-		printf("%f\n", sphere->center.x);
-
+		sphere->center = add_vec(sphere->center, vec);
 	}
 	else if (on->type == PLANE)
 	{
 		plane = (t_plane *)on->object;
-		plane->point.x += move;
-		printf("%f\n", plane->point.x);
+		plane->point = add_vec(plane->point, vec);
+
+	}
+	else if (on->type == CYLINDER)
+	{
+		cylinder = (t_cylinder *)on->object;
+		cylinder->center = add_vec(cylinder->center, vec);
 	}
 }
 
@@ -79,22 +110,24 @@ int	supersample_handle(int keycode, t_trace *trace)
 	}
 	return (0);
 }
+//arrows can use XK_LEFT, XK_RIGHT, XK_UP, XK_DOWN if needed for smthing
 
 int	key_press_2(int keycode, t_trace *trace)
 {
 	
-	//testing dummy move obj
-	if (keycode == XK_Left)//need move z, change these to uiojkl
-	{
-		//will pass in apropriate translation function later
-		translate_object(trace->on, -.5);
-	}
-	else if (keycode == XK_Right)
-		translate_object(trace->on, .5);
-	/* else if (keycode == XK_Up)
-		trace->move_y -= .5;
-	else if (keycode == XK_Down)
-		trace->move_y += .5; */
+	//translation
+	if (keycode == J)
+		translate_object(trace->on, vec(-.5, 0, 0));
+	else if (keycode == L)
+		translate_object(trace->on, vec(.5, 0, 0));
+	else if (keycode == I)
+		translate_object(trace->on, vec(0, .5, 0));
+	else if (keycode == K)
+		translate_object(trace->on, vec(0, -.5, 0));
+	else if (keycode == U)
+		translate_object(trace->on, vec(0, 0, .5));
+	else if (keycode == O)
+		translate_object(trace->on, vec(0, 0, -.5));
 	else
 		supersample_handle(keycode, trace);
 	render(trace);
@@ -103,7 +136,7 @@ int	key_press_2(int keycode, t_trace *trace)
 
 int	key_press(int keycode, t_trace *trace)//first function is for things that do not rerender the scene. key_press_2 and on will rerender.
 {
-	printf("key: %d\n", keycode);
+	//printf("key: %d\n", keycode);//prints key press num for troub shoot
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == N_1 || keycode == N_2 || keycode == N_3)

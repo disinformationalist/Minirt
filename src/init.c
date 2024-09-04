@@ -95,10 +95,10 @@ void info_init(t_trace *trace)
 	trace->curr_cy = trace->cylinders;
 
 
-	trace->zoom = 1;
+	trace->zoom = 1;//not used right now
 	trace->supersample = false;
 	trace->s_kernel = 5;
-	trace->layer = false;
+	trace->layer = false;//not used...
 	trace->n = 1.0;//for muliple rays per pixel... not using yet...
 	init_viewing(trace);
 }
