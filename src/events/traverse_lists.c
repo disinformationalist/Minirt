@@ -1,6 +1,7 @@
 # include "minirt.h"
 	/**************** "ON" DIAGRAM *****************/
 	/*
+	ON is a single struct object as is cam, and light in non bonus
 	ON has pointer to current object to be manipulated
 
 		all list objects are doubly linked circular
@@ -33,11 +34,6 @@ void	switch_list(int keycode, t_trace *trace, t_on *on)
 	{
 		on->object = trace->curr_pl;
 		on->type = PLANE;
-	}
-	else if (keycode == N_3)
-	{
-		on->object = trace->curr_cy;
-		on->type = CYLINDER;
 	}
 	else if (keycode == N_3)
 	{

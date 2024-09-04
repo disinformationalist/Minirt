@@ -30,6 +30,8 @@ void	thread_error(t_trace *trace, int i)
 	clear_all(trace);
 }
 
+//set pixel section limits for each thread and each gets a copy of trace struct
+
 void	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	piece[i][j].x_s = j * ((trace->width * trace->n) / trace->num_cols);// using n for other multiple rays per pixel method

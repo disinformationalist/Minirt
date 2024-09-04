@@ -7,6 +7,8 @@
 1 = sp list;
 2 = pl list;
 3 = cy list;
+4 = 4th object... todo
+
 9 = lt list;
 0 = cam;
 
@@ -38,7 +40,7 @@ J,L => x directions
 I,K => y directions
 U,O => z directions
 
-//RESIZE
+//RESIZE OBJECT, 
 
 //OTHER TRANSFORMATIONS?
 
@@ -46,17 +48,22 @@ U,O => z directions
 //maybe an onscreen control board?
 */
 
-
-//makes a vector and returns it
-t_vec3	vec(double x, double y, double z)
+void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
 {
-	t_vec3	v;
+	t_cam		*cam;
+	t_light		*light;
 
-	v.x = x;
-	v.y = y;
-	v.z = z;
-
-	return (v);
+	if (on->type == LIGHT)
+	{
+		light = (t_light *)on->object;
+		light->center = add_vec(light->center, vec);
+	}
+	else if (on->type == CAM)
+	{
+		cam = (t_cam *)on->object;
+		cam->center = add_vec(cam->center, vec);
+		init_viewing(trace);
+	}
 }
 
 //moves current "on" object in x,y,z
@@ -66,8 +73,7 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 	t_sphere	*sphere;
 	t_plane		*plane;
 	t_cylinder	*cylinder;
-	t_cam		*cam;
-	t_light		*light;
+	
 
 	if (on->type == SPHERE)
 	{
@@ -84,17 +90,8 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 		cylinder = (t_cylinder *)on->object;
 		cylinder->center = add_vec(cylinder->center, vec);
 	}
-	else if (on->type == LIGHT)
-	{
-		light = (t_light *)on->object;
-		light->center = add_vec(light->center, vec);
-	}
-	else if (on->type == CAM)
-	{
-		cam = (t_cam *)on->object;
-		cam->center = add_vec(cam->center, vec);
-		init_viewing(trace);
-	}
+	else
+		translate_object2(trace, on, vec);
 }
 
 
@@ -112,31 +109,32 @@ int	close_win(t_trace *trace)//valgrind error when using the x to close window, 
 	return (0);
 }
 
-int	supersample_handle(int keycode, t_trace *trace)
+//rotations will go in key_press_3 TODO
+
+int key_press_3(int keycode, t_trace *trace)
 {
-	if (keycode == SPACE)
-	{
-		if (trace->supersample)
-		{
-			trace->width = trace->width_orig;
-			trace->height = trace->height_orig;
-			init_viewing(trace);
-		}
-		else
-		{
-			trace->width = trace->width * trace->s_kernel;
-			trace->height = trace->height * trace->s_kernel;
-			init_viewing(trace);
-		}
-		trace->supersample = !trace->supersample;
-	}
+	/* if (keycode == A)//along x
+
+	else if (keycode == D)
+	
+	else if (keycode == W)//along y
+	
+	else if (keycode == S)
+	
+	else if (keycode == Q)//along z
+	
+	else if (keycode == E)
+	
+	else */
+	supersample_handle(keycode, trace);
+	render(trace);
 	return (0);
 }
+
 //arrows can use XK_LEFT, XK_RIGHT, XK_UP, XK_DOWN if needed for smthing
 
 int	key_press_2(int keycode, t_trace *trace)
 {
-	
 	//translation
 	if (keycode == J)
 		translate_object(trace, trace->on, vec(-.5, 0, 0));
@@ -170,29 +168,7 @@ int	key_press(int keycode, t_trace *trace)//first function is for things that do
 	else if (keycode == UP_CARET)
 		trace->layer = !trace->layer;
 	else if ((keycode == F1) | (keycode == F3))//F1 = forge and  F3 = save png. bones
-	{
-		char *name;// easily make name select and function forge or save png
-
-		if (keycode == F3)
-			name = get_nxt_name("scene_");
-		else if (keycode == F1)
-			name = get_nxt_name_rt("forged_");
-		if (!name)
-			clear_all(trace);
-		
-		if (keycode == F1)
-			forge_rt(name, trace);// bones only, uses snprintf
-		else if (keycode == F3)//bones, uses png functions
-		{
-			if (export_png(name, &trace->img, trace->width_orig, trace->height_orig, NULL) == -1)
-			{
-				free(name);
-				close_win(trace);
-			}
-			ft_putstr_color_fd(1, "EXPORT COMPLETE\n", BOLD_BRIGHT_BLUE);
-		}
-		free(name);
-	}
+		forge_or_export(keycode, trace);
 	else
 		key_press_2(keycode, trace);
 	return (0);

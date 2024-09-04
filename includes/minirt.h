@@ -9,7 +9,7 @@
 
 # include "extras.h"
 
-
+// holds the current closest object
 typedef struct s_track_hits
 {
 	double	t;
@@ -54,7 +54,7 @@ typedef struct s_cylinder
 
 /***MAIN STRUCT***/
 
-//TODO: go through trace struct and see what can be removed, broken up, etc to improve speed
+//TODO: go through trace struct and see what can be removed, broken up, etc to improve speed maybe second struct for stuff not needed everywhere... events stuff?
 
 typedef struct s_trace
 {
@@ -74,7 +74,7 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
-	//for traversing during events
+	//for tracking traversing during events
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
@@ -197,6 +197,7 @@ bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
 
+//add list obs
 bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
@@ -225,30 +226,27 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
 
 /***MATH UTILS***/
 uint8_t			round_c(double d);
+
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
+t_vec3			vec(double x, double y, double z);
 t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
+t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 t_vec3			normalize_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
-t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 
 /***COLOR UTILS***/
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
-
-
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
 
 //traverse lists
-void	switch_list(int keycode, t_trace *trace, t_on *on);
-void	next_list_ob(t_trace *trace, t_on *on);
-void	prev_list_ob(t_trace *trace, t_on *on);
-
-
-
+void			switch_list(int keycode, t_trace *trace, t_on *on);
+void			next_list_ob(t_trace *trace, t_on *on);
+void			prev_list_ob(t_trace *trace, t_on *on);
 
 /***CLEAN_UP***/
 void			clear_all(t_trace *trace);
@@ -267,17 +265,15 @@ void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
 int				count_chars(int num);
 char			*get_nxt_name_rt(char *name);
+void			forge_or_export(int keycode, t_trace *trace);
+int				supersample_handle(int keycode, t_trace *trace);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);
-
 void			print_obj_nums(t_trace *trace);
 void			print_3d_array(char ***array);
-
-
-
 
 #endif

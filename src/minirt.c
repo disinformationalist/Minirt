@@ -69,7 +69,7 @@ void	*ray_trace(void *arg)
 		while (++pos.i < piece->x_e)
 		{
 			r.direction = subtract_vec(current_pixel, r.origin);
-			//r.direction = normalize_vec(subtract_vec(current_pixel, r.origin));
+			//r.direction = normalize_vec(subtract_vec(current_pixel, r.origin));//faster w/o norm, see if needed later
 			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}

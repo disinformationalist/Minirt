@@ -1,13 +1,16 @@
-
 NAME := minirt
 
 SRC_DIR = ./src
 OBJ_DIR = ./obj
 INC_DIR = ./includes
 
-SRCS := ./src/main.c ./src/init.c ./src/minirt.c \
-./src/render.c ./src/threader.c ./src/clean_up.c \
-./src/math_utils.c \
+SRCS := ./src/main.c \
+./src/init.c \
+./src/minirt.c \
+./src/render.c \
+./src/clean_up.c \
+./src/math_utils/vector_ops.c \
+./src/math_utils/vector_ops2.c \
 ./src/parsing/split_file.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \
@@ -29,6 +32,7 @@ SRCS := ./src/main.c ./src/init.c ./src/minirt.c \
 ./src/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
+./src/events/extra_events.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \
 ./src/forge/write_planes.c \
@@ -40,7 +44,7 @@ SRCS := ./src/main.c ./src/init.c ./src/minirt.c \
 ./src/png/import_png_utils.c \
 ./src/png/get_png_name.c \
 ./src/downsample.c \
-
+./src/threader.c \
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -march=native
 #-Iincludes
