@@ -59,7 +59,9 @@ typedef enum e_type
 {
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	LIGHT,
+	CAM
 } 	t_type;
 
 /***UTILS***/

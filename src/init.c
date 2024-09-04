@@ -1,17 +1,17 @@
 #include "minirt.h"
-/*----------------------VIEWPORT DIAGRAM---------------------------
+/*----------------------------VIEWPORT DIAGRAM---------------------------Best I could manage in ascii chars :(
 			 |\
- 			 | \
+ 			 | \												Using Right Handed Coordinates(for everything)
  			 |  \ 
- 			 |   \
- 			 |	  \==> viewport width
-			/|\    \
- 		   / | \	\				+-----------------+
- 		  /	 |	\	 \				| SCENE GOES HERE |
-		 /	 |	 \	  \				+-----------------+
-(cam){o}----------\	  |				   
-  		  |   \	   \  |				
-   		  |    \	\ | 
+ 			 |   \															Y+ (up screen)
+ 			 |	  \==> viewport width										|
+			/|\    \														|	
+ 		   / | \	\				+-----------------+						| 
+ 		  /	 |	\	 \				| SCENE GOES HERE |						\--------Z- (into screen goes minus)
+		 /	 |	 \	  \				+-----------------+					     \
+(cam){o}----------\	  |				   									      \
+  		  |   \	   \  |													 	   \
+   		  |    \	\ | 														X+ (along screen width)
     	  | 	\	 \|
       focal_len	 \	  |==> viewport height
  (dash from cam)  \	  |
@@ -20,7 +20,7 @@
 					 \|
 
  view_width = 2 * focal_len * tan(horizontal_FOV / 2)// moved focal len adj.
- -----------------------------------------------------------------*/
+ ----------------------------------------------------------------------------*/
 
 
 void	set_pixel00(t_trace *trace, double focal_len, t_vec3 up_vec)
@@ -122,7 +122,7 @@ void trace_init(t_trace *trace)
 	info_init(trace);
 	trace->mlx_connect = mlx_init();
 	if (trace->mlx_connect == NULL)//need to free objects here check the clear_all() function.
-		exit(EXIT_FAILURE);
+		clear_all(trace);
 	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, trace->name);
 	if (trace->mlx_win == NULL)
 		clear_all(trace);
@@ -131,8 +131,8 @@ void trace_init(t_trace *trace)
 	trace->on = (t_on *)malloc(sizeof(t_on));
 	if (!trace->on)//check all protections
 		clear_all(trace);
-	trace->on->object = trace->spheres;//
-	trace->on->type = SPHERE;//
+	trace->on->object = trace->spheres;
+	trace->on->type = SPHERE;
 	if (pthread_mutex_init(&trace->mutex, NULL) != 0)
 		clear_all(trace);
 	events_init(trace);
