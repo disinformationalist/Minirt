@@ -15,7 +15,7 @@ F3 => save current scene to png
 
 F1	 F3								  NUM PAD	
 +-------------------------------+	+---------+
-|1 2 3 4                 9 0	|	|		- | pad - prev obj on curr list
+|1 2 3 4(lists)        (l,c)9 0	|	|		- | pad - prev obj on curr list
 |Q W E					U I O	|	|		+ | pad + next obj on curr list
 |A S D					J K L	|	|		  |
 |(rot)					(move)	|	|		  |
@@ -23,8 +23,6 @@ F1	 F3								  NUM PAD
 +-------------------------------+	+---------+
 
 SPACE => supersample mode
-
-//-------LIST TRAVERSAL
 
 //TRANSLATION
 

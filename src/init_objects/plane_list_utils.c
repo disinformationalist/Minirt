@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+//maybe normalize planes by force? and other orientation vecs? 
+
 void	set_pl_vals(t_plane *new, char **line)
 {
 	new->point = get_coordinates(line[1]);
