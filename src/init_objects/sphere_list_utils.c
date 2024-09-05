@@ -55,62 +55,46 @@ void	update_sphere_ids(t_sphere *sphere)
 		sphere = sphere->next;
 	}
 }
-//this duplicates a sphere, placing a new duplicate immediately after in the list.NOT DONE
-/* bool	insert_sp_dup_after(t_sphere **current)
+
+//if list is empty, make a default sphere and set it as the current object
+
+void make_default_sp(t_sphere **start, t_sphere *new)
 {
-	t_sphere	*sphere;
-	t_sphere	*new;
-
-	sphere = *current;
-	//build_sp_line here.
-
-	new = create_sphere(line);
-	if (!new)
-		return (true);
-	//for empty list
-	if (!sphere)
-	{
-		new->id = 1;
-		sphere = new;
-		return (false);
-	}
-	//else
-	new->prev = sphere;
-	new->next = sphere->next;
-	sphere->next->prev = new;
-	if (sphere->next == sphere)
-		sphere->prev = new;
-	sphere->next = new;
-	if (sphere == *current)///
-		*current = new;///
-	new->id = sphere->id + 1;
-	update_sphere_ids(new->next);
-	return (false);
-} */
-
-//make a get_object_line function for insert(need one for each object type), and rt file creation.
-//this needs to be able to get the values for the object after being moved, changed, etc. WAIT TO DO THIS
-
-/* char **build_sp_line(t_sphere *sp)
-{
-	int		line_len;
-	char 	**line;
-
-	//convert all params to str
-	char *cen_str;
-	cen_str
-	//count len for malloc..
-	
-
-	return (line);
+	new->center = vec(0.000,-0.500,-6.500);
+	new->radius = 1.5;
+	new->color.r = 200;
+	new->color.g = 50;
+	new->color.b = 200;
+	*start = new;
+	new->id = 1;
+	new->next = new;
+	new->prev = new;
 }
 
-typedef struct s_sphere
+//copy a sphere and place it immediately after the current sphere in the list
+
+bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 {
-	int				id;
-	t_vec3			center;
-	double			radius;
-	t_color 		color;
-	struct s_sphere	*next;
-	struct s_sphere *prev;
-}	t_sphere; */
+	t_sphere	*sp_to_copy;
+	t_sphere	*new;
+
+	new = (t_sphere *)malloc(sizeof(t_sphere));
+	if (!new)
+		return (true);
+	if (!*current)
+	{
+		make_default_sp(&trace->spheres, new);
+		trace->on->object = trace->spheres;
+		trace->on->type = SPHERE;
+		return (false);
+	}
+	sp_to_copy = *current;
+	*new = *sp_to_copy;//copy contents
+	new->next = sp_to_copy->next;
+	new->prev = sp_to_copy;
+	sp_to_copy->next->prev = new;
+	sp_to_copy->next = new;
+	new->id = sp_to_copy->id + 1;
+	update_sphere_ids(new->next);
+	return (false);
+}
