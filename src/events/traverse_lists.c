@@ -25,6 +25,7 @@
 
 void	switch_list(int keycode, t_trace *trace, t_on *on)
 {
+
 	if (keycode == N_1)
 	{
 		on->object = trace->curr_sp;// curr_ is the current spot on list stored in trace to keep track
@@ -54,12 +55,14 @@ void	switch_list(int keycode, t_trace *trace, t_on *on)
 
 // go the the next object on the current list, else is cam or non list object
 
-void	next_list_ob(t_trace *trace, t_on *on)
+void	next_list_ob(t_trace *trace, t_on *on)//must handle no spheres, on->object == NULL
 {
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
+	if (on->object == NULL)
+		return ;
 	if (on->type == SPHERE)
 	{
 		curr_sp = (t_sphere *)on->object;// typecast current "on" object so we can operate upon it
@@ -90,6 +93,8 @@ void	prev_list_ob(t_trace *trace, t_on *on)
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
+	if (on->object == NULL)
+		return ;
 	if (on->type == SPHERE)
 	{
 		curr_sp = (t_sphere *)on->object;

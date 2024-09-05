@@ -48,11 +48,12 @@ U,O => z directions
 //maybe an onscreen control board?
 */
 
-void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
+static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
 {
 	t_cam		*cam;
 	t_light		*light;
 
+	(void)trace;
 	if (on->type == LIGHT)
 	{
 		light = (t_light *)on->object;
@@ -62,7 +63,7 @@ void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
 	{
 		cam = (t_cam *)on->object;
 		cam->center = add_vec(cam->center, vec);
-		init_viewing(trace);
+		//init_viewing(trace);
 	}
 }
 
@@ -74,7 +75,8 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 	t_plane		*plane;
 	t_cylinder	*cylinder;
 	
-
+	if (on->object == NULL)
+		return ;
 	if (on->type == SPHERE)
 	{
 		sphere = (t_sphere *)on->object;
@@ -127,7 +129,6 @@ int key_press_3(int keycode, t_trace *trace)
 	
 	else */
 	supersample_handle(keycode, trace);
-	render(trace);
 	return (0);
 }
 
@@ -148,6 +149,12 @@ int	key_press_2(int keycode, t_trace *trace)
 		translate_object(trace, trace->on, vec(0, 0, .5));
 	else if (keycode == O)
 		translate_object(trace, trace->on, vec(0, 0, -.5));
+	else if (keycode == PERIOD)
+	{
+		if (insert_spcopy_after(trace, &trace->curr_sp))
+			close_win(trace);	
+		next_list_ob(trace, trace->on);
+	}
 	else
 		supersample_handle(keycode, trace);
 	render(trace);

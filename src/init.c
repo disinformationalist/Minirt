@@ -84,7 +84,7 @@ void info_init(t_trace *trace)
 	
 	trace->aspect_r = 16.0 / 9.0;
 	
-	trace->width = 1080;//control screen size by setting width and the aspect_r
+	trace->width = 1920;//control screen size by setting width and the aspect_r
 	trace->height = (int)((double)trace->width / trace->aspect_r);
 
 	trace->height_orig = trace->height;

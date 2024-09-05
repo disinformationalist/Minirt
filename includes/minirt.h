@@ -202,6 +202,9 @@ bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
+bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
+
+
 
 //bool			insert_sp_after(t_sphere **head, char **line); //check/fix mayve just use append?
 
