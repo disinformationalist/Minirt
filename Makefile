@@ -26,6 +26,7 @@ SRCS := ./src/main.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
+./src/trace_objects/trace_cylinders.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_utils.c \
 ./src/free_all_objects.c \

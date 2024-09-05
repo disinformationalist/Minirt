@@ -18,7 +18,7 @@ void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 
 	check_spheres(trace->spheres, closest, ray, &t); //see trace_spheres.c
 	check_planes(trace->planes, closest, ray, &t); //see trace_planes.c
-	//check_cylinders();//todo
+	check_cylinders(trace->cylinders, closest, ray, &t);//see trace_cylinders.c
 
 }
 
@@ -32,9 +32,8 @@ void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *clo
 		final_color = color_sphere(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
 		final_color = color_plane(trace, r, closest);
-	/* 
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
-		final_color = color_cylinder(trace, r, closest);//todo */
+		final_color = color_cylinder(trace, r, closest);
 	else
 		final_color = 0x000000;//background color here
 	put_pixel(pos.i, pos.j, trace, final_color);

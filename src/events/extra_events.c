@@ -4,15 +4,15 @@
 
 void	forge_or_export(int keycode, t_trace *trace)
 {
-	char *name;
+	char	*name;
 
+	name = NULL;
 	if (keycode == F3)
 		name = get_nxt_name("scene_");
 	else if (keycode == F1)
 		name = get_nxt_name_rt("forged_");
 	if (!name)
 		clear_all(trace);
-
 	if (keycode == F1)
 		forge_rt(name, trace);// bones only, uses snprintf
 	else if (keycode == F3)//bones, uses png functions

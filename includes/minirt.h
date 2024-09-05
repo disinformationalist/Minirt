@@ -221,7 +221,8 @@ void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t
 unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
 
 //cylinder utils
-
+void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
+unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 
 
 /***MATH UTILS***/
