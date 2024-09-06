@@ -19,7 +19,6 @@ double	get_double(char **doub_str)
 	}
 	str[++i] = '\0';
 	ret = ft_atof(str);
-//	printf("double ret: %f\n", ret);
 	return (ret);
 }
 

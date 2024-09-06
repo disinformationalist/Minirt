@@ -8,6 +8,8 @@ void	put_pixel(int x, int y, t_trace *trace, int color)
 		my_pixel_put(x, y, &trace->img, color);
 }
 
+//find closest object hit by ray
+
 void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 {
 	double			t;
@@ -80,18 +82,3 @@ void	*ray_trace(void *arg)
 		//current_pixel = subtract_vec(current_pixel, scalar_mult_vec(j * trace->pixel_height, trace->v_vec));//old y shift
 
 			//current_pixel = add_vec(current_pixel, trace->pix_delta_u);//move along width to next pixel//old x shift
-
-
-
-//sphere
-/* (bx^2 +by^2 + bz^2)t^2 +  (2(axbx + ayby))t + (ax^2 + ay^2 - r^2) = 0
-a = ray origin
-b = ray direction
-r = radius
-t = hit distance
-
-double a = dot(raydir, raydir);
-double b = 2.0 * dot (rayorigin, raydirection)
-double c = dot(rayorigin, rayorigin) - radius*radius
-
-*/

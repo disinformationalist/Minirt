@@ -90,8 +90,8 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);
 	}
-	//free_all_objects(trace);//used in testing
 }
 
+	//free_all_objects(trace);//used in testing
 	//print_all_objects(trace);//testing...
 	//print_obj_nums(trace);
