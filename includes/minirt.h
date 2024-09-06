@@ -178,11 +178,8 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
 /***INIT***/
 
-int				new_img_init(void *mlx_con, t_img *img, int width, int height);
-void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
-unsigned int	**malloc_ui_matrix(int width, int height);
-void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
-void			free_ui_matrix(unsigned int **matrix, int j);
+
+void 			trace_init(t_trace *trace);
 
 
 //get and set vals
@@ -197,18 +194,20 @@ bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
 
-//add list obs
+//***add list obs***
 bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
+//copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
+bool			insert_plcopy_after(t_trace *trace, t_plane **current);
+bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 
-
-
-//bool			insert_sp_after(t_sphere **head, char **line); //check/fix mayve just use append?
-
-void 			trace_init(t_trace *trace);
+//remove a list object
+void			pop_sp(t_trace *trace, t_sphere **current);
+void			pop_cy(t_trace *trace, t_cylinder **current);
+void			pop_pl(t_trace *trace, t_plane **current);
 
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
@@ -271,6 +270,13 @@ int				count_chars(int num);
 char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
+
+//supersample
+int				new_img_init(void *mlx_con, t_img *img, int width, int height);
+void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
+unsigned int	**malloc_ui_matrix(int width, int height);
+void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
+void			free_ui_matrix(unsigned int **matrix, int j);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);

@@ -19,8 +19,11 @@ SRCS := ./src/main.c \
 ./src/parsing/check_line_utils.c \
 ./src/parsing/check_line_utils2.c \
 ./src/init_objects/sphere_list_utils.c \
+./src/init_objects/push_sp.c \
 ./src/init_objects/plane_list_utils.c \
+./src/init_objects/push_pl.c \
 ./src/init_objects/cylinder_list_utils.c \
+./src/init_objects/push_cy.c \
 ./src/init_objects/get_line_vals.c \
 ./src/init_objects/set_amb_cam_lights.c \
 ./src/parsing/parse_rt_utils.c \
