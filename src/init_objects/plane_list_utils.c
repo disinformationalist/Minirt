@@ -22,15 +22,6 @@ t_plane	*create_plane(char **line)
 	return (new);
 }
 
-void	update_plane_ids(t_plane *plane)
-{
-	while (plane->id != 1)
-	{
-		plane->id++;
-		plane = plane->next;
-	}
-}
-
 bool	append_pl(t_plane **start, char **line)
 {
 	t_plane *new;

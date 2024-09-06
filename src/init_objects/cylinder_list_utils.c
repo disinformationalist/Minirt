@@ -27,15 +27,6 @@ t_cylinder *create_cylinder(char **line)
 	return (new);
 }
 
-void	update_cylinder_ids(t_sphere *cylinder)
-{
-	while (cylinder->id != 1)
-	{
-		cylinder->id++;
-		cylinder = cylinder->next;
-	}
-}
-
 bool	append_cy(t_cylinder **start, char **line)
 {
 	t_cylinder *new;

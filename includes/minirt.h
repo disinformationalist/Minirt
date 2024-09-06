@@ -170,7 +170,6 @@ void			check_cy(char **line, char ***rt_file);
 int				check_param_num(char **line, int num);
 int				check_double(char **ratio_str, double lower_lim, double upper_lim);
 int				check_color(char *color_str);
-int				check_rgb_color(char **s);
 int				check_fov(char *fov_str);
 int				check_orientation(char *orient_str);
 int				check_coordinates(char *coord_str);
