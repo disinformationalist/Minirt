@@ -52,54 +52,27 @@ U,O => z directions
 //maybe an onscreen control board?
 */
 
-static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
-{
-	t_cam		*cam;
-	t_light		*light;
-
-	(void)trace;
-	if (on->type == LIGHT)
-	{
-		light = (t_light *)on->object;
-		light->center = add_vec(light->center, vec);
-	}
-	else if (on->type == CAM)
-	{
-		cam = (t_cam *)on->object;
-		cam->center = add_vec(cam->center, vec);
-		init_viewing(trace);
-	}
-}
-
 //moves current "on" object in x,y,z
 
 void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 {
-	t_sphere	*sphere;
-	t_plane		*plane;
-	t_cylinder	*cylinder;
 	
 	if (on->object == NULL)
 		return ;
 	if (on->type == SPHERE)
-	{
-		sphere = (t_sphere *)on->object;
-		sphere->center = add_vec(sphere->center, vec);
-	}
+		trace->curr_sp->center = add_vec(trace->curr_sp->center, vec);
 	else if (on->type == PLANE)
-	{
-		plane = (t_plane *)on->object;
-		plane->point = add_vec(plane->point, vec);
-	}
+		trace->curr_pl->point = add_vec(trace->curr_pl->point, vec);
 	else if (on->type == CYLINDER)
+		trace->curr_cy->center = add_vec(trace->curr_cy->center, vec);
+	else if (on->type == LIGHT)
+		trace->lights->center = add_vec(trace->lights->center, vec);
+	else if (on->type == CAM)
 	{
-		cylinder = (t_cylinder *)on->object;
-		cylinder->center = add_vec(cylinder->center, vec);
+		trace->cam->center = add_vec(trace->cam->center, vec);
+		init_viewing(trace);
 	}
-	else
-		translate_object2(trace, on, vec);
 }
-
 
 int	close_win(t_trace *trace)//valgrind error when using the x to close window, escape key gives no such error...
 {	
@@ -177,9 +150,10 @@ void	pop_object(t_trace *trace, t_on *on)
 		return ;
 }
 
+//translation, push, and pop functions
+
 int	key_press_2(int keycode, t_trace *trace)
 {
-	//translation
 	if (keycode == J)
 		translate_object(trace, trace->on, vec(-.5, 0, 0));
 	else if (keycode == L)
