@@ -39,7 +39,6 @@ float get_rgb(char **s, float val)
 	str[++i] = '\0';
 	chan_color = ft_atoi(str);
 	norm_color = (float)chan_color / val;//val is 255.0 or 1.0 
-//	printf("chan_color: %d\n", chan_color);
 	return (norm_color);
 }
 

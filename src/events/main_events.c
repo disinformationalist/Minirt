@@ -21,10 +21,14 @@ F1	 F3								  NUM PAD
 |Q W E					U I O	|	|		+ | pad + next obj on curr list
 |A S D					J K L	|	|		  |
 |(rot)					(move)	|	|		  |
-|			  SPACE				|	|		  |
+|			  SPACE		,	.	|	|		  |
 +-------------------------------+	+---------+
 
 SPACE => supersample mode
+
+. => pop current object from current list
+
+. => push new object to current list
 
 //TRANSLATION
 
@@ -63,7 +67,7 @@ static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec)
 	{
 		cam = (t_cam *)on->object;
 		cam->center = add_vec(cam->center, vec);
-		//init_viewing(trace);
+		init_viewing(trace);
 	}
 }
 
@@ -134,6 +138,45 @@ int key_press_3(int keycode, t_trace *trace)
 
 //arrows can use XK_LEFT, XK_RIGHT, XK_UP, XK_DOWN if needed for smthing
 
+void	push_new_object(t_trace *trace, t_on *on)
+{
+	if (on->type == SPHERE)
+	{
+		if (insert_spcopy_after(trace, &trace->curr_sp))
+			close_win(trace);
+	}
+	else if (on->type == PLANE)
+	{
+		if (insert_plcopy_after(trace, &trace->curr_pl))
+			close_win(trace);	
+	}
+	else if (on->type == CYLINDER)
+	{
+		if (insert_cycopy_after(trace, &trace->curr_cy))
+			close_win(trace);	
+	}
+	else
+		return ;
+	/* else if (on->type == LIGHT)////---------------
+	{
+		if (insert_ltcopy_after(trace, &trace->lights))
+			close_win(trace);	
+	} */
+	next_list_ob(trace, trace->on);
+}
+
+void	pop_object(t_trace *trace, t_on *on)
+{
+	if (on->type == SPHERE)
+		pop_sp(trace, &trace->curr_sp);
+	else if (on->type == PLANE)
+		pop_pl(trace, &trace->curr_pl);
+	else if (on->type == CYLINDER)
+		pop_cy(trace, &trace->curr_cy);
+	else
+		return ;
+}
+
 int	key_press_2(int keycode, t_trace *trace)
 {
 	//translation
@@ -150,11 +193,9 @@ int	key_press_2(int keycode, t_trace *trace)
 	else if (keycode == O)
 		translate_object(trace, trace->on, vec(0, 0, -.5));
 	else if (keycode == PERIOD)
-	{
-		if (insert_spcopy_after(trace, &trace->curr_sp))
-			close_win(trace);	
-		next_list_ob(trace, trace->on);
-	}
+		push_new_object(trace, trace->on);
+	else if (keycode == COMMA)
+		pop_object(trace, trace->on);
 	else
 		supersample_handle(keycode, trace);
 	render(trace);
