@@ -26,7 +26,7 @@ F1	 F3								  NUM PAD
 
 SPACE => supersample mode
 
-. => pop current object from current list
+, => pop current object from current list
 
 . => push new object to current list
 
@@ -44,7 +44,7 @@ J,L => x directions
 I,K => y directions
 U,O => z directions
 
-//RESIZE OBJECT, 
+//RESIZE OBJECT, + -
 
 //OTHER TRANSFORMATIONS?
 

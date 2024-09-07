@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
 	double	denom;
 	double	sol;
@@ -60,9 +60,14 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		//plug closest->t back into ray eq for intersect point;
 		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
 		light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-		cos_angle = dot_product(plane->norm_vector, light_dir);
-		light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
-		light_intensity = fmin(light_intensity, 1.0);
+		if (obscured(trace, intersect_pnt, light_dir, plane->norm_vector))
+				light_intensity = 0;
+		else
+		{
+			cos_angle = dot_product(plane->norm_vector, light_dir);
+			light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+			light_intensity = fmin(light_intensity, 1.0);
+		}
 	}
 	else
 		light_intensity = 0;

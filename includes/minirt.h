@@ -6,8 +6,10 @@
 # include "tools.h"
 # include "keyboard.h"
 //# include "keyboard (42).h"
-
+# include <sys/time.h>//testing speed
 # include "extras.h"
+
+# define ASPECT (16.0 / 9.0)
 
 // holds the current closest object
 typedef struct s_track_hits
@@ -65,8 +67,7 @@ typedef struct s_trace
 	t_cam			*cam;
 	t_light			*lights;
 
-	t_track_hits	*closest;
-
+	t_track_hits	*closest;//tracking first hit
 	t_on			*on;//current object for manipulating
 	
 	//linked list objects
@@ -74,18 +75,16 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
-	//for tracking traversing during events
+	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
 	//mlx
-	char			*name;
 	void			*mlx_connect;
 	void			*mlx_win;
 	
 	//other
-	double			zoom;
 	bool			layer;
 
 	//dimension and view
@@ -94,19 +93,10 @@ typedef struct s_trace
 	int 			height_orig;
 	int				width_orig;
 
-
-	double			view_width;
-	double			view_height;
-	double			aspect_r;
-
+	//need
 	double			pixel_width;
 	double			pixel_height;
 	t_point			pixel00;//changed to t_point
-
-	t_vec3			u_vec;
-	t_vec3			v_vec;
-	t_vec3			pix_delta_u;
-	t_vec3			pix_delta_v;
 	
 	//for supersampling
 	bool			supersample;
@@ -114,14 +104,6 @@ typedef struct s_trace
 	int				s_kernel;
 	double			n;
 	
-	//nums of each object type
-	int				amb_count;
-	int				cam_count;
-	int				light_count;
-	int				sphere_count;
-	int				plane_count;
-	int				cyl_count;
-
 	//threading	
 	int				num_cols;
 	int				num_rows;
@@ -139,7 +121,6 @@ typedef struct s_piece //for threads
 	t_trace		*trace;
 }	t_piece;
 
-
 /***PARSING***/
 
 void			parse_rt(t_trace *trace, char ***rt_file);
@@ -147,7 +128,7 @@ char			***split_file(char *file);
 
 //parse_rt_utils
 void			init_obs(t_trace *trace);
-void			init_counts(t_trace *trace);
+void			init_counts(t_obj_counts *counts);
 void			count_check(int *item_count, char *msg, char ***rt_file);
 
 //split_file_utils
@@ -177,16 +158,13 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
 /***INIT***/
 
-
 void 			trace_init(t_trace *trace);
-
+void			init_viewing(t_trace *trace);
 
 //get and set vals
-void			init_viewing(t_trace *trace);
 
 t_vec3			get_coordinates(char *coord_str);
 t_norm_color	get_color(char *color_str, float val);
-
 double			get_double(char **str);
 
 bool			set_amb(t_amb **amb, char **line);
@@ -216,14 +194,20 @@ void			*ray_trace(void *arg);
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
 unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
+
+//shadows
+bool	obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal);
 
 
 /***MATH UTILS***/
@@ -235,6 +219,7 @@ t_vec3			vec(double x, double y, double z);
 t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
+t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			normalize_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 
@@ -282,7 +267,11 @@ void			print_all_objects(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);
-void			print_obj_nums(t_trace *trace);
+void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
+long			get_time(void);
+void			print_times(long start, long end, char *msg);
+
+
 
 #endif

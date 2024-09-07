@@ -12,8 +12,9 @@ int	ft_3darray_len(char ***array)
 
 int	main(int ac, char **av)
 {
-	char ***rt_file;
+	char	***rt_file;
 	t_trace	trace;
+	
 	if (ac != 2)
 	{
 		printf("Error: Usage: ./minirt [scene.rt]\n");
@@ -39,7 +40,6 @@ int	main(int ac, char **av)
 	}
 //-----------------------	
 
-	trace.name = "***MiniRT***";
 	trace_init(&trace);
 	render(&trace);
 	mlx_loop(trace.mlx_connect);

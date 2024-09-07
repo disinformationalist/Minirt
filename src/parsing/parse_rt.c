@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	count_ids(t_trace *trace, char ***rt_file)
+void	count_ids(t_obj_counts *counts, char ***rt_file)
 {
 	int k;
 
@@ -8,17 +8,17 @@ void	count_ids(t_trace *trace, char ***rt_file)
 	while(rt_file[++k])
 	{
 		if (!ft_strcmp(*(rt_file[k]), "A"))
-			count_check(&trace->amb_count, "Error\n Only one ambient light allowed\n", rt_file);
+			count_check(&counts->amb_count, "Error\n Only one ambient light allowed\n", rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
-			count_check(&trace->cam_count, "Error\n Only one camera allowed\n", rt_file); 
+			count_check(&counts->cam_count, "Error\n Only one camera allowed\n", rt_file); 
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
-			count_check(&trace->light_count, "Error\n Only one light source allowed\n", rt_file);
+			count_check(&counts->light_count, "Error\n Only one light source allowed\n", rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
-			trace->sphere_count++;
+			counts->sphere_count++;
 		else if (!ft_strcmp(*(rt_file[k]), "pl"))
-			trace->plane_count++;
+			counts->plane_count++;
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
-			trace->cyl_count++;
+			counts->cyl_count++;
 		else
 		{
 			free_3d_array_i(rt_file, ft_3darray_len(rt_file));
@@ -78,8 +78,10 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 
 void	parse_rt(t_trace *trace, char ***rt_file)
 {
-	init_counts(trace);
-	count_ids(trace, rt_file);
+	t_obj_counts counts;
+
+	init_counts(&counts);
+	count_ids(&counts, rt_file);
 	check_ids(rt_file);
 	//check_counts(); //make function here checking things like at least one cam, at least one object, etc... custom error msgs.
 	init_obs(trace);
@@ -94,4 +96,4 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 
 	//free_all_objects(trace);//used in testing
 	//print_all_objects(trace);//testing...
-	//print_obj_nums(trace);
+	//print_obj_nums(counts);

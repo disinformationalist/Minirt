@@ -30,6 +30,7 @@ SRCS := ./src/main.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
 ./src/trace_objects/trace_cylinders.c \
+./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_utils.c \
 ./src/free_all_objects.c \
@@ -50,7 +51,7 @@ SRCS := ./src/main.c \
 ./src/downsample.c \
 ./src/threader.c \
 
-CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -march=native
+CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 #-Iincludes
 RM := rm -f
 

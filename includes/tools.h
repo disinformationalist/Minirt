@@ -19,7 +19,7 @@
 # include <pthread.h>
 # include <png.h>//for export/import bones only
 
-# define DEG_TO_RAD  M_PI / 180.0
+# define DEG_TO_RAD  (M_PI / 180.0)
 
 typedef struct s_norm_color
 {
@@ -113,6 +113,16 @@ typedef struct s_light
 	t_norm_color	light_color;//rbg colors t_color for the bones
 }	t_light;
 
+//parse utils
 
+typedef struct s_obj_counts
+{
+	int				amb_count;
+	int				cam_count;
+	int				light_count;
+	int				sphere_count;
+	int				plane_count;
+	int				cyl_count;
+}	t_obj_counts;
 
 #endif

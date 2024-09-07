@@ -140,8 +140,13 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		view_dir = normalize_vec(subtract_vec(r.origin, intersect_pnt));
 		if (dot_product(normal, view_dir) > 0)
 			normal = scalar_mult_vec(-1, normal);
-		cos_angle = dot_product(normal, light_dir);
-		light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+		if (obscured(trace, intersect_pnt, light_dir, normal))//shadow ray test here
+				light_intensity = 0;
+		else
+		{
+			cos_angle = dot_product(normal, light_dir);
+			light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+		}
 	}
 	else
 		light_intensity = 0;

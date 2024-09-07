@@ -13,7 +13,10 @@ void	render(t_trace *trace)
 		}
 		zero_ui_matrix(trace->pixels_xl, trace->width, trace->height);
 	}
+	
+	long start = get_time();//test
 	render_scene(trace);
+	
 	if (trace->supersample)
 	{
 		downsample_xl(trace->width, trace->height, &trace->img, trace->pixels_xl, trace->s_kernel);
@@ -23,4 +26,5 @@ void	render(t_trace *trace)
 	}
 	mlx_put_image_to_window(trace->mlx_connect,
 		trace->mlx_win, trace->img.img_ptr, 0, 0);
+	print_times(start, get_time(), "RENDER TIME: %f seconds\n");//test
 }

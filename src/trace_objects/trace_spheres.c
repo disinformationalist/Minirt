@@ -30,7 +30,7 @@ static inline bool check_solutions(double a, double b, double c, double *t)
 	return (false);
 }
 
-static inline bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+bool	ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
 	t_vec3	oc;//ray origin to center
 	double	a;//coefficients of quadratic
@@ -87,11 +87,21 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
 		normal = normalize_vec(subtract_vec(intersect_pnt, sphere->center));
 		light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-		cos_angle = dot_product(normal, light_dir);
-		light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+		//hard shadows...
+		if (obscured(trace, intersect_pnt, light_dir, normal))
+				light_intensity = 0;
+		else
+		{
+			cos_angle = dot_product(normal, light_dir);
+			light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+		}
 	}
 	else
 		light_intensity = 0;
 	return (get_final_color(trace, sphere->color, light_intensity));
-	
 }
+//cast shadow ray from intersect point toward light source
+//s_ray.dir = norm(L - P) light cen - int point
+//s.origin = P + e-6, prevent s_ray form intersecting surface of origination
+//test intersects until light 
+//light distance = mag(L -P)
