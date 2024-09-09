@@ -2,13 +2,14 @@
 
 //check spheres for intersection within dist
 
-static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, double t)
+static inline bool	check_sp_dist(t_sphere *spheres, float dist, t_ray ray, double t)
 {
 	t_sphere	*curr_sp;
 
 	if (spheres == NULL)
 		return (false);
 	curr_sp = spheres;
+
 	while (true)
 	{
 		if (ray_sphere_intersect(*curr_sp, ray.direction, ray.origin, &t))
@@ -25,7 +26,7 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 
 //check planes for intersection within dist
 
-static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double t)
+static inline bool	check_pl_dist(t_plane *planes, float dist, t_ray ray, double t)
 {
 	t_plane	*curr_pl;
 
@@ -48,7 +49,7 @@ static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double
 
 //check cylinders for intersection within dist
 
-static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, double t)
+static inline bool	check_cy_dist(t_cylinder *cylinders, float dist, t_ray ray, double t)
 {
 	t_cylinder	*curr_cy;
 
@@ -71,12 +72,12 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, 
 
 //check it any object in any list blocks light
 
-static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)//try with float.... 
+static inline bool	check_all_dist(t_trace *trace, float dist, t_ray s_ray)
 {
 	bool	hit;
 	double	t;
 
-	t = dist + .01;
+	t = dist;
 	hit = check_sp_dist(trace->spheres, dist, s_ray, t);
 	if (hit)
 		return (true);
@@ -94,10 +95,10 @@ static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)//try
 bool	obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal)
 {
 	t_ray	s_ray;
-	double	light_dist;
+	float	light_dist;
 
 	s_ray.direction = light_dir;//normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-	s_ray.origin = add_vec(intersect_pnt, scalar_mult_vec(1e-3, normal));
+	s_ray.origin = add_vec(intersect_pnt, scalar_mult_vec(1e-5, normal));
 	light_dist = magnitude(subtract_vec(trace->lights->center, intersect_pnt));// use in previous to get light dir test times.
 	//check all intersects within distance
 	return (check_all_dist(trace, light_dist, s_ray));

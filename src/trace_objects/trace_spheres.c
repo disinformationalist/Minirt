@@ -53,6 +53,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 	if (spheres == NULL)
 		return ;
 	curr_sp = spheres;
+
 	while (true)
 	{
 		if (ray_sphere_intersect(*curr_sp, ray.direction, ray.origin, t))
@@ -70,6 +71,22 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 	}
 }
 
+//testing specular for sp
+
+float	get_spec(t_trace *trace, t_vec3 norm, t_vec3 light_dir, t_point intersect)
+{
+	t_vec3	ref;
+	t_vec3	view_dir;
+	float	spec;
+
+	ref = scalar_mult_vec(2 * dot_product(norm, light_dir), norm);
+	ref = subtract_vec(ref, light_dir);
+	view_dir = normalize_vec(subtract_vec(trace->cam->center, intersect));
+	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
+	//spec = mat.spec * trace->lights->brightness * pow(fmax(dot_product(ref, view_dir), 0), mat.shine);
+	return (spec);
+}
+
 unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_point			intersect_pnt;//light intersect with surface
@@ -83,7 +100,6 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 
 	if (trace->lights)// getting the light intensity at each intersection point
 	{
-		//plug closest->t back into ray eq for intersect point;
 		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
 		normal = normalize_vec(subtract_vec(intersect_pnt, sphere->center));
 		light_dir = normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
@@ -92,14 +108,18 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 				light_intensity = 0;
 		else
 		{
+			//make a get light intensity function will take material and other must involve amb..
 			cos_angle = dot_product(normal, light_dir);
-			light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
+			float spec = get_spec(trace, normal, light_dir, intersect_pnt);//trying spec for spheres
+			light_intensity	= trace->lights->brightness * (fmax(cos_angle, 0.0) + .9 * spec);
 		}
 	}
 	else
 		light_intensity = 0;
 	return (get_final_color(trace, sphere->color, light_intensity));
 }
+
+
 //cast shadow ray from intersect point toward light source
 //s_ray.dir = norm(L - P) light cen - int point
 //s.origin = P + e-6, prevent s_ray form intersecting surface of origination

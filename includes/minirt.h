@@ -19,7 +19,16 @@ typedef struct s_track_hits
 	t_type	object_type;
 }	t_track_hits;
 
-/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
+// gives vals for material TOFINISH
+typedef struct s_mat
+{
+	float	amb;
+	float	diff;
+	float	spec;
+	float	shine;
+}	t_mat;
+
+/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
 
 typedef struct s_sphere
 {
@@ -27,6 +36,7 @@ typedef struct s_sphere
 	t_point			center;
 	double			radius;
 	t_norm_color 	color;
+	t_mat			mat;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -37,6 +47,7 @@ typedef struct s_plane
 	t_point			point;
 	t_vec3			norm_vector;
 	t_norm_color	color;
+	t_mat			mat;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -49,6 +60,7 @@ typedef struct s_cylinder
 	double				radius;
 	double				height;
 	t_norm_color		color;
+	t_mat				mat;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -207,7 +219,7 @@ unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
 
 //shadows
-bool	obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal);
 
 
 /***MATH UTILS***/
@@ -222,6 +234,10 @@ t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			normalize_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
+t_vec3 			neg(t_vec3 vec);
+t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
+
+
 
 /***COLOR UTILS***/
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);

@@ -7,7 +7,7 @@
 1 = sp list;
 2 = pl list;
 3 = cy list;
-4 = 4th object... todo
+4 = 4th object... todo (prisms?)
 
 9 = lt list;
 0 = cam;

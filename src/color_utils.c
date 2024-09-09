@@ -18,7 +18,7 @@ unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_in
 	uint8_t g;
 	uint8_t b;
 
-	if (trace->amb)
+	if (trace->amb)//check outside if no amb make and set = 0 or require ambient
 	{
 		r = clamp_color(color.r * (light_intensity + trace->amb->color.r));
 		g = clamp_color(color.g * (light_intensity + trace->amb->color.g));

@@ -12,6 +12,9 @@
 
 #include "minirt.h"
 
+//ISSUES WITH CYLINDERS NEED FIXING, TRY WITH ONE CYL AND A LIGHT,  ALSO CAPS NEEDED
+//problem seems to be cyl shadowing self. works ok without the obscure check function.
+
 //this function will check each cylinder passed to it
 // a, b and c got combined into one t_vec3 because of the norm 
 static inline bool	check_solutions(t_vec3 abc, double *t1, double *t2)
@@ -134,13 +137,13 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		//plug closest->t back into ray eq for intersect point;
 		intersect_pnt = add_vec(r.origin, scalar_mult_vec(closest->t, r.direction));
 		oc = subtract_vec(intersect_pnt, cylinder->center);
-		axis = normalize_vec(cylinder->norm_vector);
+		axis = normalize_vec(cylinder->norm_vector);//already normed unless a non normed entry. have parser check these.
 		normal = normalize_vec(subtract_vec(oc, scalar_mult_vec(dot_product(oc, axis), axis)));
 		light_dir = normalize_vec(subtract_vec(intersect_pnt, trace->lights->center));
 		view_dir = normalize_vec(subtract_vec(r.origin, intersect_pnt));
 		if (dot_product(normal, view_dir) > 0)
 			normal = scalar_mult_vec(-1, normal);
-		if (obscured(trace, intersect_pnt, light_dir, normal))//shadow ray test here
+		if (obscured(trace, intersect_pnt, light_dir, normal))//shadow ray test here, not yet right for cyl, planes?
 				light_intensity = 0;
 		else
 		{
@@ -151,5 +154,4 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 	else
 		light_intensity = 0;
 	return (get_final_color(trace, cylinder->color, light_intensity));
-	
 }

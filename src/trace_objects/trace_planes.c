@@ -2,18 +2,19 @@
 
 bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
-	double	denom;
+	float	denom;
 	double	sol;
 	t_vec3	op;//origin to point
 
 	denom = dot_product(plane.norm_vector, ray_dir);
 	
+
 	if (fabs(denom) < 1e-6)// close to parallel, no intersect
 		return (false);
+
 	
 	op = subtract_vec(plane.point, ray_orig);
 	sol = dot_product(op, plane.norm_vector) / denom;
-
 	if (sol > 0)//in front of ray origin, not behind
 	{
 		*t = sol;
@@ -67,9 +68,11 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 			cos_angle = dot_product(plane->norm_vector, light_dir);
 			light_intensity	= trace->lights->brightness * fmax(cos_angle, 0.0);
 			light_intensity = fmin(light_intensity, 1.0);
+			
 		}
 	}
 	else
 		light_intensity = 0;
 	return (get_final_color(trace, plane->color, light_intensity));
 }
+//plane norm vector must point toward light for compute, check in parser and set norm vector sign there.
