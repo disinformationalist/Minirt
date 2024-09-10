@@ -35,7 +35,7 @@ typedef struct s_sphere
 	int				id;
 	t_point			center;
 	double			radius;
-	t_norm_color 	color;
+	t_norm_color 	color;//color will move into mat
 	t_mat			mat;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
@@ -45,7 +45,7 @@ typedef struct s_plane
 {
 	int				id;
 	t_point			point;
-	t_vec3			norm_vector;
+	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
 	struct s_plane	*next;
@@ -56,7 +56,7 @@ typedef struct s_cylinder
 {
 	int					id;
 	t_point				center;
-	t_vec3				norm_vector;
+	t_vec3				norm;
 	double				radius;
 	double				height;
 	t_norm_color		color;
@@ -218,8 +218,12 @@ void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, 
 unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
 
+//light
+float			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)
+
+
 //shadows
-bool			obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
 
 
 /***MATH UTILS***/
@@ -230,9 +234,9 @@ double			dot_product(t_vec3 vec1, t_vec3 vec2);
 t_vec3			vec(double x, double y, double z);
 t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
-t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
+t_vec3			scale_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
-t_vec3			normalize_vec(t_vec3 vec);
+t_vec3			norm_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
@@ -240,7 +244,11 @@ t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 
 
 /***COLOR UTILS***/
-unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
+unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
+t_norm_color	color(float r, float g, float b);
+
+
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);

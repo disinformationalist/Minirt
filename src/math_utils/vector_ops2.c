@@ -4,12 +4,12 @@
 {
 	t_ray r;
 
-	r.direction = dir;
+	r.dir = dir;
 	r.origin = origin;
 	return (r);
 } */
 
-t_vec3	normalize_vec(t_vec3 vec)
+t_vec3	norm_vec(t_vec3 vec)
 {
 	t_vec3	normed;
 	double	length;
@@ -33,7 +33,7 @@ t_vec3	cross_prod(t_vec3 vec1, t_vec3 vec2)
 	return (res);
 }
 
-t_vec3	scalar_mult_vec(double scalar, t_vec3 vec)
+t_vec3	scale_vec(double scalar, t_vec3 vec)
 {
 	t_vec3	res;
 

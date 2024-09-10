@@ -12,7 +12,7 @@ static inline bool	check_sp_dist(t_sphere *spheres, float dist, t_ray ray, doubl
 
 	while (true)
 	{
-		if (ray_sphere_intersect(*curr_sp, ray.direction, ray.origin, &t))
+		if (ray_sphere_intersect(*curr_sp, ray.dir, ray.origin, &t))
 		{
 			if (t < dist)
 				return (true);
@@ -35,7 +35,7 @@ static inline bool	check_pl_dist(t_plane *planes, float dist, t_ray ray, double 
 	curr_pl = planes;
 	while (true)
 	{
-		if (ray_plane_intersect(*curr_pl, ray.direction, ray.origin, &t))
+		if (ray_plane_intersect(*curr_pl, ray.dir, ray.origin, &t))
 		{
 			if (t < dist)
 				return (true);
@@ -58,7 +58,7 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, float dist, t_ray ray, d
 	curr_cy = cylinders;
 	while (true)
 	{
-		if (ray_cylinder_intersect(*curr_cy, ray.direction, ray.origin, &t))
+		if (ray_cylinder_intersect(*curr_cy, ray.dir, ray.origin, &t))
 		{
 			if (t < dist)
 				return (true);
@@ -92,14 +92,14 @@ static inline bool	check_all_dist(t_trace *trace, float dist, t_ray s_ray)
 
 //function to check if any object blocks light
  //light center is on surface gives issue
-bool	obscured(t_trace *trace, t_point intersect_pnt, t_vec3 light_dir, t_vec3 normal)
+bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 {
 	t_ray	s_ray;
 	float	light_dist;
 
-	s_ray.direction = light_dir;//normalize_vec(subtract_vec(trace->lights->center, intersect_pnt));
-	s_ray.origin = add_vec(intersect_pnt, scalar_mult_vec(1e-5, normal));
-	light_dist = magnitude(subtract_vec(trace->lights->center, intersect_pnt));// use in previous to get light dir test times.
+	s_ray.dir = light_dir;//norm_vec(subtract_vec(trace->lights->center, int_pnt));
+	s_ray.origin = add_vec(pnt, scale_vec(1e-5, normal));
+	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));// use in previous to get light dir test times.
 	//check all intersects within distance
 	return (check_all_dist(trace, light_dist, s_ray));
 }

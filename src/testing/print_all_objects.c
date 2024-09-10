@@ -9,9 +9,9 @@ void	print_cylinders(t_cylinder *cylinder)
 	printf("centerx: %f\n", cylinder->center.x);
 	printf("centery: %f\n", cylinder->center.y);
 	printf("centerz: %f\n", cylinder->center.z);
-	printf("norm_vecx: %f\n", cylinder->norm_vector.x);
-	printf("norm_vecy: %f\n", cylinder->norm_vector.y);
-	printf("norm_vecz: %f\n", cylinder->norm_vector.z);
+	printf("norm_vecx: %f\n", cylinder->norm.x);
+	printf("norm_vecy: %f\n", cylinder->norm.y);
+	printf("norm_vecz: %f\n", cylinder->norm.z);
 	printf("cylinder diam: %f\n", cylinder->radius * 2);
 	printf("cylinder height: %f\n", cylinder->height);
 	printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
@@ -22,9 +22,9 @@ void	print_cylinders(t_cylinder *cylinder)
 		printf("centerx: %f\n", cylinder->center.x);
 		printf("centery: %f\n", cylinder->center.y);
 		printf("centerz: %f\n", cylinder->center.z);
-		printf("norm_vecx: %f\n", cylinder->norm_vector.x);
-		printf("norm_vecy: %f\n", cylinder->norm_vector.y);
-		printf("norm_vecz: %f\n", cylinder->norm_vector.z);
+		printf("norm_vecx: %f\n", cylinder->norm.x);
+		printf("norm_vecy: %f\n", cylinder->norm.y);
+		printf("norm_vecz: %f\n", cylinder->norm.z);
 		printf("cylinder diam: %f\n", cylinder->radius * 2);
 		printf("cylinder height: %f\n", cylinder->height);
 		printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
@@ -41,9 +41,9 @@ void	print_planes(t_plane *plane)
 	printf("pointx: %f\n", plane->point.x);
 	printf("pointy: %f\n", plane->point.y);
 	printf("pointz: %f\n", plane->point.z);
-	printf("norm_vecx: %f\n", plane->norm_vector.x);
-	printf("norm_vecy: %f\n", plane->norm_vector.y);
-	printf("norm_vecz: %f\n", plane->norm_vector.z);
+	printf("norm_vecx: %f\n", plane->norm.x);
+	printf("norm_vecy: %f\n", plane->norm.y);
+	printf("norm_vecz: %f\n", plane->norm.z);
 	printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
 	plane = plane->next;
 	while (plane->id != start_id)
@@ -52,9 +52,9 @@ void	print_planes(t_plane *plane)
 		printf("pointx: %f\n", plane->point.x);
 		printf("pointy: %f\n", plane->point.y);
 		printf("pointz: %f\n", plane->point.z);
-		printf("norm_vecx: %f\n", plane->norm_vector.x);
-		printf("norm_vecy: %f\n", plane->norm_vector.y);
-		printf("norm_vecz: %f\n", plane->norm_vector.z);
+		printf("norm_vecx: %f\n", plane->norm.x);
+		printf("norm_vecy: %f\n", plane->norm.y);
+		printf("norm_vecz: %f\n", plane->norm.z);
 		printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
 		plane = plane->next;
 	}

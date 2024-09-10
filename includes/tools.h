@@ -52,7 +52,7 @@ typedef struct s_position
 typedef struct s_ray
 {
 	t_point origin;
-	t_vec3 direction;
+	t_vec3 dir;
 }	t_ray;
 
 typedef enum e_type

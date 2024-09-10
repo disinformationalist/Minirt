@@ -30,12 +30,12 @@ static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 u_ve
 	t_vec3	pix_delta_v;
 
 	//set change in u/v per pixel along view directions
-	pix_delta_u = scalar_mult_vec(trace->pixel_width, u_vec);
-	pix_delta_v = scalar_mult_vec(trace->pixel_height, v_vec);
+	pix_delta_u = scale_vec(trace->pixel_width, u_vec);
+	pix_delta_v = scale_vec(trace->pixel_height, v_vec);
 
 	//the adjust by .5 is for pixel centers
-	trace->pixel00 = add_vec(view_topleft, scalar_mult_vec(0.5, pix_delta_u));
-	trace->pixel00 = add_vec(trace->pixel00, scalar_mult_vec(0.5, pix_delta_v));
+	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, pix_delta_u));
+	trace->pixel00 = add_vec(trace->pixel00, scale_vec(0.5, pix_delta_v));
 }
 
 static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
@@ -47,15 +47,16 @@ static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double v
 	t_vec3	v_vec;
 	
 	//right and up basis vecs
-	u_vec = normalize_vec(cross_prod(trace->cam->orient, vec(0, 1, 0)));
-	v_vec = normalize_vec(cross_prod(u_vec, trace->cam->orient));
+	u_vec = norm_vec(cross_prod(trace->cam->orient, vec(0, 1, 0)));
+	v_vec = norm_vec(cross_prod(u_vec, trace->cam->orient));
 
 	//for set view center
-	horizontal_move = scalar_mult_vec(view_width / 2.0, u_vec);
-	vertical_move = scalar_mult_vec(view_height / 2.0, v_vec);
+	horizontal_move = scale_vec(view_width / 2.0, u_vec);
+	vertical_move = scale_vec(view_height / 2.0, v_vec);
 
 	view_topleft = add_vec(view_center, vertical_move); 
 	view_topleft = subtract_vec(view_topleft, horizontal_move);
+	//trace->pixel00 = view_topleft;//----------for other super
 
 	set_pixel00(trace, view_topleft, u_vec, v_vec);
 }
@@ -71,7 +72,7 @@ void	init_viewing(t_trace *trace)
 	double	view_height;
 	
 	focal_len = 1.0;
-	view_center = add_vec(trace->cam->center, scalar_mult_vec(1.0 / focal_len, trace->cam->orient));
+	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
 
 	view_width = 2.0 * tan((double)(trace->cam->fov / 2) * DEG_TO_RAD);
 	view_height = view_width / ASPECT;

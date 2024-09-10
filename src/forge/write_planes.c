@@ -22,7 +22,7 @@ char	*build_pl_line(t_plane *plane)
 	int				spaces2;
 
 	p = plane->point;
-	n = plane->norm_vector;
+	n = plane->norm;
 	spaces = 16 - count_chars(p.x) - count_chars(p.y) - count_chars(p.z);
 	spaces2 = 38 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
 	snprintf(line, sizeof(line), "pl          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s", p.x, p.y, p.z, spaces, "", n.x, n.y, n.z, spaces2, "");

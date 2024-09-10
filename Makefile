@@ -50,6 +50,8 @@ SRCS := ./src/main.c \
 ./src/png/get_png_name.c \
 ./src/downsample.c \
 ./src/threader.c \
+./src/color_disrupt.c \
+
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 #-Iincludes

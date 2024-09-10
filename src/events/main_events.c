@@ -32,17 +32,17 @@ SPACE => supersample mode
 
 //TRANSLATION
 
-J,L => x directions
-I,K => y directions
-U,O => z directions
+J,L => x dirs
+I,K => y dirs
+U,O => z dirs
 
 -----------------TODO--------------------
 
 //ROTATION
 
-J,L => x directions
-I,K => y directions
-U,O => z directions
+J,L => x dirs
+I,K => y dirs
+U,O => z dirs
 
 //RESIZE OBJECT, + -
 
