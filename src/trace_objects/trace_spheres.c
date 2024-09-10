@@ -105,6 +105,7 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	{
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		norm = norm_vec(subtract_vec(int_pnt, sphere->center));
+		//loop here for multiple lights.
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		if (dot_product(norm, r.dir) > 0)//this seems to work for correction.. moving light and cam inside of sphere
 			norm = neg(norm);

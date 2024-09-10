@@ -45,10 +45,11 @@ static inline void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_t
 }
 
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest, t_position pos)
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
 {
 	t_ray		r;
 	t_point		current_pixel;
+	t_position	pos;
 
 	r.origin = trace->cam->center;
 	pos.j = piece->y_s - 1;
@@ -60,8 +61,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 		while (++pos.i < piece->x_e)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));//normed now
-			//r.dir = subtract_vec(current_pixel, r.origin);
-			//r.dir.x = .5 * r.dir.x; //to toy with transform
+			/* r.dir.x = .1 * r.dir.x; //to toy with transform
+			r.dir = norm_vec(r.dir); */
 			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}
@@ -74,7 +75,6 @@ void	*ray_trace(void *arg)
 {
 	t_piece			*piece;
 	t_trace			*trace;
-	t_position		pos;
 	t_track_hits 	*closest;
 
 	piece = (t_piece *)arg;
@@ -82,7 +82,7 @@ void	*ray_trace(void *arg)
 	closest = (t_track_hits *)malloc(sizeof(t_track_hits));
 	if (!closest)
 		clear_all(trace);
-	compute_pixels(trace, piece, closest, pos);
+	compute_pixels(trace, piece, closest);
 	free(closest);
 	pthread_exit(NULL);
 }
