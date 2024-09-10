@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PIECE_OF_HEADER_H
+# define PIECE_OF_HEADER_H
+
 # define MTRX_SIZE 4
 # define SIZE_3X3 3
 # define SIZE_2X2 2
