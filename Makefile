@@ -36,7 +36,7 @@ SRCS := ./src/main.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
-./src/trace_objects/trace_cylinders.c \
+./src/trace_objects/trace_capped_cylinders.c \
 ./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_utils.c \
@@ -59,6 +59,7 @@ SRCS := ./src/main.c \
 ./src/threader.c \
 ./src/color_disrupt.c \
 ./src/init_objects/light_list_utils.c \
+#./src/trace_objects/trace_cylinders.c \
 
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
