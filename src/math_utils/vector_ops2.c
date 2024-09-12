@@ -1,13 +1,13 @@
 #include "minirt.h"
 
-/* t_ray	ray(t_vec3 dir, t_point origin)
+t_ray	ray(t_vec3 dir, t_point origin)
 {
 	t_ray r;
 
 	r.dir = dir;
 	r.origin = origin;
 	return (r);
-} */
+}
 
 t_vec3	norm_vec(t_vec3 vec)
 {

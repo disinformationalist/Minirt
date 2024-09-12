@@ -18,9 +18,9 @@
 // a, b and c got combined into one t_vec3 because of the norm 
 static inline bool	check_solutions(t_vec3 abc, double *t1, double *t2)//changed to calc sq_discrim
 {
-	float	discrim;
-	float	inv_2a;
-	float 	sq_discrim;
+	double	discrim;
+	double	inv_2a;
+	double 	sq_discrim;
 
 	discrim = abc.y * abc.y - 4 * abc.x * abc.z;
 	if (discrim < 0)
@@ -121,12 +121,13 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 	//t_vec3			view_dir;
 	t_vec3			ci;//center to intersect
 	t_vec3			axis;
-	float			light_int;
+	double			light_int;
 	//double			cos_angle;
 	t_cylinder		*cylinder;
 
 	cylinder = (t_cylinder *)closest->object;
 
+	light_int = 0;
 	if (trace->lights)
 	{
 		//plug closest->t back into ray eq for intersect point;
@@ -138,17 +139,11 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));//swapped args
 		if (dot_product(normal, r.dir) > 0)//if (dot_product(normal, view_dir) < 0)//orig, r.dir is normed at inital raycast now.
 			normal = neg(normal);
-		if (obscured(trace, int_pnt, light_dir, normal))
-				light_int = 0;
-		else
-		{
+		if (!obscured(trace, int_pnt, light_dir, normal))
 			light_int = trace->lights->brightness * get_light_int(normal, light_dir, neg(r.dir));//diff + spec here
 			
 			/* cos_angle = dot_product(normal, light_dir);
 			light_int	= trace->lights->brightness * fmax(cos_angle, 0.0); */
-		}
 	}
-	else
-		light_int = 0;
 	return (get_final_color(trace, cylinder->color, light_int));
 }

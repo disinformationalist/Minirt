@@ -23,10 +23,10 @@ typedef struct s_track_hits
 // gives vals for material TOFINISH
 typedef struct s_mat
 {
-	float	amb;
-	float	diff;
-	float	spec;
-	float	shine;
+	double	amb;
+	double	diff;
+	double	spec;
+	double	shine;
 }	t_mat;
 
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
@@ -66,6 +66,23 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 }	t_cylinder;
 
+typedef struct s_light
+{
+	t_vec3			center;
+	double			brightness;
+	t_norm_color	color;//rbg colors t_color for the bones
+//stuff for bring sp lights in
+	t_ltype				type;
+	int					id;
+	t_point				pos;
+	t_vec3				dir;
+	double				inner_cone;
+	double				outer_cone;
+	double				inten;
+	struct s_light		*prev;
+	struct s_light		*next;
+}	t_light;
+
 
 /***MAIN STRUCT***/
 
@@ -78,7 +95,7 @@ typedef struct s_trace
 	//single objects
 	t_amb			*amb;
 	t_cam			*cam;
-	t_light			*lights;
+	//t_light			*lights;//single in non bones
 
 	t_track_hits	*closest;//tracking first hit
 	t_on			*on;//current object for manipulating
@@ -88,10 +105,14 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
+	t_light			*lights;//bones
+
 	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
+
+	t_light			*curr_sl;
 
 	//mlx
 	void			*mlx_connect;
@@ -177,12 +198,15 @@ void			init_viewing(t_trace *trace);
 //get and set vals
 
 t_vec3			get_coordinates(char *coord_str);
-t_norm_color	get_color(char *color_str, float val);
+t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
 
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
+
+bool			append_light(t_light **start, char **line);
+
 
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
@@ -220,11 +244,13 @@ unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
 
 //light
-float			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)
+double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)
 
 
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
+
 
 
 /***MATH UTILS***/
@@ -241,13 +267,15 @@ t_vec3			norm_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
+t_ray			ray(t_vec3 dir, t_point origin);
+
 
 
 
 /***COLOR UTILS***/
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
 t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
-t_norm_color	color(float r, float g, float b);
+t_norm_color	color(double r, double g, double b);
 
 
 
@@ -296,7 +324,5 @@ void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
 long			get_time(void);
 void			print_times(long start, long end, char *msg);
-
-
 
 #endif

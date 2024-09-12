@@ -138,5 +138,6 @@ void trace_init(t_trace *trace)
 	trace->on->type = SPHERE;
 	if (pthread_mutex_init(&trace->mutex, NULL) != 0)
 		clear_all(trace);
+	//append_sl(trace->spotlights);///------------------
 	events_init(trace);
 }

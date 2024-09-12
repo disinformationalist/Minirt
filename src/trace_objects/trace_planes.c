@@ -1,18 +1,27 @@
 #include "minirt.h"
+/* 		   soft
+		   spot
+		  light 
+		 / 	|  \
+		/  / \  \
+	   /  /   \  \
+	  /  /     \  \
+	 /  /	    \  \
+			^	  ^
+			|	  |
+	inner cone    outer cone
+(full intensity)  (attenuating toward outer edge)	 */	
+
 
 bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
 {
-	float	denom;
+	double	denom;
 	double	sol;
 	t_vec3	op;//origin to point
 
 	denom = dot_product(plane.norm, ray_dir);
-	
-
 	if (fabs(denom) < 1e-6)// close to parallel, no intersect
 		return (false);
-
-	
 	op = subtract_vec(plane.point, ray_orig);
 	sol = dot_product(op, plane.norm) / denom;
 	if (sol > 0)//in front of ray origin, not behind
@@ -51,33 +60,60 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_vec3	int_pnt;
 	t_vec3	light_dir; 
-	float	light_int;
-	//double	cos_angle;
+	double	light_int;
 	t_plane	*plane;
 
 	plane = (t_plane *)closest->object;
+	light_int = 0;
 	if (trace->lights)
 	{
-		//plug closest->t back into ray eq for intersect point;
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		if (dot_product(plane->norm, r.dir) > 0)//this seems to work for moving to other side dubchk
+		if (dot_product(plane->norm, r.dir) > 0)
 			plane->norm = neg(plane->norm);
-		if (obscured(trace, int_pnt, light_dir, plane->norm))
-				light_int = 0;
-		else
+		if (!obscured(trace, int_pnt, light_dir, plane->norm))
+			light_int = trace->lights->brightness * get_light_int(plane->norm, light_dir, neg(r.dir));//diff + spec here	
+	}
+	//plane->color = stripe(int_pnt);//trying color function
+	return (get_final_color(trace, plane->color, light_int));
+}
+
+/* unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
+{
+	t_vec3	int_pnt;
+	t_vec3	light_dir; 
+	double	light_int;
+	t_plane	*plane;
+
+	plane = (t_plane *)closest->object;
+
+	t_light			*curr_lt;
+
+	light_int = 0;
+	if (trace->lights)
+	{
+		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
+		if (dot_product(plane->norm, r.dir) > 0)
+			plane->norm = neg(plane->norm);
+		curr_lt = trace->lights;
+		while (true)
 		{
-			light_int = trace->lights->brightness * get_light_int(plane->norm, light_dir, neg(r.dir));//diff + spec here
-			
+			light_dir = norm_vec(subtract_vec(curr_lt->center, int_pnt));
+			//hard shadows...
+			//if (!obscured(trace, int_pnt, light_dir, plane->norm))
+			if (!obscured_b(trace, ray(light_dir, add_vec(int_pnt, scale_vec(1e-5, plane->norm))), curr_lt->center, int_pnt))
+				light_int += curr_lt->brightness * get_light_int(plane->norm, light_dir, neg(r.dir));//diff + spec here for each light
+			curr_lt = curr_lt->next;
+			if (curr_lt == trace->lights)
+				break;
+		}	
+	}
+	//plane->color = stripe(int_pnt);//trying color function
+	return (get_final_color(trace, plane->color, light_int));
+} */
+
+
+	//old light calc.
 			/* cos_angle = dot_product(plane->norm, light_dir);
 			light_int	= trace->lights->brightness * fmax(cos_angle, 0.0);
 			light_int = fmin(light_int, 1.0); */
-		}
-	}
-	else
-		light_int = 0;
-	//plane->color = stripe(int_pnt);//trying color function
-
-	return (get_final_color(trace, plane->color, light_int));
-}
-//plane norm vector must point toward light for compute, check in parser and set norm vector sign there.

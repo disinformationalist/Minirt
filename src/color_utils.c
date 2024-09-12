@@ -5,7 +5,7 @@ int	round_int(double d)
 	return (floor(d + .5));
 }
 
-uint8_t clamp_color(float color)
+uint8_t clamp_color(double color)
 {
 	if (color > 255)
 		return (255);
@@ -20,8 +20,8 @@ unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_in
 
 	if (trace->amb)//check outside if no amb make and set = 0 or require ambient
 	{
-		r = clamp_color(color.r * (light_int + trace->amb->color.r));
-		g = clamp_color(color.g * (light_int + trace->amb->color.g));
+		r = clamp_color(color.r * (light_int + trace->amb->color.r));// 0 - 255 object color, 0 - 1 light colors
+		g = clamp_color(color.g * (light_int + trace->amb->color.g));//light int will become total light color in bonus.
 		b = clamp_color(color.b * (light_int + trace->amb->color.b));
 	}
 	else
