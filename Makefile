@@ -11,6 +11,13 @@ SRCS := ./src/main.c \
 ./src/clean_up.c \
 ./src/math_utils/vector_ops.c \
 ./src/math_utils/vector_ops2.c \
+./src/math_utils/matrix_ops/matrix_2x2.c \
+./src/math_utils/matrix_ops/matrix_3x3_init.c \
+./src/math_utils/matrix_ops/matrix_3x3_ops.c \
+./src/math_utils/matrix_ops/matrix_3x3_stack.c \
+./src/math_utils/matrix_ops/matrix_3x3_transf.c \
+./src/math_utils/matrix_ops/matrix_vec_conv.c \
+./src/math_utils/matrix_ops/print_matrix.c \
 ./src/parsing/split_file.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \

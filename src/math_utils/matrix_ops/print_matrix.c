@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "minirt.h"
 
 void	print_matrix_4(t_matrix_4x4 *matrix)
 {
@@ -72,12 +72,6 @@ void	print_matrix_2(t_matrix_2x2 *matrix)
 		j = 0;
 		i++;
 	}
-	printf("\n");
-}
-
-void	print_tuple(t_tuple tuple)
-{
-	printf("Tuple: (%f, %f, %f, %f)", tuple.x, tuple.y, tuple.z, tuple.w);
 	printf("\n");
 }
 

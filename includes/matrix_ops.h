@@ -10,21 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIECE_OF_HEADER_H
-# define PIECE_OF_HEADER_H
+#ifndef MATRIX_OPS_H
+# define MATRIX_OPS_H
 
 # define MTRX_SIZE 4
 # define SIZE_3X3 3
 # define SIZE_2X2 2
 
 # define MTRX_STACK_SIZE 10
-
-typedef struct s_vec3
-{
-	double x;
-	double y;
-	double z;
-}	t_vec3;
 
 typedef struct s_matrix_2x2
 {
@@ -46,7 +39,6 @@ typedef struct s_matrix_4x4
 void		print_matrix_4(t_matrix_4x4 *matrix);
 void		print_matrix_3(t_matrix_3x3 *matrix);
 void		print_matrix_2(t_matrix_2x2 *matrix);
-void		print_tuple(t_tuple tuple);
 void		print_vec(t_vec3 vec);
 /* matrix */
 void		init_zero_matrix(t_matrix_4x4 *matrix);

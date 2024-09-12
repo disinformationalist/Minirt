@@ -8,6 +8,7 @@
 //# include "keyboard (42).h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
+# include "matrix_ops.h"
 
 # define ASPECT (16.0 / 9.0)
 

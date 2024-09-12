@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "minirt.h"
 
 void	init_zero_matrix_2x2(t_matrix_2x2 *matrix)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "minirt.h"
 
 void	push_mtrx_on_stack(t_matrix_3x3 *matrix, t_matrix_3x3 *matrix_stack, int *end_of_stack)
 {
