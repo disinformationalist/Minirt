@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "minirt.h"
 
 t_matrix_3x3	multiply_3x3_matrices(t_matrix_3x3 *matrix_1, t_matrix_3x3 *matrix_2)
 {
@@ -28,7 +28,7 @@ t_matrix_3x3	multiply_3x3_matrices(t_matrix_3x3 *matrix_1, t_matrix_3x3 *matrix_
 		{
 			row = row_to_vec(matrix_1, i);
 			column = column_to_vec(matrix_2, j);
-			new_matrix.m[i][j] = dot(row, column);
+			new_matrix.m[i][j] = dot_product(row, column);
 			j++;
 		}
 		j = 0;
@@ -40,9 +40,9 @@ t_matrix_3x3	multiply_3x3_matrices(t_matrix_3x3 *matrix_1, t_matrix_3x3 *matrix_
 t_vec3	multiply_3x3_matrix_by_vec(t_matrix_3x3 *matrix, t_vec3 vec)
 {
 	t_vec3	new_vec;
-	new_vec.x = dot(row_to_vec(matrix, 0), vec);
-	new_vec.y = dot(row_to_vec(matrix, 1), vec);
-	new_vec.z = dot(row_to_vec(matrix, 2), vec);
+	new_vec.x = dot_product(row_to_vec(matrix, 0), vec);
+	new_vec.y = dot_product(row_to_vec(matrix, 1), vec);
+	new_vec.z = dot_product(row_to_vec(matrix, 2), vec);
 	return (new_vec);
 }
 

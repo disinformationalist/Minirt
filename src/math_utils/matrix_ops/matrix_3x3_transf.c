@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "minirt.h"
 
 t_matrix_3x3	translation_matrix_3x3(double x, double y)
 {
