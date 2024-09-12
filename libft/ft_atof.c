@@ -16,13 +16,13 @@ double	ft_atof(char *s)
 {
 	int		sign;
 	long	int_piece;
-	double	float_piece;
+	double	double_piece;
 	int		div;
 
 	div = 1;
 	sign = 1;
 	int_piece = 0;
-	float_piece = 0;
+	double_piece = 0;
 	while (*s == 32 || (*s >= 9 && *s <= 13))
 		s++;
 	while (*s == 45 || *s == 43)
@@ -34,8 +34,8 @@ double	ft_atof(char *s)
 		s++;
 	while (*s && (*s >= '0' && *s <= '9'))
 	{
-		float_piece = float_piece * 10 + (*s++ - '0');
+		double_piece = double_piece * 10 + (*s++ - '0');
 		div *= 10;
 	}
-	return (sign * (int_piece + float_piece / div));
+	return (sign * (int_piece + double_piece / div));
 }

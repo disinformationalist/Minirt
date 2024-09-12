@@ -3,7 +3,7 @@
 //playing with color reassign, do in keyhooks, point must move with translation, rotation.
 //or figure out the tranforms from jamis buck
 
-t_norm_color color(float r, float g, float b)
+t_norm_color color(double r, double g, double b)
 {
 	t_norm_color col;
 

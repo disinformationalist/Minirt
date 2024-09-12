@@ -23,9 +23,9 @@
 
 typedef struct s_norm_color
 {
-	float r;
-	float g;
-	float b;
+	double r;
+	double g;
+	double b;
 }	t_norm_color;
 
 typedef struct s_vec2
@@ -63,6 +63,12 @@ typedef enum e_type
 	LIGHT,
 	CAM
 } 	t_type;
+
+typedef enum e_ltype
+{
+	POINT,
+	SPOT
+} 	t_ltype;
 
 /***UTILS***/
 
@@ -106,12 +112,6 @@ typedef struct s_cam
 	int		fov;
 }	t_cam;
 
-typedef struct s_light
-{
-	t_vec3			center;
-	double			brightness;
-	t_norm_color	light_color;//rbg colors t_color for the bones
-}	t_light;
 
 //parse utils
 

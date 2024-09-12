@@ -51,6 +51,7 @@ SRCS := ./src/main.c \
 ./src/downsample.c \
 ./src/threader.c \
 ./src/color_disrupt.c \
+./src/init_objects/light_list_utils.c \
 
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
@@ -100,6 +101,9 @@ $(LIBFT_ARCH):
 
 #$(IMG_ARCH):
 #	$(MAKE) -C $(IMG_PATH)
+#bonus:
+
+
 
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean
@@ -111,4 +115,4 @@ fclean: clean
 	
 re: fclean all
 
-.PHONY: all clean fclean re chaos
+.PHONY: all clean fclean re bonus

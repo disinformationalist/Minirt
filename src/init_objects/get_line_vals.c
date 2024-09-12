@@ -22,12 +22,12 @@ double	get_double(char **doub_str)
 	return (ret);
 }
 
-float get_rgb(char **s, float val)
+double get_rgb(char **s, double val)
 {
 	int 	i;
 	char 	str[3];
 	int		chan_color;
-	float	norm_color;
+	double	norm_color;
 
 	i = -1;
 	while (**s != ',' && **s != '\0')
@@ -37,11 +37,14 @@ float get_rgb(char **s, float val)
 	}
 	str[++i] = '\0';
 	chan_color = ft_atoi(str);
-	norm_color = (float)chan_color / val;//val is 255.0 or 1.0 
+	norm_color = (double)chan_color / val;//val is 255.0 or 1.0 
 	return (norm_color);
 }
 
-t_norm_color	get_color(char *color_str, float val)
+//val decides if we norm the color or not. passes in the devisor
+//obj colors are not normed, light colors are.
+
+t_norm_color	get_color(char *color_str, double val)
 {
 	t_norm_color color;
 
