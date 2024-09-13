@@ -61,6 +61,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 		while (++pos.i < piece->x_e)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));//normed now
+			//r.dir = subtract_vec(current_pixel, r.origin);
+			
 			/* r.dir.x = .1 * r.dir.x; //to toy with transform
 			r.dir = norm_vec(r.dir); */
 			check_intersects(trace, r, pos, closest);
