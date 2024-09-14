@@ -56,7 +56,7 @@ t_norm_color	get_color(char *color_str, double val)
 	return (color);
 }
 
-t_vec3	get_coordinates(char *coord_str)
+t_vec3	get_coordinates(char *coord_str, double w)
 {
 	t_vec3 coord;
 
@@ -65,5 +65,6 @@ t_vec3	get_coordinates(char *coord_str)
 	coord.y = get_double(&coord_str);
 	coord_str++;
 	coord.z = get_double(&coord_str);
+	coord.w = w;
 	return (coord);
 }

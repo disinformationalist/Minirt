@@ -5,7 +5,7 @@
 	char	*bright_ratio;
 	
 	bright_ratio = line[2];
-	new->center = get_coordinates(line[1]);
+	new->center = get_coordinates(line[1], 1.0);
 	new->brightness = get_double(&bright_ratio);
 	if (line[3])
 		new->color = get_color(line[3], 255.0);//used in bonus
@@ -17,7 +17,7 @@ void	set_lt_vals(t_light *new, char **line)
 	char	*bright_ratio;
 	
 	bright_ratio = line[2];
-	new->center = get_coordinates(line[1]);
+	new->center = get_coordinates(line[1], 1.0);
 	new->brightness = get_double(&bright_ratio);
 	if (line[3])
 		new->color = get_color(line[3], 255.0);//used in bonus

@@ -23,10 +23,10 @@ static inline void	update_cylinder_ids(t_cylinder *cylinder)
 
 static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 {
-	new->center = vec(0.0,-0.5,-6.5);
+	new->center = vec(0.0,-0.5,-6.5, 1.0);
 	new->radius = 1;
 	new->height = 3.0;
-	new->norm = vec(0.0,1.0,0.0);
+	new->norm = vec(0.0,1.0,0.0, 0.0);
 	new->color.r = 0;
 	new->color.g = 200;
 	new->color.b = 100;

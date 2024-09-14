@@ -47,7 +47,7 @@ static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double v
 	t_vec3	v_vec;
 	
 	//right and up basis vecs
-	u_vec = norm_vec(cross_prod(trace->cam->orient, vec(0, 1, 0)));
+	u_vec = norm_vec(cross_prod(trace->cam->orient, vec(0, 1, 0, 0)));
 	v_vec = norm_vec(cross_prod(u_vec, trace->cam->orient));
 
 	//for set view center

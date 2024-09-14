@@ -155,17 +155,17 @@ void	pop_object(t_trace *trace, t_on *on)
 int	key_press_2(int keycode, t_trace *trace)
 {
 	if (keycode == J)
-		translate_object(trace, trace->on, vec(-.5, 0, 0));
+		translate_object(trace, trace->on, vec(-.5, 0, 0, 0));
 	else if (keycode == L)
-		translate_object(trace, trace->on, vec(.5, 0, 0));
+		translate_object(trace, trace->on, vec(.5, 0, 0, 0));
 	else if (keycode == I)
-		translate_object(trace, trace->on, vec(0, .5, 0));
+		translate_object(trace, trace->on, vec(0, .5, 0, 0));
 	else if (keycode == K)
-		translate_object(trace, trace->on, vec(0, -.5, 0));
+		translate_object(trace, trace->on, vec(0, -.5, 0, 0));
 	else if (keycode == U)
-		translate_object(trace, trace->on, vec(0, 0, .5));
+		translate_object(trace, trace->on, vec(0, 0, .5, 0));
 	else if (keycode == O)
-		translate_object(trace, trace->on, vec(0, 0, -.5));
+		translate_object(trace, trace->on, vec(0, 0, -.5, 0));
 	else if (keycode == PERIOD)
 		push_new_object(trace, trace->on);
 	else if (keycode == COMMA)

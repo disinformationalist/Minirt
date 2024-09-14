@@ -71,6 +71,7 @@ void	init_identity_matrix_3x3(t_matrix_3x3 *matrix)
 	}
 }
 
+
 void	make_incremental_matrix_3x3(t_matrix_3x3 *matrix)
 {
 	int	i;

@@ -5,7 +5,7 @@ void	set_sp_vals(t_sphere *new, char **line)
 	char *diam_str;
 
 	diam_str = line[2];
-	new->center = get_coordinates(line[1]);
+	new->center = get_coordinates(line[1], 1.0);
 	new->radius = get_double(&diam_str) / 2.0;
 	new->color = get_color(line[3], 1.0);	
 }

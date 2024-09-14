@@ -36,23 +36,24 @@ typedef struct s_vec2
 
 typedef struct s_vec3
 {
-	double x;
-	double y;
-	double z;
+	double	x;
+	double	y;
+	double	z;
+	double	w;
 }	t_vec3;
 
 typedef t_vec3 t_point;
 
 typedef struct s_position
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 }	t_position;
 
 typedef struct s_ray
 {
-	t_point origin;
-	t_vec3 dir;
+	t_point	origin;
+	t_vec3	dir;
 }	t_ray;
 
 typedef enum e_type

@@ -18,6 +18,7 @@ SRCS := ./src/main.c \
 ./src/math_utils/matrix_ops/matrix_3x3_transf.c \
 ./src/math_utils/matrix_ops/matrix_vec_conv.c \
 ./src/math_utils/matrix_ops/print_matrix.c \
+./src/math_utils/matrix_ops/inverse.c \
 ./src/parsing/split_file.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \

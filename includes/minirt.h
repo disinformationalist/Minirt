@@ -38,6 +38,7 @@ typedef struct s_sphere
 	double			radius;
 	t_norm_color 	color;//color will move into mat
 	t_mat			mat;
+	t_matrix_4x4	transform;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -49,6 +50,7 @@ typedef struct s_plane
 	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
+	t_matrix_4x4	transform;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -62,15 +64,16 @@ typedef struct s_cylinder
 	double				height;
 	t_norm_color		color;
 	t_mat				mat;
+	t_matrix_4x4		transform;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
 
 typedef struct s_light
 {
-	t_vec3			center;
-	double			brightness;
-	t_norm_color	color;//rbg colors t_color for the bones
+	t_vec3				center;
+	double				brightness;
+	t_norm_color		color;//rbg colors t_color for the bones
 //stuff for bring sp lights in
 	t_ltype				type;
 	int					id;
@@ -197,7 +200,7 @@ void			init_viewing(t_trace *trace);
 
 //get and set vals
 
-t_vec3			get_coordinates(char *coord_str);
+t_vec3			get_coordinates(char *coord_str, double w);
 t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
 
@@ -231,12 +234,12 @@ void			*ray_trace(void *arg);
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_sphere_intersect(t_sphere sphere, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
+bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
+bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
@@ -251,6 +254,9 @@ double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
 bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
 
+//vec tools
+t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
+
 
 
 /***MATH UTILS***/
@@ -258,7 +264,7 @@ uint8_t			round_c(double d);
 
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
-t_vec3			vec(double x, double y, double z);
+t_vec3			vec(double x, double y, double z, double w);
 t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scale_vec(double scalar, t_vec3 vec);

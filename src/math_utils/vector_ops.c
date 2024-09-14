@@ -11,13 +11,14 @@ double	dot_product(t_vec3 vec1, t_vec3 vec2)
 }
 
 //makes a vector and returns it
-t_vec3	vec(double x, double y, double z)
+t_vec3	vec(double x, double y, double z, double w)
 {
 	t_vec3	v;
 
 	v.x = x;
 	v.y = y;
 	v.z = z;
+	v.w = w;
 	return (v);
 }
 
@@ -30,6 +31,7 @@ t_vec3 add_vec(t_vec3 vec1, t_vec3 vec2)
 	res.x = vec1.x + vec2.x;
 	res.y = vec1.y + vec2.y;
 	res.z = vec1.z + vec2.z;
+	res.w = vec1.w + vec2.w;
 	return (res);
 }
 
@@ -42,6 +44,7 @@ t_vec3 subtract_vec(t_vec3 vec1, t_vec3 vec2)
 	res.x = vec1.x - vec2.x;
 	res.y = vec1.y - vec2.y;
 	res.z = vec1.z - vec2.z;
+	res.w = vec1.w - vec2.w;
 	return (res);
 }
 

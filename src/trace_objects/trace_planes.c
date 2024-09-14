@@ -13,16 +13,17 @@
 (full intensity)  (attenuating toward outer edge)	 */	
 
 
-bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+//old 
+bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	double	denom;
 	double	sol;
 	t_vec3	op;//origin to point
 
-	denom = dot_product(plane.norm, ray_dir);
+	denom = dot_product(plane.norm, ray.dir);
 	if (fabs(denom) < 1e-6)// close to parallel, no intersect
 		return (false);
-	op = subtract_vec(plane.point, ray_orig);
+	op = subtract_vec(plane.point, ray.origin);
 	sol = dot_product(op, plane.norm) / denom;
 	if (sol > 0)//in front of ray origin, not behind
 	{
@@ -31,6 +32,19 @@ bool	ray_plane_intersect(t_plane plane, t_vec3 ray_dir, t_vec3 ray_orig, double 
 	}
 	return (false);
 }
+
+//--------------------new
+
+/* bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
+{
+	ray = transform(ray, plane.transform);//works
+
+	if (fabs(ray.dir.y) < 1e-6)// close to parallel, no intersect
+		return (false);
+	*t = -ray.origin.y / ray.dir.y;
+	return (true);
+} */
+
 
 void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 {
@@ -41,7 +55,7 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	curr_pl = planes;
 	while (true)
 	{
-		if (ray_plane_intersect(*curr_pl, ray.dir, ray.origin, t))
+		if (ray_plane_intersect(*curr_pl, ray, t))
 		{
 			if (*t < closest->t && *t > 0)
 			{

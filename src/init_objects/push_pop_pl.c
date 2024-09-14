@@ -22,8 +22,8 @@ static inline void	update_plane_ids(t_plane *plane)
 
 static inline void	make_default_pl(t_plane **start, t_plane *new)
 {
-	new->point = vec(0.0,-0.5,-6.5);
-	new->norm = vec(0.0,1.0,0.0);
+	new->point = vec(0.0,-0.5,-6.5, 1.0);
+	new->norm = vec(0.0,1.0,0.0, 0.0);
 	new->color.r = 200;
 	new->color.g = 0;
 	new->color.b = 0;

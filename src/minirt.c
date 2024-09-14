@@ -51,7 +51,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 	t_point		current_pixel;
 	t_position	pos;
 
-	r.origin = trace->cam->center;
+	r.origin = trace->cam->center;//check these auto assign 1 to points
+	r.origin.w = 1;//to keep point from being affected by the translation matrix
 	pos.j = piece->y_s - 1;
 	while (++pos.j < piece->y_e)
 	{
@@ -63,8 +64,6 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));//normed now
 			//r.dir = subtract_vec(current_pixel, r.origin);
 			
-			/* r.dir.x = .1 * r.dir.x; //to toy with transform
-			r.dir = norm_vec(r.dir); */
 			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}

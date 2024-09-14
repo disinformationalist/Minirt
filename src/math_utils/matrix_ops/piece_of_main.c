@@ -10,10 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minirt.h"
+
 int	main(int argc, char **argv)
 {
+	int				end_of_stack;
 	t_matrix_3x3	matrix_stack[MTRX_STACK_SIZE];
-	int		end_of_stack;
 	t_matrix_3x3	matrix;
 	t_matrix_3x3	matrix_b;
 	t_matrix_3x3	matrix_c;

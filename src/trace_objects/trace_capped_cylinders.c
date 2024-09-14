@@ -168,6 +168,8 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		ci = subtract_vec(int_pnt, cylinder->center);
 		axis = norm_vec(cylinder->norm);//already normed unless a non normed entry. have parser check these.
+		
+		//must adjust normal handling for caps.
 		normal = norm_vec(subtract_vec(ci, scale_vec(dot_product(ci, axis), axis)));
 //		light_dir = norm_vec(subtract_vec(int_pnt, trace->lights->center));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));//swapped args

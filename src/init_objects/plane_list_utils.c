@@ -4,8 +4,8 @@
 
 void	set_pl_vals(t_plane *new, char **line)
 {
-	new->point = get_coordinates(line[1]);
-	new->norm = get_coordinates(line[2]);
+	new->point = get_coordinates(line[1], 1.0);
+	new->norm = get_coordinates(line[2], 0.0);
 	new->color = get_color(line[3], 1.0);	
 }
 
