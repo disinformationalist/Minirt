@@ -89,7 +89,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 	{
 		if (ray_sphere_intersect(*curr_sp, ray, t))
 		{
-			if (*t < closest->t && *t > 0)
+			if (*t < closest->t)//&& *t > 0)
 			{
 				closest->t = *t;
 				closest->object = curr_sp;
@@ -191,8 +191,8 @@ t_vec3	normal_at(t_point int_pnt, t_matrix_4x4 transform)
 unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_sphere		*sphere;
-	t_point			int_pnt;//light intersect with surface
 	t_vec3			norm;
+	t_point			int_pnt;//light intersect with surface
 	t_vec3			light_dir; 
 	double			light_int;//total non amb lt intensity
 

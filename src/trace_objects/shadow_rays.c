@@ -12,6 +12,8 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 
 	while (true)
 	{
+		//ray = transform(ray, curr_sp->transform);
+
 		if (ray_sphere_intersect(*curr_sp, ray, &t))
 		{
 			if (t < dist)
@@ -35,6 +37,7 @@ static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double
 	curr_pl = planes;
 	while (true)
 	{
+		//ray = transform(ray, curr_pl->transform);
 		if (ray_plane_intersect(*curr_pl, ray, &t))
 		{
 			if (t < dist)
