@@ -13,12 +13,14 @@ bool	veccmp(t_vec3 v1, t_vec3 v2)
 
 //rodriguez formula to get rotation of any dir vec to up vec(inverse transform rotation)
 //takes normed vecs...
+//not working, weird scaling.
 t_matrix_4x4 inv_rot(t_vec3 start, t_vec3 target)
 {
 	t_vec3 			axis;
 	double 			angle;
 	t_matrix_4x4	res;
-
+start = norm_vec(start);
+target = norm_vec(target);
 /* 	if (fabs(angle) < 1e-6)// already aligned
 		return (identity(&res), res); */
 	//if ortho handle todo
@@ -31,6 +33,7 @@ t_matrix_4x4 inv_rot(t_vec3 start, t_vec3 target)
 	if (!veccmp(start, vec(-1, 0, 0, 0)))
 		return (rot_z(M_PI / 2));
 	axis = cross_prod(start, target);
+	norm_vec(axis);
 	angle  = acos(dot(start, target));
 /* 		 if (fabs(fabs(angle) - M_PI) < 1e-6) {
         axis = cross_prod(start, vec(1, 0, 0, 0));
@@ -56,7 +59,7 @@ t_matrix_4x4 inv_rot(t_vec3 start, t_vec3 target)
 	cos_theta = cos(angle);
 	sin_theta = sin(angle);
 
-	res.m[0][0] = cos_theta + x *x * (1 - cos_theta);
+	res.m[0][0] = cos_theta + x * x * (1 - cos_theta);
 	res.m[0][1] = x * y * (1 - cos_theta) - z * sin_theta;
 	res.m[0][2] = x * z * (1 - cos_theta) + y * sin_theta;
 	res.m[0][3] = 0;
@@ -127,10 +130,14 @@ t_matrix_4x4 get_rot(t_vec3 ori)// must use this + normal, then invert... use ro
 		return (rot_z(M_PI / 2));
 	if (!veccmp(ori, vec(-1, 0, 0, 0)))
 		return (rot_z(-M_PI / 2));
+	if (!veccmp(ori, vec(0, 0, 1, 0)))
+		return (rot_x(M_PI / 2));
+	if (!veccmp(ori, vec(0, 0, -1, 0)))
+		return (rot_x(-M_PI / 2));
 	yaw = atan2(ori.x, ori.z);
 	pitch = asin(ori.y);
-	y_rot = rot_y(-yaw);
-	x_rot = rot_x(-pitch);
+	y_rot = rot_y(yaw);
+	x_rot = rot_x(pitch);
 	return (mat_mult(x_rot, y_rot));
 }
 
@@ -153,7 +160,7 @@ void	set_pl_transforms(t_trace *trace)
 			//curr_pl->transform = mat_mult(inv_trans, inv_rot(curr_pl->norm, vec(0, 1, 0, 0)));
 			
 			
-			curr_pl->transform = mat_mult(inv_rot(curr_pl->norm, vec(0, 1, 0, 0)), inv_trans);
+			curr_pl->transform = mat_mult(get_rot(curr_pl->norm), inv_trans);
 			//curr_pl->transform = mat_mult(get_rot(curr_pl->norm), inv_trans);
 	
 			curr_pl = curr_pl->next;
@@ -163,31 +170,38 @@ void	set_pl_transforms(t_trace *trace)
 	}
 }
 
-/* void	set_cy_transforms(t_trace *trace)
+void	set_cy_transforms(t_trace *trace)
 {
-	t_plane	*curr_cy;
+	t_cylinder	*curr_cy;
 
 	if (trace->cylinders)
 	{
 		curr_cy = trace->cylinders;
 		while (true)
 		{
-			t_matrix_4x4 trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->point.z);// building the transform working
-			//t_matrix_4x4 sca = inv_scaling(curr_pl->radius, curr_pl->radius, curr_pl->radius);
-			curr_pl->transform = mat_mult(sca, trans);
-			curr_pl = curr_sp->next;
-			if (curr_pl == trace->spheres)
+			norm_vec(curr_cy->norm);
+			t_matrix_4x4 inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);// building the transform working
+		t_matrix_4x4 scale = inv_scaling(curr_cy->radius, curr_cy->radius, curr_cy->radius);
+			//curr_cy->transform = mat_mult(get_rot(curr_cy->norm), mat_mult(scale, inv_trans));
+	curr_cy->transform = mat_mult(get_rot(curr_cy->norm), mat_mult(scale, inv_trans));
+			//curr_cy->transform = mat_mult(scale, mat_mult(get_rot(curr_cy->norm), inv_trans));
+			/* t_matrix_4x4 id;
+			identity(&id);
+			curr_cy->transform = inv_trans; */
+			//print_matrix_4(&curr_cy->transform);
+			curr_cy = curr_cy->next;
+			if (curr_cy == trace->cylinders)
 				break;
-		}
 	}
-} */
+		}
+}
 
 void	render(t_trace *trace)
 {
-	//set all transforms here
+	//set all transforms here maybe move to outside render later... must adjust hooks
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
-	//set_cy_transforms(trace);
+	set_cy_transforms(trace);
 
 	if (trace->supersample)
 	{

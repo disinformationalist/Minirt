@@ -244,7 +244,7 @@ bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
 unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t);
+bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
 double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)

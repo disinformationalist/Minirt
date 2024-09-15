@@ -188,8 +188,8 @@ t_matrix_4x4	rot_z(double radians)
 
 	identity(&matrix);
 	matrix.m[0][0] = cos(radians);
-	matrix.m[1][0] = -sin(radians);
-	matrix.m[0][1] = sin(radians);
+	matrix.m[1][0] = sin(radians);
+	matrix.m[0][1] = -sin(radians);
 	matrix.m[1][1] = cos(radians);
 	return (matrix);
 }

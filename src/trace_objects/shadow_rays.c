@@ -61,7 +61,7 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, 
 	curr_cy = cylinders;
 	while (true)
 	{
-		if (ray_cylinder_intersect(*curr_cy, ray.dir, ray.origin, &t))
+		if (ray_cylinder_intersect(*curr_cy, ray, &t))
 		{
 			if (t < dist)
 				return (true);

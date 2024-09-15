@@ -181,7 +181,7 @@ t_vec3	normal_at(t_point int_pnt, t_matrix_4x4 transform)
 	t_point obj_pnt;
 
 	obj_pnt = mat_vec_mult(transform, int_pnt); //get the normal using the transform
-	obj_pnt.w = 1;
+	//obj_pnt.w = 1;
 	norm = mat_vec_mult(transpose(transform), obj_pnt);
 	norm.w = 0;
 	return (norm_vec(norm));

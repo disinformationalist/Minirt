@@ -32,7 +32,7 @@ static inline bool	check_solutions(t_vec3 abc, double *t1, double *t2)//changed 
 	return (true);
 }
 
-bool	is_within_height(double t_val, t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig)
+bool	is_within_height(double t_val, t_cylinder cylinder, t_ray ray)
 {
 	t_vec3	int_pnt;
 	t_vec3	axis;
@@ -40,7 +40,7 @@ bool	is_within_height(double t_val, t_cylinder cylinder, t_vec3 ray_dir, t_vec3 
 
 	if (t_val < 1e-5)
 		return (false);
-	int_pnt = add_vec(ray_orig, scale_vec(t_val, ray_dir));
+	int_pnt = add_vec(ray.origin, scale_vec(t_val, ray.dir));
 	axis = norm_vec(cylinder.norm);//normed already
 	projection_len = dot_product(subtract_vec(int_pnt, cylinder.center), axis);
 	if (projection_len >= -cylinder.height / 2 && projection_len <= cylinder.height / 2)
@@ -49,36 +49,36 @@ bool	is_within_height(double t_val, t_cylinder cylinder, t_vec3 ray_dir, t_vec3 
 		return (false);
 }
 
-static inline void	compute_abc(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, t_vec3 *abc)
+static inline void	compute_abc(t_cylinder cylinder, t_ray ray, t_vec3 *abc)
 {
 	t_vec3	oc;//ray origin to center
 	t_vec3	axis;//cylinder axis
 	t_vec3	oc_proj;//oc projected on a plane perpendicular to axis
-	t_vec3	ray_proj;//ray_dir projected on a plane perpendicular to axis
+	t_vec3	ray_proj;//ray.dir projected on a plane perpendicular to axis
 
-	oc = subtract_vec(ray_orig, cylinder.center);
+	oc = subtract_vec(ray.origin, cylinder.center);
 	axis = norm_vec(cylinder.norm);//should already be normed, adjust parser
 	oc_proj = subtract_vec(oc, scale_vec(dot_product(oc, axis), axis));
-	ray_proj = subtract_vec(ray_dir, scale_vec(dot_product(ray_dir, axis), axis));
+	ray_proj = subtract_vec(ray.dir, scale_vec(dot_product(ray.dir, axis), axis));
 	abc->x = dot_product(ray_proj, ray_proj); //a
 	abc->y = 2.0 * dot_product(ray_proj, oc_proj); //b
 	abc->z = dot_product(oc_proj, oc_proj) - cylinder.radius * cylinder.radius; //c
 }
 
-bool	ray_cylinder_intersect(t_cylinder cylinder, t_vec3 ray_dir, t_vec3 ray_orig, double *t)
+bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 {
 	t_vec3	abc;//coefficients of quadratic; a is abc.x, b is abc.y, c is abc.z
 	double	t1;
 	double	t2;
 	double	closest_t;
 
-	compute_abc(cylinder, ray_dir, ray_orig, &abc);
+	compute_abc(cylinder, ray, &abc);
 	if (check_solutions(abc, &t1, &t2))
 	{
 		closest_t = INFINITY;
-		if (is_within_height(t1, cylinder, ray_dir, ray_orig))
+		if (is_within_height(t1, cylinder, ray))
 			closest_t = t1;
-		if (is_within_height(t2, cylinder, ray_dir, ray_orig) && t2 < closest_t)
+		if (is_within_height(t2, cylinder, ray) && t2 < closest_t)
 			closest_t = t2;
 		if (closest_t < INFINITY)
 		{
@@ -98,7 +98,7 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 	curr_cy = cylinders;
 	while (true)
 	{
-		if (ray_cylinder_intersect(*curr_cy, ray.dir, ray.origin, t))
+		if (ray_cylinder_intersect(*curr_cy, ray, t))
 		{
 			if (*t < closest->t && *t > 0)
 			{
