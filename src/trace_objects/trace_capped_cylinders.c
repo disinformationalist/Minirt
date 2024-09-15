@@ -43,7 +43,8 @@ bool	is_within_height(double t_val, t_cylinder cylinder, t_vec3 ray_dir, t_vec3 
 	int_pnt = add_vec(ray_orig, scale_vec(t_val, ray_dir));
 	axis = norm_vec(cylinder.norm);//normed already
 	projection_len = dot_product(subtract_vec(int_pnt, cylinder.center), axis);
-	if (projection_len >= 0 && projection_len <= cylinder.height)
+	//if (projection_len >= 0 && projection_len <= cylinder.height)
+	if (projection_len >= -cylinder.height / 2 && projection_len <= cylinder.height / 2)
 		return (true);
 	else
 		return (false);
@@ -85,12 +86,20 @@ static inline bool	check_caps_solutions(t_cylinder cylinder, t_vec3 ray_dir, t_v
 	t_vec3	int_pnt;
 
 	axis = norm_vec(cylinder.norm);
+<<<<<<< HEAD
 	top_cap_center = add_vec(cylinder.center, scale_vec(cylinder.height, axis));
+=======
+	top_cap_center = add_vec(cylinder.center, scale_vec(cylinder.height / 2, axis));
+>>>>>>> main
 	*t3 = dot_product(subtract_vec(top_cap_center, ray_orig), axis) / dot_product(ray_dir, axis);
 	int_pnt = add_vec(ray_orig, scale_vec(*t3, ray_dir));
 	if (*t3 > 1e-5 && is_within_cap(*t3, cylinder, int_pnt, top_cap_center))//TODO
 		return (true);
+<<<<<<< HEAD
 	bottom_cap_center = cylinder.center;
+=======
+	bottom_cap_center = subtract_vec(cylinder.center, scale_vec(cylinder.height / 2, axis));
+>>>>>>> main
 	*t3 = dot_product(subtract_vec(bottom_cap_center, ray_orig), axis) / dot_product(ray_dir, axis);
 	int_pnt = add_vec(ray_orig, scale_vec(*t3, ray_dir));
 	if (*t3 > 1e-5 && is_within_cap(*t3, cylinder, int_pnt, bottom_cap_center))//TODO
@@ -168,8 +177,11 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		ci = subtract_vec(int_pnt, cylinder->center);
 		axis = norm_vec(cylinder->norm);//already normed unless a non normed entry. have parser check these.
+<<<<<<< HEAD
 		
 		//must adjust normal handling for caps.
+=======
+>>>>>>> main
 		normal = norm_vec(subtract_vec(ci, scale_vec(dot_product(ci, axis), axis)));
 //		light_dir = norm_vec(subtract_vec(int_pnt, trace->lights->center));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));//swapped args

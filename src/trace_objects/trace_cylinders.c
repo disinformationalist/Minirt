@@ -43,7 +43,7 @@ bool	is_within_height(double t_val, t_cylinder cylinder, t_vec3 ray_dir, t_vec3 
 	int_pnt = add_vec(ray_orig, scale_vec(t_val, ray_dir));
 	axis = norm_vec(cylinder.norm);//normed already
 	projection_len = dot_product(subtract_vec(int_pnt, cylinder.center), axis);
-	if (projection_len >= 0 && projection_len <= cylinder.height)
+	if (projection_len >= -cylinder.height / 2 && projection_len <= cylinder.height / 2)
 		return (true);
 	else
 		return (false);
