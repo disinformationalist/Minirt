@@ -64,7 +64,8 @@ void	render_scene(t_trace *trace)
 		while (++j < trace->num_cols)
 		{
 			set_pieces(trace, piece, i, j);
-			if (pthread_create(&trace->threads[i * trace->num_cols + j], NULL, ray_trace, (void *)&piece[i][j]) != 0)
+			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
+				NULL, ray_trace, (void *)&piece[i][j]) != 0)
 				thread_error(trace, i * trace->num_cols + j);
 		}
 	}

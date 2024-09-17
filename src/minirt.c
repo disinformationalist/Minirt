@@ -18,9 +18,11 @@ static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest
 	closest->object = NULL;
 	closest->object_type =  -1;
 
-	t = 0;
+	t = INFINITY;
 	check_spheres(trace->spheres, closest, ray, &t);
+	t = INFINITY;
 	check_planes(trace->planes, closest, ray, &t);
+	t = INFINITY;
 	check_cylinders(trace->cylinders, closest, ray, &t);
 
 }
@@ -52,7 +54,6 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 	t_position	pos;
 
 	r.origin = trace->cam->center;//check these auto assign 1 to points
-	r.origin.w = 1;//to keep point from being affected by the translation matrix
 	pos.j = piece->y_s - 1;
 	while (++pos.j < piece->y_e)
 	{
@@ -61,9 +62,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{
-			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));//normed now
+			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
 			//r.dir = subtract_vec(current_pixel, r.origin);
-			
 			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}

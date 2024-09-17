@@ -5,6 +5,8 @@ uint8_t round_c(double d)
 	return (floor(d + .5));
 }
 
+//ambient has already adjusted its color based on intensity
+
 bool	set_amb(t_amb **amb, char **line)
 {
 	char	*ratio_str;
@@ -18,7 +20,6 @@ bool	set_amb(t_amb **amb, char **line)
 	(*amb)->color.r = (*amb)->ratio * (*amb)->color.r;
 	(*amb)->color.g = (*amb)->ratio * (*amb)->color.g;
 	(*amb)->color.b = (*amb)->ratio * (*amb)->color.b;
-
 	return (0);
 }
 

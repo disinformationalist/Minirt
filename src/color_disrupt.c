@@ -13,15 +13,39 @@ t_norm_color color(double r, double g, double b)
 	return(col);
 }
 
+//old for test/example
+
 t_norm_color stripe(t_point point)//, t_norm_color color1, t_norm_color color2)
 {
 	t_norm_color col;
 
-	/* if ((int)floor(point.z * 2) % 2 == 0)
+	/* if ((int)floor(sqrt(point.x * point.x + point.z * point.z) * 2) % 2 == 0)
 		col = color(40, 40, 40); */
-	if ((int)floor(sqrt(point.x * point.x + point.z * point.z) * 2) % 2 == 0)
+	
+	
+	if ((int)floor(point.x * 2) % 2 == 0)
 		col = color(40, 40, 40);
 	else
 		col = color(255, 255, 255);
 	return (col);
 }
+
+
+//disrupt color using object space. working.
+
+t_norm_color stripe_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)
+{
+	t_norm_color	col;
+	t_point			obj_pnt;
+
+	obj_pnt = mat_vec_mult(transform, point);
+	
+	if ((int)floor(sqrt(obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z) * 2) % 2 == 0)
+		col = color(40, 40, 40);
+	/* if ((int)floor(obj_pnt.x * 2) % 2 == 0)
+		col = color(40, 40, 40); */
+	else
+		col = color(255, 255, 255);
+	return (col);
+}
+

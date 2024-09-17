@@ -11,6 +11,27 @@
 			|	  |
 	inner cone    outer cone
 (full intensity)  (attenuating toward outer edge)	 */	
+//playing with spotlight adjustment here
+//check the condition first to see if there is any need for the compute of diff/spec to opti.
+
+double spotlight(t_vec3 light_dir)
+{
+	t_vec3	ln;//spot light pointing direction
+	double	cos_theta;
+	double	inner_cone = cos(M_PI / 12);
+	double	outer_cone = cos(M_PI / 8);
+
+	ln = norm_vec(vec(0, 1, 0, 0));//neg orientation 
+	cos_theta = dot_product(ln, light_dir);
+	if (cos_theta > inner_cone)
+		return (1.0);
+	else if (cos_theta > outer_cone)
+	{
+		return ((cos_theta - outer_cone) / (inner_cone - outer_cone));
+	}
+	else
+		return (0);
+}
 
 
 //old 
@@ -42,7 +63,7 @@ bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 	if (fabs(ray.dir.y) < 1e-6)// close to parallel, no intersect
 		return (false);
 	*t = -ray.origin.y / ray.dir.y;
-	if (*t > 0)//shadows need this...
+	if (*t > 0)
 		return (true);
 	return (false);
 }
@@ -58,7 +79,7 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	{
 		if (ray_plane_intersect(*curr_pl, ray, t))
 		{
-			if (*t < closest->t)// && *t > 0)
+			if (*t < closest->t)
 			{
 				closest->t = *t;
 				closest->object = curr_pl;
@@ -86,16 +107,16 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		norm = plane->norm;
-		//norm = normal_at(int_pnt, plane->transform);
 		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here	
 	}
-	//plane->color = stripe(int_pnt);//trying color function
+	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
 	return (get_final_color(trace, plane->color, light_int));
 }
 
+//for multiple lights later
 /* unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_vec3	int_pnt;

@@ -12,8 +12,6 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 
 	while (true)
 	{
-		//ray = transform(ray, curr_sp->transform);
-
 		if (ray_sphere_intersect(*curr_sp, ray, &t))
 		{
 			if (t < dist)
@@ -31,13 +29,11 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double t)
 {
 	t_plane	*curr_pl;
-
 	if (planes == NULL)
 		return (false);
 	curr_pl = planes;
 	while (true)
 	{
-		//ray = transform(ray, curr_pl->transform);
 		if (ray_plane_intersect(*curr_pl, ray, &t))
 		{
 			if (t < dist)
@@ -80,13 +76,15 @@ static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)
 	bool	hit;
 	double	t;
 
-	t = dist;
+	t = INFINITY;
 	hit = check_sp_dist(trace->spheres, dist, s_ray, t);
 	if (hit)
 		return (true);
+	t = INFINITY;
 	hit = check_pl_dist(trace->planes, dist, s_ray, t);
 	if (hit)
 		return (true);
+	t = INFINITY;
 	hit = check_cy_dist(trace->cylinders, dist, s_ray, t);
 	if (hit)
 		return (true);
@@ -100,8 +98,9 @@ bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 	t_ray	s_ray;
 	double	light_dist;
 
-	s_ray.dir = light_dir;//norm_vec(subtract_vec(trace->lights->center, int_pnt));
+	s_ray.dir = light_dir;
 	s_ray.origin = add_vec(pnt, scale_vec(1e-5, normal));
+	
 	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));// use in previous to get light dir test times.
 	//check all intersects within distance
 	return (check_all_dist(trace, light_dist, s_ray));

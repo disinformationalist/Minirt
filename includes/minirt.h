@@ -275,12 +275,14 @@ t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
+t_matrix_4x4	rot_up(t_vec3 ori);
 
 
 
 /***COLOR UTILS***/
 unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
 t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
+t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
 t_norm_color	color(double r, double g, double b);
 
 
