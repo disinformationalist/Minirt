@@ -11,9 +11,9 @@ void	check_sp(char **line, char ***rt_file)
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid sphere coordinates\n", \
 	"sphere coordinates must be in the format x,y,z\n");
-	if (check_double(&diam_str, -9999.0, 9999.0))
+	if (check_double(&diam_str, 0.0001, 9999.0))
 		free_exit(rt_file, "Error\n Invalid sphere diameter\n", \
-	"Sphere diameter must be between 0.0 and 9999.0\n");
+	"Sphere diameter must be between 0.0001 and 9999.0\n");
 	if (check_color(line[3]))
 		free_exit(rt_file, "Error\n Invalid sphere color value\n", \
 	"Sphere color channel values must be between 0 and 255" \
@@ -56,12 +56,12 @@ void	check_cy(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid cylinder orientation\n", \
 	"Cylinder orientation must be in the format x,y,z," \
 	"with values between minus one and one\n");
-	if (check_double(&diam_str, -9999.0, 9999.0))
+	if (check_double(&diam_str, 0.0001, 9999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \
-	"Cylinder diameter must be between -9999 and 9999\n");
-	if (check_double(&height_str, -9999.0, 9999.0))
+	"Cylinder diameter must be between 0.0001 and 9999\n");
+	if (check_double(&height_str, 0.0001, 9999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder height\n", \
-	"Cylinder height must be between -9999 and 9999\n");
+	"Cylinder height must be between 0.0001 and 9999\n");
 	if (check_color(line[5]))
 		free_exit(rt_file, "Error\n Invalid cylinder color value\n", \
 	"Cylinder color channel values between 0 and 255 in the format r,g,b\n");
