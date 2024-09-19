@@ -32,6 +32,10 @@ void	check_pl(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid plane orientation\n", \
 	"Plane normal vector must be in the format x,y,z," \
 	"with values between minus one and one\n");
+	if (check_normalization(line[2]))
+		free_exit(rt_file, "Error\n Invalid plane orientation vector\n", \
+	"Plane orientation vector must be normalized," \
+	" with magnitude of one\n");
 	if (check_color(line[3]))
 		free_exit(rt_file, "Error\n Invalid plane color value\n", \
 	"Plane color channel values must be between 0 and 255" \
@@ -56,6 +60,10 @@ void	check_cy(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid cylinder orientation\n", \
 	"Cylinder orientation must be in the format x,y,z," \
 	"with values between minus one and one\n");
+	if (check_normalization(line[2]))
+		free_exit(rt_file, "Error\n Invalid cylinder orientation vector\n", \
+	"Cylinder orientation vector must be normalized," \
+	" with magnitude of one\n");
 	if (check_double(&diam_str, 0.0001, 9999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \
 	"Cylinder diameter must be between 0.0001 and 9999\n");

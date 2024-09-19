@@ -38,6 +38,22 @@ int	check_orientation(char *orient_str)
 	return (0);
 }
 
+int	check_normalization(char *orient_str)
+{
+	double	coord_x;
+	double	coord_y;
+	double	coord_z;
+
+	coord_x = get_double(&orient_str);
+	orient_str++;
+	coord_y = get_double(&orient_str);
+	orient_str++;
+	coord_z = get_double(&orient_str);
+	if (!is_normalized(vec(coord_x, coord_y, coord_z, 0)))
+		return (1);
+	return (0);
+}
+
 int	check_fov(char *fov_str)
 {
 	int 	i;

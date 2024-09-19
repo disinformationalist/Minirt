@@ -24,6 +24,17 @@ t_vec3	norm_vec(t_vec3 vec)
 	return (normed);
 }
 
+bool	is_normalized(t_vec3 vec)
+{
+	double	magnit;
+
+	magnit = magnitude(vec);
+	if ((magnit >= 1 - (1e-5)) && (magnit <= 1 + (1e-5)))
+		return (true);
+	else
+		return (false);
+}
+
 t_vec3	cross_prod(t_vec3 vec1, t_vec3 vec2)
 {
 	t_vec3	res;

@@ -29,6 +29,10 @@ void	check_cam(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid camera orientation\n", \
 	" Camera orientation must be in the format x,y,z," \
 	" with values between zero and one\n");
+	if (check_normalization(line[2]))
+		free_exit(rt_file, "Error\n Invalid camera orientation vector\n", \
+	"Camera orientation vector must be normalized," \
+	" with magnitude of one\n");
 	if (check_fov(line[3]))
 		free_exit(rt_file, "Error\n Invalid camera FOV\n", \
 	" Camera FOV must be between 0 and 180\n");
