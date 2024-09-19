@@ -23,7 +23,7 @@ int	fill_array_loop(char **line, char ***split_file, int fd, int i)
 	*line = ft_strtrim(*line, " \t");
 	if (!(*line))
 		return (free_and_close(split_file, "Error\n ft_strtrim failure\n" , fd, i), 1);
-	split_file[i] = ft_split(*line, ' ');
+	split_file[i] = split_by_whitespace(*line);
 	free(*line);
 	if (!split_file[i])
 		return (free_and_close(split_file, "Error\n ft_split failure\n" , fd, i), 1);

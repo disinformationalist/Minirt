@@ -162,6 +162,7 @@ typedef struct s_piece //for threads
 
 void			parse_rt(t_trace *trace, char ***rt_file);
 char			***split_file(char *file);
+char			**split_by_whitespace(char const *s);
 
 //parse_rt_utils
 void			init_obs(t_trace *trace);
