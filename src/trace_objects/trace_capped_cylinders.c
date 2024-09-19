@@ -168,7 +168,7 @@ bool	check_cap(t_ray ray, double t)
 
 	x = ray.origin.x + t * ray.dir.x;
 	z = ray.origin.z + t * ray.dir.z;
-	if ((x * x + z * z) <= 1.5)
+	if ((x * x + z * z) <= 1)
 		return (true);
 	return (false);	
 }

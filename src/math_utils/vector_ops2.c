@@ -29,7 +29,7 @@ bool	is_normalized(t_vec3 vec)
 	double	magnit;
 
 	magnit = magnitude(vec);
-	if ((magnit >= 1 - (1e-5)) && (magnit <= 1 + (1e-5)))
+	if ((magnit >= 1 - (1e-3)) && (magnit <= 1 + (1e-3)))
 		return (true);
 	else
 		return (false);

@@ -7,7 +7,7 @@ C           0.000,1.000,-0.500             0.000,0.000,1.000                    
 
 
 #Lights:    Cen_x | Cen_y | Cen_z    								    Intensity
-L           0.001,1.001,5.501                                          0.750                 
+L           0.001,1.001,5.501                                          .750                 
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z         								Diameter      		  R | G | B
