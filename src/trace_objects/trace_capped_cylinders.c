@@ -168,13 +168,12 @@ bool	check_cap(t_ray ray, double t)
 
 	x = ray.origin.x + t * ray.dir.x;
 	z = ray.origin.z + t * ray.dir.z;
-	if ((x * x + z * z) < 1)
+	if ((x * x + z * z) <= 1.5)
 		return (true);
 	return (false);	
 }
 
 //later return false if cyl.closed == false
-//later will need 4th intersection, one per cap when tracking all
 
 bool	intersect_caps(t_ray ray, double half_h, double *t3)
 {
@@ -217,8 +216,8 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	double	t2;
 	double 	t3;
 	double	half_h;
-	
-	half_h = cylinder.height / 2;// store this as cyl height  at parse?
+
+	half_h = cylinder.height / 2.0;// store this as cyl height  at parse?
 	ray = transform(ray, cylinder.transform);
 	compute_abc(&abc, ray);
 	if (abc.x != 0)
@@ -250,6 +249,7 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 	curr_cy = cylinders;
 	while (true)
 	{
+		//*t = INFINITY;
 		if (ray_cylinder_intersect(*curr_cy, ray, t))
 		{
 			if (*t < closest->t)
@@ -267,18 +267,21 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 
 t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
 {
-	t_vec3	norm;
-	double	dist;
+	t_vec3 norm;
+	double dist;
 
 	int_pnt = mat_vec_mult(transform, int_pnt);
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
-	if (dist < .99999 && int_pnt.y >= (half_h - 1e-5))
-		norm = vec(0, 1, 0, 0);
-	else if (dist < .99999 && int_pnt.y <= (-half_h + 1e-5))
-		norm = vec(0, -1, 0, 0);
+	if (dist < .99999)
+	{
+		if (int_pnt.y >= half_h - 1e-5)
+			norm = vec(0, 1, 0, 0);
+		else if (int_pnt.y <= -half_h + 1e-5)
+			norm = vec(0, -1, 0, 0);
+		norm = mat_vec_mult(transpose(transform), norm);
+	}
 	else
-		norm = vec(int_pnt.x, 0, int_pnt.z, 0);
-	norm = mat_vec_mult(transpose(transform), norm);
+		norm = mat_vec_mult(transpose(transform), vec(int_pnt.x, 0, int_pnt.z, 0));
 	norm.w = 0;
 	return (norm_vec(norm));
 }
