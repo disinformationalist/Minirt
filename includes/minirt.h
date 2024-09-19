@@ -162,6 +162,7 @@ typedef struct s_piece //for threads
 
 void			parse_rt(t_trace *trace, char ***rt_file);
 char			***split_file(char *file);
+char			**split_by_whitespace(char const *s);
 
 //parse_rt_utils
 void			init_obs(t_trace *trace);
@@ -190,6 +191,7 @@ int				check_double(char **ratio_str, double lower_lim, double upper_lim);
 int				check_color(char *color_str);
 int				check_fov(char *fov_str);
 int				check_orientation(char *orient_str);
+int				check_normalization(char *orient_str);
 int				check_coordinates(char *coord_str);
 void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
@@ -270,6 +272,7 @@ t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scale_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			norm_vec(t_vec3 vec);
+bool			is_normalized(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
