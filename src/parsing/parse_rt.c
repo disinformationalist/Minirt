@@ -80,6 +80,12 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 {
 	init_counts(trace);
 	count_ids(trace, rt_file);
+	if (trace->amb_count == 0)
+		free_exit(rt_file, "Error\n Missing or invalid ambient lighting identifier\n", \
+	" Ambient lighting line must begin with 'A'\n");
+	if (trace->cam_count == 0)
+		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
+	" Camera line must begin with 'C'\n");
 	check_ids(rt_file);
 	//check_counts(); //make function here checking things like at least one cam, at least one object, etc... custom error msgs.
 	init_obs(trace);
