@@ -12,8 +12,8 @@ int	ft_3darray_len(char ***array)
 
 int	main(int ac, char **av)
 {
-	char	***rt_file;
-	t_trace	trace;
+	char		***rt_file;
+	t_trace		trace;
 	
 	if (ac != 2)
 	{
@@ -27,7 +27,7 @@ int	main(int ac, char **av)
 	free_3d_array_i(rt_file, ft_3darray_len(rt_file));//free parsing tool 3d split rt_file
     
 //----------------------------- multithread stuff here
-	trace.num_cols = 1;//compare speeds with optisetter
+	trace.num_cols = 1;
 	trace.num_rows = get_num_cores();
 	//trace.num_rows = 1;
 

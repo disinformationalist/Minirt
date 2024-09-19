@@ -182,14 +182,24 @@ t_matrix_4x4	rot_y(double radians)
 	return (matrix);
 }
 
+void	tuple_to_row(t_matrix_4x4 *matrix, t_vec3 tuple, int row)
+{
+	matrix->m[row][0] = tuple.x;
+	matrix->m[row][1] = tuple.y;
+	matrix->m[row][2] = tuple.z;
+	matrix->m[row][3] = tuple.w;
+}
+
+//using right handed here
+
 t_matrix_4x4	rot_z(double radians)
 {
 	t_matrix_4x4	matrix;
 
 	identity(&matrix);
 	matrix.m[0][0] = cos(radians);
-	matrix.m[1][0] = sin(radians);
-	matrix.m[0][1] = -sin(radians);
+	matrix.m[1][0] = -sin(radians);
+	matrix.m[0][1] = sin(radians);
 	matrix.m[1][1] = cos(radians);
 	return (matrix);
 }

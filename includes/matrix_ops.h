@@ -19,6 +19,8 @@
 
 # define MTRX_STACK_SIZE 10
 
+//#include "tools.h"
+
 typedef struct s_matrix_2x2
 {
 	double		m[SIZE_2X2][SIZE_2X2];
@@ -34,9 +36,17 @@ typedef struct s_matrix_4x4
 	double		m[MTRX_SIZE][MTRX_SIZE];
 }				t_matrix_4x4;
 
-//apply an objects transform matrix to ray
+typedef struct s_vec3
+{
+	double	x;
+	double	y;
+	double	z;
+	double	w;
+}	t_vec3;
 
-t_ray	transform(t_ray r, t_matrix_4x4 m);
+typedef t_vec3 t_point;
+
+//apply an objects transform matrix to ray
 
 
 //----------------------------new------------------------
@@ -49,9 +59,6 @@ t_vec3			row_to_vec4(t_matrix_4x4 matrix, int row);
 
 t_matrix_4x4	inverse(t_matrix_4x4 matrix);//all stuff for this in inverse.c
 t_matrix_4x4	transpose(t_matrix_4x4 matrix);
-
-
-
 
 t_vec3			mat_vec_mult(t_matrix_4x4 matrix, t_vec3 vec);
 t_matrix_4x4	mat_mult(t_matrix_4x4 m_1, t_matrix_4x4 m_2);
@@ -69,6 +76,9 @@ t_matrix_4x4	rot_z(double radians);
 
 void			zero(t_matrix_4x4 *matrix);
 void			identity(t_matrix_4x4 *matrix);
+
+void			tuple_to_row(t_matrix_4x4 *matrix, t_vec3 tuple, int row);
+
 
 //----------------------------end new------------------------
 

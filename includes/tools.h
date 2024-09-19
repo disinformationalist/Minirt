@@ -14,12 +14,15 @@
 # include "ansi_colors.h"
 # include "limits.h"
 # include <stdint.h>//uint8_t
+# include "matrix_ops.h"
+
 
 //used for bones
 # include <pthread.h>
 # include <png.h>//for export/import bones only
 
 # define DEG_TO_RAD  (M_PI / 180.0)
+
 
 typedef struct s_norm_color
 {
@@ -33,16 +36,6 @@ typedef struct s_vec2
 	double x;
 	double y;
 }	t_vec_2;
-
-typedef struct s_vec3
-{
-	double	x;
-	double	y;
-	double	z;
-	double	w;
-}	t_vec3;
-
-typedef t_vec3 t_point;
 
 typedef struct s_position
 {
@@ -102,17 +95,22 @@ typedef struct s_on
 typedef struct s_amb
 {
 	double	ratio;
-	//t_color	amb_color;
 	t_norm_color	color;
 }	t_amb;
 
 typedef struct s_cam
 {
-	t_vec3	center;
-	t_vec3	orient;
-	int		fov;
+	t_vec3			center;
+	t_vec3			orient;
+	int				fov;
+	t_matrix_4x4	transform;
+	double			width;
+	double			height;
+	double			half_width;
+	double			half_height;
+	double			half_view;
+	double			pixel_size;
 }	t_cam;
-
 
 //parse utils
 
@@ -125,5 +123,8 @@ typedef struct s_obj_counts
 	int				plane_count;
 	int				cyl_count;
 }	t_obj_counts;
+
+t_ray	transform(t_ray r, t_matrix_4x4 m);
+
 
 #endif

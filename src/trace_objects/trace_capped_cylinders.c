@@ -306,7 +306,7 @@ unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (!obscured(trace, int_pnt, light_dir, normal))
 			light_int = trace->lights->brightness * get_light_int(normal, light_dir, neg(r.dir));//diff + spec here	
 	}
-	cylinder->color = stripe_at(int_pnt, cylinder->transform);//trying color function
+	//cylinder->color = stripe_at(int_pnt, cylinder->transform);//trying color function
 
 	return (get_final_color(trace, cylinder->color, light_int));
 }

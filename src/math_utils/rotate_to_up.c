@@ -2,16 +2,19 @@
 
 static inline bool	veccmp(t_vec3 v1, t_vec3 v2)
 {
-	if (v1.x != v2.x)
+	double eps;
+
+	eps = 1e-6;
+	if (fabs(v1.x - v2.x) > eps)
 		return (true);
-	if (v1.y != v2.y)
+	if (fabs(v1.y - v2.y) > eps)
 		return (true);
-	if (v1.z != v2.z)
+	if (fabs(v1.z - v2.z) > eps)
 		return (true);
 	return (false);
 }
 
-//uses rodrigues got get rotation
+//uses rodrigues rotation formula to get inverse rotation
 
 static inline t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
 {
@@ -53,8 +56,8 @@ t_matrix_4x4 rot_up(t_vec3 ori)
 		return (identity(&res), res);
 	if (!veccmp(ori, vec(0, -1, 0, 0)))
 		return (rot_x(M_PI));
-	axis = cross_prod(ori, up);
-	angle = acos(dot_product(norm_vec(ori), norm_vec(up)));
+	axis = norm_vec(cross_prod(ori, up));
+	angle = acos(dot_product(ori, up));
 	res = get_rotation(axis, cos(angle), sin(angle));
 	return (res);
 }

@@ -112,6 +112,7 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here	
 	}
+	//plane->color = stripe(int_pnt);
 	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
 	return (get_final_color(trace, plane->color, light_int));
 }

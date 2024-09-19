@@ -74,6 +74,25 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 	}
 }
 
+void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
+{
+	
+	if (on->object == NULL)
+		return ;
+	else if (on->type == PLANE)
+		trace->curr_pl->norm = mat_vec_mult(rot, trace->curr_pl->norm);
+	else if (on->type == CYLINDER)
+		trace->curr_cy->norm = mat_vec_mult(rot, trace->curr_cy->norm);
+	else if (on->type == CAM)
+	{
+		//broken does scaling
+		trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
+		init_viewing(trace);
+	}
+	else
+		return ;
+}
+
 int	close_win(t_trace *trace)//valgrind error when using the x to close window, escape key gives no such error...
 {	
 	pthread_mutex_destroy(&trace->mutex);
@@ -92,19 +111,19 @@ int	close_win(t_trace *trace)//valgrind error when using the x to close window, 
 
 int key_press_3(int keycode, t_trace *trace)
 {
-	/* if (keycode == A)//along x
-
+	if (keycode == A)//along x
+		rotate_object(trace, trace->on, rot_x(-M_PI / 6));
 	else if (keycode == D)
-	
+		rotate_object(trace, trace->on, rot_x(M_PI / 6));
 	else if (keycode == W)//along y
-	
+		rotate_object(trace, trace->on, rot_y(M_PI / 6));
 	else if (keycode == S)
-	
+		rotate_object(trace, trace->on, rot_y(-M_PI / 6));
 	else if (keycode == Q)//along z
-	
+		rotate_object(trace, trace->on, rot_z(M_PI / 6));
 	else if (keycode == E)
-	
-	else */
+		rotate_object(trace, trace->on, rot_z(-M_PI / 6));
+	else
 	supersample_handle(keycode, trace);
 	return (0);
 }
@@ -171,7 +190,8 @@ int	key_press_2(int keycode, t_trace *trace)
 	else if (keycode == COMMA)
 		pop_object(trace, trace->on);
 	else
-		supersample_handle(keycode, trace);
+		key_press_3(keycode, trace);
+		//supersample_handle(keycode, trace);
 	render(trace);
 	return (0);
 }

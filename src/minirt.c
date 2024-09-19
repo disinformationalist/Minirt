@@ -12,19 +12,17 @@ static inline void	put_pixel(int x, int y, t_trace *trace, int color)
 
 static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 {
-	double			t;
+	double	t;
 
 	closest->t = INFINITY;
 	closest->object = NULL;
-	closest->object_type =  -1;
-
+	closest->object_type = -1;
 	t = INFINITY;
 	check_spheres(trace->spheres, closest, ray, &t);
 	t = INFINITY;
 	check_planes(trace->planes, closest, ray, &t);
 	t = INFINITY;
 	check_cylinders(trace->cylinders, closest, ray, &t);
-
 }
 
 //checking for the closest intersection and computing color
@@ -34,7 +32,6 @@ static inline void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_t
 	unsigned int	final_color;
 	
 	find_closest(trace, r, closest);
-
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		final_color = color_sphere(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
@@ -46,6 +43,50 @@ static inline void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_t
 	put_pixel(pos.i, pos.j, trace, final_color);
 }
 
+//transform view way, harder to use, slow
+
+/* t_ray	ray_for_pixel(t_cam *cam, double x, double y)
+{
+	t_ray	ray;
+	double	xoffset;
+	double	yoffset;
+	double	world_x;
+	double	world_y;
+
+	//try replacing here with pixel00 method
+	xoffset = (x + .5) * cam->pixel_size;
+	yoffset = (y + .5) * cam->pixel_size;
+	world_x = cam->half_width - xoffset;
+	world_y = cam->half_height - yoffset;
+
+	t_vec3 pixel = mat_vec_mult(inverse(cam->transform), vec(world_x, world_y, -1, 1));
+	ray.origin = mat_vec_mult(inverse(cam->transform), vec(0, 0, 0, 1));
+	ray.dir = norm_vec(subtract_vec(pixel, ray.origin));
+	return (ray);
+}
+
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
+{
+	t_ray		r;
+	t_position	pos;
+	t_cam		*cam;
+
+	cam = trace->cam;
+	pos.j = piece->y_s - 1;
+	while (++pos.j < piece->y_e)
+	{
+		pos.i = piece->x_s - 1;
+		while (++pos.i < piece->x_e)
+		{
+			r = ray_for_pixel(cam, pos.i, pos.j);
+			check_intersects(trace, r, pos, closest);
+		}
+	}
+} */
+
+//non transform view
+
+//maybe use transform on cam orient and center
 
 static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
 {
@@ -53,7 +94,7 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 	t_point		current_pixel;
 	t_position	pos;
 
-	r.origin = trace->cam->center;//check these auto assign 1 to points
+	r.origin = trace->cam->center;
 	pos.j = piece->y_s - 1;
 	while (++pos.j < piece->y_e)
 	{
