@@ -10,14 +10,14 @@ void	init_obs(t_trace *trace)
 	trace->cylinders = NULL;
 }
 
-void	init_counts(t_trace *trace)
+void	init_counts(t_obj_counts *counts)
 {
-	trace->amb_count = 0;
-	trace->cam_count = 0;
-	trace->light_count = 0;
-	trace->sphere_count = 0;
-	trace->plane_count = 0;
-	trace->cyl_count = 0;
+	counts->amb_count = 0;
+	counts->cam_count = 0;
+	counts->light_count = 0;
+	counts->sphere_count = 0;
+	counts->plane_count = 0;
+	counts->cyl_count = 0;
 }
 
 void	count_check(int *item_count, char *msg, char ***rt_file)

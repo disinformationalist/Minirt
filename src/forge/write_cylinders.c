@@ -27,7 +27,7 @@ char	*build_cy_line(t_cylinder *cyl)
 
 	
 	cen = cyl->center;
-	n = cyl->norm_vector;
+	n = cyl->norm;
 	d = (2.0 * cyl->radius);
 	h = cyl->height;
 	

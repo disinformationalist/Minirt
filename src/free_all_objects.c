@@ -57,11 +57,31 @@ void	free_cy_list(t_cylinder **start)
 	*start = NULL;
 }
 
+void	free_lt_list(t_light **start)
+{
+	t_light		*curr;
+	t_light		*temp;
+
+	if (*start == NULL)
+		return ;
+	curr = *start;
+	curr = curr->next;
+	while (curr != *start)
+	{
+		temp = curr->next;
+		free(curr);
+		curr = temp;
+	}
+	free(curr);
+	*start = NULL;
+}
+
 void	free_all_objects(t_trace *trace)
 {
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);
+	//free_lt_list(&trace->cylinders);
 	if (trace->amb)
 		free(trace->amb);
 	if (trace->cam)

@@ -2,98 +2,86 @@
 
 void	print_cylinders(t_cylinder *cylinder)
 {
-	int start_id;
+	t_cylinder	*curr_cy;
 
-	start_id = cylinder->id;
-	printf("----------------------cylinder id: %d ----------------- \n", cylinder->id);
-	printf("centerx: %f\n", cylinder->center.x);
-	printf("centery: %f\n", cylinder->center.y);
-	printf("centerz: %f\n", cylinder->center.z);
-	printf("norm_vecx: %f\n", cylinder->norm_vector.x);
-	printf("norm_vecy: %f\n", cylinder->norm_vector.y);
-	printf("norm_vecz: %f\n", cylinder->norm_vector.z);
-	printf("cylinder diam: %f\n", cylinder->radius * 2);
-	printf("cylinder height: %f\n", cylinder->height);
-	printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
-	cylinder = cylinder->next;
-	while (cylinder->id != start_id)
+	if (cylinder == NULL)
+		return ;
+	curr_cy = cylinder;
+	printf("\n----------------------------CYLINDERS-----------------------------\n");
+	while (true)
 	{
-		printf("----------------------cylinder id: %d ----------------- \n", cylinder->id);
-		printf("centerx: %f\n", cylinder->center.x);
-		printf("centery: %f\n", cylinder->center.y);
-		printf("centerz: %f\n", cylinder->center.z);
-		printf("norm_vecx: %f\n", cylinder->norm_vector.x);
-		printf("norm_vecy: %f\n", cylinder->norm_vector.y);
-		printf("norm_vecz: %f\n", cylinder->norm_vector.z);
-		printf("cylinder diam: %f\n", cylinder->radius * 2);
-		printf("cylinder height: %f\n", cylinder->height);
-		printf("cylinder color rgb: r: %f, g: %f, b %f\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
-		cylinder = cylinder->next;
+		printf("\n----------------------cylinder id: %d ----------------- \n", curr_cy->id);
+		printf("centerx: %f\n", curr_cy->center.x);
+		printf("centery: %f\n", curr_cy->center.y);
+		printf("centerz: %f\n\n", curr_cy->center.z);
+		printf("norm_vecx: %f\n", curr_cy->norm.x);
+		printf("norm_vecy: %f\n", curr_cy->norm.y);
+		printf("norm_vecz: %f\n\n", curr_cy->norm.z);
+		printf("cylinder diam: %f\n", curr_cy->radius * 2);
+		printf("cylinder height: %f\n", curr_cy->height);
+		printf("cylinder color rgb: r: %f, g: %f, b %f\n", curr_cy->color.r, curr_cy->color.g, curr_cy->color.b);
+		curr_cy = curr_cy->next;
+		if (curr_cy == cylinder)
+			break;
 	}
 }
 
 void	print_planes(t_plane *plane)
 {
-	int start_id;
+	t_plane	*curr_pl;
 
-	start_id = plane->id;
-	printf("----------------------plane id: %d ----------------- \n", plane->id);
-	printf("pointx: %f\n", plane->point.x);
-	printf("pointy: %f\n", plane->point.y);
-	printf("pointz: %f\n", plane->point.z);
-	printf("norm_vecx: %f\n", plane->norm_vector.x);
-	printf("norm_vecy: %f\n", plane->norm_vector.y);
-	printf("norm_vecz: %f\n", plane->norm_vector.z);
-	printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
-	plane = plane->next;
-	while (plane->id != start_id)
+	if (plane == NULL)
+		return ;
+	curr_pl = plane;
+	printf("\n----------------------------PLANES-----------------------------\n");
+	while (true)
 	{
-		printf("----------------------plane id: %d ----------------- \n", plane->id);
-		printf("pointx: %f\n", plane->point.x);
-		printf("pointy: %f\n", plane->point.y);
-		printf("pointz: %f\n", plane->point.z);
-		printf("norm_vecx: %f\n", plane->norm_vector.x);
-		printf("norm_vecy: %f\n", plane->norm_vector.y);
-		printf("norm_vecz: %f\n", plane->norm_vector.z);
-		printf("plane color rgb: r: %f, g: %f, b %f\n", plane->color.r, plane->color.g, plane->color.b);
-		plane = plane->next;
+		printf("\n----------------------plane id: %d ----------------- \n", curr_pl->id);
+		printf("pointx: %f\n", curr_pl->point.x);
+		printf("pointy: %f\n", curr_pl->point.y);
+		printf("pointz: %f\n", curr_pl->point.z);
+		printf("norm_vecx: %f\n", curr_pl->norm.x);
+		printf("norm_vecy: %f\n", curr_pl->norm.y);
+		printf("norm_vecz: %f\n", curr_pl->norm.z);
+		printf("plane color rgb: r: %f, g: %f, b %f\n", curr_pl->color.r, curr_pl->color.g, curr_pl->color.b);
+		curr_pl = curr_pl->next;
+		if (curr_pl == plane)
+			break;
 	}
 }
 
-void	print_spheres(t_sphere *sphere)
+void	print_spheres(t_sphere *spheres)
 {
-	int start_id;
+	t_sphere	*curr_sp;
 
-	start_id = sphere->id;
-	printf("----------------------sphere id: %d ----------------- \n", sphere->id);
-	printf("centerx: %f\n", sphere->center.x);
-	printf("centery: %f\n", sphere->center.y);
-	printf("centerz: %f\n", sphere->center.z);
-	printf("sphere diam: %f\n", sphere->radius * 2);
-	printf("sphere color rgb: r: %f, g: %f, b %f\n", sphere->color.r, sphere->color.g, sphere->color.b);
-	sphere = sphere->next;
-	while (sphere->id != start_id)
+	if (spheres == NULL)
+		return ;
+	curr_sp = spheres;
+	printf("\n----------------------------SPHERES-----------------------------\n");
+	while (true)
 	{
-		printf("----------------------sphere id: %d ----------------- \n", sphere->id);
-		printf("centerx: %f\n", sphere->center.x);
-		printf("centery: %f\n", sphere->center.y);
-		printf("centerz: %f\n", sphere->center.z);
-			printf("sphere diam: %f\n", sphere->radius * 2);
-	printf("sphere color rgb: r: %f, g: %f, b %f\n", sphere->color.r, sphere->color.g, sphere->color.b);
-		sphere = sphere->next;
+		printf("\n----------------------sphere id: %d ----------------- \n", curr_sp->id);
+		printf("centerx: %f\n", curr_sp->center.x);
+		printf("centery: %f\n", curr_sp->center.y);
+		printf("centerz: %f\n\n", curr_sp->center.z);
+		printf("sphere diam: %f\n", curr_sp->radius * 2);
+		printf("sphere color rgb: r: %f, g: %f, b %f\n", curr_sp->color.r, curr_sp->color.g, curr_sp->color.b);
+		curr_sp = curr_sp->next;
+		if (curr_sp == spheres)
+			break;
 	}
 }
 
 void	print_amb(t_amb *amb)
 {
-	printf("----------------------------amb-----------------------------\n");
+	printf("\n----------------------------AMB-----------------------------\n");
 	printf("intensity ratio:%f\n", amb->ratio);
 	printf("ambient color rgb: r: %f, g: %f, b %f\n", amb->color.r, amb->color.g, amb->color.b);
 }
 
 void	print_cam(t_cam *cam)
 {
-	printf("----------------------------cam-----------------------------\n");
+	printf("\n----------------------------CAM-----------------------------\n");
 	printf("centerx: %f\n", cam->center.x);
 	printf("centery: %f\n", cam->center.y);
 	printf("centerz: %f\n\n", cam->center.z);
@@ -105,13 +93,25 @@ void	print_cam(t_cam *cam)
 
 void	print_lights(t_light *lights)
 {
-	printf("----------------------------lights-----------------------------\n");
-	printf("centerx: %f\n", lights->center.x);
-	printf("centery: %f\n", lights->center.y);
-	printf("centerz: %f\n\n", lights->center.z);
-	printf("brightness ratio:%f\n", lights->brightness);
-	if (lights->light_color.r)
-		printf("light color rgb: r: %f, g: %f, b %f\n", lights->light_color.r, lights->light_color.g, lights->light_color.b);
+	t_light	*curr_lt;
+
+	if (lights == NULL)
+		return ;
+	curr_lt = lights;
+	printf("\n----------------------------LIGHTS-----------------------------\n");
+	while (true)
+	{
+		printf("\n----------------------light id: %d ----------------- \n", curr_lt->id);
+		printf("centerx: %f\n", curr_lt->center.x);
+		printf("centery: %f\n", curr_lt->center.y);
+		printf("centerz: %f\n\n", curr_lt->center.z);
+		printf("brightness ratio:%f\n", curr_lt->brightness);
+		if (curr_lt->color.r)
+			printf("light color rgb: r: %f, g: %f, b %f\n", curr_lt->color.r, curr_lt->color.g, curr_lt->color.b);
+		curr_lt = curr_lt->next;
+		if (curr_lt == lights)
+			break;
+	}
 }
 
 void	print_all_objects(t_trace *trace)
@@ -128,4 +128,5 @@ void	print_all_objects(t_trace *trace)
 		print_planes(trace->planes);
 	if (trace->cylinders)
 		print_cylinders(trace->cylinders);
+	printf("\n\n");
 }

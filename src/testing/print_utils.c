@@ -1,13 +1,13 @@
 #include "minirt.h"
 
-void	print_obj_nums(t_trace *trace)
+void	print_obj_nums(t_obj_counts *counts)
 {
-	printf("amb_count: %d\n", trace->amb_count);
-	printf("cam_count: %d\n", trace->cam_count);
-	printf("light_count: %d\n", trace->light_count);
-	printf("sphere_count: %d\n", trace->sphere_count);
-	printf("plane_count: %d\n", trace->plane_count);
-	printf("cyl_count: %d\n", trace->cyl_count);
+	printf("amb_count: %d\n", counts->amb_count);
+	printf("cam_count: %d\n", counts->cam_count);
+	printf("light_count: %d\n", counts->light_count);
+	printf("sphere_count: %d\n", counts->sphere_count);
+	printf("plane_count: %d\n", counts->plane_count);
+	printf("cyl_count: %d\n", counts->cyl_count);
 }
 
 void	print_3d_array(char ***array)
@@ -26,4 +26,22 @@ void	print_3d_array(char ***array)
 		}
 		i++;
 	}
+}
+
+long	get_time(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL))
+		exit(EXIT_FAILURE);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+void	print_times(long start, long end, char *msg)
+{
+	double	duration;
+
+	duration = (double)(end - start) / 1000;
+	//ft_putstr_color(title, color);
+	printf(msg, duration);
 }

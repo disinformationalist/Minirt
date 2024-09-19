@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	put_pixel(int x, int y, t_trace *trace, int color)
+static inline void	put_pixel(int x, int y, t_trace *trace, int color)
 {
 	if (trace->supersample)
 		trace->pixels_xl[y][x] = color;
@@ -8,26 +8,30 @@ void	put_pixel(int x, int y, t_trace *trace, int color)
 		my_pixel_put(x, y, &trace->img, color);
 }
 
-void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
+//find closest object hit by ray
+
+static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 {
-	double			t;
+	double	t;
 
 	closest->t = INFINITY;
 	closest->object = NULL;
-	closest->object_type =  -1;
-
-	check_spheres(trace->spheres, closest, ray, &t); //see trace_spheres.c
-	check_planes(trace->planes, closest, ray, &t); //see trace_planes.c
-	check_cylinders(trace->cylinders, closest, ray, &t);//see trace_cylinders.c
-
+	closest->object_type = -1;
+	t = INFINITY;
+	check_spheres(trace->spheres, closest, ray, &t);
+	t = INFINITY;
+	check_planes(trace->planes, closest, ray, &t);
+	t = INFINITY;
+	check_cylinders(trace->cylinders, closest, ray, &t);
 }
 
-void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *closest)
+//checking for the closest intersection and computing color
+
+static inline void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *closest)
 {
 	unsigned int	final_color;
 	
 	find_closest(trace, r, closest);
-
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		final_color = color_sphere(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
@@ -39,27 +43,59 @@ void	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *clo
 	put_pixel(pos.i, pos.j, trace, final_color);
 }
 
+//transform view way, harder to use, slow
 
-//routine to loop through all pixels and compute.
-
-void	*ray_trace(void *arg)
+/* t_ray	ray_for_pixel(t_cam *cam, double x, double y)
 {
-	t_piece		*piece;
-	t_trace		*trace;
-	t_position	pos;
-	t_point		current_pixel;
+	t_ray	ray;
+	double	xoffset;
+	double	yoffset;
+	double	world_x;
+	double	world_y;
+
+	//try replacing here with pixel00 method
+	xoffset = (x + .5) * cam->pixel_size;
+	yoffset = (y + .5) * cam->pixel_size;
+	world_x = cam->half_width - xoffset;
+	world_y = cam->half_height - yoffset;
+
+	t_vec3 pixel = mat_vec_mult(inverse(cam->transform), vec(world_x, world_y, -1, 1));
+	ray.origin = mat_vec_mult(inverse(cam->transform), vec(0, 0, 0, 1));
+	ray.dir = norm_vec(subtract_vec(pixel, ray.origin));
+	return (ray);
+}
+
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
+{
 	t_ray		r;
+	t_position	pos;
+	t_cam		*cam;
 
-	piece = (t_piece *)arg;
-	trace = piece->trace;
+	cam = trace->cam;
+	pos.j = piece->y_s - 1;
+	while (++pos.j < piece->y_e)
+	{
+		pos.i = piece->x_s - 1;
+		while (++pos.i < piece->x_e)
+		{
+			r = ray_for_pixel(cam, pos.i, pos.j);
+			check_intersects(trace, r, pos, closest);
+		}
+	}
+} */
 
-	t_track_hits *closest;
-	closest = (t_track_hits *)malloc(sizeof(t_track_hits));//maybe move into piece set proper frees for each thread.
-	if (!closest)
-		clear_all(trace);
+//non transform view
+
+//maybe use transform on cam orient and center
+
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
+{
+	t_ray		r;
+	t_point		current_pixel;
+	t_position	pos;
 
 	r.origin = trace->cam->center;
-	pos.j = piece->y_s - 1;//each thread is working within its limits in piece structs
+	pos.j = piece->y_s - 1;
 	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
@@ -67,31 +103,93 @@ void	*ray_trace(void *arg)
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{
-			r.direction = subtract_vec(current_pixel, r.origin);
-			//r.direction = normalize_vec(subtract_vec(current_pixel, r.origin));//faster w/o norm, see if needed later
+			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
+			//r.dir = subtract_vec(current_pixel, r.origin);
 			check_intersects(trace, r, pos, closest);
 			current_pixel.x += trace->pixel_width;
 		}
 	}
+}
+
+//routine to loop through all pixels and compute.
+
+void	*ray_trace(void *arg)
+{
+	t_piece			*piece;
+	t_trace			*trace;
+	t_track_hits 	*closest;
+
+	piece = (t_piece *)arg;
+	trace = piece->trace;
+	closest = (t_track_hits *)malloc(sizeof(t_track_hits));
+	if (!closest)
+		clear_all(trace);
+	compute_pixels(trace, piece, closest);
 	free(closest);
 	pthread_exit(NULL);
 }
 
-		//current_pixel = subtract_vec(current_pixel, scalar_mult_vec(j * trace->pixel_height, trace->v_vec));//old y shift
+//attempting to set up other super sample method, not done or working yet....
+/* 
+static inline unsigned int	check_intersects(t_trace *trace, t_ray r, t_position pos, t_track_hits *closest)
+{
+	unsigned int	final_color;
+	
+	(void)pos;
+	find_closest(trace, r, closest);
 
-			//current_pixel = add_vec(current_pixel, trace->pix_delta_u);//move along width to next pixel//old x shift
+	if (closest->t != INFINITY && closest->object_type == SPHERE)
+		final_color = color_sphere(trace, r, closest);
+	else if (closest->t != INFINITY && closest->object_type == PLANE)
+		final_color = color_plane(trace, r, closest);
+	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
+		final_color = color_cylinder(trace, r, closest);
+	else
+		final_color = 0x000000;//background color here
+	return (final_color);
+	//put_pixel(pos.i, pos.j, trace, final_color);
+}
 
 
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest, t_position pos)
+{
+	t_ray		r;
+	t_point		current_pixel;
+	int			n = 1;
+	int			k = -1;
+	int			l = -1;
+	unsigned int color = 0;
+	t_vec_2 offset;
 
-//sphere
-/* (bx^2 +by^2 + bz^2)t^2 +  (2(axbx + ayby))t + (ax^2 + ay^2 - r^2) = 0
-a = ray origin
-b = ray direction
-r = radius
-t = hit distance
+	offset.x = trace->pixel_width / n;
+	offset.y = trace->pixel_height / n;
 
-double a = dot(raydir, raydir);
-double b = 2.0 * dot (rayorigin, raydirection)
-double c = dot(rayorigin, rayorigin) - radius*radius
-
-*/
+	
+	r.origin = trace->cam->center;
+	pos.j = piece->y_s - 1;
+	while (++pos.j < piece->y_e)
+	{
+		current_pixel = trace->pixel00;
+		current_pixel.y -= pos.j * trace->pixel_height;
+		pos.i = piece->x_s - 1;
+		while (++pos.i < piece->x_e)
+		{
+			while(++l < n)
+			{
+				current_pixel.y += offset.y;
+				while (++k < n)
+				{
+				current_pixel.x += offset.x;
+			
+				r.dir = norm_vec(subtract_vec(current_pixel, r.origin));//normed now
+				//r.dir.x = .5 * r.dir.x; //to toy with transform
+				//r.dir = subtract_vec(current_pixel, r.origin);
+				color += check_intersects(trace, r, pos, closest);
+				current_pixel.x += trace->pixel_width;
+				}
+			}
+			color = color / (n * n);
+			my_pixel_put(pos.i, pos.j, &trace->img, color);
+		}
+	}
+} */

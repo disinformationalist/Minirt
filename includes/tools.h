@@ -14,18 +14,21 @@
 # include "ansi_colors.h"
 # include "limits.h"
 # include <stdint.h>//uint8_t
+# include "matrix_ops.h"
+
 
 //used for bones
 # include <pthread.h>
 # include <png.h>//for export/import bones only
 
-# define DEG_TO_RAD  M_PI / 180.0
+# define DEG_TO_RAD  (M_PI / 180.0)
+
 
 typedef struct s_norm_color
 {
-	float r;
-	float g;
-	float b;
+	double r;
+	double g;
+	double b;
 }	t_norm_color;
 
 typedef struct s_vec2
@@ -34,25 +37,16 @@ typedef struct s_vec2
 	double y;
 }	t_vec_2;
 
-typedef struct s_vec3
-{
-	double x;
-	double y;
-	double z;
-}	t_vec3;
-
-typedef t_vec3 t_point;
-
 typedef struct s_position
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 }	t_position;
 
 typedef struct s_ray
 {
-	t_point origin;
-	t_vec3 direction;
+	t_point	origin;
+	t_vec3	dir;
 }	t_ray;
 
 typedef enum e_type
@@ -63,6 +57,12 @@ typedef enum e_type
 	LIGHT,
 	CAM
 } 	t_type;
+
+typedef enum e_ltype
+{
+	POINT,
+	SPOT
+} 	t_ltype;
 
 /***UTILS***/
 
@@ -95,24 +95,36 @@ typedef struct s_on
 typedef struct s_amb
 {
 	double	ratio;
-	//t_color	amb_color;
 	t_norm_color	color;
 }	t_amb;
 
 typedef struct s_cam
 {
-	t_vec3	center;
-	t_vec3	orient;
-	int		fov;
+	t_vec3			center;
+	t_vec3			orient;
+	int				fov;
+	t_matrix_4x4	transform;
+	double			width;
+	double			height;
+	double			half_width;
+	double			half_height;
+	double			half_view;
+	double			pixel_size;
 }	t_cam;
 
-typedef struct s_light
-{
-	t_vec3			center;
-	double			brightness;
-	t_norm_color	light_color;//rbg colors t_color for the bones
-}	t_light;
+//parse utils
 
+typedef struct s_obj_counts
+{
+	int				amb_count;
+	int				cam_count;
+	int				light_count;
+	int				sphere_count;
+	int				plane_count;
+	int				cyl_count;
+}	t_obj_counts;
+
+t_ray	transform(t_ray r, t_matrix_4x4 m);
 
 
 #endif

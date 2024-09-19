@@ -104,13 +104,13 @@ typedef struct s_png_io
 typedef struct s_wheel
 {
 	int		*colors;
-	float	hue_step;
-	float	c;
-	float	x;
-	float	m;
-	float	r_;
-	float	g_;
-	float	b_;
+	double	hue_step;
+	double	c;
+	double	x;
+	double	m;
+	double	r_;
+	double	g_;
+	double	b_;
 	int		hue;
 }				t_wheel;
 

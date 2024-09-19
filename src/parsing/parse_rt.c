@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	count_ids(t_trace *trace, char ***rt_file)
+void	count_ids(t_obj_counts *counts, char ***rt_file)
 {
 	int k;
 
@@ -8,17 +8,20 @@ void	count_ids(t_trace *trace, char ***rt_file)
 	while(rt_file[++k])
 	{
 		if (!ft_strcmp(*(rt_file[k]), "A"))
-			count_check(&trace->amb_count, "Error\n Only one ambient light allowed\n", rt_file);
+			count_check(&counts->amb_count, "Error\n Only one ambient light allowed\n", rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
-			count_check(&trace->cam_count, "Error\n Only one camera allowed\n", rt_file); 
+			count_check(&counts->cam_count, "Error\n Only one camera allowed\n", rt_file); 
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
-			count_check(&trace->light_count, "Error\n Only one light source allowed\n", rt_file);
+		{
+			count_check(&counts->light_count, "Error\n Only one light source allowed\n", rt_file);//leaving in in non bonus
+			//continue ;
+		}
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
-			trace->sphere_count++;
+			counts->sphere_count++;
 		else if (!ft_strcmp(*(rt_file[k]), "pl"))
-			trace->plane_count++;
+			counts->plane_count++;
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
-			trace->cyl_count++;
+			counts->cyl_count++;
 		else
 		{
 			free_3d_array_i(rt_file, ft_3darray_len(rt_file));
@@ -46,6 +49,8 @@ void	check_ids(char ***rt_file)
 			check_pl(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cy"))
 			check_cy(rt_file[k], rt_file);
+		/* if (!ft_strcmp(*(rt_file[k]), "sl"))//spot lights check needed
+			check_sl(rt_file[k], rt_file); */
 	}
 }
 
@@ -63,13 +68,18 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			status = set_cam(&trace->cam, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
-			status = set_light(&trace->lights, rt_file[k]);
+		{
+			status = set_light(&trace->lights, rt_file[k]); //non bonus
+			//status = append_light(&trace->lights, rt_file[k]);
+		}
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
 			status = append_sp(&trace->spheres, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "pl"))
 			status = append_pl(&trace->planes, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
 			status = append_cy(&trace->cylinders, rt_file[k]);
+		/* else if (!ft_strcmp(*(rt_file[k]), "sl"))//using sep identifier for sl, appending the same way
+			status = append_lt(&trace->spotlights, rt_file[k]);*/
 		if (status)
 			break ;
 	}
@@ -86,6 +96,10 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 	if (trace->cam_count == 0)
 		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
 	" Camera line must begin with 'C'\n");
+	t_obj_counts counts;
+
+	init_counts(&counts);
+	count_ids(&counts, rt_file);
 	check_ids(rt_file);
 	//check_counts(); //make function here checking things like at least one cam, at least one object, etc... custom error msgs.
 	init_obs(trace);
@@ -96,8 +110,11 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);
 	}
-	//free_all_objects(trace);//used in testing
+	//print_all_objects(trace);//testing...
+
 }
 
+	//free_all_objects(trace);//used in testing
 	//print_all_objects(trace);//testing...
 	//print_obj_nums(trace);
+	//print_obj_nums(counts);

@@ -2,17 +2,17 @@
 
 int	check_coordinates(char *coord_str)
 {
-	if (check_double(&coord_str, -10000.0, 10000.0))
+	if (check_double(&coord_str, -9999.0, 9999.0))
 		return (1);
 	if (*(coord_str) != ',')
 		return (1);
 	coord_str++;
-	if (check_double(&coord_str, -10000.0, 10000.0))
+	if (check_double(&coord_str, -9999.0, 9999.0))
 		return (1);
 	if (*(coord_str) != ',')
 		return (1);
 	coord_str++;
-	if (check_double(&coord_str, -10000.0, 10000.0))
+	if (check_double(&coord_str, -9999.0, 9999.0))
 		return (1);
 	if (*(coord_str) != '\0')
 		return (1);

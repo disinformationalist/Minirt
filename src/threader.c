@@ -4,18 +4,12 @@ int	get_num_cores(void)
 {
 	int	num_cores;
 
-	#if defined(_WIN32) || defined(_WIN64)
-		SYSTEM_INFO sysinfo;
-		GetSystemInfo(&sysinfo);
-		num_cores = sysinfo.dwNumberOfProcessors;
-	#else
-		num_cores = sysconf(_SC_NPROCESSORS_ONLN);
-		if (num_cores < 1)
-		{
-			perror("sysconf error\n");
-			return (1);
-		}
-	#endif
+	num_cores = sysconf(_SC_NPROCESSORS_ONLN);
+	if (num_cores < 1)
+	{
+		perror("sysconf error\n");
+		return (1);
+	}
 	return (num_cores);
 }
 
@@ -70,7 +64,8 @@ void	render_scene(t_trace *trace)
 		while (++j < trace->num_cols)
 		{
 			set_pieces(trace, piece, i, j);
-			if (pthread_create(&trace->threads[i * trace->num_cols + j], NULL, ray_trace, (void *)&piece[i][j]) != 0)
+			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
+				NULL, ray_trace, (void *)&piece[i][j]) != 0)
 				thread_error(trace, i * trace->num_cols + j);
 		}
 	}

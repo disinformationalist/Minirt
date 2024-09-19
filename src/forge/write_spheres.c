@@ -39,7 +39,6 @@ char	*build_sp_line(t_sphere *sphere)
 	double			d;
 	int 			spaces;
 	int				spaces2;
-	//get spaces in between to align, can pass in.
 	
 	cen = sphere->center;
 	d = (2.0 * sphere->radius);

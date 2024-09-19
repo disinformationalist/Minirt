@@ -8,6 +8,28 @@ void	free_exit(char ***rt_file, char *msg1, char *msg2)
 	exit(EXIT_FAILURE);
 }
 
+
+static inline int	check_rgb_color(char **s)
+{
+	int 	i;
+	char 	str[50];
+	int		chan_color;
+
+	i = -1;
+	while (**s != ',' && **s != '\0')
+	{
+		if (!isdigit((**s)))
+			return (-1);
+		str[++i] = **s;
+		(*s)++;
+	}
+	str[++i] = '\0';
+	chan_color = ft_atoi(str);
+	if (chan_color < 0 || chan_color > 255)
+		return (-1);
+	return (0);
+}
+
 int	check_color(char *color_str)
 {
 	if (check_rgb_color(&color_str) == -1)
@@ -27,39 +49,16 @@ int	check_color(char *color_str)
 	return (0);
 }
 
-int	check_rgb_color(char **s)
-{
-	int 	i;
-	char 	str[3];
-	int		chan_color;
-
-	i = -1;
-	while (**s != ',' && **s != '\0')
-	{
-		if (!isdigit((**s)))
-			return (-1);
-		str[++i] = **s;
-		(*s)++;
-	}
-	str[++i] = '\0';
-	chan_color = ft_atoi(str);
-//	printf("chan_color: %d\n", chan_color);
-	if (chan_color < 0 || chan_color > 255)
-		return (-1);
-	return (0);
-}
-
 //make a check for long after the. ---> .29384829232313133131
 int	check_double(char **doub_str, double lower_lim, double upper_lim)
 {
 	int		i;
 	double	ratio;
-	int		dot_cnt;//check if this is necessary..
+	int		dot_cnt;
 	char	str[50];
 	
 	i = -1;
 	dot_cnt = 0;
-	//printf("%s\n", *str);
 	if (**doub_str == '-')
 	{
 		str[++i] = **doub_str;
@@ -75,8 +74,7 @@ int	check_double(char **doub_str, double lower_lim, double upper_lim)
 		(*doub_str)++;
 	}
 	str[++i] = '\0';
-	ratio = ft_atof(str);
-//	printf("ratio: %f\n", ratio);
+	ratio = (double)ft_atof(str);
 	if (ratio < lower_lim || ratio > upper_lim)
 		return (1);
 	return (0);

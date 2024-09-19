@@ -11,6 +11,15 @@ SRCS := ./src/main.c \
 ./src/clean_up.c \
 ./src/math_utils/vector_ops.c \
 ./src/math_utils/vector_ops2.c \
+./src/math_utils/matrix_ops/matrix_2x2.c \
+./src/math_utils/matrix_ops/matrix_3x3_init.c \
+./src/math_utils/matrix_ops/matrix_3x3_ops.c \
+./src/math_utils/matrix_ops/matrix_3x3_stack.c \
+./src/math_utils/matrix_ops/matrix_3x3_transf.c \
+./src/math_utils/matrix_ops/matrix_vec_conv.c \
+./src/math_utils/matrix_ops/print_matrix.c \
+./src/math_utils/matrix_ops/inverse.c \
+./src/math_utils/rotate_to_up.c \
 ./src/parsing/split_file.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \
@@ -19,14 +28,18 @@ SRCS := ./src/main.c \
 ./src/parsing/check_line_utils.c \
 ./src/parsing/check_line_utils2.c \
 ./src/init_objects/sphere_list_utils.c \
+./src/init_objects/push_pop_sp.c \
 ./src/init_objects/plane_list_utils.c \
+./src/init_objects/push_pop_pl.c \
 ./src/init_objects/cylinder_list_utils.c \
+./src/init_objects/push_pop_cy.c \
 ./src/init_objects/get_line_vals.c \
 ./src/init_objects/set_amb_cam_lights.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
-./src/trace_objects/trace_cylinders.c \
+./src/trace_objects/trace_capped_cylinders.c \
+./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_utils.c \
 ./src/free_all_objects.c \
@@ -46,8 +59,12 @@ SRCS := ./src/main.c \
 ./src/png/get_png_name.c \
 ./src/downsample.c \
 ./src/threader.c \
+./src/color_disrupt.c \
+./src/init_objects/light_list_utils.c \
+#./src/trace_objects/trace_cylinders.c \
 
-CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -march=native
+
+CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 #-Iincludes
 RM := rm -f
 
@@ -94,6 +111,9 @@ $(LIBFT_ARCH):
 
 #$(IMG_ARCH):
 #	$(MAKE) -C $(IMG_PATH)
+#bonus:
+
+
 
 clean:
 	$(MAKE) -C $(LIBFT_PATH) clean
@@ -105,4 +125,4 @@ fclean: clean
 	
 re: fclean all
 
-.PHONY: all clean fclean re chaos
+.PHONY: all clean fclean re bonus

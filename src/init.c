@@ -1,17 +1,17 @@
 #include "minirt.h"
-/*----------------------------VIEWPORT DIAGRAM---------------------------Best I could manage in ascii chars :(
+/*-------------VIEWPORT DIAGRAM-----------Best I could manage in ascii chars :(
 			 |\
- 			 | \												Using Right Handed Coordinates(for everything)
+ 			 | \				Using LEFT Handed Coordinates(for everything)
  			 |  \ 
- 			 |   \															Y+ (up screen)
- 			 |	  \==> viewport width										|
-			/|\    \														|	
- 		   / | \	\				+-----------------+						| 
- 		  /	 |	\	 \				| SCENE GOES HERE |						\--------Z- (into screen goes minus)
-		 /	 |	 \	  \				+-----------------+					     \
-(cam){o}----------\	  |				   									      \
-  		  |   \	   \  |													 	   \
-   		  |    \	\ | 														X+ (along screen width)
+ 			 |   \								Y+ (up screen)
+ 			 |	  \==> viewport width			|
+			/|\    \							|	
+ 		   / | \	\	+-----------------+		| 
+ 		  /	 |	\	 \	| SCENE GOES HERE |		\--------Z+ (into screen is +)
+		 /	 |	 \	  \	+-----------------+	     \
+(cam){o}----------\	  |		   				 	  \
+  		  |   \	   \  |							   \
+   		  |    \	\ | 							X+ (rightward along screen)
     	  | 	\	 \|
       focal_len	 \	  |==> viewport height
  (dash from cam)  \	  |
@@ -22,70 +22,103 @@
  view_width = 2 * focal_len * tan(horizontal_FOV / 2)// moved focal len adj.
  ----------------------------------------------------------------------------*/
 
+//setting the top left pixel the center of the corresponding view section
 
-void	set_pixel00(t_trace *trace, double focal_len, t_vec3 up_vec)
+static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 left, t_vec3 true_up)
 {
-	t_point view_center;
-	t_vec3 horizontal;
-	t_vec3 vertical;
-	t_point view_topleft;
-	/* t_vec3 u_vec; //later simplify trace once tracer is mostly done
-	t_vec3 v_vec; */
-	
-
-	//right and up basis vecs
-	trace->u_vec = normalize_vec(cross_prod(trace->cam->orient, up_vec));
-	trace->v_vec = normalize_vec(cross_prod(trace->u_vec, trace->cam->orient));
-
-	//for set view center
-	horizontal = scalar_mult_vec(trace->view_width / 2.0, trace->u_vec);
-	vertical = scalar_mult_vec(trace->view_height / 2.0, trace->v_vec);
-
-	view_center = add_vec(trace->cam->center, scalar_mult_vec(1.0 / focal_len, trace->cam->orient));
-	view_topleft = add_vec(view_center, vertical);//move up 
-	view_topleft = subtract_vec(view_topleft, horizontal);//move_left
+	t_vec3	pix_delta_u;
+	t_vec3	pix_delta_v;
 
 	//set change in u/v per pixel along view directions
-	trace->pix_delta_u = scalar_mult_vec(trace->pixel_width, trace->u_vec);
-	trace->pix_delta_v = scalar_mult_vec(trace->pixel_height, trace->v_vec);
+	pix_delta_u = scale_vec(trace->pixel_width, left);
+	pix_delta_v = scale_vec(trace->pixel_height, true_up);
 
 	//the adjust by .5 is for pixel centers
-	trace->pixel00 = add_vec(view_topleft, scalar_mult_vec(0.5, trace->pix_delta_u));
-	trace->pixel00 = add_vec(trace->pixel00, scalar_mult_vec(0.5, trace->pix_delta_v));
+	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, pix_delta_u));
+	trace->pixel00 = add_vec(trace->pixel00, scale_vec(0.5, pix_delta_v));
 }
 
-// recall init_viewing when moving or rotating the cam
+static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
+{
+	t_point	view_topleft;
+	t_vec3	horizontal_move;
+	t_vec3	vertical_move;
+	t_vec3	right;
+	t_vec3	true_up;
+	
+	//right and up basis vecs
+	right = norm_vec(cross_prod(vec(0, 1, 0, 0), trace->cam->orient));//try replace with forward vec, use transform to change dir.
+	true_up = norm_vec(cross_prod(trace->cam->orient, right));
+
+
+	//for set view center
+	horizontal_move = scale_vec(view_width / 2.0, right);
+	vertical_move = scale_vec(view_height / 2.0, true_up);
+
+	view_topleft = add_vec(view_center, vertical_move);
+	view_topleft = subtract_vec(view_topleft, horizontal_move);
+
+	set_pixel00(trace, view_topleft, right, true_up);
+}
+
+//setup for transform way(very slow seems to have no big advantage keep until sure)
+/* 
 void	init_viewing(t_trace *trace)
 {
-	double focal_len;
-	t_vec3 up_vec;
+	double	half_view;
+	double	aspect;
 
-	up_vec.x = 0;//set world up direction
-	up_vec.y = 1;
-	up_vec.z = 0;
-
-	focal_len = 1.0;
-
-	trace->view_width = 2.0 * tan((double)(trace->cam->fov / 2) * DEG_TO_RAD);
-	trace->view_height = trace->view_width / trace->aspect_r;
+	half_view = tan(((double)(trace->cam->fov) / 2.0) * DEG_TO_RAD);
+	aspect = (double)trace->width / (double)trace->height;
+	
+	if (aspect >= 1)
+	{
+		trace->cam->half_width = half_view;
+		trace->cam->half_height = half_view / aspect;	
+	}
+	else
+	{
+		trace->cam->half_width = half_view * aspect;
+		trace->cam->half_height = half_view;
+	}
 	
 	// scale pixels to veiwport
-	trace->pixel_width = trace->view_width / (double)trace->width;
-	trace->pixel_height = trace->view_height / (double)trace->height;
+	trace->cam->pixel_size = 2.0 * trace->cam->half_width / trace->cam->width;
+	//set_view_topleft(trace, view_center, view_width, view_height);
+} */
 
-	set_pixel00(trace, focal_len, up_vec);
+//old
+void	init_viewing(t_trace *trace)
+{
+	t_point	view_center;
+	double	focal_len;
+	double	view_width;
+	double	view_height;
+	
+	focal_len = 1.0;
+	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
+
+	view_width = 2.0 * tan((double)((trace->cam->fov) / 2.0) * DEG_TO_RAD);
+	view_height = view_width / ASPECT;
+	
+	// scale pixels to veiwport
+	trace->pixel_width = view_width / (double)trace->width;
+	trace->pixel_height = view_height / (double)trace->height;
+
+	set_view_topleft(trace, view_center, view_width, view_height);
 }
 
 
 void info_init(t_trace *trace)
 {
-	//use the fov horizontal and aspect_r to set view width, height;
-	//double aspect_r;
-	
-	trace->aspect_r = 16.0 / 9.0;
+	//use the fov horizontal and aspect ratio to set view width, height;
 	
 	trace->width = 1080;//control screen size by setting width and the aspect_r
-	trace->height = (int)((double)trace->width / trace->aspect_r);
+	//trace->height = 640;
+	
+	/* trace->cam->width = 1080;//adding to cam, eventually just need this one.
+	trace->cam->height = 640; */
+	trace->height = (int)((double)trace->width / ASPECT);
 
 	trace->height_orig = trace->height;
 	trace->width_orig = trace->width;
@@ -94,8 +127,6 @@ void info_init(t_trace *trace)
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
 
-
-	trace->zoom = 1;//not used right now
 	trace->supersample = false;
 	trace->s_kernel = 5;
 	trace->layer = false;//not used...
@@ -123,7 +154,7 @@ void trace_init(t_trace *trace)
 	trace->mlx_connect = mlx_init();
 	if (trace->mlx_connect == NULL)//need to free objects here check the clear_all() function.
 		clear_all(trace);
-	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, trace->name);
+	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MiniRT***");
 	if (trace->mlx_win == NULL)
 		clear_all(trace);
 	if (new_img_init(trace->mlx_connect, &trace->img, trace->width, trace->height) == -1)
@@ -135,5 +166,6 @@ void trace_init(t_trace *trace)
 	trace->on->type = SPHERE;
 	if (pthread_mutex_init(&trace->mutex, NULL) != 0)
 		clear_all(trace);
+	//append_sl(trace->spotlights);///------------------
 	events_init(trace);
 }

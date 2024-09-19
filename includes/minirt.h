@@ -6,8 +6,11 @@
 # include "tools.h"
 # include "keyboard.h"
 //# include "keyboard (42).h"
-
+# include <sys/time.h>//testing speed
 # include "extras.h"
+//# include "matrix_ops.h"
+
+# define ASPECT (16.0 / 9.0)
 
 // holds the current closest object
 typedef struct s_track_hits
@@ -17,14 +20,25 @@ typedef struct s_track_hits
 	t_type	object_type;
 }	t_track_hits;
 
-/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
+// gives vals for material TOFINISH
+typedef struct s_mat
+{
+	double	amb;
+	double	diff;
+	double	spec;
+	double	shine;
+}	t_mat;
+
+/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
 
 typedef struct s_sphere
 {
 	int				id;
 	t_point			center;
 	double			radius;
-	t_norm_color 	color;
+	t_norm_color 	color;//color will move into mat
+	t_mat			mat;
+	t_matrix_4x4	transform;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -33,8 +47,10 @@ typedef struct s_plane
 {
 	int				id;
 	t_point			point;
-	t_vec3			norm_vector;
+	t_vec3			norm;
 	t_norm_color	color;
+	t_mat			mat;
+	t_matrix_4x4	transform;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -43,13 +59,32 @@ typedef struct s_cylinder
 {
 	int					id;
 	t_point				center;
-	t_vec3				norm_vector;
+	t_vec3				norm;
 	double				radius;
 	double				height;
 	t_norm_color		color;
+	t_mat				mat;
+	t_matrix_4x4		transform;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
+
+typedef struct s_light
+{
+	t_vec3				center;
+	double				brightness;
+	t_norm_color		color;//rbg colors t_color for the bones
+//stuff for bring sp lights in
+	t_ltype				type;
+	int					id;
+	t_point				pos;
+	t_vec3				dir;
+	double				inner_cone;
+	double				outer_cone;
+	double				inten;
+	struct s_light		*prev;
+	struct s_light		*next;
+}	t_light;
 
 
 /***MAIN STRUCT***/
@@ -63,10 +98,9 @@ typedef struct s_trace
 	//single objects
 	t_amb			*amb;
 	t_cam			*cam;
-	t_light			*lights;
+	//t_light			*lights;//single in non bones
 
-	t_track_hits	*closest;
-
+	t_track_hits	*closest;//tracking first hit
 	t_on			*on;//current object for manipulating
 	
 	//linked list objects
@@ -74,18 +108,20 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
-	//for tracking traversing during events
+	t_light			*lights;//bones
+
+	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
+	t_light			*curr_sl;
+
 	//mlx
-	char			*name;
 	void			*mlx_connect;
 	void			*mlx_win;
 	
 	//other
-	double			zoom;
 	bool			layer;
 
 	//dimension and view
@@ -94,19 +130,10 @@ typedef struct s_trace
 	int 			height_orig;
 	int				width_orig;
 
-
-	double			view_width;
-	double			view_height;
-	double			aspect_r;
-
+	//need
 	double			pixel_width;
 	double			pixel_height;
 	t_point			pixel00;//changed to t_point
-
-	t_vec3			u_vec;
-	t_vec3			v_vec;
-	t_vec3			pix_delta_u;
-	t_vec3			pix_delta_v;
 	
 	//for supersampling
 	bool			supersample;
@@ -114,14 +141,6 @@ typedef struct s_trace
 	int				s_kernel;
 	double			n;
 	
-	//nums of each object type
-	int				amb_count;
-	int				cam_count;
-	int				light_count;
-	int				sphere_count;
-	int				plane_count;
-	int				cyl_count;
-
 	//threading	
 	int				num_cols;
 	int				num_rows;
@@ -139,7 +158,6 @@ typedef struct s_piece //for threads
 	t_trace		*trace;
 }	t_piece;
 
-
 /***PARSING***/
 
 void			parse_rt(t_trace *trace, char ***rt_file);
@@ -147,7 +165,7 @@ char			***split_file(char *file);
 
 //parse_rt_utils
 void			init_obs(t_trace *trace);
-void			init_counts(t_trace *trace);
+void			init_counts(t_obj_counts *counts);
 void			count_check(int *item_count, char *msg, char ***rt_file);
 
 //split_file_utils
@@ -170,7 +188,6 @@ void			check_cy(char **line, char ***rt_file);
 int				check_param_num(char **line, int num);
 int				check_double(char **ratio_str, double lower_lim, double upper_lim);
 int				check_color(char *color_str);
-int				check_rgb_color(char **s);
 int				check_fov(char *fov_str);
 int				check_orientation(char *orient_str);
 int				check_coordinates(char *coord_str);
@@ -178,34 +195,36 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
 /***INIT***/
 
-int				new_img_init(void *mlx_con, t_img *img, int width, int height);
-void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
-unsigned int	**malloc_ui_matrix(int width, int height);
-void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
-void			free_ui_matrix(unsigned int **matrix, int j);
-
-
-//get and set vals
+void 			trace_init(t_trace *trace);
 void			init_viewing(t_trace *trace);
 
-t_vec3			get_coordinates(char *coord_str);
-t_norm_color	get_color(char *color_str, float val);
+//get and set vals
 
+t_vec3			get_coordinates(char *coord_str, double w);
+t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
 
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
 
-//add list obs
+bool			append_light(t_light **start, char **line);
+
+
+//***add list obs***
 bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
+//copy and push new list obs, if empty make default
+bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
+bool			insert_plcopy_after(t_trace *trace, t_plane **current);
+bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 
-//bool			insert_sp_after(t_sphere **head, char **line); //check/fix mayve just use append?
-
-void 			trace_init(t_trace *trace);
+//remove a list object
+void			pop_sp(t_trace *trace, t_sphere **current);
+void			pop_cy(t_trace *trace, t_cylinder **current);
+void			pop_pl(t_trace *trace, t_plane **current);
 
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
@@ -215,14 +234,29 @@ void			*ray_trace(void *arg);
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
 unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
+
+//light
+double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)
+
+
+//shadows
+bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
+
+//vec tools
+t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
+
 
 
 /***MATH UTILS***/
@@ -230,15 +264,28 @@ uint8_t			round_c(double d);
 
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
-t_vec3			vec(double x, double y, double z);
+t_vec3			vec(double x, double y, double z, double w);
 t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
-t_vec3			scalar_mult_vec(double scalar, t_vec3 vec);
-t_vec3			normalize_vec(t_vec3 vec);
+t_vec3			scale_vec(double scalar, t_vec3 vec);
+t_vec3			div_vec(double scalar, t_vec3 vec);
+t_vec3			norm_vec(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
+t_vec3 			neg(t_vec3 vec);
+t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
+t_ray			ray(t_vec3 dir, t_point origin);
+
+t_matrix_4x4	rot_up(t_vec3 ori);
+
+
 
 /***COLOR UTILS***/
-unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_intensity);
+unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
+t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
+t_norm_color	color(double r, double g, double b);
+
+
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
@@ -269,12 +316,21 @@ char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 
+//supersample
+int				new_img_init(void *mlx_con, t_img *img, int width, int height);
+void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
+unsigned int	**malloc_ui_matrix(int width, int height);
+void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
+void			free_ui_matrix(unsigned int **matrix, int j);
+
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);
-void			print_obj_nums(t_trace *trace);
+void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
+long			get_time(void);
+void			print_times(long start, long end, char *msg);
 
 #endif
