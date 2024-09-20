@@ -24,30 +24,38 @@
 
 //setting the top left pixel the center of the corresponding view section
 
-static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 left, t_vec3 true_up)
+static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up)
 {
-	t_vec3	pix_delta_u;
-	t_vec3	pix_delta_v;
+	t_vec3	pix_delta_rht;
+	t_vec3	pix_delta_up;
 
-	//set change in u/v per pixel along view directions
-	pix_delta_u = scale_vec(trace->pixel_width, left);
-	pix_delta_v = scale_vec(trace->pixel_height, true_up);
+	//set change in /v per pixel along view directions
+	pix_delta_rht = scale_vec(trace->pixel_width, right);
+	pix_delta_up = scale_vec(trace->pixel_height, true_up);
 
 	//the adjust by .5 is for pixel centers
-	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, pix_delta_u));
-	trace->pixel00 = add_vec(trace->pixel00, scale_vec(0.5, pix_delta_v));
+	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, pix_delta_rht));
+	trace->pixel00 = add_vec(trace->pixel00, scale_vec(0.5, pix_delta_up));
 }
 
+	/* left = cross_prod(ori_vec, norm_vec(up));
+	true_up = cross_prod(left, ori_vec);
+	tuple_to_row(&orient, vec(left.x, left.y, left.z, 0), 0);
+	tuple_to_row(&orient, vec(true_up.x, true_up.y, true_up.z, 0), 1);
+	tuple_to_row(&orient, vec(-ori_vec.x, -ori_vec.y, -ori_vec.z, 0), 2);
+	tuple_to_row(&orient, vec(0, 0, 0, 1), 3);
+	return (mat_mult(orient, translation(-from.x, -from.y, -from.z)));
+ */
 static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
 {
 	t_point	view_topleft;
 	t_vec3	horizontal_move;
 	t_vec3	vertical_move;
 	t_vec3	right;
-	t_vec3	true_up;
+	t_vec3	true_up;//(up ortho to the orient dir.)
 	
 	//right and up basis vecs
-	right = norm_vec(cross_prod(vec(0, 1, 0, 0), trace->cam->orient));//try replace with forward vec, use transform to change dir.
+	right = norm_vec(cross_prod(vec(0, .9, .1, 0), trace->cam->orient));//try replace with forward vec, use transform to change dir.
 	true_up = norm_vec(cross_prod(trace->cam->orient, right));
 
 
@@ -95,6 +103,7 @@ void	init_viewing(t_trace *trace)
 	double	view_width;
 	double	view_height;
 	
+	trace->cam->orient = norm_vec(trace->cam->orient);
 	focal_len = 1.0;
 	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
 

@@ -87,6 +87,7 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	{
 		//broken does scaling
 		trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
+		print_vec(trace->cam->orient);
 		init_viewing(trace);
 	}
 	else
@@ -112,19 +113,19 @@ int	close_win(t_trace *trace)//valgrind error when using the x to close window, 
 int key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)//along x
-		rotate_object(trace, trace->on, rot_x(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(-M_PI / 4));
 	else if (keycode == D)
-		rotate_object(trace, trace->on, rot_x(M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(M_PI / 4));
 	else if (keycode == W)//along y
-		rotate_object(trace, trace->on, rot_y(M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(M_PI / 4));
 	else if (keycode == S)
-		rotate_object(trace, trace->on, rot_y(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(-M_PI / 4));
 	else if (keycode == Q)//along z
-		rotate_object(trace, trace->on, rot_z(M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(M_PI / 4));
 	else if (keycode == E)
-		rotate_object(trace, trace->on, rot_z(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(-M_PI / 4));
 	else
-	supersample_handle(keycode, trace);
+		supersample_handle(keycode, trace);
 	return (0);
 }
 

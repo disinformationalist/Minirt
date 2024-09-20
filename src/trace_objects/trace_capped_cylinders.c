@@ -184,7 +184,7 @@ bool	intersect_caps(t_ray ray, double half_h, double *t3)
 	*t3 = INFINITY;
 	if (fabs(ray.dir.y) < 1e-5)
 		return (false);
-	t = -(half_h + ray.origin.y) / ray.dir.y;
+	t = (-half_h - ray.origin.y) / ray.dir.y;
 	hit1 = check_cap(ray, t);
 	if (hit1)
 		*t3 = t;
@@ -232,7 +232,7 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	}
 	if (intersect_caps(ray, half_h, &t3))
 	{
-		if (t3 > 1e-5 && t3 < *t)
+		if (t3 > 0 && t3 < *t)
 			*t = t3;
 	}
 	if (*t < INFINITY)
@@ -254,7 +254,7 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 		{
 			if (*t < closest->t)
 			{
-				closest->t = *t;
+				closest->t = *t;//move these to outer function after checking all t's for a shape, let t track for each shape, close obj must stay..
 				closest->object = curr_cy;
 				closest->object_type = CYLINDER;
 			}

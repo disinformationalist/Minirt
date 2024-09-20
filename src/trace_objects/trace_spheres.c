@@ -116,18 +116,16 @@ double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat sp
 	light_int = fmax(cos_angle, 0.0) + .5 * spec;
 	//light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
 	//return (spotlight(light_dir) * light_int);//trying sp_light
-	return (light_int);//trying sp_light
+	return (light_int);
 
 }
-
-//transform testing
 
 t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 {
 	t_vec3	norm;
 	t_point obj_pnt;
 
-	obj_pnt = mat_vec_mult(transform, int_pnt); //get the normal using the transform
+	obj_pnt = mat_vec_mult(transform, int_pnt);
 	norm = mat_vec_mult(transpose(transform), obj_pnt);
 	norm.w = 0;
 	return (norm_vec(norm));
@@ -149,7 +147,7 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	{
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		norm = sp_normal_at(int_pnt, sphere->transform);
-		if (dot_product(norm, r.dir) > 0)//maybe using transform for view takes care of this?
+		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
 		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));

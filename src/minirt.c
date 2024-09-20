@@ -23,6 +23,7 @@ static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest
 	check_planes(trace->planes, closest, ray, &t);
 	t = INFINITY;
 	check_cylinders(trace->cylinders, closest, ray, &t);
+	
 }
 
 //checking for the closest intersection and computing color
