@@ -176,19 +176,20 @@ bool	check_cap(t_ray ray, double t)
 //later return false if cyl.closed == false
 //later will need 4th intersection, one per cap when tracking all
 
-bool	intersect_caps(t_ray ray, double half_h, double *t3)
+bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
 {
 	double	t;
 	bool	hit1;
 	bool	hit2;
 
 	*t3 = INFINITY;
+	*t4 = INFINITY;
 	if (fabs(ray.dir.y) < 1e-5)
 		return (false);
 	t = -(half_h + ray.origin.y) / ray.dir.y;
 	hit1 = check_cap(ray, t);
 	if (hit1)
-		*t3 = t;
+		*t4 = t;
 	t = (half_h - ray.origin.y) / ray.dir.y;
 	hit2 = check_cap(ray, t);
 	if (hit2 && t < *t3)
@@ -216,6 +217,7 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	double	t1;
 	double	t2;
 	double 	t3;
+	double 	t4;
 	double	half_h;
 	
 	half_h = cylinder.height / 2;// store this as cyl height  at parse?
@@ -231,10 +233,12 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 					*t = t2;
 		}
 	}
-	if (intersect_caps(ray, half_h, &t3))
+	if (intersect_caps(ray, half_h, &t3, &t4))
 	{
 		if (t3 > 1e-5 && t3 < *t)
 			*t = t3;
+		if (t4 > 1e-5 && t4 < *t)
+			*t = t4;
 	}
 	if (*t < INFINITY)
 		return (true);
