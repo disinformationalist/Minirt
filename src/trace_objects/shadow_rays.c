@@ -9,7 +9,6 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 	if (spheres == NULL)
 		return (false);
 	curr_sp = spheres;
-
 	while (true)
 	{
 		if (ray_sphere_intersect(*curr_sp, ray, &t))
@@ -29,6 +28,7 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double t)
 {
 	t_plane	*curr_pl;
+
 	if (planes == NULL)
 		return (false);
 	curr_pl = planes;
@@ -92,17 +92,15 @@ static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)
 }
 
 //function to check if any object blocks light
- //light center is on surface gives issue
+
 bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 {
 	t_ray	s_ray;
 	double	light_dist;
 
 	s_ray.dir = light_dir;
-	s_ray.origin = add_vec(pnt, scale_vec(1e-5, normal));
-	
+	s_ray.origin = add_vec(pnt, scale_vec(1e-6, normal));	
 	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));// use in previous to get light dir test times.
-	//check all intersects within distance
 	return (check_all_dist(trace, light_dist, s_ray));
 }
 
@@ -111,7 +109,6 @@ bool	obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt)
 {
 	double	light_dist;
 
-	light_dist = magnitude(subtract_vec(lt_pos, int_pnt));// use in previous to get light dir test times.
-	//check all intersects within distance, move check all dist into this function.
+	light_dist = magnitude(subtract_vec(lt_pos, int_pnt));
 	return (check_all_dist(trace, light_dist, s_ray));
 }

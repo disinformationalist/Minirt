@@ -100,17 +100,18 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel.y -= pos.j * trace->pixel_height;
+		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
-			//r.dir = subtract_vec(current_pixel, r.origin);
 			check_intersects(trace, r, pos, closest);
-			current_pixel.x += trace->pixel_width;
+			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}
 	}
 }
+//		current_pixel.y -= pos.j * trace->pixel_height;
+//			current_pixel.x += trace->pixel_width;
 
 //routine to loop through all pixels and compute.
 

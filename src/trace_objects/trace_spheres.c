@@ -2,7 +2,6 @@
 
 //og world space method
 
-
 /* bool	ray_sphere_intersect(t_sphere sphere, t_ray ray, double *t)
 {
 	t_vec3	oc;//ray origin to center

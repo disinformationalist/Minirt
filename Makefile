@@ -8,9 +8,11 @@ SRCS := ./src/main.c \
 ./src/init.c \
 ./src/minirt.c \
 ./src/render.c \
+./src/set_transforms.c \
 ./src/clean_up.c \
 ./src/math_utils/vector_ops.c \
 ./src/math_utils/vector_ops2.c \
+./src/math_utils/vector_ops3.c \
 ./src/math_utils/matrix_ops/matrix_2x2.c \
 ./src/math_utils/matrix_ops/matrix_3x3_init.c \
 ./src/math_utils/matrix_ops/matrix_3x3_ops.c \
@@ -47,6 +49,7 @@ SRCS := ./src/main.c \
 ./src/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
+./src/events/transform_objects.c \
 ./src/events/extra_events.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \

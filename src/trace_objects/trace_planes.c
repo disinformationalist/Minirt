@@ -60,7 +60,7 @@ bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	ray = transform(ray, plane.transform);
 
-	if (fabs(ray.dir.y) < 1e-6)// close to parallel, no intersect
+	if (fabs(ray.dir.y) < 1e-5)// close to parallel, no intersect
 		return (false);
 	*t = -ray.origin.y / ray.dir.y;
 	if (*t > 0)
@@ -106,11 +106,12 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	{
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
+		//norm = norm_vec(mat_vec_mult(transpose(plane->transform), vec(0, 1, 0, 0)));		
 		norm = plane->norm;
 		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here	
+			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));
 	}
 	//plane->color = stripe(int_pnt);
 	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function

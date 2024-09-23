@@ -134,6 +134,8 @@ typedef struct s_trace
 	double			pixel_width;
 	double			pixel_height;
 	t_point			pixel00;//changed to t_point
+	t_vec3			pix_delta_down;
+	t_vec3 			pix_delta_rht;
 	
 	//for supersampling
 	bool			supersample;
@@ -218,6 +220,7 @@ bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
+
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
@@ -232,6 +235,10 @@ void			pop_pl(t_trace *trace, t_plane **current);
 void			render_scene(t_trace *trace);
 void			render(t_trace *trace);
 void			*ray_trace(void *arg);
+
+void			set_sp_transforms(t_trace *trace);
+void			set_pl_transforms(t_trace *trace);
+void			set_cy_transforms(t_trace *trace);
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
@@ -257,7 +264,7 @@ bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal
 bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
 
 //vec tools
-t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
+//t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
 
 
 
@@ -279,6 +286,8 @@ t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
 t_matrix_4x4	rot_up(t_vec3 ori);
+bool			veccmp(t_vec3 v1, t_vec3 v2);
+
 
 
 
@@ -293,6 +302,13 @@ t_norm_color	color(double r, double g, double b);
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
+
+void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
+void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
+void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
+void			pop_object(t_trace *trace, t_on *on);
+void			push_new_object(t_trace *trace, t_on *on);
+
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);

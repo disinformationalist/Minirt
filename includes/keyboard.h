@@ -95,7 +95,7 @@
 
 /****OTHER****/
 # define ESC 65307
-# define UP_CARET 65106
+# define UP_CARET 96
 # define PLUS 43
 # define MINUS 45
 # define SPACE 32

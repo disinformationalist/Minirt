@@ -191,7 +191,7 @@ bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
 		*t4 = t;
 	t = (half_h - ray.origin.y) / ray.dir.y;
 	hit2 = check_cap(ray, t);
-	if (hit2 && t < *t3)
+	if (hit2)
 		*t3 = t;
 	if (hit1 || hit2)
 		return (true);
@@ -236,7 +236,7 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	{
 		if (t3 > 0 && t3 < *t)
 			*t = t3;
-		if (t4 > 1e-5 && t4 < *t)
+		if (t4 > 0 && t4 < *t)
 			*t = t4;
 	}
 	if (*t < INFINITY)

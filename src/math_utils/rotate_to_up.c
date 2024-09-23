@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline bool	veccmp(t_vec3 v1, t_vec3 v2)
+bool	veccmp(t_vec3 v1, t_vec3 v2)
 {
 	double eps;
 

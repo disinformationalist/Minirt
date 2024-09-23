@@ -23,11 +23,15 @@ static inline void	update_sphere_ids(t_sphere *sphere)
 
 static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 {
-	new->center = vec(0.0,-0.5,-6.5, 1.0);
-	new->radius = 1.5;
+	t_matrix_4x4 transform;
+
+	new->center = vec(0.0, 0.0, 0.0, 1.0);
+	new->radius = 1;
 	new->color.r = 200;
 	new->color.g = 50;
 	new->color.b = 200;
+	identity(&transform);
+	new->transform = transform;
 	*start = new;
 	new->id = 1;
 	new->next = new;

@@ -7,7 +7,7 @@
  			 |	  \==> viewport width			|
 			/|\    \							|	
  		   / | \	\	+-----------------+		| 
- 		  /	 |	\	 \	| SCENE GOES HERE |		\--------Z+ (into screen is +)
+ 		  /	 |	\	 \	| SCENE GOES HERE |		\--------Z+ (into screen)
 		 /	 |	 \	  \	+-----------------+	     \
 (cam){o}----------\	  |		   				 	  \
   		  |   \	   \  |							   \
@@ -24,20 +24,6 @@
 
 //setting the top left pixel the center of the corresponding view section
 
-static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up)
-{
-	t_vec3	pix_delta_rht;
-	t_vec3	pix_delta_up;
-
-	//set change in /v per pixel along view directions
-	pix_delta_rht = scale_vec(trace->pixel_width, right);
-	pix_delta_up = scale_vec(trace->pixel_height, true_up);
-
-	//the adjust by .5 is for pixel centers
-	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, pix_delta_rht));
-	trace->pixel00 = add_vec(trace->pixel00, scale_vec(0.5, pix_delta_up));
-}
-
 	/* left = cross_prod(ori_vec, norm_vec(up));
 	true_up = cross_prod(left, ori_vec);
 	tuple_to_row(&orient, vec(left.x, left.y, left.z, 0), 0);
@@ -46,28 +32,75 @@ static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 righ
 	tuple_to_row(&orient, vec(0, 0, 0, 1), 3);
 	return (mat_mult(orient, translation(-from.x, -from.y, -from.z)));
  */
+
+
+static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up)
+{
+	//set change in /v per pixel along view directions
+	trace->pix_delta_rht = scale_vec(trace->pixel_width, right);
+	trace->pix_delta_down = scale_vec(trace->pixel_height, neg(true_up));
+	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, add_vec(trace->pix_delta_down, trace->pix_delta_rht)));
+}
+
+//for z rot, rotate the viewwindow ( right and up)
+//add rotZ to struct and rotate, that much on the right and up. init to zero
 static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
 {
 	t_point	view_topleft;
 	t_vec3	horizontal_move;
 	t_vec3	vertical_move;
 	t_vec3	right;
-	t_vec3	true_up;//(up ortho to the orient dir.)
+	t_vec3	true_up;
 	
 	//right and up basis vecs
-	right = norm_vec(cross_prod(vec(0, .9, .1, 0), trace->cam->orient));//try replace with forward vec, use transform to change dir.
-	true_up = norm_vec(cross_prod(trace->cam->orient, right));
-
-
+	if (!veccmp(trace->cam->orient, vec(0, 1, 0, 0)))
+	{
+		right = vec(1, 0, 0, 0);
+		true_up = vec(0, 1, 0, 0);
+	}
+	else if (!veccmp(trace->cam->orient, vec(0, -1, 0, 0)))
+	{
+		right = vec(-1, 0, 0, 0);
+		true_up = vec(0, -1, 0, 0);
+	}
+	else
+	{
+		right = norm_vec(cross_prod(vec(0, 1, 0, 0), trace->cam->orient));
+		true_up = norm_vec(cross_prod(trace->cam->orient, right));
+	}
+	//if (dot_product(trace->cam->orient, vec(0, 0, 1, 0)) < 0)this works for vert but not horiz. 
+	//	right = neg(right);
 	//for set view center
 	horizontal_move = scale_vec(view_width / 2.0, right);
 	vertical_move = scale_vec(view_height / 2.0, true_up);
-
 	view_topleft = add_vec(view_center, vertical_move);
 	view_topleft = subtract_vec(view_topleft, horizontal_move);
-
 	set_pixel00(trace, view_topleft, right, true_up);
 }
+
+void	init_viewing(t_trace *trace)
+{
+	t_point	view_center;
+	double	focal_len;
+	double	view_width;
+	double	view_height;
+	
+	trace->cam->orient = norm_vec(trace->cam->orient);
+	focal_len = 1.0;
+	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
+
+	view_width = 2.0 * tan((double)((trace->cam->fov) / 2.0) * DEG_TO_RAD);
+	view_height = view_width / ASPECT;
+	// scale pixels to veiwport
+	trace->pixel_width = view_width / (double)trace->width;
+	trace->pixel_height = view_height / (double)trace->height;
+	
+	set_view_topleft(trace, view_center, view_width, view_height);
+}
+	/* printf("h_move: %.3f\n", horizontal_move);
+	printf("v_move: %.3f\n", vertical_move); */
+	/* print_vec(horizontal_move);
+	print_vec(vertical_move); */
 
 //setup for transform way(very slow seems to have no big advantage keep until sure)
 /* 
@@ -94,29 +127,6 @@ void	init_viewing(t_trace *trace)
 	trace->cam->pixel_size = 2.0 * trace->cam->half_width / trace->cam->width;
 	//set_view_topleft(trace, view_center, view_width, view_height);
 } */
-
-//old
-void	init_viewing(t_trace *trace)
-{
-	t_point	view_center;
-	double	focal_len;
-	double	view_width;
-	double	view_height;
-	
-	trace->cam->orient = norm_vec(trace->cam->orient);
-	focal_len = 1.0;
-	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
-
-	view_width = 2.0 * tan((double)((trace->cam->fov) / 2.0) * DEG_TO_RAD);
-	view_height = view_width / ASPECT;
-	
-	// scale pixels to veiwport
-	trace->pixel_width = view_width / (double)trace->width;
-	trace->pixel_height = view_height / (double)trace->height;
-
-	set_view_topleft(trace, view_center, view_width, view_height);
-}
-
 
 void info_init(t_trace *trace)
 {
@@ -177,4 +187,8 @@ void trace_init(t_trace *trace)
 		clear_all(trace);
 	//append_sl(trace->spotlights);///------------------
 	events_init(trace);
+
+	set_sp_transforms(trace);
+	set_pl_transforms(trace);
+	set_cy_transforms(trace);
 }

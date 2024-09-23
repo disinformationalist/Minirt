@@ -2,7 +2,7 @@
 
 double magnitude(t_vec3 vec)
 {
-	return (sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z + vec.w * vec.w));
+	return (sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z));
 }
 
 double	dot_product(t_vec3 vec1, t_vec3 vec2)

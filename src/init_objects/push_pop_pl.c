@@ -22,11 +22,15 @@ static inline void	update_plane_ids(t_plane *plane)
 
 static inline void	make_default_pl(t_plane **start, t_plane *new)
 {
-	new->point = vec(0.0,-0.5,-6.5, 1.0);
-	new->norm = vec(0.0,1.0,0.0, 0.0);
+	t_matrix_4x4 transform;
+
+	new->point = vec(0.0,-1, 0.0, 1.0);
+	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color.r = 200;
 	new->color.g = 0;
 	new->color.b = 0;
+	transform = translation(-new->point.x, -new->point.y, -new->point.z);
+	new->transform = transform;
 	*start = new;
 	new->id = 1;
 	new->next = new;
