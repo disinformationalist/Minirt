@@ -31,6 +31,8 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->color.g = 50;
 	new->color.b = 200;
 	identity(&transform);
+	new->curr_scale = transform;
+	new->curr_rottran = transform;
 	new->transform = transform;
 	*start = new;
 	new->id = 1;

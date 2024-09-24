@@ -12,8 +12,6 @@
 
 #include "minirt.h"
 
-//JUST NEED TO DO END CAPS
-
 //this function will check each cylinder passed to it
 // a, b and c got combined into one t_vec3 because of the norm 
 static inline bool	check_solutions(t_vec3 abc, double *t1, double *t2)//changed to calc sq_discrim

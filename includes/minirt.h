@@ -5,7 +5,7 @@
 //# include "../image_processing/image_processing.h"
 # include "tools.h"
 # include "keyboard (42).h"
-//# include "keyboard (42).h"
+//# include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
 //# include "matrix_ops.h"
@@ -39,6 +39,8 @@ typedef struct s_sphere
 	t_norm_color 	color;//color will move into mat
 	t_mat			mat;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	curr_scale;
+	t_matrix_4x4	curr_rottran;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -51,6 +53,8 @@ typedef struct s_plane
 	t_norm_color	color;
 	t_mat			mat;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	curr_scale;
+	t_matrix_4x4	curr_rottran;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -65,6 +69,8 @@ typedef struct s_cylinder
 	t_norm_color		color;
 	t_mat				mat;
 	t_matrix_4x4		transform;
+	t_matrix_4x4		curr_scale;
+	t_matrix_4x4		curr_rottran;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -240,6 +246,8 @@ void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
+void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up);
+
 
 
 //sphere utils

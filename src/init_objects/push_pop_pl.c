@@ -30,7 +30,10 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->color.g = 0;
 	new->color.b = 0;
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
+	new->curr_rottran = transform;
 	new->transform = transform;
+	identity(&transform);
+	new->curr_scale = transform;
 	*start = new;
 	new->id = 1;
 	new->next = new;

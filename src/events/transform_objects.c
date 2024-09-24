@@ -1,4 +1,39 @@
 #include "minirt.h"
+//in progress reintit cam based on current orient and true up...
+void	reset_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
+{
+	t_point	view_topleft;
+	t_vec3	horizontal_move;
+	t_vec3	vertical_move;
+	t_vec3	right;
+	t_vec3	true_up;
+	
+	right = norm_vec(cross_prod(trace->cam->true_up, trace->cam->orient));
+	true_up = trace->cam->true_up;
+
+	horizontal_move = scale_vec(view_width / 2.0, right);
+	vertical_move = scale_vec(view_height / 2.0, true_up);
+	view_topleft = add_vec(view_center, vertical_move);
+	view_topleft = subtract_vec(view_topleft, horizontal_move);
+	set_pixel00(trace, view_topleft, right, true_up);
+}
+
+void	reinit_viewing(t_trace *trace)
+{
+	t_point	view_center;
+	double	focal_len;
+	double	view_width;
+	double	view_height;
+	
+	trace->cam->orient = norm_vec(trace->cam->orient);
+	focal_len = 1.0;
+	view_center = add_vec(trace->cam->center, scale_vec(1.0 / focal_len, trace->cam->orient));
+	view_width = 2.0 * tan((double)((trace->cam->fov) / 2.0) * DEG_TO_RAD);
+	view_height = view_width / ASPECT;
+	trace->pixel_width = view_width / (double)trace->width;
+	trace->pixel_height = view_height / (double)trace->height;	
+	reset_topleft(trace, view_center, view_width, view_height);
+}
 
 //moves current "on" object in x,y,z
 
@@ -7,17 +42,27 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 	if (on->object == NULL)
 		return ;
 	if (on->type == SPHERE)
-		trace->curr_sp->transform = mat_mult(trace->curr_sp->transform, translation(-vec.x, -vec.y, -vec.z));
+	{
+		trace->curr_sp->curr_rottran = mat_mult(trace->curr_sp->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
+	}
 	else if (on->type == PLANE)
-		trace->curr_pl->transform = mat_mult(trace->curr_pl->transform, translation(-vec.x, -vec.y, -vec.z));
+	{
+		//trace->curr_pl->transform = mat_mult(trace->curr_pl->transform, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
+	}
 	else if (on->type == CYLINDER)
-		trace->curr_cy->transform = mat_mult(trace->curr_cy->transform, translation(-vec.x, -vec.y, -vec.z));
+	{
+		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+	}
 	else if (on->type == LIGHT)
 		trace->lights->center = add_vec(trace->lights->center, vec);
 	else if (on->type == CAM)
 	{
 		trace->cam->center = add_vec(trace->cam->center, vec);
-		init_viewing(trace);
+		reinit_viewing(trace);
 	}
 }
 
@@ -28,18 +73,28 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	if (on->object == NULL)
 		return ;
 	else if (on->type == SPHERE)
-		trace->curr_sp->transform = mat_mult(rot, trace->curr_sp->transform);
+	{
+		trace->curr_sp->curr_rottran = mat_mult(rot, trace->curr_sp->curr_rottran);
+		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
+	}
 	else if (on->type == PLANE)
 	{	
-		trace->curr_pl->transform = mat_mult(rot, trace->curr_pl->transform);
+		//trace->curr_pl->transform = mat_mult(rot, trace->curr_pl->transform);
+		trace->curr_pl->curr_rottran = mat_mult(rot, trace->curr_pl->curr_rottran);
+		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
 		trace->curr_pl->norm = norm_vec(mat_vec_mult(transpose(trace->curr_pl->transform), vec(0, 1, 0, 0)));
 	}
 	else if (on->type == CYLINDER)
-		trace->curr_cy->transform = mat_mult(rot, trace->curr_cy->transform);
+	{
+		trace->curr_cy->curr_rottran = mat_mult(rot, trace->curr_cy->curr_rottran);
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+	}
 	else if (on->type == CAM)
 	{
 		trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
-		init_viewing(trace);
+		trace->cam->true_up = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->true_up)));
+		//adjust the true up also
+		reinit_viewing(trace);
 	}
 	else
 		return ;
@@ -52,15 +107,23 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec)
 	if (on->object == NULL)
 		return ;
 	if (on->type == SPHERE)
-		trace->curr_sp->transform = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_sp->transform);
+	{
+		trace->curr_sp->curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_sp->curr_scale);
+		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
+	}
 	else if (on->type == PLANE)
 		trace->curr_pl->transform = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_pl->transform);
 	else if (on->type == CYLINDER)
-		trace->curr_cy->transform = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_cy->transform);
+	{
+		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_cy->curr_scale);
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+	}
+	else
+		return ;
 
 /* 	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?
 		trace->lights->center = add_vec(trace->lights->center, vec);
-	else if (on->type == CAM)
+	else if (on->type == CAM)// no use case yet?!
 	{
 		trace->cam->center = add_vec(trace->cam->center, vec);
 		init_viewing(trace);

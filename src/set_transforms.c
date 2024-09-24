@@ -1,22 +1,19 @@
 #include "minirt.h"
 
 //set all transforms to account for position and orientation.
-//book say chain, transform <- trans * scale * rotate => then invert, we use inverted ops from start 
 
 void	set_sp_transforms(t_trace *trace)
 {
-	t_sphere		*curr_sp;
-	t_matrix_4x4	inv_scale;
-	t_matrix_4x4	inv_tran;
+	t_sphere	*curr_sp;
 
 	if (trace->spheres)
 	{
 		curr_sp = trace->spheres;
 		while (true)
 		{
-			inv_scale = inv_scaling(curr_sp->radius, curr_sp->radius, curr_sp->radius);
-			inv_tran = translation(-curr_sp->center.x, -curr_sp->center.y, -curr_sp->center.z);
-			curr_sp->transform = (mat_mult(inv_scale, inv_tran));
+			curr_sp->curr_scale = inv_scaling(curr_sp->radius, curr_sp->radius, curr_sp->radius);
+			curr_sp->curr_rottran = translation(-curr_sp->center.x, -curr_sp->center.y, -curr_sp->center.z);
+			curr_sp->transform = (mat_mult(curr_sp->curr_scale, curr_sp->curr_rottran));
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break;
@@ -37,23 +34,20 @@ void	set_pl_transforms(t_trace *trace)
 		{
 			inv_trans = translation(-curr_pl->point.x, -curr_pl->point.y, -curr_pl->point.z);
 			inv_rot = rot_up(curr_pl->norm);
-			curr_pl->transform = mat_mult(inv_rot, inv_trans);
+			curr_pl->curr_scale = scaling(1.0, 1.0, 1.0);
+			curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);			
+			curr_pl->transform = curr_pl->curr_rottran;			
 			curr_pl->norm = norm_vec(mat_vec_mult(transpose(curr_pl->transform), vec(0, 1, 0, 0)));
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
 				break;
 		}
 	}
-}			//forward then take inverse version
-			/* inv_trans = translation(curr_cy->center.x, curr_cy->center.y, curr_cy->center.z);
-			inv_scale = scaling(curr_cy->radius, curr_cy->radius, curr_cy->radius);
-			inv_rot = inverse(rot_up(curr_cy->norm));
-			curr_cy->transform = inverse(mat_mult(inv_trans, mat_mult(inv_scale, inv_rot))); */
+}
 
 void	set_cy_transforms(t_trace *trace)
 {
 	t_cylinder		*curr_cy;
-	t_matrix_4x4	inv_scale;
 	t_matrix_4x4	inv_trans;
 	t_matrix_4x4	inv_rot;
 
@@ -63,17 +57,16 @@ void	set_cy_transforms(t_trace *trace)
 		while (true)
 		{
 			inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);
-			inv_scale = inv_scaling(curr_cy->radius, curr_cy->radius, curr_cy->radius);
 			inv_rot = rot_up(curr_cy->norm);
-			curr_cy->transform = mat_mult(inv_scale, mat_mult(inv_rot, inv_trans));			
+			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);
+			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
+			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break;
 		}
 	}
 }
-
-
 
 //not using view trans right now.
 

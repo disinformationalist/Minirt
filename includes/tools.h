@@ -102,6 +102,7 @@ typedef struct s_cam
 {
 	t_vec3			center;
 	t_vec3			orient;
+	t_vec3			true_up;
 	int				fov;
 	t_matrix_4x4	transform;
 	double			width;

@@ -1,23 +1,5 @@
 #include "minirt.h"
 
-//og world space method
-
-/* bool	ray_sphere_intersect(t_sphere sphere, t_ray ray, double *t)
-{
-	t_vec3	oc;//ray origin to center
-	double	a;//coefficients of quadratic
-	double	b;
-	double	c;
-
-	oc = subtract_vec(ray.origin, sphere.center);
-	a = dot_product(ray.dir, ray.dir);
-	b = 2.0 * dot_product(oc, ray.dir);
-	c = dot_product(oc, oc) - sphere.radius * sphere.radius;
-	if (check_solutions(a, b, c, t))
-		return (true);
-	return (false);
-} */
-
 static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)//change  store vals
 {
 	double	discrim;
@@ -86,7 +68,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 
 //diff plus specular for sp
 
-double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat sphere->mat)
+double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat mat)
 {
 	t_vec3	ref;
 	double	spec;
@@ -137,10 +119,10 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
-	}
 	//sphere->color = stripe(int_pnt);//trying color function
-	
 	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
+	}
+	
 	return (get_final_color(trace, sphere->color, light_int));
 }
 

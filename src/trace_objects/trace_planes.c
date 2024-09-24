@@ -33,29 +33,6 @@ double spotlight(t_vec3 light_dir)
 		return (0);
 }
 
-
-//old 
-/* bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
-{
-	double	denom;
-	double	sol;
-	t_vec3	op;//origin to point
-
-	denom = dot_product(plane.norm, ray.dir);
-	if (fabs(denom) < 1e-6)// close to parallel, no intersect
-		return (false);
-	op = subtract_vec(plane.point, ray.origin);
-	sol = dot_product(op, plane.norm) / denom;
-	if (sol > 0)//in front of ray origin, not behind
-	{
-		*t = sol;
-		return (true);
-	}
-	return (false);
-} */
-
-//--------------------new
-
 bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	ray = transform(ray, plane.transform);
@@ -112,9 +89,9 @@ unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));
-	}
-	//plane->color = stripe(int_pnt);
 	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
+	//plane->color = stripe(int_pnt);
+	}
 	return (get_final_color(trace, plane->color, light_int));
 }
 

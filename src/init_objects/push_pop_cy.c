@@ -25,14 +25,16 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 {
 	t_matrix_4x4 transform;
 
-	new->center = vec(0.0, 0, 0.0, 1.0);
+	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
 	new->height = 2.0;
-	new->norm = vec(0.0,1.0,0.0, 0.0);
+	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color.r = 0;
 	new->color.g = 200;
 	new->color.b = 100;
 	identity(&transform);
+	new->curr_scale = transform;
+	new->curr_rottran = transform;
 	new->transform = transform;
 	*start = new;
 	new->id = 1;
