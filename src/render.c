@@ -67,6 +67,31 @@ void	set_cy_transforms(t_trace *trace)
 	}
 }
 
+/*void	set_le_transforms(t_trace *trace)
+{
+	t_lens			*curr_le;
+	t_matrix_4x4	inv_scale;
+	t_matrix_4x4	inv_trans;
+	t_matrix_4x4	inv_rot;
+
+	if (trace->lenses)
+	{
+		curr_le = trace->lenses;
+		while (true)
+		{
+			inv_scale = inv_scaling(curr_le->sphere_1.radius, curr_le->sphere_1.radius, curr_le->sphere_1.radius);
+			inv_trans = translation(-curr_le->sphere_1.center.x, -curr_le->sphere_1.center.y, -curr_le->sphere_1.center.z);
+			curr_le->sphere_1.transform = (mat_mult(inv_scale, inv_trans));
+			inv_scale = inv_scaling(curr_le->sphere_2.radius, curr_le->sphere_2.radius, curr_le->sphere_2.radius);
+			inv_trans = translation(-curr_le->sphere_2.center.x, -curr_le->sphere_2.center.y, -curr_le->sphere_2.center.z);
+			curr_le->sphere_2.transform = (mat_mult(inv_scale, inv_trans));
+			curr_le = curr_le->next;
+			if (curr_le == trace->lenses)
+				break;
+		}
+	}
+}*/
+
 /* using from will inv_translate that much, the diff between from and to is 
 the orienation.
 
@@ -104,6 +129,7 @@ void	render(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
+	set_le_transforms(trace);
 	/* t_vec3 cam_cen;
 	t_vec3 cam_ori;
 	cam_cen = trace->cam->center;

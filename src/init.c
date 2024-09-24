@@ -124,6 +124,7 @@ void info_init(t_trace *trace)
 	trace->width_orig = trace->width;
 	
 	trace->curr_sp = trace->spheres;
+	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
 

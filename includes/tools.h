@@ -52,6 +52,7 @@ typedef struct s_ray
 typedef enum e_type
 {
 	SPHERE,
+	LENS,
 	PLANE,
 	CYLINDER,
 	LIGHT,
@@ -120,6 +121,7 @@ typedef struct s_obj_counts
 	int				cam_count;
 	int				light_count;
 	int				sphere_count;
+	int				lens_count;
 	int				plane_count;
 	int				cyl_count;
 }	t_obj_counts;
