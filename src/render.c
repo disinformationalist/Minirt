@@ -2,20 +2,10 @@
 
 void	render(t_trace *trace)
 {
-	//set all transforms here maybe move to outside render later... must adjust hooks
 	/* set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace); */
-	/* t_vec3 cam_cen;
-	t_vec3 cam_ori;
-	cam_cen = trace->cam->center;
-	cam_ori = trace->cam->orient;
-	trace->cam->transform = view_transform(cam_cen, cam_ori, vec(0, 1, 0, 0));
- 	//trace->cam->transform = view_transform(vec(0, 0, -6, 1), vec(0, 0, 1, 1), vec(0, 1, 0, 0)); 
-	print_matrix_4(&trace->cam->transform);
- */
-	//print_vec((trace->cam->orient));
-
+	
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);

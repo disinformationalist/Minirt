@@ -2,11 +2,20 @@
 
 t_ray	ray(t_vec3 dir, t_point origin)
 {
-	t_ray r;
+	t_ray	r;
 
 	r.dir = dir;
 	r.origin = origin;
 	return (r);
+}
+
+t_ray	transform(t_ray r, t_matrix_4x4 m)
+{
+	t_ray	new;
+
+	new.dir = mat_vec_mult(m, r.dir);
+	new.origin = mat_vec_mult(m, r.origin);
+	return (new);
 }
 
 t_vec3	norm_vec(t_vec3 vec)

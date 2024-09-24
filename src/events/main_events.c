@@ -106,9 +106,9 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	else if (keycode == O)
 		scale_object(trace, trace->on, vec(1, 1, 1.1, 0));
 	else if (keycode == PERIOD)
-		push_new_object(trace, trace->on);
+		scale_object(trace, trace->on, vec(1.1, 1.1, 1.1, 0));
 	else if (keycode == COMMA)
-		pop_object(trace, trace->on);
+		scale_object(trace, trace->on, vec(.9, .9, .9, 0));
 	else
 		key_press_3(keycode, trace);
 	render(trace);

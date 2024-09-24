@@ -18,59 +18,44 @@
 	return (false);
 } */
 
-static inline bool check_solutions(double a, double b, double c, double *t)//change  store vals
+static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)//change  store vals
 {
 	double	discrim;
-	double	sol_1;
-	double	sol_2;
-	double	sqr_discrim;
 	double	inv_2a;
-
-	discrim = b * b - 4 * a * c;
-	if (discrim < 0)
+	double 	sq_discrim;
+	
+	discrim = abc.y * abc.y - 4 * abc.x * abc.z;
+	if (discrim < 1e-5)
 		return (false);
-	sqr_discrim = sqrt(discrim);
-	inv_2a = 0.5 / a;
-	sol_1 = (-b - sqr_discrim) * inv_2a;
-	if (sol_1 > 0)
-	{
-		*t = sol_1;
-		return (true);
-	}
-	sol_2 = (-b + sqr_discrim) * inv_2a;
-	if (sol_2 > 0)
-	{
-		*t = sol_2;
-		return (true);
-	}
-	//make return smaller of two
-	return (false);
-}
-
-t_ray	transform(t_ray r, t_matrix_4x4 m)
-{
-	t_ray new;
-
-	new.dir = mat_vec_mult(m, r.dir);
-	new.origin = mat_vec_mult(m, r.origin);
-	return (new);
+	sq_discrim = sqrt(discrim);
+	inv_2a = 0.5 / abc.x;
+	*t1 = (-abc.y - sq_discrim) * inv_2a;
+	*t2 = (-abc.y + sq_discrim) * inv_2a;
+	return (true);
 }
 
 //using object space
 
 bool	ray_sphere_intersect(t_sphere sphere, t_ray ray, double *t)
 {
-	t_vec3	oc;
+	double	t1;
+	double	t2;
 	double	a;
 	double	b;
 	double	c;
 
 	ray = transform(ray, sphere.transform);
-	oc = ray.origin;
 	a = dot_product(ray.dir, ray.dir);
-	b = 2.0 * dot_product(oc, ray.dir);
-	c = dot_product(oc, oc) - 1;
-	if (check_solutions(a, b, c, t))
+	b = 2.0 * dot_product(ray.origin, ray.dir);
+	c = dot_product(ray.origin, ray.origin) - 1;
+	if (check_solutions(vec(a, b, c, 0), &t1, &t2))
+	{
+		if (t1 > 0 && t1 < *t)
+			*t = t1;
+		if (t2 > 0 && t2 < *t)
+			*t = t2;
+	}
+	if (*t < INFINITY)
 		return (true);
 	return (false);
 }
@@ -153,6 +138,8 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
 	}
+	//sphere->color = stripe(int_pnt);//trying color function
+	
 	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
 	return (get_final_color(trace, sphere->color, light_int));
 }

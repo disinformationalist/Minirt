@@ -47,7 +47,7 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 
 //scales current object in xyz based on the vec passed in
 
-void	scale_object(t_trace *trace, t_on *on, t_vec3 vec)//this isnt working well with rotations for spheres.
+void	scale_object(t_trace *trace, t_on *on, t_vec3 vec)
 {
 	if (on->object == NULL)
 		return ;

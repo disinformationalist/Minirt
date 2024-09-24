@@ -239,6 +239,8 @@ void			*ray_trace(void *arg);
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
+t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
+
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);

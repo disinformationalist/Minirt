@@ -103,8 +103,8 @@ void	init_viewing(t_trace *trace)
 	print_vec(vertical_move); */
 
 //setup for transform way(very slow seems to have no big advantage keep until sure)
-/* 
-void	init_viewing(t_trace *trace)
+
+/* void	init_viewing(t_trace *trace)
 {
 	double	half_view;
 	double	aspect;
@@ -191,4 +191,13 @@ void trace_init(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
+
+	/* t_vec3 cam_cen;
+	t_vec3 cam_ori;
+	cam_cen = trace->cam->center;
+	cam_ori = trace->cam->orient;
+	trace->cam->transform = view_transform(cam_cen, cam_ori, vec(0, 1, 0, 0)); */
+ 	//trace->cam->transform = view_transform(vec(0, 0, -6, 1), vec(0, 0, 1, 1), vec(0, 1, 0, 0)); 
+	//print_matrix_4(&trace->cam->transform);
+
 }

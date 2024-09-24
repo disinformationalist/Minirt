@@ -44,7 +44,7 @@ t_norm_color stripe_at(t_point point, t_matrix_4x4 transform)//, t_norm_color co
 	
 	/* if ((int)floor(sqrt(obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z) * 2) % 2 == 0)
 		col = color(40, 40, 40); */
-	if ((int)floor(obj_pnt.x * 2) % 2 == 0)
+	if ((int)floor(obj_pnt.x * 4) % 2 == 0)
 		col = color(40, 40, 40);
 	else
 		col = color(255, 255, 255);

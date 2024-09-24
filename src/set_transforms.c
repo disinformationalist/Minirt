@@ -1,6 +1,7 @@
 #include "minirt.h"
 
 //set all transforms to account for position and orientation.
+//book say chain, transform <- trans * scale * rotate => then invert, we use inverted ops from start 
 
 void	set_sp_transforms(t_trace *trace)
 {
@@ -43,7 +44,11 @@ void	set_pl_transforms(t_trace *trace)
 				break;
 		}
 	}
-}
+}			//forward then take inverse version
+			/* inv_trans = translation(curr_cy->center.x, curr_cy->center.y, curr_cy->center.z);
+			inv_scale = scaling(curr_cy->radius, curr_cy->radius, curr_cy->radius);
+			inv_rot = inverse(rot_up(curr_cy->norm));
+			curr_cy->transform = inverse(mat_mult(inv_trans, mat_mult(inv_scale, inv_rot))); */
 
 void	set_cy_transforms(t_trace *trace)
 {
@@ -60,13 +65,16 @@ void	set_cy_transforms(t_trace *trace)
 			inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);
 			inv_scale = inv_scaling(curr_cy->radius, curr_cy->radius, curr_cy->radius);
 			inv_rot = rot_up(curr_cy->norm);
-			curr_cy->transform = mat_mult(inv_scale, mat_mult(inv_rot, inv_trans));
+			curr_cy->transform = mat_mult(inv_scale, mat_mult(inv_rot, inv_trans));			
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break;
 		}
 	}
 }
+
+
+
 //not using view trans right now.
 
 /* using from will inv_translate that much, the diff between from and to is 
@@ -81,7 +89,7 @@ the orienation.
 */
 //t_matrix_4x4	view_transform(t_point from, t_point to, t_vec3 up)
 
-t_matrix_4x4	view_transform(t_point from, t_point ori_vec, t_vec3 up)
+t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up)
 {
 	t_matrix_4x4	orient;
 	//t_vec3			forward;
