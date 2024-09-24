@@ -42,6 +42,11 @@ void	switch_list(int keycode, t_trace *trace, t_on *on)
 		on->object = trace->curr_cy;
 		on->type = CYLINDER;
 	}
+	else if (keycode == N_4)
+	{
+		on->object = trace->curr_le;
+		on->type = LENS;
+	}
 	else if (keycode == N_9)
 	{
 		on->object = trace->lights;
@@ -61,6 +66,7 @@ void	next_list_ob(t_trace *trace, t_on *on)
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
+	t_lens			*curr_le;
 
 	if (on->object == NULL)
 		return ;
@@ -82,6 +88,12 @@ void	next_list_ob(t_trace *trace, t_on *on)
 		trace->curr_cy = curr_cy->next;
 		on->object = trace->curr_cy;
 	}
+	else if (on->type == LENS)
+	{
+		curr_le = (t_lens *)on->object;
+		trace->curr_le = curr_le->next;
+		on->object = trace->curr_le;
+	}
 	else
 		return ;
 }
@@ -93,6 +105,7 @@ void	prev_list_ob(t_trace *trace, t_on *on)
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
+	t_lens			*curr_le;
 
 	if (on->object == NULL)
 		return ;
@@ -113,6 +126,12 @@ void	prev_list_ob(t_trace *trace, t_on *on)
 		curr_cy = (t_cylinder *)on->object;
 		trace->curr_cy = curr_cy->prev;
 		on->object = trace->curr_cy;
+	}
+	else if (on->type == LENS)
+	{
+		curr_le = (t_lens *)on->object;
+		trace->curr_le = curr_le->prev;
+		on->object = trace->curr_le;
 	}
 	else
 		return ;

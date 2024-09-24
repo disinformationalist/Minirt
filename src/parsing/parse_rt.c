@@ -22,6 +22,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file)
 			counts->plane_count++;
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
 			counts->cyl_count++;
+		else if (!ft_strcmp(*(rt_file[k]), "le"))
+			counts->lens_count++;
 		else
 		{
 			free_3d_array_i(rt_file, ft_3darray_len(rt_file));
@@ -49,6 +51,8 @@ void	check_ids(char ***rt_file)
 			check_pl(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cy"))
 			check_cy(rt_file[k], rt_file);
+		if (!ft_strcmp(*(rt_file[k]), "le"))
+			check_le(rt_file[k], rt_file);
 		/* if (!ft_strcmp(*(rt_file[k]), "sl"))//spot lights check needed
 			check_sl(rt_file[k], rt_file); */
 	}

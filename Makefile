@@ -27,20 +27,24 @@ SRCS := ./src/main.c \
 ./src/parsing/split_file_utils.c \
 ./src/parsing/parse_rt.c \
 ./src/parsing/check_amb_cam_light.c \
-./src/parsing/check_sp_pl_cy.c \
+./src/parsing/check_sp_pl_cy_le.c \
 ./src/parsing/check_line_utils.c \
 ./src/parsing/check_line_utils2.c \
+./src/parsing/check_line_utils3.c \
 ./src/init_objects/sphere_list_utils.c \
 ./src/init_objects/push_pop_sp.c \
 ./src/init_objects/plane_list_utils.c \
 ./src/init_objects/push_pop_pl.c \
 ./src/init_objects/cylinder_list_utils.c \
 ./src/init_objects/push_pop_cy.c \
+./src/init_objects/lens_list_utils.c \
+./src/init_objects/push_pop_le.c \
 ./src/init_objects/get_line_vals.c \
 ./src/init_objects/set_amb_cam_lights.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
+./src/trace_objects/trace_lenses.c \
 ./src/trace_objects/trace_capped_cylinders.c \
 ./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
@@ -55,6 +59,7 @@ SRCS := ./src/main.c \
 ./src/forge/write_spheres.c \
 ./src/forge/write_planes.c \
 ./src/forge/write_cylinders.c \
+./src/forge/write_lenses.c \
 ./src/forge/get_rt_name.c \
 ./src/png/export_png.c \
 ./src/png/export_png_utils.c \
@@ -66,7 +71,6 @@ SRCS := ./src/main.c \
 ./src/color_disrupt.c \
 ./src/init_objects/light_list_utils.c \
 #./src/trace_objects/trace_cylinders.c \
-
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 #-Iincludes

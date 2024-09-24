@@ -45,6 +45,15 @@ typedef struct s_sphere
 	struct s_sphere *prev;
 }	t_sphere;
 
+typedef struct s_lens
+{
+	t_sphere	sphere_1;
+	t_sphere	sphere_2;
+	int				id;
+	struct s_lens	*next;
+	struct s_lens	*prev;
+}	t_lens;
+
 typedef struct s_plane 
 {
 	int				id;
@@ -111,6 +120,7 @@ typedef struct s_trace
 	
 	//linked list objects
 	t_sphere		*spheres;
+	t_lens			*lenses;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
@@ -118,6 +128,7 @@ typedef struct s_trace
 
 	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
+	t_lens			*curr_le;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
@@ -190,6 +201,7 @@ void			check_amb(char **line, char ***rt_file);
 void			check_cam(char **line, char ***rt_file);
 void			check_light(char **line, char ***rt_file);
 void			check_sp(char **line, char ***rt_file);
+void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 
@@ -202,6 +214,7 @@ int				check_orientation(char *orient_str);
 int				check_normalization(char *orient_str);
 int				check_coordinates(char *coord_str);
 void			free_exit(char ***rt_file, char *msg1, char *msg2);
+int				check_spheres_intersect(char *center_str_1, char *diam_str_1, char *center_str_2, char *diam_str_2);
 
 /***INIT***/
 
@@ -223,17 +236,20 @@ bool			append_light(t_light **start, char **line);
 
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
+bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
+bool			insert_lecopy_after(t_trace *trace, t_lens **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
 bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
+void			pop_le(t_trace *trace, t_lens **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
 void			pop_pl(t_trace *trace, t_plane **current);
 
@@ -254,6 +270,11 @@ void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 tr
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
 unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
+
+//lens utils
+void			check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t);
+unsigned int	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
@@ -331,15 +352,18 @@ void			error_exit(char *msg);
 void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
+void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 
 /***EXTRAS ***/ //extras only remain in bonus version here or in extras header.
 
 //forge rt file, builds rt file from current scene.
 void			forge_rt(const char *path, t_trace *trace);
+char			*build_sp_line(t_sphere *sphere);
 void			write_spheres(t_sphere *spheres, int fd);
 void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
+void			write_lenses(t_lens *lenses, int fd);
 int				count_chars(int num);
 char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);
