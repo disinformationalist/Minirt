@@ -271,21 +271,18 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 
 t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
 {
-	t_vec3 norm;
-	double dist;
+	t_vec3	norm;
+	double	dist;
 
 	int_pnt = mat_vec_mult(transform, int_pnt);
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
-	if (dist < .99999)
-	{
-		if (int_pnt.y >= half_h - 1e-5)
-			norm = vec(0, 1, 0, 0);
-		else if (int_pnt.y <= -half_h + 1e-5)
-			norm = vec(0, -1, 0, 0);
-		norm = mat_vec_mult(transpose(transform), norm);
-	}
+	if (dist < .99999 && int_pnt.y >= half_h - 1e-5)
+		norm = vec(0, 1, 0, 0);
+	else if (dist < .99999 && int_pnt.y <= -half_h + 1e-5)
+		norm = vec(0, -1, 0, 0);
 	else
-		norm = mat_vec_mult(transpose(transform), vec(int_pnt.x, 0, int_pnt.z, 0));
+		norm = vec(int_pnt.x, 0, int_pnt.z, 0);
+	norm = mat_vec_mult(transpose(transform), norm);
 	norm.w = 0;
 	return (norm_vec(norm));
 }

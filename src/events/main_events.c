@@ -26,11 +26,11 @@ F1	 F3								  NUM PAD
 
 SPACE => supersample mode
 
-, => pop current object from current list
+, => pop current object from current list // second layer scale down axes
 
-. => push new object to current list
+. => push new object to current list // second layer scale up all axes
 
-//TRANSLATION
+//TRANSLATION(first layer) //SCALE(second layer)  
 
 J,L => x dirs
 I,K => y dirs
@@ -43,9 +43,6 @@ I,K => y dirs
 U,O => z dirs
 
 -----------------TODO--------------------
-
-
-//RESIZE OBJECT, + - (partially done in scale_object())
 
 //OTHER TRANSFORMATIONS?
 
@@ -141,9 +138,9 @@ int	key_press_2(int keycode, t_trace *trace)
 	return (0);
 }
 
-int	key_press(int keycode, t_trace *trace)//first function is for things that do not rerender the scene. key_press_2 and on will rerender.
+int	key_press(int keycode, t_trace *trace)
 {
-	//printf("key: %d\n", keycode);//prints key press num for troub shoot
+	printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == UP_CARET)
