@@ -147,6 +147,11 @@ void	push_new_object(t_trace *trace, t_on *on)
 		if (insert_cycopy_after(trace, &trace->curr_cy))
 			close_win(trace);	
 	}
+	else if (on->type == LENS)
+	{
+		if (insert_lecopy_after(trace, &trace->curr_le))
+			close_win(trace);	
+	}
 	else
 		return ;
 	/* else if (on->type == LIGHT)////---------------
@@ -165,6 +170,8 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_pl(trace, &trace->curr_pl);
 	else if (on->type == CYLINDER)
 		pop_cy(trace, &trace->curr_cy);
+	else if (on->type == LENS)
+		pop_le(trace, &trace->curr_le);
 	else
 		return ;
 }

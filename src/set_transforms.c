@@ -68,6 +68,28 @@ void	set_cy_transforms(t_trace *trace)
 	}
 }
 
+void	set_le_transforms(t_trace *trace)
+{
+	t_lens	*curr_le;
+
+	if (trace->lenses)
+	{
+		curr_le = trace->lenses;
+		while (true)
+		{
+			curr_le->sphere_1.curr_scale = inv_scaling(curr_le->sphere_1.radius, curr_le->sphere_1.radius, curr_le->sphere_1.radius);
+			curr_le->sphere_1.curr_rottran = translation(-curr_le->sphere_1.center.x, -curr_le->sphere_1.center.y, -curr_le->sphere_1.center.z);
+			curr_le->sphere_1.transform = (mat_mult(curr_le->sphere_1.curr_scale, curr_le->sphere_1.curr_rottran));
+			curr_le->sphere_2.curr_scale = inv_scaling(curr_le->sphere_2.radius, curr_le->sphere_2.radius, curr_le->sphere_2.radius);
+			curr_le->sphere_2.curr_rottran = translation(-curr_le->sphere_2.center.x, -curr_le->sphere_2.center.y, -curr_le->sphere_2.center.z);
+			curr_le->sphere_2.transform = (mat_mult(curr_le->sphere_2.curr_scale, curr_le->sphere_2.curr_rottran));
+			curr_le = curr_le->next;
+			if (curr_le == trace->lenses)
+				break;
+		}
+	}
+}
+
 //not using view trans right now.
 
 /* using from will inv_translate that much, the diff between from and to is 

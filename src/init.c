@@ -191,6 +191,7 @@ void trace_init(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
+	set_le_transforms(trace);
 
 	/* t_vec3 cam_cen;
 	t_vec3 cam_ori;

@@ -82,6 +82,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_pl(&trace->planes, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
 			status = append_cy(&trace->cylinders, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "le"))
+			status = append_le(&trace->lenses, rt_file[k]);
 		/* else if (!ft_strcmp(*(rt_file[k]), "sl"))//using sep identifier for sl, appending the same way
 			status = append_lt(&trace->spotlights, rt_file[k]);*/
 		if (status)

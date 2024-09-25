@@ -261,6 +261,7 @@ void			*ray_trace(void *arg);
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
+void			set_le_transforms(t_trace *trace);
 t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
 void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up);
 
