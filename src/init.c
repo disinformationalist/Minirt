@@ -190,7 +190,7 @@ void trace_init(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
-
+	trace->cam->transform = rot_up(trace->cam->orient);
 	/* t_vec3 cam_cen;
 	t_vec3 cam_ori;
 	cam_cen = trace->cam->center;

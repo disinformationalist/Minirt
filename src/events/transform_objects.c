@@ -1,5 +1,5 @@
 #include "minirt.h"
-//in progress reintit cam based on current orient and true up...
+//in progress reintit cam based on current orient and true up... must rotate with object space!
 void	reset_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
 {
 	t_point	view_topleft;
@@ -48,7 +48,6 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 	}
 	else if (on->type == PLANE)
 	{
-		//trace->curr_pl->transform = mat_mult(trace->curr_pl->transform, translation(-vec.x, -vec.y, -vec.z));
 		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
 		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
 	}
@@ -79,7 +78,6 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	}
 	else if (on->type == PLANE)
 	{	
-		//trace->curr_pl->transform = mat_mult(rot, trace->curr_pl->transform);
 		trace->curr_pl->curr_rottran = mat_mult(rot, trace->curr_pl->curr_rottran);
 		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
 		trace->curr_pl->norm = norm_vec(mat_vec_mult(transpose(trace->curr_pl->transform), vec(0, 1, 0, 0)));
@@ -91,9 +89,14 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	}
 	else if (on->type == CAM)
 	{
-		trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
-		trace->cam->true_up = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->true_up)));
-		//adjust the true up also
+		//stack the matrix ops... to rotate the camera //its not working for object space rotation
+		//print_matrix_4(&trace->cam->transform);
+		trace->cam->transform = mat_mult(rot, trace->cam->transform);
+		trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, vec(0, 1, 0, 0)));
+		trace->cam->true_up = norm_vec(mat_vec_mult(trace->cam->transform, vec(0.0, 0.0, -1.0, 0.0)));
+		
+		/* trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
+		trace->cam->true_up = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->true_up))); */
 		reinit_viewing(trace);
 	}
 	else
