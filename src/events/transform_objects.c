@@ -57,6 +57,13 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
 		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
+	else if (on->type == LENS)
+	{
+		trace->curr_le->sphere_1.curr_rottran = mat_mult(trace->curr_le->sphere_1.curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
+		trace->curr_le->sphere_2.curr_rottran = mat_mult(trace->curr_le->sphere_2.curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
+	}
 	else if (on->type == LIGHT)
 		trace->lights->center = add_vec(trace->lights->center, vec);
 	else if (on->type == CAM)
@@ -89,6 +96,11 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 		trace->curr_cy->curr_rottran = mat_mult(rot, trace->curr_cy->curr_rottran);
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
+	else if (on->type == LENS)
+	{
+		trace->curr_le->curr_rottran = mat_mult(rot, trace->curr_le->curr_rottran);
+		trace->curr_le->transform = mat_mult(trace->curr_le->curr_scale, trace->curr_le->curr_rottran);
+	}
 	else if (on->type == CAM)
 	{
 		trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
@@ -117,6 +129,13 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec)
 	{
 		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_cy->curr_scale);
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+	}
+	if (on->type == LENS)
+	{
+		trace->curr_le->sphere_1.curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_le->sphere_1.curr_scale);
+		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
+		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_le->sphere_2.curr_scale);
+		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
 	else
 		return ;

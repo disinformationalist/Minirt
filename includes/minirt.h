@@ -47,9 +47,16 @@ typedef struct s_sphere
 
 typedef struct s_lens
 {
+	int				id;
 	t_sphere	sphere_1;
 	t_sphere	sphere_2;
-	int				id;
+	double			d; // inter-center distance
+	t_vec3			center;
+	double			radius;
+	t_vec3			axis;
+	t_matrix_4x4	transform;
+	t_matrix_4x4	curr_scale;
+	t_matrix_4x4	curr_rottran;
 	struct s_lens	*next;
 	struct s_lens	*prev;
 }	t_lens;
