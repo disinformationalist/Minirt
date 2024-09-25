@@ -89,12 +89,19 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	}
 	else if (on->type == CAM)
 	{
+		/* t_matrix_4x4	curr_rot;//huh?
+		get_rotation(trace->cam->orient, double cos(M_PI / 6), double sin(M_PI / 6)); */
+
 		//stack the matrix ops... to rotate the camera //its not working for object space rotation
 		//print_matrix_4(&trace->cam->transform);
 		trace->cam->transform = mat_mult(rot, trace->cam->transform);
 		trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, vec(0, 1, 0, 0)));
 		trace->cam->true_up = norm_vec(mat_vec_mult(trace->cam->transform, vec(0.0, 0.0, -1.0, 0.0)));
-		
+
+		/* trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, trace->cam->orient));
+		trace->cam->true_up = norm_vec(mat_vec_mult(trace->cam->transform, trace->cam->true_up));		
+ */
+
 		/* trace->cam->orient = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->orient)));
 		trace->cam->true_up = norm_vec(mat_vec_mult(rot, norm_vec(trace->cam->true_up))); */
 		reinit_viewing(trace);

@@ -16,7 +16,7 @@ bool	veccmp(t_vec3 v1, t_vec3 v2)
 
 //uses rodrigues rotation formula to get inverse rotation
 
-static inline t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
+t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
 {
 	t_matrix_4x4 	res;
 	double			t;

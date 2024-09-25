@@ -296,6 +296,7 @@ t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
 t_matrix_4x4	rot_up(t_vec3 ori);
+t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 
