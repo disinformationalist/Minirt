@@ -54,10 +54,7 @@ SRCS := ./src/main.c \
 ./src/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
-./src/events/push_pop.c \
-./src/events/translation.c \
-./src/events/rotation.c \
-./src/events/scaling.c \
+./src/events/transform_objects.c \
 ./src/events/extra_events.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \
@@ -75,6 +72,11 @@ SRCS := ./src/main.c \
 ./src/color_disrupt.c \
 ./src/init_objects/light_list_utils.c \
 #./src/trace_objects/trace_cylinders.c \
+
+#./src/events/push_pop.c \
+./src/events/translation.c \
+./src/events/rotation.c \
+./src/events/scaling.c \
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 #-Iincludes
