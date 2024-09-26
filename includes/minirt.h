@@ -139,7 +139,7 @@ typedef struct s_trace
 	//need
 	double			pixel_width;
 	double			pixel_height;
-	t_point			pixel00;//changed to t_point
+	t_point			pixel00;
 	t_vec3			pix_delta_down;
 	t_vec3 			pix_delta_rht;
 	
@@ -207,14 +207,13 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 
 void 			trace_init(t_trace *trace);
 void			init_viewing(t_trace *trace);
-
+void			reinit_viewing(t_trace *trace);
 
 //get and set vals
 
 t_vec3			get_coordinates(char *coord_str, double w);
 t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
-
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
@@ -246,12 +245,6 @@ void			*ray_trace(void *arg);
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
-t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
-void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up);
-void			cam_transform(t_cam *cam);
-
-
-
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
