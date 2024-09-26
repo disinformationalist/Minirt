@@ -105,6 +105,8 @@ typedef struct s_cam
 	t_vec3			true_up;
 	int				fov;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	transform_up;
+
 	double			width;
 	double			height;
 	double			half_width;

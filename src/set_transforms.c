@@ -33,7 +33,7 @@ void	set_pl_transforms(t_trace *trace)
 		while (true)
 		{
 			inv_trans = translation(-curr_pl->point.x, -curr_pl->point.y, -curr_pl->point.z);
-			inv_rot = rot_up(curr_pl->norm);
+			inv_rot = rot_to(curr_pl->norm,  vec(0, 1, 0, 0));
 			curr_pl->curr_scale = scaling(1.0, 1.0, 1.0);
 			curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);			
 			curr_pl->transform = curr_pl->curr_rottran;			
@@ -57,7 +57,7 @@ void	set_cy_transforms(t_trace *trace)
 		while (true)
 		{
 			inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);
-			inv_rot = rot_up(curr_cy->norm);
+			inv_rot = rot_to(curr_cy->norm,  vec(0, 1, 0, 0));
 			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);
 			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
@@ -99,4 +99,21 @@ t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up)
 	tuple_to_row(&orient, vec(-ori_vec.x, -ori_vec.y, -ori_vec.z, 0), 2);
 	tuple_to_row(&orient, vec(0, 0, 0, 1), 3);
 	return (mat_mult(orient, translation(-from.x, -from.y, -from.z)));
+}
+
+void	cam_transform(t_cam *cam)
+{
+	t_matrix_4x4	inv_trans;
+	t_matrix_4x4	inv_rot;
+
+	inv_trans = translation(-cam->center.x, -cam->center.y, -cam->center.z);
+	inv_rot = rot_to(cam->orient, vec(0, 1, 0, 0));
+	cam->transform = mat_mult(inv_rot, inv_trans);
+/* 	left = cross_prod(ori_vec, norm_vec(up));
+	true_up = cross_prod(left, ori_vec);
+	tuple_to_row(&orient, vec(left.x, left.y, left.z, 0), 0);
+	tuple_to_row(&orient, vec(true_up.x, true_up.y, true_up.z, 0), 1);
+	tuple_to_row(&orient, vec(-ori_vec.x, -ori_vec.y, -ori_vec.z, 0), 2);
+	tuple_to_row(&orient, vec(0, 0, 0, 1), 3);
+	return (mat_mult(orient, translation(-from.x, -from.y, -from.z))); */
 }

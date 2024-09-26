@@ -4,8 +4,8 @@
 
 //# include "../image_processing/image_processing.h"
 # include "tools.h"
-# include "keyboard (42).h"
-//# include "keyboard.h"
+//# include "keyboard (42).h"//figure out how to automatically select correct one
+# include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
 //# include "matrix_ops.h"
@@ -208,6 +208,7 @@ void			free_exit(char ***rt_file, char *msg1, char *msg2);
 void 			trace_init(t_trace *trace);
 void			init_viewing(t_trace *trace);
 
+
 //get and set vals
 
 t_vec3			get_coordinates(char *coord_str, double w);
@@ -247,6 +248,8 @@ void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
 void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up);
+void			cam_transform(t_cam *cam);
+
 
 
 
@@ -276,6 +279,7 @@ bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
 //vec tools
 //t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
 
+void	reinit_viewing(t_trace *trace);
 
 
 /***MATH UTILS***/
@@ -295,7 +299,10 @@ t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
-t_matrix_4x4	rot_up(t_vec3 ori);
+
+t_matrix_4x4 rot_to(t_vec3 from, t_vec3 to);
+
+//t_matrix_4x4	rot_up(t_vec3 ori);
 t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 

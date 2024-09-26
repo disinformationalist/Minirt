@@ -1,11 +1,7 @@
 #include "minirt.h"
 
 void	render(t_trace *trace)
-{
-	/* set_sp_transforms(trace);
-	set_pl_transforms(trace);
-	set_cy_transforms(trace); */
-	
+{	
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);

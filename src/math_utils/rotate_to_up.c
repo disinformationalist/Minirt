@@ -41,23 +41,22 @@ t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
 	return (res);
 }
 
-// takes an orientation vec, returns the matrix to transform to up vec
+// takes a vec "from" to rotate to "to" returns the matrix to rotate from into to
 
-t_matrix_4x4 rot_up(t_vec3 ori)
+t_matrix_4x4 rot_to(t_vec3 from, t_vec3 to)
 {
 	t_matrix_4x4	res;
 	t_vec3			axis;
-	t_vec3			up;
 	double			angle;
 
-	norm_vec(ori);
-	up = vec(0, 1, 0, 0);
-	if (!veccmp(ori, up))
+	norm_vec(from);
+	to = norm_vec(to);
+	if (!veccmp(from, to))
 		return (identity(&res), res);
-	if (!veccmp(ori, vec(0, -1, 0, 0)))
+	if (!veccmp(from, neg(from)))
 		return (rot_x(M_PI));
-	axis = norm_vec(cross_prod(ori, up));
-	angle = acos(dot_product(ori, up));
+	axis = norm_vec(cross_prod(from, to));
+	angle = acos(dot_product(from, to));
 	res = get_rotation(axis, cos(angle), sin(angle));
 	return (res);
 }
