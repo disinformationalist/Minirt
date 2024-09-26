@@ -54,7 +54,7 @@ SRCS := ./src/main.c \
 ./src/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
-./src/events/transform_objects.c \
+./src/events/push_pop.c \
 ./src/events/translation.c \
 ./src/events/rotation.c \
 ./src/events/scaling.c \
