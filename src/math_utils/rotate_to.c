@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+//returns false when vectors are =
+
 bool	veccmp(t_vec3 v1, t_vec3 v2)
 {
 	double eps;

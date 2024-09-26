@@ -21,18 +21,11 @@
 
  view_width = 2 * focal_len * tan(horizontal_FOV / 2)// moved focal len adj.
  ----------------------------------------------------------------------------*/
+//use the fov horizontal and aspect ratio to set view width, height;
 
 void info_init(t_trace *trace)
 {
-	//use the fov horizontal and aspect ratio to set view width, height;
-	
-	trace->width = 1080;//control screen size by setting width and the aspect_r
-
-	//trace->height = 640;
-	
-	/* trace->cam->width = 1080;//adding to cam, eventually just need this one.
-	trace->cam->height = 640; */
-	
+	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
 
 	trace->height_orig = trace->height;

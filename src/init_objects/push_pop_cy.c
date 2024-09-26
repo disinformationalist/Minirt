@@ -9,7 +9,6 @@ static inline void	update_cylinder_ids(t_cylinder *cylinder)
 
 	start = cylinder;
 	id = 1;
-
 	cylinder->id = id++;
 	cylinder = cylinder->next;
 	while (cylinder != start)
@@ -23,7 +22,7 @@ static inline void	update_cylinder_ids(t_cylinder *cylinder)
 
 static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 {
-	t_matrix_4x4 transform;
+	t_matrix_4x4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
