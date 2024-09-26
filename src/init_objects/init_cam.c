@@ -69,6 +69,7 @@ static inline void	reset_topleft(t_trace *trace, t_vec3 view_center, double view
 	vertical_move = scale_vec(view_height / 2.0, true_up);
 	view_topleft = add_vec(view_center, vertical_move);
 	view_topleft = subtract_vec(view_topleft, horizontal_move);
+
 	set_pixel00(trace, view_topleft, right, true_up);
 }
 

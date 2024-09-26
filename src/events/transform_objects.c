@@ -2,37 +2,43 @@
 
 //moves current "on" object in x,y,z
 
-void	translate_object(t_trace *trace, t_on *on, t_vec3 vec)
+void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->object == NULL)
 		return ;
 	if (on->type == SPHERE)
 	{
-		trace->curr_sp->curr_rottran = mat_mult(trace->curr_sp->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_sp->curr_rottran = mat_mult(trace->curr_sp->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
 	}
 	else if (on->type == PLANE)
 	{
-		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
 	}
 	else if (on->type == CYLINDER)
 	{
-		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
 	else if (on->type == LENS)
 	{
-		trace->curr_le->sphere_1.curr_rottran = mat_mult(trace->curr_le->sphere_1.curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_le->sphere_1.curr_rottran = mat_mult(trace->curr_le->sphere_1.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_rottran = mat_mult(trace->curr_le->sphere_2.curr_rottran, translation(-vec.x, -vec.y, -vec.z));
+		trace->curr_le->sphere_2.curr_rottran = mat_mult(trace->curr_le->sphere_2.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
 	else if (on->type == LIGHT)
-		trace->lights->center = add_vec(trace->lights->center, vec);
+		trace->lights->center = add_vec(trace->lights->center, vec1);
 	else if (on->type == CAM)
 	{
-		trace->cam->center = add_vec(trace->cam->center, vec);
+		t_vec3	right;
+		t_vec3	move;
+
+		right = cross_prod(trace->cam->true_up, trace->cam->orient);
+		move = add_vec(scale_vec(vec1.x , right), scale_vec(vec1.y , trace->cam->true_up));
+		move = add_vec(move, scale_vec(vec1.z , trace->cam->orient));
+		trace->cam->center = add_vec(trace->cam->center, move);
 		reinit_viewing(trace);
 	}
 }
@@ -67,7 +73,6 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	}
 	else if (on->type == CAM)
 	{
-		//cam still misbehaving in combos...
 		trace->cam->transform = mat_mult(trace->cam->transform, rot);
 		trace->cam->transform_up = mat_mult(trace->cam->transform_up, rot);
 		trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, vec(0.0, 0.0, 1.0, 0.0)));
@@ -78,39 +83,39 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 		return ;
 }
 
-//scales current object in xyz based on the vec passed in
+//scales current object in xyz based on the vec1 passed in
 
-void	scale_object(t_trace *trace, t_on *on, t_vec3 vec)
+void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->object == NULL)
 		return ;
 	if (on->type == SPHERE)
 	{
-		trace->curr_sp->curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_sp->curr_scale);
+		trace->curr_sp->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_sp->curr_scale);
 		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
 	}
 	else if (on->type == PLANE)
-		trace->curr_pl->transform = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_pl->transform);
+		trace->curr_pl->transform = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_pl->transform);
 	else if (on->type == CYLINDER)
 	{
-		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_cy->curr_scale);
+		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_cy->curr_scale);
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
 	if (on->type == LENS)
 	{
-		trace->curr_le->sphere_1.curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_le->sphere_1.curr_scale);
+		trace->curr_le->sphere_1.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_1.curr_scale);
 		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec.x, vec.y, vec.z), trace->curr_le->sphere_2.curr_scale);
+		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_2.curr_scale);
 		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
 	else
 		return ;
 
 /* 	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?
-		trace->lights->center = add_vec(trace->lights->center, vec);
+		trace->lights->center = add_vec(trace->lights->center, vec1);
 	else if (on->type == CAM)// no use case yet?!
 	{
-		trace->cam->center = add_vec(trace->cam->center, vec);
+		trace->cam->center = add_vec(trace->cam->center, vec1);
 		init_viewing(trace);
 	} */
 }
