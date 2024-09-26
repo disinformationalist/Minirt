@@ -41,6 +41,7 @@ SRCS := ./src/main.c \
 ./src/init_objects/push_pop_le.c \
 ./src/init_objects/get_line_vals.c \
 ./src/init_objects/set_amb_cam_lights.c \
+./src/init_objects/init_cam.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \

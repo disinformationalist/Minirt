@@ -4,8 +4,8 @@
 
 //# include "../image_processing/image_processing.h"
 # include "tools.h"
-# include "keyboard (42).h"
-//# include "keyboard.h"
+//# include "keyboard (42).h"//figure out how to automatically select correct one
+# include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
 //# include "matrix_ops.h"
@@ -157,7 +157,7 @@ typedef struct s_trace
 	//need
 	double			pixel_width;
 	double			pixel_height;
-	t_point			pixel00;//changed to t_point
+	t_point			pixel00;
 	t_vec3			pix_delta_down;
 	t_vec3 			pix_delta_rht;
 	
@@ -227,13 +227,13 @@ int				check_spheres_intersect(char *center_str_1, char *diam_str_1, char *cente
 
 void 			trace_init(t_trace *trace);
 void			init_viewing(t_trace *trace);
+void			reinit_viewing(t_trace *trace);
 
 //get and set vals
 
 t_vec3			get_coordinates(char *coord_str, double w);
 t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
-
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
@@ -269,10 +269,6 @@ void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
-t_matrix_4x4	view_transform(t_point from, t_vec3 ori_vec, t_vec3 up);
-void			set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up);
-
-
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
@@ -305,6 +301,7 @@ bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
 //vec tools
 //t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
 
+void	reinit_viewing(t_trace *trace);
 
 
 /***MATH UTILS***/
@@ -324,7 +321,11 @@ t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
-t_matrix_4x4	rot_up(t_vec3 ori);
+
+t_matrix_4x4 rot_to(t_vec3 from, t_vec3 to);
+
+//t_matrix_4x4	rot_up(t_vec3 ori);
+t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 

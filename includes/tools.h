@@ -23,7 +23,6 @@
 
 # define DEG_TO_RAD  (M_PI / 180.0)
 
-
 typedef struct s_norm_color
 {
 	double r;
@@ -106,12 +105,7 @@ typedef struct s_cam
 	t_vec3			true_up;
 	int				fov;
 	t_matrix_4x4	transform;
-	double			width;
-	double			height;
-	double			half_width;
-	double			half_height;
-	double			half_view;
-	double			pixel_size;
+	t_matrix_4x4	transform_up;
 }	t_cam;
 
 //parse utils
@@ -128,6 +122,5 @@ typedef struct s_obj_counts
 }	t_obj_counts;
 
 t_ray	transform(t_ray r, t_matrix_4x4 m);
-
 
 #endif
