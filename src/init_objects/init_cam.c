@@ -5,8 +5,6 @@ static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 righ
 	trace->pix_delta_rht = scale_vec(trace->pixel_width, right);
 	trace->pix_delta_down = scale_vec(trace->pixel_height, neg(true_up));
 	trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, add_vec(trace->pix_delta_down, trace->pix_delta_rht)));
-	trace->cam->transform = rot_to(vec(0, 0, 1, 0), trace->cam->orient);
-	trace->cam->transform_up = rot_to(vec(0, 1, 0, 0), trace->cam->true_up);
 }
 
 static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)
@@ -53,6 +51,8 @@ void	init_viewing(t_trace *trace)
 	trace->pixel_width = view_width / (double)trace->width;
 	trace->pixel_height = view_height / (double)trace->height;	
 	set_view_topleft(trace, view_center, view_width, view_height);
+	trace->cam->transform = rot_to(vec(0, 0, 1, 0), trace->cam->orient);
+	trace->cam->transform_up = rot_to(vec(0, 1, 0, 0), trace->cam->true_up);
 }
 
 static inline void	reset_topleft(t_trace *trace, t_vec3 view_center, double view_width, double view_height)

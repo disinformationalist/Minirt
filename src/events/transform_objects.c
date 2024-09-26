@@ -67,6 +67,7 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	}
 	else if (on->type == CAM)
 	{
+		//cam still misbehaving in combos...
 		trace->cam->transform = mat_mult(trace->cam->transform, rot);
 		trace->cam->transform_up = mat_mult(trace->cam->transform_up, rot);
 		trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, vec(0.0, 0.0, 1.0, 0.0)));
