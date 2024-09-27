@@ -88,6 +88,7 @@ bool	ray_lens_intersect(t_lens lens, t_ray ray, double *t)
 	double	t2_s1;
 	double	t1_s2;
 	double	t2_s2;
+	double	t_temp;
 
 	t1_s1 = INFINITY;
 	t2_s1 = INFINITY;
@@ -100,6 +101,9 @@ bool	ray_lens_intersect(t_lens lens, t_ray ray, double *t)
 			if (lens_hit(t1_s1, t2_s1, t1_s2, t2_s2))
 			{
 				*t = fmin(fmax(t1_s1, t2_s1), fmin(t1_s2, t2_s2));
+				t_temp = fmin(fmin(t1_s1, t2_s1), fmax(t1_s2, t2_s2));
+				if (t_temp < *t)
+				*t = t_temp;
 				return (true);
 			}
 	}
