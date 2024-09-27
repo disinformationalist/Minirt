@@ -76,15 +76,14 @@ void	*ray_trace(void *arg)
 {
 	t_piece			*piece;
 	t_trace			*trace;
-	t_track_hits 	*closest;
+	//t_track_hits 	*closest;
 
 	piece = (t_piece *)arg;
 	trace = piece->trace;
-	closest = (t_track_hits *)malloc(sizeof(t_track_hits));
+	/* closest = (t_track_hits *)malloc(sizeof(t_track_hits));
 	if (!closest)
-		clear_all(trace);
-	compute_pixels(trace, piece, closest);
-	free(closest);
+		clear_all(trace); */
+	compute_pixels(trace, piece, piece->closest);
 	pthread_exit(NULL);
 }
 

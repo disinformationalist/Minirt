@@ -25,7 +25,7 @@
 
 void info_init(t_trace *trace)
 {
-	trace->width = 1080;
+	trace->width = 108;
 	trace->height = (int)((double)trace->width / ASPECT);
 
 	trace->height_orig = trace->height;
@@ -62,10 +62,15 @@ void trace_init(t_trace *trace)
 	info_init(trace);
 	trace->mlx_connect = mlx_init();
 	if (trace->mlx_connect == NULL)
-		clear_all(trace);
+	{
+		free_all_objects(trace);
+		free(trace->threads);
+		perror("Malloc or Thread error\n");
+		exit(EXIT_FAILURE);		
+	}
 	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MiniRT***");
 	if (trace->mlx_win == NULL)
-		clear_all(trace);
+		clear_some(trace);
 	if (new_img_init(trace->mlx_connect, &trace->img, trace->width, trace->height) == -1)
 		clear_all(trace);
 	trace->on = (t_on *)malloc(sizeof(t_on));
@@ -73,8 +78,6 @@ void trace_init(t_trace *trace)
 		clear_all(trace);
 	trace->on->object = trace->spheres;
 	trace->on->type = SPHERE;
-	if (pthread_mutex_init(&trace->mutex, NULL) != 0)
-		clear_all(trace);
 	events_init(trace);
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);

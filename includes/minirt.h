@@ -171,7 +171,6 @@ typedef struct s_trace
 	int				num_cols;
 	int				num_rows;
 	pthread_t		*threads;
-	pthread_mutex_t	mutex;
 
 }	t_trace;
 
@@ -182,6 +181,7 @@ typedef struct s_piece //for threads
 	int			y_s;
 	int			y_e;
 	t_trace		*trace;
+	t_track_hits *closest;
 }	t_piece;
 
 /***PARSING***/
@@ -356,6 +356,7 @@ void			next_list_ob(t_trace *trace, t_on *on);
 void			prev_list_ob(t_trace *trace, t_on *on);
 
 /***CLEAN_UP***/
+void			clear_some(t_trace *trace);
 void			clear_all(t_trace *trace);
 void			error_exit(char *msg);
 void			free_sp_list(t_sphere **start);

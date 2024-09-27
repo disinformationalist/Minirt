@@ -52,7 +52,6 @@ U,O => z dirs
 
 int	close_win(t_trace *trace)//valgrind error when using the x to close window, escape key gives no such error...
 {	
-	pthread_mutex_destroy(&trace->mutex);
 	free_all_objects(trace);
 	free(trace->on);
 	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);

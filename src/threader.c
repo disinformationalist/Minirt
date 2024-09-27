@@ -20,19 +20,22 @@ void	thread_error(t_trace *trace, int i)
 		if (trace->threads[i])
 			pthread_join(trace->threads[i], NULL);
 	}
-	//pthread_mutex_destroy(&trace->mutex);
 	clear_all(trace);
 }
 
 //set pixel section limits for each thread and each gets a copy of trace struct
 
-void	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
+int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	piece[i][j].x_s = j * ((trace->width * trace->n) / trace->num_cols);// using n for other multiple rays per pixel method
 	piece[i][j].x_e = (j + 1) * ((trace->width * trace->n) / trace->num_cols);
 	piece[i][j].y_s = i * ((trace->height * trace->n) / trace->num_rows);
 	piece[i][j].y_e = (i + 1) * ((trace->height * trace->n) / trace->num_rows);
 	piece[i][j].trace = trace;
+	piece[i][j].closest = (t_track_hits *)malloc(sizeof(t_track_hits));
+	if (!piece[i][j].closest)
+		return (1);
+	return (0);
 }
 
 void	join_threads(t_trace *trace)
@@ -46,6 +49,25 @@ void	join_threads(t_trace *trace)
 		j = -1;
 		while (++j < trace->num_cols)
 			pthread_join(trace->threads[i * trace->num_cols + j], NULL);
+	}
+}
+
+void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
+{
+	
+	while (--j >= 0)
+	{
+		if (piece[--i][j].closest)
+			free(piece[i][j].closest);
+	}
+	while (--i >= 0)
+	{
+		j = trace->num_cols;
+		while (--j >= 0)
+		{
+			if (piece[i][j].closest)
+				free(piece[i][j].closest);
+		}
 	}
 }
 
@@ -63,11 +85,20 @@ void	render_scene(t_trace *trace)
 		j = -1;
 		while (++j < trace->num_cols)
 		{
-			set_pieces(trace, piece, i, j);
+			if (set_pieces(trace, piece, i, j))
+			{
+				free_closests(trace, piece, i, j);
+				clear_all(trace);
+			}
 			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
 				NULL, ray_trace, (void *)&piece[i][j]) != 0)
+			{
+				free_closests(trace, piece, i, j);
 				thread_error(trace, i * trace->num_cols + j);
+				return ;
+			}
 		}
 	}
 	join_threads(trace);
+	free_closests(trace, piece, trace->num_rows, trace->num_cols);
 }
