@@ -132,7 +132,7 @@ clean:
 	$(RM) $(OBS)
 
 fclean: clean
-	$(MAKE) -C $(LIBFT_PATH) clean
+	$(MAKE) -C $(LIBFT_PATH) fclean
 	$(RM) $(NAME)
 	
 re: fclean all

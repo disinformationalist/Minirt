@@ -17,7 +17,7 @@
 
 #endif
 
-unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size)
+unsigned int	ft_strlcpy2(char *dest, char *src, unsigned int size)
 {
 	unsigned int	i;
 	unsigned int	length;
@@ -77,7 +77,7 @@ char	*cut_line_from_keeper(char **state_keeper)
 		line = (char *)malloc(sizeof(char) * (line_len));
 		if (!line)
 			return (NULL);
-		ft_strlcpy(line, *state_keeper, line_len);
+		ft_strlcpy2(line, *state_keeper, line_len);
 		ft_memmove(*state_keeper, found_newline + 1, rest_of_keeper + 1);
 	}
 	else
