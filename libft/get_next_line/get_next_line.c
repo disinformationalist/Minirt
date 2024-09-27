@@ -13,11 +13,11 @@
 #include "../libft.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE  4
+# define BUFFER_SIZE  5
 
 #endif
 
-unsigned int	ft_strlcpy2(char *dest, char *src, unsigned int size)
+/* unsigned int	ft_strlcpy(char *dest, char *src, unsigned int size)
 {
 	unsigned int	i;
 	unsigned int	length;
@@ -34,7 +34,7 @@ unsigned int	ft_strlcpy2(char *dest, char *src, unsigned int size)
 		dest[i] = '\0';
 	}
 	return (length);
-}
+} */
 
 ssize_t	read_to_keeper(int fd, char **state_keeper)
 {
@@ -74,10 +74,10 @@ char	*cut_line_from_keeper(char **state_keeper)
 	{
 		rest_of_keeper = ft_strlen(found_newline + 1);
 		line_len = ft_strlen(*state_keeper) - rest_of_keeper;
-		line = (char *)malloc(sizeof(char) * (line_len));
+		line = (char *)malloc(sizeof(char) * (line_len + 1));
 		if (!line)
 			return (NULL);
-		ft_strlcpy2(line, *state_keeper, line_len);
+		ft_strlcpy(line, *state_keeper, line_len + 1);
 		ft_memmove(*state_keeper, found_newline + 1, rest_of_keeper + 1);
 	}
 	else
