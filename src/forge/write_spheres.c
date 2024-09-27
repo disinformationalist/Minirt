@@ -1,15 +1,17 @@
 #include "minirt.h"
 
-int	count_chars(int num)
+int	count_chars(double n)
 {
 	int	count;
+	int num;
 
 	count = 1;
-	if (num < 0)
+	if (n < 0)
 	{
 		count++;
-		num = -num;
+		n = -n;
 	}
+	num = n;
 	while (num / 10)
 	{
 		count++;
@@ -40,8 +42,8 @@ char	*build_sp_line(t_sphere *sphere)
 	int 			spaces;
 	int				spaces2;
 	
-	cen = sphere->center;
-	d = (2.0 * sphere->radius);
+	cen = mat_vec_mult(inverse(sphere->transform), vec(0, 0, 0, 1));
+	d = (2.0 / sphere->curr_scale.m[2][2]);
 	spaces = 46 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
 	spaces2 = 18 - count_chars(d);
 	snprintf(line, sizeof(line), "sp          %.3f,%.3f,%.3f%*s%.3f", cen.x, cen.y, cen.z, spaces, "",d);
