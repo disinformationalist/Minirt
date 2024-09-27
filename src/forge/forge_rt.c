@@ -28,8 +28,7 @@ void	write_cam(t_cam *cam, int fd)
 	int 	spaces;
 	int		spaces2;
 
-	if (cam == NULL)
-		return ;
+//	must track forward vector later when bones is made
 	cen = cam->center;
 	ori = cam->orient;
 	

@@ -48,14 +48,6 @@ static inline bool check_solutions(double a, double b, double c, double *t1, dou
 	return (false);
 }
 
-/*t_ray	transform(t_ray r, t_matrix_4x4 m)
-{
-	t_ray new;
-
-	new.dir = mat_vec_mult(m, r.dir);
-	new.origin = mat_vec_mult(m, r.origin);
-	return (new);
-}*/
 bool	ray_lens_sphere_intersect(t_sphere sphere, t_ray ray, double *t1, double *t2)
 {
 	t_vec3	oc;

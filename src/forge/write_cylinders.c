@@ -13,7 +13,7 @@ void	add_cy_color(t_cylinder *cyl, char *line)
 	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), "%d,%d,%d\n", r, g, b);
 }
 
-char	*build_cy_line(t_cylinder *cyl)
+char	*build_cy_line(t_cylinder *cyl)//maybe just save and apply the transform for later version do this
 {
 	static char 	line[200];
 	t_point			cen;
@@ -24,12 +24,13 @@ char	*build_cy_line(t_cylinder *cyl)
 	int				spaces2;
 	int				spaces3;
 	int				spaces4;
+	t_matrix_4x4    transform;
 
-	
-	cen = cyl->center;
-	n = cyl->norm;
-	d = (2.0 * cyl->radius);
-	h = cyl->height;
+	transform = inverse(cyl->transform);
+	cen = mat_vec_mult(transform, vec(0, 0, 0, 1));
+	n = norm_vec(mat_vec_mult(transform, vec(0, 1, 0, 0)));
+	d = (2.0 / cyl->curr_scale.m[2][2]);
+	h = (1.0 / cyl->curr_scale.m[1][1]) * cyl->height;
 	
 	spaces = 16 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
 	spaces2 = 16 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);

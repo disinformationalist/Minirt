@@ -65,7 +65,7 @@ static inline void	compute_abc(t_cylinder cylinder, t_ray ray, t_vec3 *abc)
 
 bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 {
-	t_vec3	abc;//coefficients of quadratic; a is abc.x, b is abc.y, c is abc.z
+	t_vec3	abc;
 	double	t1;
 	double	t2;
 	double	closest_t;

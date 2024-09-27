@@ -373,7 +373,7 @@ void			write_spheres(t_sphere *spheres, int fd);
 void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
 void			write_lenses(t_lens *lenses, int fd);
-int				count_chars(int num);
+int				count_chars(double n);
 char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
