@@ -29,6 +29,7 @@ int	fill_array_loop(char **line, char ***split_file, int fd, int i)
 		return (free_and_close(split_file, "Error\n ft_split failure\n" , fd, i), 1);
 	*line = get_next_line(fd);
 	*line = skip_empty(*line, fd);	
+
 	return (0);
 }
 
