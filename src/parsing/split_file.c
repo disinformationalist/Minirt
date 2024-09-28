@@ -28,7 +28,8 @@ int	fill_array_loop(char **line, char ***split_file, int fd, int i)
 	if (!split_file[i])
 		return (free_and_close(split_file, "Error\n ft_split failure\n" , fd, i), 1);
 	*line = get_next_line(fd);
-	*line = skip_empty(*line, fd);	
+	*line = skip_empty(*line, fd);
+
 	return (0);
 }
 
@@ -43,7 +44,7 @@ char ***fill_3darray(char ***split_file, char *file, int num_lines)
 		return (err_free(split_file, "Error\n Error opening file\n"), NULL);
 	i = -1;
 	line = get_next_line(fd);
-	line = skip_empty(line, fd);
+	line = skip_empty(line, fd);//need to check handling here at start...
 	if (!line)
 	{
 		close(fd);
@@ -53,7 +54,7 @@ char ***fill_3darray(char ***split_file, char *file, int num_lines)
 	{
 		if (fill_array_loop(&line, split_file, fd, i))
 			return (NULL);
-		if (!line && i < num_lines - 1)
+		if (!line && i < num_lines - 1)//ah here is teh gnl line count protection.--
 			return (free_and_close(split_file, "Error\n gnl failure\n" , fd, i), NULL);
 	}
 	split_file[i] = NULL;

@@ -64,3 +64,21 @@ void	rotation_z_axis_matrix(t_matrix_4x4 *matrix, double radians)
 	matrix->m[0][1] = sin(radians);
 	matrix->m[1][1] = cos(radians);
 }
+
+void	push_mtrx_on_stack(t_matrix_3x3 *matrix, t_matrix_3x3 *matrix_stack, int *end_of_stack)
+{
+	if (*end_of_stack < MTRX_STACK_SIZE - 1)
+	{
+		(*end_of_stack)++;
+		ft_memcpy(&matrix_stack[*end_of_stack], matrix, sizeof(t_matrix_3x3));
+	}
+}
+
+void	pop_mtrx_from_stack(t_matrix_3x3 *matrix, t_matrix_3x3 *matrix_stack, int *end_of_stack)
+{
+	if (*end_of_stack >= 0)
+	{
+		ft_memcpy(matrix, &matrix_stack[*end_of_stack], sizeof(t_matrix_3x3));
+		(*end_of_stack)--;
+	}
+}

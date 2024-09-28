@@ -57,10 +57,10 @@ int	count_word_len(char const *s)
 
 void	*free_whole_array(int i, char **array)
 {
-	while (i >= 0)
+	while (--i >= 0)//start at the index before the failed malloc.
 	{
 		free(array[i]);
-		i--;
+		//i--;
 	}
 	free(array);
 	return (NULL);
