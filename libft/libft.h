@@ -113,4 +113,11 @@ char	*ft_strchr_g(char *s, int c); */
 
 char	*get_next_line(int fd);
 
+/***AR gnl utils***/
+int		ft_strlen2(const char *str);
+void	*ft_memmove2(void *to, const void *from, size_t n);
+char	*ft_strdup2(const char *s);
+char	*ft_strjoin2(char const *s1, char const *s2);
+char	*ft_strchr2(const char *s, int c);
+
 #endif 
