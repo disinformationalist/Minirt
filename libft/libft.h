@@ -107,9 +107,10 @@ t_stack	*ft_last(t_stack *lst);
 
 /******GNL******/
 
-size_t	ft_strlen_g(char *s);
+/* size_t	ft_strlen_g(char *s);
 char	*ft_strjoin_g(char *s1, char *s2);
-char	*ft_strchr_g(char *s, int c);
+char	*ft_strchr_g(char *s, int c); */
+
 char	*get_next_line(int fd);
 
 #endif 

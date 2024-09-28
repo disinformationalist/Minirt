@@ -14,6 +14,19 @@
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (!s)
+		return (NULL);
+	while (*s && *s != (unsigned char) c)
+		s++;
+	if (*s == (unsigned char) c)
+		return ((char *) s);
+	return (NULL);
+}
+
+/* char	*ft_strchr(const char *s, int c)
+{
+	if (s == NULL)
+		return (NULL);
 	while (*s)
 	{
 		if (*s == (char)c)
@@ -23,7 +36,7 @@ char	*ft_strchr(const char *s, int c)
 	if ((char)c == '\0')
 		return ((char *)s);
 	return (NULL);
-}
+} */
 /*
 int main()
 {
