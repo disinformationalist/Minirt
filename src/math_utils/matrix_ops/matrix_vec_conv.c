@@ -45,3 +45,11 @@ void	vec_to_column(t_matrix_3x3 *matrix, t_vec3 vec, int column)
 	matrix->m[1][column] = vec.y;
 	matrix->m[2][column] = vec.z;
 }
+
+void	tuple_to_row(t_matrix_4x4 *matrix, t_vec3 tuple, int row)
+{
+	matrix->m[row][0] = tuple.x;
+	matrix->m[row][1] = tuple.y;
+	matrix->m[row][2] = tuple.z;
+	matrix->m[row][3] = tuple.w;
+}

@@ -25,7 +25,9 @@ int	count_lines(int fd)
 
 char *remove_new_line(char *line)
 {
-    char *newline_pos = strchr(line, '\n');
+    char	*newline_pos;
+
+	newline_pos = strchr(line, '\n');
     if (newline_pos)
         *newline_pos = '\0';
     return (line);

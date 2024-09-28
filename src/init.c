@@ -25,7 +25,7 @@
 
 void info_init(t_trace *trace)
 {
-	trace->width = 108;
+	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
 
 	trace->height_orig = trace->height;

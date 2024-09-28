@@ -25,9 +25,9 @@ int	main(int ac, char **av)
 		return (1);
 	parse_rt(&trace, rt_file);//PARSING
 	free_3d_array_i(rt_file, ft_3darray_len(rt_file));//free parsing tool 3d split rt_file
-	free_all_objects(&trace);
+	//free_all_objects(&trace);
 
-    return (0);
+    //return (0);
 
 
 //----------------------------- multithread stuff here
