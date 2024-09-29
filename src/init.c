@@ -27,9 +27,6 @@ void info_init(t_trace *trace)
 {
 	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
-
-	trace->height_orig = trace->height;
-	trace->width_orig = trace->width;
 	
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
@@ -38,7 +35,7 @@ void info_init(t_trace *trace)
 
 	trace->supersample = false;
 	trace->layer = false;
-	trace->n = 3.0;//for muliple rays per pix
+	trace->n = 3.0;
 	init_viewing(trace);
 }
 
@@ -64,8 +61,8 @@ void trace_init(t_trace *trace)
 	{
 		free_all_objects(trace);
 		free(trace->threads);
-		perror("Malloc or Thread error\n");
-		exit(EXIT_FAILURE);		
+		perror("Mlx init() failure\n");
+		exit(EXIT_FAILURE);
 	}
 	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MiniRT***");
 	if (trace->mlx_win == NULL)

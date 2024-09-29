@@ -29,7 +29,6 @@ int	main(int ac, char **av)
 
     //return (0);
 
-
 //----------------------------- multithread stuff here
 	trace.num_cols = 1;
 	trace.num_rows = get_num_cores();

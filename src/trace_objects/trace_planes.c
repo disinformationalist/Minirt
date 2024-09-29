@@ -37,7 +37,7 @@ bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	ray = transform(ray, plane.transform);
 
-	if (fabs(ray.dir.y) < 1e-5)// close to parallel, no intersect
+	if (fabs(ray.dir.y) < 1e-5)
 		return (false);
 	*t = -ray.origin.y / ray.dir.y;
 	if (*t > 0)
@@ -83,7 +83,6 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	{
 		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		//norm = norm_vec(mat_vec_mult(transpose(plane->transform), vec(0, 1, 0, 0)));		
 		norm = plane->norm;
 		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
@@ -129,9 +128,3 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	//plane->color = stripe(int_pnt);//trying color function
 	return (get_final_color(trace, plane->color, light_int));
 } */
-
-
-	//old light calc.
-			/* cos_angle = dot_product(plane->norm, light_dir);
-			light_int	= trace->lights->brightness * fmax(cos_angle, 0.0);
-			light_int = fmin(light_int, 1.0); */

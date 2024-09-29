@@ -54,6 +54,7 @@ SRCS := ./src/main.c \
 ./src/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
+./src/events/switch_list.c \
 ./src/events/push_pop.c \
 ./src/events/translation.c \
 ./src/events/rotation.c \
@@ -74,10 +75,8 @@ SRCS := ./src/main.c \
 ./src/threader.c \
 ./src/color_disrupt.c \
 ./src/init_objects/light_list_utils.c \
-#./src/trace_objects/trace_cylinders.c \
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
-#-Iincludes
 RM := rm -f
 
 LIBFT_PATH = libft
@@ -86,12 +85,7 @@ LIBFT_ARCH = $(LIBFT_PATH)/libft.a
 
 CC := cc
 
-#OBS := $(SRCS:.c=.o)
-
 OBS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-#IMG_PATH = image_processing
-#IMG_ARCH = $(IMG_PATH)/libimage_processing.a
 
 COLOR_RESET = \033[0m
 COLOR_GREEN = \033[1;92m
@@ -111,9 +105,6 @@ $(NAME): $(OBS)
 	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
 	$(call print_colored, "[SUCCESS]", "./$(NAME)", "Ready")
 
-#	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -L$(IMG_PATH) -limage_processing -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
-
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -121,10 +112,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT_ARCH):
 	$(MAKE) -C $(LIBFT_PATH)
 
-#$(IMG_ARCH):
-#	$(MAKE) -C $(IMG_PATH)
 #bonus:
-
 
 
 clean:

@@ -70,35 +70,3 @@ void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int 
 		}
 	}
 }
-
-//render_scene starts by breaking up the screen into sections of pixels and assigns the limits of each section to a t_peice, each to be worked by a thread
-
-void	render_scene(t_trace *trace)
-{
-	t_piece	piece[trace->num_rows][trace->num_cols];
-	int		i;
-	int		j;
-
-	i = -1;
-	while (++i < trace->num_rows)
-	{
-		j = -1;
-		while (++j < trace->num_cols)
-		{
-			if (set_pieces(trace, piece, i, j))
-			{
-				free_closests(trace, piece, i, j);
-				clear_all(trace);
-			}
-			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
-				NULL, ray_trace, (void *)&piece[i][j]) != 0)
-			{
-				free_closests(trace, piece, i, j);
-				thread_error(trace, i * trace->num_cols + j);
-				return ;
-			}
-		}
-	}
-	join_threads(trace);
-	free_closests(trace, piece, trace->num_rows, trace->num_cols);
-}

@@ -83,7 +83,6 @@ double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat ma
 	//light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);
-
 }
 
 t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
@@ -159,44 +158,6 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 			if (curr_lt == trace->lights)
 				break;
 		}	
-	}
-	//sphere->color = stripe(int_pnt);//trying color function
-	return (get_final_color(trace, sphere->color, light_int));
-} */
-
-
-
-//cast shadow ray from intersect point toward light source
-//s_ray.dir = norm(L - P) light cen - int point
-//s.origin = P + e-6, prevent s_ray form intersecting surface of origination
-//test intersects until light 
-//light distance = mag(L -P)
-
-//og
-
-/* unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
-{
-	t_sphere		*sphere;
-	t_point			int_pnt;//light intersect with surface
-	t_vec3			norm;
-	t_vec3			light_dir; 
-	double			light_int;//total non amb lt intensity
-
-	sphere = (t_sphere *)closest->object;//pass in at check intersects, do for each shape ...
-	
-	light_int = 0;//use this simplification on all
-	if (trace->lights)// getting the light intensity at each intersection point
-	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		norm = norm_vec(subtract_vec(int_pnt, sphere->center));
-		if (dot_product(norm, r.dir) > 0)
-			norm = neg(norm);
-		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
-		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		//hard shadows...
-		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
-			//trace->lights = trace->lights->next
 	}
 	//sphere->color = stripe(int_pnt);//trying color function
 	return (get_final_color(trace, sphere->color, light_int));

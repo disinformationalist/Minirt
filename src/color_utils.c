@@ -1,30 +1,11 @@
 #include "minirt.h"
 
-int	round_int(double d)
-{
-	return (floor(d + .5));
-}
-
 uint8_t clamp_color(double color)
 {
 	if (color > 255)
 		return (255);
 	return (color);
 }
-
-/* unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_int)
-{
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
-
-	r = clamp_color(color.r * (light_int + trace->amb->color.r));// 0 - 255 object color, 0 - 1 light colors
-	g = clamp_color(color.g * (light_int + trace->amb->color.g));//light int will become total light color in bonus.
-	b = clamp_color(color.b * (light_int + trace->amb->color.b));
-
-	return (r << 16 | g << 8 | b);
-} */
-
 
 t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add)
 {
@@ -54,7 +35,7 @@ t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_in
 	t_norm_color color_out;
 
 	color_out.r = color.r * (light_int + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
-	color_out.g = color.g * (light_int + trace->amb->color.g);//light int will become total light color in bonus.
+	color_out.g = color.g * (light_int + trace->amb->color.g);
 	color_out.b = color.b * (light_int + trace->amb->color.b);
 
 	return (color_out);

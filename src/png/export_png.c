@@ -82,7 +82,7 @@ static inline void	write_img(t_png_io *png_img)
 //-----consider creating a check for t(a) channel and create rgb or rgba
 //will have to adjust png_set_ihdr, png color type
 
-int	export_png(const char *filename, t_img *img, int width, int height, png_text *text)
+int	export_png(const char *filename, t_img *img, int width, int height)
 {
 	t_png_io	*png_img;
 
@@ -104,7 +104,7 @@ int	export_png(const char *filename, t_img *img, int width, int height, png_text
 	}
 	if (set_png_pixels(png_img, img, height, width) == -1)
 		return (-1);
-	png_img->text = text;
+	png_img->text = NULL;
 	write_img(png_img);
 	clean_memory(png_img, height, true);
 	return (0);

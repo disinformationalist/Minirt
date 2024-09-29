@@ -1,18 +1,16 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-
-//# include "../image_processing/image_processing.h"
 # include "tools.h"
 //# include "keyboard (42).h"//figure out how to automatically select correct one
 # include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
-//# include "matrix_ops.h"
 
 # define ASPECT (16.0 / 9.0)
 
 // holds the current closest object
+
 typedef struct s_track_hits
 {
 	double	t;
@@ -21,6 +19,7 @@ typedef struct s_track_hits
 }	t_track_hits;
 
 // gives vals for material TOFINISH
+
 typedef struct s_mat
 {
 	double	amb;
@@ -111,19 +110,15 @@ typedef struct s_light
 
 /***MAIN STRUCT***/
 
-//TODO: go through trace struct and see what can be removed, broken up, etc to improve speed maybe second struct for stuff not needed everywhere... events stuff?
-
 typedef struct s_trace
 {
 	t_img			img;
 	
-	//single objects
 	t_amb			*amb;
 	t_cam			*cam;
-	//t_light			*lights;//single in non bones
 
-	t_track_hits	*closest;//tracking first hit
-	t_on			*on;//current object for manipulating
+	t_track_hits	*closest;
+	t_on			*on;
 	
 	//linked list objects
 	t_sphere		*spheres;
@@ -131,7 +126,7 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
-	t_light			*lights;//bones
+	t_light			*lights;
 
 	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
@@ -151,10 +146,6 @@ typedef struct s_trace
 	//dimension and view
 	int				height;
 	int				width;
-	int 			height_orig;
-	int				width_orig;
-
-	//need
 	double			pixel_width;
 	double			pixel_height;
 	t_point			pixel00;
@@ -241,7 +232,6 @@ bool			set_light(t_light **light, char **line);
 
 bool			append_light(t_light **start, char **line);
 
-
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
 bool			append_le(t_lens **start, char **line);
@@ -267,13 +257,13 @@ void			render(t_trace *trace);
 void			*ray_trace(void *arg);
 
 //super
-void	*ray_trace_s(void *arg);
+void			*ray_trace_s(void *arg);
 
-
-void	join_threads(t_trace *trace);
-void	thread_error(t_trace *trace, int i);
-int		set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
-void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
+//thread
+void			join_threads(t_trace *trace);
+void			thread_error(t_trace *trace, int i);
+int				set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
+void			free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
 
 
 void			set_sp_transforms(t_trace *trace);
@@ -281,32 +271,28 @@ void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
 
-//-----
-
-t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
-t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
-t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-//------
+//mlx utils
+int				new_img_init(void *mlx_con, t_img *img, int width, int height);
+void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
-//unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //lens utils
 void			check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t);
-//unsigned int	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
-//unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
-//unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
@@ -337,26 +323,20 @@ t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
-
 t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
 t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
-
 /***COLOR UTILS***/
-//unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
 
-//other super test
-t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int);
-unsigned int avg_samples(t_norm_color sum, double n);
-t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
-
+t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+unsigned int	avg_samples(t_norm_color sum, double n);
+t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
 
 t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
 t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
-
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
@@ -369,6 +349,7 @@ void			pop_object(t_trace *trace, t_on *on);
 void			push_new_object(t_trace *trace, t_on *on);
 void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
+void			switch_list(int keycode, t_trace *trace, t_on *on);
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);
@@ -398,13 +379,6 @@ int				count_chars(double n);
 char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
-
-//supersample
-int				new_img_init(void *mlx_con, t_img *img, int width, int height);
-void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
-unsigned int	**malloc_ui_matrix(int width, int height);
-void			zero_ui_matrix(unsigned int **pixels_xl, int width, int height);
-void			free_ui_matrix(unsigned int **matrix, int j);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);

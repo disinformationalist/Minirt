@@ -1,7 +1,6 @@
 #include "minirt.h"
 /****KEY HOOK GUIDE****/
 /*
-
 1 => 4, 9, 0: switch between object lists (spheres, planes, etc...)
 
 1 = sp list;
@@ -19,9 +18,9 @@ F1	 F3								  NUM PAD
 +-------------------------------+	+---------+
 |1 2 3 4(lists)        (l,c)9 0	|	|		- | pad - prev obj on curr list
 |Q W E					U I O	|	|		+ | pad + next obj on curr list
-|A S D					J K L	|	|		  |
-|(rot)					(move)	|	|		  |
-|			  SPACE		,	.	|	|		  |
+|A S D					J K L	|	|		  | //second key layer
+|(rot)					(move)	|	|		  | pad - supersample level -1
+|			  SPACE		,	.	|	|		  | pad + supersample level +1
 +-------------------------------+	+---------+
 
 SPACE => supersample mode
@@ -44,13 +43,11 @@ U,O => z dirs
 
 -----------------TODO--------------------
 
-//OTHER TRANSFORMATIONS?
-
-
-//maybe an onscreen control board?
+//Color disruption
+//change material
 */
 
-int	close_win(t_trace *trace)//valgrind error when using the x to close window, escape key gives no such error...
+int	close_win(t_trace *trace)
 {	
 	free_all_objects(trace);
 	free(trace->on);

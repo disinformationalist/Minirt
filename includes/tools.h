@@ -124,5 +124,4 @@ typedef struct s_obj_counts
 
 t_ray	transform(t_ray r, t_matrix_4x4 m);
 
-
 #endif
