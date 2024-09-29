@@ -163,9 +163,10 @@ typedef struct s_trace
 	
 	//for supersampling
 	bool			supersample;
-	unsigned int	**pixels_xl;
-	int				s_kernel;
 	double			n;
+	t_vec3			move_x;
+	t_vec3			move_y;
+	double			n2;
 	
 	//threading	
 	int				num_cols;
@@ -265,29 +266,45 @@ void			render_scene(t_trace *trace);
 void			render(t_trace *trace);
 void			*ray_trace(void *arg);
 
+void	*ray_trace_s(void *arg);
+
+void	join_threads(t_trace *trace);
+void	thread_error(t_trace *trace, int i);
+int		set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
+void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
+
+
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
 
+//-----
+
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+//------
+
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
-unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+//unsigned int	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //lens utils
 void			check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t);
-unsigned int	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
+//unsigned int	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
-unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+//unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
-unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+//unsigned int 	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
@@ -298,15 +315,12 @@ double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
 bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
 
-//vec tools
-//t_vec3			normal_at(t_point int_pnt, t_matrix_4x4 transform);
-
-void	reinit_viewing(t_trace *trace);
+//view
+void			reinit_viewing(t_trace *trace);
 
 
 /***MATH UTILS***/
 uint8_t			round_c(double d);
-
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
 t_vec3			vec(double x, double y, double z, double w);
@@ -322,21 +336,24 @@ t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 
 
-t_matrix_4x4 rot_to(t_vec3 from, t_vec3 to);
-
-//t_matrix_4x4	rot_up(t_vec3 ori);
+t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
 t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 
-
-
 /***COLOR UTILS***/
-unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+//unsigned int 	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+
+//other super test
+t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int);
+unsigned int avg_samples(t_norm_color sum, double n);
+t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
+
+
 t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
 t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
 t_norm_color	color(double r, double g, double b);
-
+uint8_t			clamp_color(double color);
 
 
 /***EVENTS***/

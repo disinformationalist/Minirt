@@ -1,29 +1,46 @@
 #include "minirt.h"
 
+void	render_scene_s(t_trace *trace)
+{
+	t_piece	piece[trace->num_rows][trace->num_cols];
+	int		i;
+	int		j;
+
+	i = -1;
+	while (++i < trace->num_rows)
+	{
+		j = -1;
+		while (++j < trace->num_cols)
+		{
+			if (set_pieces(trace, piece, i, j))
+			{
+				free_closests(trace, piece, i, j);
+				clear_all(trace);
+			}
+			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
+				NULL, ray_trace_s, (void *)&piece[i][j]) != 0)
+			{
+				free_closests(trace, piece, i, j);
+				thread_error(trace, i * trace->num_cols + j);
+				return ;
+			}
+		}
+	}
+	join_threads(trace);
+	free_closests(trace, piece, trace->num_rows, trace->num_cols);
+}
+
 void	render(t_trace *trace)
 {	
+	long start = get_time();//test
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);
-		trace->pixels_xl = malloc_ui_matrix(trace->width_orig * trace->s_kernel, trace->height_orig * trace->s_kernel);
-		if (!trace->pixels_xl)
-		{
-			printf(RED"The super malloc has failed\n"RESET);
-			close_win(trace);
-		}
-		zero_ui_matrix(trace->pixels_xl, trace->width, trace->height);
-	}
-	
-	long start = get_time();//test
-	render_scene(trace);
-	
-	if (trace->supersample)
-	{
-		downsample_xl(trace->width, trace->height, &trace->img, trace->pixels_xl, trace->s_kernel);
-		zero_ui_matrix(trace->pixels_xl, trace->width, trace->height);
-		free_ui_matrix(trace->pixels_xl, trace->height);
+		render_scene_s(trace);
 		ft_putstr_color_fd(1, "SUPERSAMPLE COMPLETE!\n", BOLD_BRIGHT_GREEN);
 	}
+	else
+		render_scene(trace);
 	mlx_put_image_to_window(trace->mlx_connect,
 		trace->mlx_win, trace->img.img_ptr, 0, 0);
 	print_times(start, get_time(), "RENDER TIME: %f seconds\n");//test

@@ -34,17 +34,9 @@ int	supersample_handle(int keycode, t_trace *trace)
 	if (keycode == SPACE)
 	{
 		if (trace->supersample)
-		{
-			trace->width = trace->width_orig;
-			trace->height = trace->height_orig;
 			init_viewing(trace);
-		}
 		else
-		{
-			trace->width = trace->width * trace->s_kernel;
-			trace->height = trace->height * trace->s_kernel;
 			init_viewing(trace);
-		}
 		trace->supersample = !trace->supersample;
 	}
 	return (0);

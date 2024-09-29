@@ -37,9 +37,10 @@ void info_init(t_trace *trace)
 	trace->curr_cy = trace->cylinders;
 
 	trace->supersample = false;
-	trace->s_kernel = 5;
 	trace->layer = false;
-	trace->n = 1.0;//for muliple rays per pixel... not using yet...
+	trace->n = 5.0;//for muliple rays per pix
+	trace->n2 = trace->n * trace->n;
+	
 	init_viewing(trace);
 }
 

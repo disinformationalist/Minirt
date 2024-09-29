@@ -12,7 +12,7 @@ uint8_t clamp_color(double color)
 	return (color);
 }
 
-unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_int)
+/* unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_int)
 {
 	uint8_t r;
 	uint8_t g;
@@ -23,6 +23,41 @@ unsigned int get_final_color(t_trace *trace, t_norm_color color, double light_in
 	b = clamp_color(color.b * (light_int + trace->amb->color.b));
 
 	return (r << 16 | g << 8 | b);
+} */
+
+
+t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add)
+{
+	sum.r += to_add.r;
+	sum.g += to_add.g;
+	sum.b += to_add.b;
+	return (sum);
+}
+
+//averages samples components, packs and returns a pixel color
+
+unsigned int avg_samples(t_norm_color sum, double n)
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+
+	r = clamp_color(sum.r / n);
+	g = clamp_color(sum.g / n);
+	b = clamp_color(sum.b / n);
+	return (r << 16 | g << 8 | b);
+}
+
+//using for other supersample method
+t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
+{
+	t_norm_color color_out;
+
+	color_out.r = color.r * (light_int + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = color.g * (light_int + trace->amb->color.g);//light int will become total light color in bonus.
+	color_out.b = color.b * (light_int + trace->amb->color.b);
+
+	return (color_out);
 }
 
 

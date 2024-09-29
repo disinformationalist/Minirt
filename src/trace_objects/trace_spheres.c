@@ -99,7 +99,7 @@ t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 
 //this function will check each sphere passed to it
 
-unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_sphere		*sphere;
 	t_vec3			norm;
@@ -120,9 +120,8 @@ unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
 	//sphere->color = stripe(int_pnt);//trying color function
-	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
+	sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
 	}
-	
 	return (get_final_color(trace, sphere->color, light_int));
 }
 

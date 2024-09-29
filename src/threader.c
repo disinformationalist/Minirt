@@ -13,6 +13,7 @@ int	get_num_cores(void)
 	return (num_cores);
 }
 
+
 void	thread_error(t_trace *trace, int i)
 {
 	while (--i >= 0)
@@ -27,10 +28,10 @@ void	thread_error(t_trace *trace, int i)
 
 int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
-	piece[i][j].x_s = j * ((trace->width * trace->n) / trace->num_cols);// using n for other multiple rays per pixel method
-	piece[i][j].x_e = (j + 1) * ((trace->width * trace->n) / trace->num_cols);
-	piece[i][j].y_s = i * ((trace->height * trace->n) / trace->num_rows);
-	piece[i][j].y_e = (i + 1) * ((trace->height * trace->n) / trace->num_rows);
+	piece[i][j].x_s = j * ((trace->width) / trace->num_cols);//maybe use with applied n?
+	piece[i][j].x_e = (j + 1) * ((trace->width) / trace->num_cols);
+	piece[i][j].y_s = i * ((trace->height) / trace->num_rows);
+	piece[i][j].y_e = (i + 1) * ((trace->height) / trace->num_rows);
 	piece[i][j].trace = trace;
 	piece[i][j].closest = (t_track_hits *)malloc(sizeof(t_track_hits));
 	if (!piece[i][j].closest)

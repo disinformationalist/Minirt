@@ -172,7 +172,7 @@ t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
 	return (norm_vec(norm));
 }
 
-unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_cylinder		*cylinder;
 	t_vec3			int_pnt;

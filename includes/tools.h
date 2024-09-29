@@ -107,14 +107,6 @@ typedef struct s_cam
 	int				fov;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	transform_up;
-
-	//stuff for buck cam.. think we need it...
-	double			width;
-	double			height;
-	double			half_width;
-	double			half_height;
-	double			half_view;
-	double			pixel_size;
 }	t_cam;
 
 //parse utils

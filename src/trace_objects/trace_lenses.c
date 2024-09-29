@@ -188,7 +188,7 @@ t_vec3	le_sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 	return (get_final_color(trace, sphere->color, light_int));
 }*/
 
-unsigned int color_lens(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_lens			*lens;
 	t_sphere		*sphere_1;

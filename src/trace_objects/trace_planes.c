@@ -69,7 +69,7 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	}
 }
 
-unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_plane	*plane;
 	t_vec3	int_pnt;

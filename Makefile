@@ -7,6 +7,7 @@ INC_DIR = ./includes
 SRCS := ./src/main.c \
 ./src/init.c \
 ./src/minirt.c \
+./src/minirt_super.c \
 ./src/render.c \
 ./src/set_transforms.c \
 ./src/clean_up.c \
@@ -69,7 +70,6 @@ SRCS := ./src/main.c \
 ./src/png/import_png.c \
 ./src/png/import_png_utils.c \
 ./src/png/get_png_name.c \
-./src/downsample.c \
 ./src/threader.c \
 ./src/color_disrupt.c \
 ./src/init_objects/light_list_utils.c \
