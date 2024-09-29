@@ -3,9 +3,8 @@
 static inline void	set_pixel00(t_trace *trace, t_point view_topleft, t_vec3 right, t_vec3 true_up)
 {
 	trace->pix_delta_rht = scale_vec(trace->pixel_width, right);
-	trace->pix_delta_down = scale_vec(trace->pixel_height, neg(true_up));
-	//trace->pixel00 = add_vec(view_topleft, scale_vec(0.5, add_vec(trace->pix_delta_down, trace->pix_delta_rht)));
-	
+	trace->pix_delta_down = scale_vec(trace->pixel_height, neg(true_up));	
+	trace->n2 = trace->n * trace->n;
 	if (trace->supersample)
 		trace->pixel00 = add_vec(view_topleft, scale_vec(1.0 / (2.0 * trace->n), add_vec(trace->pix_delta_down, trace->pix_delta_rht)));
 	else

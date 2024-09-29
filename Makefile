@@ -58,6 +58,7 @@ SRCS := ./src/main.c \
 ./src/events/translation.c \
 ./src/events/rotation.c \
 ./src/events/scaling.c \
+./src/events/supersample.c \
 ./src/events/extra_events.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \

@@ -38,9 +38,7 @@ void info_init(t_trace *trace)
 
 	trace->supersample = false;
 	trace->layer = false;
-	trace->n = 5.0;//for muliple rays per pix
-	trace->n2 = trace->n * trace->n;
-	
+	trace->n = 3.0;//for muliple rays per pix
 	init_viewing(trace);
 }
 

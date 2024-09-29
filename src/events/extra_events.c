@@ -26,18 +26,3 @@ void	forge_or_export(int keycode, t_trace *trace)
 	}
 	free(name);
 }
-
-//super on/off
-
-int	supersample_handle(int keycode, t_trace *trace)
-{
-	if (keycode == SPACE)
-	{
-		if (trace->supersample)
-			init_viewing(trace);
-		else
-			init_viewing(trace);
-		trace->supersample = !trace->supersample;
-	}
-	return (0);
-}

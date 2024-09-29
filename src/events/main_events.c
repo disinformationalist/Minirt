@@ -145,6 +145,10 @@ int	key_press(int keycode, t_trace *trace)
 		trace->layer = !trace->layer;
 	else if (keycode == N_1 || keycode == N_2 || keycode == N_3 || keycode == N_4 || keycode == N_9 || keycode == N_0)
 		switch_list(keycode, trace, trace->on);
+	else if (keycode == PAD_PLUS && trace->layer)
+		adjust_super(keycode, trace);
+	else if (keycode == PAD_MINUS && trace->layer)
+		adjust_super(keycode, trace);
 	else if (keycode == PAD_PLUS)
 		next_list_ob(trace, trace->on);
 	else if (keycode == PAD_MINUS)

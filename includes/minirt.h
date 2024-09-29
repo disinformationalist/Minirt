@@ -266,7 +266,9 @@ void			render_scene(t_trace *trace);
 void			render(t_trace *trace);
 void			*ray_trace(void *arg);
 
+//super
 void	*ray_trace_s(void *arg);
+
 
 void	join_threads(t_trace *trace);
 void	thread_error(t_trace *trace, int i);
@@ -365,7 +367,8 @@ void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			pop_object(t_trace *trace, t_on *on);
 void			push_new_object(t_trace *trace, t_on *on);
-
+void			adjust_super(int keycode, t_trace *trace);
+int				supersample_handle(int keycode, t_trace *trace);
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);
