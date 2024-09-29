@@ -333,8 +333,9 @@ t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_in
 unsigned int	avg_samples(t_norm_color sum, double n);
 t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
 
-t_norm_color	stripe(t_point point);//, t_norm_color color1, t_norm_color color2);
 t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
+t_norm_color 	checker_at(t_point point, t_matrix_4x4 transform);//, t_norm_color color1, t_norm_color color2)
+
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 

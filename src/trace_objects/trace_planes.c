@@ -90,6 +90,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));
 	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
 	//plane->color = stripe(int_pnt);
+	//plane->color = checker_at(int_pnt, plane->transform);
 	}
 	return (get_final_color(trace, plane->color, light_int));
 }
