@@ -1,40 +1,37 @@
 #include "minirt.h"
 
-void	count_ids(t_obj_counts *counts, char ***rt_file)
+void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 {
-	int k;
-
-	k = -1;
-	while(rt_file[++k])
+	while (rt_file[++(*k)])
 	{
-		if (!ft_strcmp(*(rt_file[k]), "A"))
-			count_check(&counts->amb_count, "Error\n Only one ambient light allowed\n", rt_file);
-		else if (!ft_strcmp(*(rt_file[k]), "C"))
-			count_check(&counts->cam_count, "Error\n Only one camera allowed\n", rt_file); 
-		else if (!ft_strcmp(*(rt_file[k]), "L"))
+		if (!ft_strcmp(*(rt_file[*k]), "A"))
+			count_check(&counts->amb_count,
+				"Error\n Only one ambient light allowed\n", rt_file);
+		else if (!ft_strcmp(*(rt_file[*k]), "C"))
+			count_check(&counts->cam_count,
+				"Error\n Only one camera allowed\n", rt_file);
+		else if (!ft_strcmp(*(rt_file[*k]), "L"))
 		{
-			count_check(&counts->light_count, "Error\n Only one light source allowed\n", rt_file);//leaving in in non bonus
-			//continue ;
+			count_check(&counts->light_count,
+				"Error\n Only one light source allowed\n", rt_file);
 		}
-		else if (!ft_strcmp(*(rt_file[k]), "sp"))
+		else if (!ft_strcmp(*(rt_file[*k]), "sp"))
 			counts->sphere_count++;
-		else if (!ft_strcmp(*(rt_file[k]), "pl"))
+		else if (!ft_strcmp(*(rt_file[*k]), "pl"))
 			counts->plane_count++;
-		else if (!ft_strcmp(*(rt_file[k]), "cy"))
+		else if (!ft_strcmp(*(rt_file[*k]), "cy"))
 			counts->cyl_count++;
-		else if (!ft_strcmp(*(rt_file[k]), "le"))
+		else if (!ft_strcmp(*(rt_file[*k]), "le"))
 			counts->lens_count++;
 		else
-		{
-			free_3d_array_i(rt_file, ft_3darray_len(rt_file));
-			error_exit("Error\n File contains an Invalid type identifier\n");
-		}
+			return (free_3d_array_i(rt_file, ft_3darray_len(rt_file)),
+				error_exit("Error\n Invalid type identifier\n"));
 	}
 }
 
 void	check_ids(char ***rt_file)
 {
-	int k;
+	int	k;
 
 	k = -1;
 	while (rt_file[++k])
@@ -60,7 +57,7 @@ void	check_ids(char ***rt_file)
 
 bool	build_lists(t_trace *trace, char ***rt_file)
 {
-	int 	k;
+	int		k;
 	bool	status;
 
 	k = -1;
@@ -94,12 +91,15 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 
 void	parse_rt(t_trace *trace, char ***rt_file)
 {
-	t_obj_counts counts;
+	t_obj_counts	counts;
+	int				k;
 
+	k = -1;
 	init_counts(&counts);
-	count_ids(&counts, rt_file);
+	count_ids(&counts, rt_file, &k);
 	if (counts.amb_count == 0)
-		free_exit(rt_file, "Error\n Missing or invalid ambient lighting identifier\n", \
+		free_exit(rt_file,
+			"Error\n Missing or invalid ambient lighting identifier\n", \
 	" Ambient lighting line must begin with 'A'\n");
 	if (counts.cam_count == 0)
 		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
@@ -113,11 +113,4 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);
 	}
-	//print_all_objects(trace);//testing...
-
 }
-
-	//free_all_objects(trace);//used in testing
-	//print_all_objects(trace);//testing...
-	//print_obj_nums(trace);
-	//print_obj_nums(counts);

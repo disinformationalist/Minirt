@@ -22,18 +22,19 @@ int	fill_array_loop(char **line, char ***split_file, int fd, int i)
 	*line = remove_new_line(*line);
 	*line = ft_strtrim(*line, " \t");
 	if (!(*line))
-		return (free_and_close(split_file, "Error\n ft_strtrim failure\n" , fd, i), 1);
+		return (free_and_close(split_file,
+				"Error\n ft_strtrim failure\n", fd, i), 1);
 	split_file[i] = split_by_whitespace(*line);
 	free(*line);
 	if (!split_file[i])
-		return (free_and_close(split_file, "Error\n ft_split failure\n" , fd, i), 1);
+		return (free_and_close(split_file,
+				"Error\n ft_split failure\n", fd, i), 1);
 	*line = get_next_line(fd);
 	*line = skip_empty(*line, fd);
-
 	return (0);
 }
 
-char ***fill_3darray(char ***split_file, char *file, int num_lines)
+char	***fill_3darray(char ***split_file, char *file, int num_lines)
 {
 	int		fd;
 	int		i;
@@ -44,25 +45,23 @@ char ***fill_3darray(char ***split_file, char *file, int num_lines)
 		return (err_free(split_file, "Error\n Error opening file\n"), NULL);
 	i = -1;
 	line = get_next_line(fd);
-	line = skip_empty(line, fd);//need to check handling here at start...
+	line = skip_empty(line, fd);
 	if (!line)
-	{
-		close(fd);
-		return (err_free(split_file, "Error\n gnl failure\n"), NULL);
-	}
+		return (close(fd), err_free(split_file, "Error\n gnl failure\n"), NULL);
 	while (++i < num_lines)
 	{
 		if (fill_array_loop(&line, split_file, fd, i))
 			return (NULL);
-		if (!line && i < num_lines - 1)//ah here is teh gnl line count protection.--
-			return (free_and_close(split_file, "Error\n gnl failure\n" , fd, i), NULL);
+		if (!line && i < num_lines - 1)
+			return (free_and_close(split_file,
+					"Error\n gnl failure\n", fd, i), NULL);
 	}
 	split_file[i] = NULL;
 	close(fd);
 	return (split_file);
 }
 
-char ***split_file(char *file)
+char	***split_file(char *file)
 {
 	int		fd;
 	int		num_lines;

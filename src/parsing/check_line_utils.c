@@ -11,11 +11,10 @@ void	free_exit(char ***rt_file, char *msg1, char *msg2)
 	exit(EXIT_FAILURE);
 }
 
-
 static inline int	check_rgb_color(char **s)
 {
-	int 	i;
-	char 	str[50];
+	int		i;
+	char	str[50];
 	int		chan_color;
 
 	i = -1;
@@ -59,7 +58,7 @@ int	check_double(char **doub_str, double lower_lim, double upper_lim)
 	double	ratio;
 	int		dot_cnt;
 	char	str[50];
-	
+
 	i = -1;
 	dot_cnt = 0;
 	if (**doub_str == '-')
@@ -78,7 +77,5 @@ int	check_double(char **doub_str, double lower_lim, double upper_lim)
 	}
 	str[++i] = '\0';
 	ratio = (double)ft_atof(str);
-	if (ratio < lower_lim || ratio > upper_lim)
-		return (1);
-	return (0);
+	return ((ratio < lower_lim || ratio > upper_lim) == true);
 }

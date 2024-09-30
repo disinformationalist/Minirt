@@ -56,7 +56,7 @@ int	check_normalization(char *orient_str)
 
 int	check_fov(char *fov_str)
 {
-	int 	i;
+	int		i;
 	char	str[3];	
 	int		fov;	
 

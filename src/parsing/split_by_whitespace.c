@@ -57,10 +57,9 @@ int	count_word_len(char const *s)
 
 void	*free_whole_array(int i, char **array)
 {
-	while (--i >= 0)//start at the index before the failed malloc.
+	while (--i >= 0)
 	{
 		free(array[i]);
-		//i--;
 	}
 	free(array);
 	return (NULL);
@@ -85,11 +84,10 @@ char	**split_by_whitespace(char const *s)
 			s++;
 		if (*s && count_word_len(s) > 0)
 		{
-			array[i] = ft_substr(s, 0, count_word_len(s));
-			if (!(array[i]))
-				return(free_whole_array(i, array), NULL);
+			array[i++] = ft_substr(s, 0, count_word_len(s));
+			if (!(array[i - 1]))
+				return (free_whole_array(i - 1, array), NULL);
 			s += count_word_len(s);
-			i++;
 		}
 	}
 	array[i] = NULL;

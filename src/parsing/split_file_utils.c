@@ -10,7 +10,7 @@ int	count_lines(int fd)
 {
 	int		count;
 	char	*line;
-	
+
 	count = 0;
 	line = get_next_line(fd);
 	while (line)
@@ -23,24 +23,24 @@ int	count_lines(int fd)
 	return (count);
 }
 
-char *remove_new_line(char *line)
+char	*remove_new_line(char *line)
 {
-    char	*newline_pos;
+	char	*newline_pos;
 
 	newline_pos = strchr(line, '\n');
-    if (newline_pos)
-        *newline_pos = '\0';
-    return (line);
+	if (newline_pos)
+		*newline_pos = '\0';
+	return (line);
 }
 
 int	strlen_no_whitespace(char *s)
 {
 	int	i;
-	int len;
+	int	len;
 
 	len = 0;
 	i = -1;
-	while(s[++i])
+	while (s[++i])
 	{
 		if (s[i] != 32 && (s[i] < 9 || s[i] > 13))
 			len++;
@@ -50,7 +50,7 @@ int	strlen_no_whitespace(char *s)
 
 void	free_3d_array_i(char ***split_file, int k)
 {
-	while(--k >= 0)
+	while (--k >= 0)
 		ft_free_matrix_i(split_file[k], ft_matrix_len(split_file[k]));
 	free(split_file);
 	split_file = NULL;
