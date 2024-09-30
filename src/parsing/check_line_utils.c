@@ -2,9 +2,12 @@
 
 void	free_exit(char ***rt_file, char *msg1, char *msg2)
 {
-	ft_putstr_color_fd(2, msg1, RED);
-	ft_putstr_color_fd(2, msg2, RED);
-	free_3d_array_i(rt_file, ft_3darray_len(rt_file));
+	if (msg1)
+		ft_putstr_color_fd(2, msg1, RED);
+	if (msg2)
+		ft_putstr_color_fd(2, msg2, RED);
+	if (rt_file)
+		free_3d_array_i(rt_file, ft_3darray_len(rt_file));
 	exit(EXIT_FAILURE);
 }
 

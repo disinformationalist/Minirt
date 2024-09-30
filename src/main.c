@@ -10,6 +10,20 @@ int	ft_3darray_len(char ***array)
 	return (i);
 }
 
+int	is_rt_file_valid(char *filename)
+{
+	int		len;
+	char	*dot;
+
+	len = ft_strlen(filename);
+	if (len < 4)
+		return (0);
+	dot = ft_strrchr(filename, '.');
+	if (!dot || ft_strcmp(dot, ".rt"))
+		return (0);
+	return (1);
+}
+
 int	main(int ac, char **av)
 {
 	char		***rt_file;
@@ -17,7 +31,12 @@ int	main(int ac, char **av)
 	
 	if (ac != 2)
 	{
-		printf("Error: Usage: ./minirt [scene.rt]\n");
+		free_exit(NULL, "Error: Usage: ./minirt [scene.rt]\n", NULL);
+		return (1);
+	}
+	if (!is_rt_file_valid(av[1]))
+	{
+		free_exit(NULL, "Error\n Invalid [scene.rt] file\n", NULL);
 		return (1);
 	}
 	rt_file = split_file(av[1]);
