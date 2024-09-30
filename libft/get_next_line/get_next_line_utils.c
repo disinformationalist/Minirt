@@ -12,7 +12,6 @@
 
 #include "../libft.h"
 
-
 int	ft_strlen2(const char *str)
 {
 	int	count;
