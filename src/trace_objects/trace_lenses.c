@@ -40,9 +40,11 @@ static inline bool check_solutions(double a, double b, double c, double *t1, dou
 	sqr_discrim = sqrt(discrim);
 	inv_2a = 0.5 / a;
 	sol_2 = (-b + sqr_discrim) * inv_2a;
-	*t2 = sol_2;
+	if (sol_2 > 0)
+		*t2 = sol_2;
 	sol_1 = (-b - sqr_discrim) * inv_2a;
-	*t1 = sol_1;
+	if (sol_1 > 0)
+		*t1 = sol_1;
 	if (*t1 < INFINITY || *t2 < INFINITY)
 		return (true);
 	return (false);
@@ -211,7 +213,7 @@ t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (dot_product(norm_1, r.dir) > 0)//maybe using transform for view takes care of this?
 			norm_1 = neg(norm_1);
 		//if (dot_product(norm_2, r.dir) > 0)//maybe using transform for view takes care of this?
-		//	norm_1 = neg(norm_2);
+		//	norm_2 = neg(norm_2);
 		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		if (!obscured(trace, int_pnt, light_dir, norm_1))
@@ -220,5 +222,5 @@ t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest)
 		//	light_int = trace->lights->brightness * get_light_int(norm_2, light_dir, neg(r.dir));//diff + spec here for each light
 	}
 	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
-	return (get_final_color(trace, sphere_1->color, light_int)); //, get_final_color(trace, sphere_2->color, light_int));
+	return (get_final_color(trace, sphere_1->color, light_int)); //, get_final_color(trace, sphere_2->color, light_int_2));
 }
