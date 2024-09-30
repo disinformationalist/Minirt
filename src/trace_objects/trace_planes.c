@@ -76,6 +76,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	t_vec3	light_dir; 
 	t_vec3	norm;
 	double	light_int;
+	t_norm_color	color1;
 
 	plane = (t_plane *)closest->object;
 	light_int = 0;
@@ -88,11 +89,14 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
 			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));
+
 	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
-	//plane->color = stripe(int_pnt);
-	//plane->color = checker_at(int_pnt, plane->transform);
+	//color1 = checker_at(int_pnt, plane->transform);//works passing in to get_fin_col
+	//color1 = ring_at(int_pnt, plane->transform);
+	//color1 = gradient_at(int_pnt, plane->transform, color(0, 255, 0), color(0, 0, 255));
 	}
-	return (get_final_color(trace, plane->color, light_int));
+	color1 = plane->color;
+	return (get_final_color(trace, color1, light_int));
 }
 
 //for multiple lights later

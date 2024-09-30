@@ -4,7 +4,10 @@ uint8_t clamp_color(double color)
 {
 	if (color > 255)
 		return (255);
-	return (color);
+	else
+		return ((uint8_t)color);
+	//if (color < 0)
+	//	return (0);
 }
 
 t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add)

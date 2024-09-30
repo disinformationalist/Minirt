@@ -330,14 +330,20 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 /***COLOR UTILS***/
 
 t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
-unsigned int	avg_samples(t_norm_color sum, double n);
-t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
-
-t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
-t_norm_color 	checker_at(t_point point, t_matrix_4x4 transform);//, t_norm_color color1, t_norm_color color2)
 
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
+int				ft_round(double num);
+
+//used in mthread
+unsigned int	avg_samples(t_norm_color sum, double n);
+t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
+
+//patterns
+t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
+t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
+t_norm_color 	checker_at(t_point point, t_matrix_4x4 transform);//, t_norm_color color1, t_norm_color color2
+t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
