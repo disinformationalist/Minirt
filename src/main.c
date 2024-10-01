@@ -31,7 +31,7 @@ int	main(int ac, char **av)
 	
 	if (ac != 2)
 	{
-		free_exit(NULL, "Error: Usage: ./minirt [scene.rt]\n", NULL);
+		free_exit(NULL, "Error\n: Usage: ./minirt [scene.rt]\n", NULL);
 		return (1);
 	}
 	if (!is_rt_file_valid(av[1]))
@@ -57,6 +57,7 @@ int	main(int ac, char **av)
 	trace.threads = (pthread_t *)malloc(trace.num_rows * trace.num_cols * sizeof(pthread_t));
 	if (!trace.threads)
 	{
+		free_all_objects(&trace);
 		printf("Error: Thread Malloc failed\n");
 		return (EXIT_FAILURE);
 	}

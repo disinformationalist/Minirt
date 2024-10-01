@@ -296,7 +296,7 @@ t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
-double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat)
+double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
 
 
 //shadows
