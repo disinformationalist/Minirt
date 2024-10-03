@@ -29,7 +29,6 @@ void info_init(t_trace *trace)
 	trace->height = (int)((double)trace->width / ASPECT);
 	
 	trace->curr_sp = trace->spheres;
-	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
 
@@ -78,5 +77,4 @@ void trace_init(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
-	set_le_transforms(trace);
 }

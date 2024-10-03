@@ -69,26 +69,6 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, 
 	return (false);
 }
 
-static inline bool	check_le_dist(t_lens *lenses, double dist, t_ray ray, double t)
-{
-	t_lens	*curr_le;
-
-	if (lenses == NULL)
-		return (false);
-	curr_le = lenses;
-	while (true)
-	{
-		if (ray_lens_intersect(*curr_le, ray, &t))
-		{
-			if (t < dist)
-				return (true);
-		}
-		curr_le = curr_le->next;
-		if (curr_le == lenses)
-			break;
-	}
-	return (false);
-}
 
 //check it any object in any list blocks light
 
@@ -107,10 +87,6 @@ static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)
 		return (true);
 	t = INFINITY;
 	hit = check_cy_dist(trace->cylinders, dist, s_ray, t);
-	if (hit)
-		return (true);
-	t = INFINITY;
-	hit = check_le_dist(trace->lenses, dist, s_ray, t);
 	if (hit)
 		return (true);
 	return (false);

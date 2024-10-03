@@ -21,8 +21,6 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->plane_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "cy"))
 			counts->cyl_count++;
-		else if (!ft_strcmp(*(rt_file[*k]), "le"))
-			counts->lens_count++;
 		else
 			return (free_3d_array_i(rt_file, ft_3darray_len(rt_file)),
 				error_exit("Error\n Invalid type identifier\n"));
@@ -48,10 +46,6 @@ void	check_ids(char ***rt_file)
 			check_pl(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cy"))
 			check_cy(rt_file[k], rt_file);
-		if (!ft_strcmp(*(rt_file[k]), "le"))
-			check_le(rt_file[k], rt_file);
-		/* if (!ft_strcmp(*(rt_file[k]), "sl"))//spot lights check needed
-			check_sl(rt_file[k], rt_file); */
 	}
 }
 
@@ -79,8 +73,6 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_pl(&trace->planes, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
 			status = append_cy(&trace->cylinders, rt_file[k]);
-		else if (!ft_strcmp(*(rt_file[k]), "le"))
-			status = append_le(&trace->lenses, rt_file[k]);
 		/* else if (!ft_strcmp(*(rt_file[k]), "sl"))//using sep identifier for sl, appending the same way
 			status = append_lt(&trace->spotlights, rt_file[k]);*/
 		if (status)

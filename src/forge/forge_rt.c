@@ -82,6 +82,5 @@ void	forge_rt(const char *path, t_trace *trace)
 	write_spheres(trace->spheres, fd);
 	write_planes(trace->planes, fd);
 	write_cylinders(trace->cylinders, fd);
-	write_lenses(trace->lenses, fd);
 	close(fd);
 }

@@ -44,7 +44,5 @@ bool	set_light(t_light **light, char **line)
 		return (1);
 	(*light)->center = get_coordinates(line[1], 1.0);
 	(*light)->brightness = get_double(&bright_ratio);
-	if (line[3])
-		(*light)->color = get_color(line[3], 255.0);//used in bonus
 	return (0);
 }

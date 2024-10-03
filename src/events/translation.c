@@ -19,14 +19,7 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 
 static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
-	if (on->type == LENS)
-	{
-		trace->curr_le->sphere_1.curr_rottran = mat_mult(trace->curr_le->sphere_1.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_rottran = mat_mult(trace->curr_le->sphere_2.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
-	}
-	else if (on->type == LIGHT)
+	if (on->type == LIGHT)
 		trace->lights->center = add_vec(trace->lights->center, vec1);
 	else if (on->type == CAM)
 		translate_cam(trace, vec1);

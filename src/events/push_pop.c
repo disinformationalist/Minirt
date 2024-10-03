@@ -1,19 +1,14 @@
 #include "minirt.h"
 
-static inline void push_new2(t_trace *trace, t_on *on)
+/* static inline void push_new2(t_trace *trace, t_on *on)
 {
-	if (on->type == LENS)
-	{
-		if (insert_lecopy_after(trace, &trace->curr_le))
-			close_win(trace);	
-	}
-	/* else if (on->type == LIGHT)////---------------
-	{
-		if (insert_ltcopy_after(trace, &trace->lights))
-			close_win(trace);	
-	} */
+	//else if (on->type == LIGHT)////---------------
+	//{
+	//	if (insert_ltcopy_after(trace, &trace->lights))
+	//		close_win(trace);	
+	//}
 	return ;
-}
+} */
 
 void	push_new_object(t_trace *trace, t_on *on)
 {
@@ -32,8 +27,8 @@ void	push_new_object(t_trace *trace, t_on *on)
 		if (insert_cycopy_after(trace, &trace->curr_cy))
 			close_win(trace);	
 	}
-	else
-		push_new2(trace, on);
+	//else
+	//	push_new2(trace, on);
 	next_list_ob(trace, trace->on);
 }
 
@@ -45,8 +40,6 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_pl(trace, &trace->curr_pl);
 	else if (on->type == CYLINDER)
 		pop_cy(trace, &trace->curr_cy);
-	else if (on->type == LENS)
-		pop_le(trace, &trace->curr_le);
 	else
 		return ;
 }

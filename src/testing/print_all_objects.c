@@ -106,8 +106,6 @@ void	print_lights(t_light *lights)
 		printf("centery: %f\n", curr_lt->center.y);
 		printf("centerz: %f\n\n", curr_lt->center.z);
 		printf("brightness ratio:%f\n", curr_lt->brightness);
-		if (curr_lt->color.r)
-			printf("light color rgb: r: %f, g: %f, b %f\n", curr_lt->color.r, curr_lt->color.g, curr_lt->color.b);
 		curr_lt = curr_lt->next;
 		if (curr_lt == lights)
 			break;

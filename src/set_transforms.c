@@ -67,32 +67,3 @@ void	set_cy_transforms(t_trace *trace)
 		}
 	}
 }
-
-void	set_le_transforms(t_trace *trace)
-{
-	t_lens	*curr_le;
-	t_matrix_4x4	inv_trans;
-	t_matrix_4x4	inv_rot;
-
-	if (trace->lenses)
-	{
-		curr_le = trace->lenses;
-		while (true)
-		{
-			curr_le->sphere_1.curr_scale = inv_scaling(curr_le->sphere_1.radius, curr_le->sphere_1.radius, curr_le->sphere_1.radius);
-			curr_le->sphere_1.curr_rottran = translation(-curr_le->sphere_1.center.x, -curr_le->sphere_1.center.y, -curr_le->sphere_1.center.z);
-			curr_le->sphere_1.transform = (mat_mult(curr_le->sphere_1.curr_scale, curr_le->sphere_1.curr_rottran));
-			curr_le->sphere_2.curr_scale = inv_scaling(curr_le->sphere_2.radius, curr_le->sphere_2.radius, curr_le->sphere_2.radius);
-			curr_le->sphere_2.curr_rottran = translation(-curr_le->sphere_2.center.x, -curr_le->sphere_2.center.y, -curr_le->sphere_2.center.z);
-			curr_le->sphere_2.transform = (mat_mult(curr_le->sphere_2.curr_scale, curr_le->sphere_2.curr_rottran));
-			inv_trans = translation(-curr_le->center.x, -curr_le->center.y, -curr_le->center.z);
-			inv_rot = rot_to(curr_le->axis, vec(0, 1, 0, 0));
-			curr_le->curr_scale = inv_scaling(curr_le->radius, 1.0, curr_le->radius);
-			curr_le->curr_rottran = mat_mult(inv_rot, inv_trans);
-			curr_le->transform = mat_mult(curr_le->curr_scale, curr_le->curr_rottran);
-			curr_le = curr_le->next;
-			if (curr_le == trace->lenses)
-				break;
-		}
-	}
-}

@@ -10,8 +10,6 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_track_hits *close
 	t = INFINITY;
 	check_spheres(trace->spheres, closest, ray, &t);
 	t = INFINITY;
-		check_lenses(trace->lenses, closest, ray, &t);
-	t = INFINITY;
 	check_planes(trace->planes, closest, ray, &t);
 	t = INFINITY;
 	check_cylinders(trace->cylinders, closest, ray, &t);
@@ -25,8 +23,6 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_h
 
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		final_color = color_sphere(trace, r, closest);
-	else if (closest->t != INFINITY && closest->object_type == LENS)
-		final_color = color_lens(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
 		final_color = color_plane(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
