@@ -84,6 +84,22 @@ double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat ma
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);
 }
+//trying with materials now..
+
+double	get_splight_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir, t_mat mat)
+{
+	t_vec3	ref;
+	double	spec;
+	double	light_int;
+	double	cos_angle;
+
+	cos_angle = dot_product(norm, light_dir);
+	ref = subtract_vec(scale_vec(2 * cos_angle, norm), light_dir);
+	spec = pow(fmax(dot_product(ref, view_dir), 0), mat.shine);
+	light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
+	//return (spotlight(light_dir) * light_int);//trying sp_light
+	return (light_int);
+}
 
 t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 {
@@ -118,7 +134,10 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
+			light_int = trace->lights->brightness * get_splight_int(norm, light_dir, neg(r.dir), sphere->mat);
+
+
+
 	//sphere->color = stripe(int_pnt);//trying color function
 	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
 	//color1 = checker_at(int_pnt, sphere->transform);

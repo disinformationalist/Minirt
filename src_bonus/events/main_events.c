@@ -60,6 +60,25 @@ int	close_win(t_trace *trace)
 	return (0);
 }
 
+//change material of current object
+
+int transfigure(int keycode, t_trace *trace)
+{
+	if (keycode == PAD_1)
+		change_mat(trace, trace->on, get_mat(DEFAULT));
+	else if (keycode == PAD_2)
+		change_mat(trace, trace->on, get_mat(METAL));
+	else if (keycode == PAD_3)
+		change_mat(trace, trace->on, get_mat(MATTE));
+	else if (keycode == PAD_4)
+		change_mat(trace, trace->on, get_mat(GLASS));
+	else if (keycode == PAD_5)
+		change_mat(trace, trace->on, get_mat(MIRROR));
+	else
+		supersample_handle(keycode, trace);
+	return (0);
+}
+
 int key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)
@@ -75,7 +94,7 @@ int key_press_3(int keycode, t_trace *trace)
 	else if (keycode == E)
 		rotate_object(trace, trace->on, rot_z(-M_PI / 6));
 	else
-		supersample_handle(keycode, trace);
+		transfigure(keycode, trace);
 	return (0);
 }
 
@@ -150,7 +169,7 @@ int	key_press(int keycode, t_trace *trace)
 		next_list_ob(trace, trace->on);
 	else if (keycode == PAD_MINUS)
 		prev_list_ob(trace, trace->on);
-	else if ((keycode == F1) | (keycode == F3))//F1 = forge and  F3 = save png. bones
+	else if ((keycode == F1) | (keycode == F3))//add material to forge
 		forge_or_export(keycode, trace);
 	else if (trace->layer)
 		key_press_2layer(keycode, trace);
