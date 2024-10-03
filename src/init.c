@@ -23,33 +23,35 @@
  ----------------------------------------------------------------------------*/
 //use the fov horizontal and aspect ratio to set view width, height;
 
+int	new_img_init(void *mlx_con, t_img *img, int width, int height)
+{
+	img->img_ptr = mlx_new_image(mlx_con,
+			width, height);
+	if (img->img_ptr == NULL)
+		return (-1);
+	img->pixels_ptr = mlx_get_data_addr(img->img_ptr,
+			&img->bpp, &img->line_len,
+			&img->endian);
+	return (0);
+}
+
 void info_init(t_trace *trace)
 {
-	trace->width = 1080;
+	trace->width = 860;
 	trace->height = (int)((double)trace->width / ASPECT);
-	
 	trace->curr_sp = trace->spheres;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
-
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 3.0;
 	init_viewing(trace);
 }
 
-//not using any of the commented out events yet, may not need them.
-
 static void events_init(t_trace *trace)
 {
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
-	//mlx_hook(trace->mlx_win, KeyRelease, KeyReleaseMask, key_release, trace);
-//	mlx_hook(trace->mlx_win, ButtonPress, ButtonPressMask, mouse_press, trace);
-	//mlx_hook(trace->mlx_win, ButtonRelease, ButtonReleaseMask, mouse_release, trace);
-	//mlx_hook(trace->mlx_win, MotionNotify, PointerMotionMask, mouse_move, trace);
 	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
-	/* mlx_loop_hook(trace->mlx_connect, render, trace);
-	mlx_loop(trace->mlx_connect); */
 }
 
 void trace_init(t_trace *trace)
@@ -59,7 +61,6 @@ void trace_init(t_trace *trace)
 	if (trace->mlx_connect == NULL)
 	{
 		free_all_objects(trace);
-		free(trace->threads);
 		perror("Mlx init() failure\n");
 		exit(EXIT_FAILURE);
 	}

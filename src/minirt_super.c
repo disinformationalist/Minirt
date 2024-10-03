@@ -36,7 +36,6 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_h
 	return (final_color);
 }
 
-
 static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_track_hits *closest, t_vec3 currpix)
 {
 	int				k;
@@ -65,7 +64,7 @@ static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_track_hits *
 	return (sum);
 }
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
+void	compute_pixels_s(t_trace *trace, t_track_hits *closest)
 {
 	t_ray			r;
 	t_point			current_pixel;
@@ -75,13 +74,13 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 
 	color = 0;
 	r.origin = trace->cam->center;
-	pos.j = piece->y_s - 1;
-	while (++pos.j < piece->y_e)
+	pos.j = -1;
+	while (++pos.j < trace->height)
 	{
 		current_pixel = trace->pixel00;
 		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
-		pos.i = piece->x_s - 1;
-		while (++pos.i < piece->x_e)
+		pos.i = -1;
+		while (++pos.i < trace->width)
 		{
 			sum = sum_subpixels(trace, r, closest, current_pixel);
 			color = avg_samples(sum, trace->n2);
@@ -89,17 +88,4 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}
 	}
-}
-
-//routine to loop through all pixels and compute.
-
-void	*ray_trace_s(void *arg)
-{
-	t_piece			*piece;
-	t_trace			*trace;
-
-	piece = (t_piece *)arg;
-	trace = piece->trace;
-	compute_pixels(trace, piece, piece->closest);
-	pthread_exit(NULL);
 }

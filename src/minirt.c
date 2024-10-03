@@ -33,14 +33,14 @@ static inline unsigned int	check_intersects(t_trace *trace, t_ray r, t_track_hit
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
 		color = color_cylinder(trace, r, closest);
 	else
-		return (0);//backround
+		return (0);
 	clamped.r = clamp_color(color.r);
 	clamped.g = clamp_color(color.g);
 	clamped.b = clamp_color(color.b);
 	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
 }
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
+void	compute_pixels(t_trace *trace, t_track_hits *closest)
 {
 	t_ray			r;
 	t_point			current_pixel;
@@ -48,13 +48,13 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 	unsigned int	color;
 
 	r.origin = trace->cam->center;
-	pos.j = piece->y_s - 1;
-	while (++pos.j < piece->y_e)
+	pos.j = -1;
+	while (++pos.j < trace->height)
 	{
 		current_pixel = trace->pixel00;
 		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
-		pos.i = piece->x_s - 1;
-		while (++pos.i < piece->x_e)
+		pos.i = -1;
+		while (++pos.i < trace->width)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
 			color = check_intersects(trace, r, closest);
@@ -62,17 +62,4 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}
 	}
-}
-
-//routine to loop through all pixels and compute.
-
-void	*ray_trace(void *arg)
-{
-	t_piece			*piece;
-	t_trace			*trace;
-
-	piece = (t_piece *)arg;
-	trace = piece->trace;
-	compute_pixels(trace, piece, piece->closest);
-	pthread_exit(NULL);
 }

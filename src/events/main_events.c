@@ -40,11 +40,6 @@ U,O => z dirs
 J,L => x dirs
 I,K => y dirs
 U,O => z dirs
-
------------------TODO--------------------
-
-//Color disruption
-//change material
 */
 
 int	close_win(t_trace *trace)
@@ -55,7 +50,6 @@ int	close_win(t_trace *trace)
 	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);
 	mlx_destroy_display(trace->mlx_connect);
 	free(trace->mlx_connect);
-	free(trace->threads);
 	exit(EXIT_SUCCESS);
 	return (0);
 }
@@ -78,8 +72,6 @@ int key_press_3(int keycode, t_trace *trace)
 		supersample_handle(keycode, trace);
 	return (0);
 }
-
-//arrows can use XK_LEFT, XK_RIGHT, XK_UP, XK_DOWN if needed for smthing
 
 //second layer of key press 2 controls, scale
 
@@ -135,7 +127,6 @@ int	key_press_2(int keycode, t_trace *trace)
 
 int	key_press(int keycode, t_trace *trace)
 {
-	//printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == UP_CARET)
@@ -150,8 +141,6 @@ int	key_press(int keycode, t_trace *trace)
 		next_list_ob(trace, trace->on);
 	else if (keycode == PAD_MINUS)
 		prev_list_ob(trace, trace->on);
-	else if ((keycode == F1) | (keycode == F3))//F1 = forge and  F3 = save png. bones
-		forge_or_export(keycode, trace);
 	else if (trace->layer)
 		key_press_2layer(keycode, trace);
 	else

@@ -48,6 +48,7 @@ SRCS := ./src/main.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
 ./src/trace_objects/trace_capped_cylinders.c \
+./src/trace_objects/trace_capped_cylinders2.c \
 ./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_utils.c \
@@ -61,20 +62,6 @@ SRCS := ./src/main.c \
 ./src/events/rotation.c \
 ./src/events/scaling.c \
 ./src/events/supersample.c \
-./src/events/extra_events.c \
-./src/forge/forge_rt.c \
-./src/forge/write_spheres.c \
-./src/forge/write_planes.c \
-./src/forge/write_cylinders.c \
-./src/forge/get_rt_name.c \
-./src/png/export_png.c \
-./src/png/export_png_utils.c \
-./src/png/import_png.c \
-./src/png/import_png_utils.c \
-./src/png/get_png_name.c \
-./src/threader.c \
-./src/color_disrupt.c \
-./src/init_objects/light_list_utils.c \
 
 SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init.c \

@@ -1,37 +1,4 @@
 #include "minirt.h"
-/* 		   soft
-		   spot
-		  light 
-		 / 	|  \
-		/  / \  \
-	   /  /   \  \
-	  /  /     \  \
-	 /  /	    \  \
-			^	  ^
-			|	  |
-	inner cone    outer cone
-(full intensity)  (attenuating toward outer edge)	 */	
-//playing with spotlight adjustment here
-//check the condition first to see if there is any need for the compute of diff/spec to opti.
-
-double spotlight(t_vec3 light_dir)
-{
-	t_vec3	ln;//spot light pointing direction
-	double	cos_theta;
-	double	inner_cone = cos(M_PI / 12);
-	double	outer_cone = cos(M_PI / 8);
-
-	ln = norm_vec(vec(0, 1, 0, 0));//neg orientation 
-	cos_theta = dot_product(ln, light_dir);
-	if (cos_theta > inner_cone)
-		return (1.0);
-	else if (cos_theta > outer_cone)
-	{
-		return ((cos_theta - outer_cone) / (inner_cone - outer_cone));
-	}
-	else
-		return (0);
-}
 
 bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
@@ -69,6 +36,22 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	}
 }
 
+//diff plus specular for sp
+
+static inline double	get_pllight_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)
+{
+	t_vec3	ref;
+	double	spec;
+	double	light_int;
+	double	cos_angle;
+
+	cos_angle = dot_product(norm, light_dir);
+	ref = subtract_vec(scale_vec(2 * cos_angle, norm), light_dir);
+	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
+	light_int = fmax(cos_angle, 0.0) + .5 * spec;
+	return (light_int);
+}
+
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_plane	*plane;
@@ -76,7 +59,6 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	t_vec3	light_dir; 
 	t_vec3	norm;
 	double	light_int;
-	t_norm_color	color1;
 
 	plane = (t_plane *)closest->object;
 	light_int = 0;
@@ -88,48 +70,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));
-
-	//plane->color = stripe_at(int_pnt, plane->transform);//trying color function
-	//color1 = checker_at(int_pnt, plane->transform);//works passing in to get_fin_col
-	//color1 = ring_at(int_pnt, plane->transform);
-	//color1 = gradient_at(int_pnt, plane->transform, color(0, 255, 0), color(0, 0, 255));
+			light_int = trace->lights->brightness * get_pllight_int(norm, light_dir, neg(r.dir));
 	}
-	color1 = plane->color;
-	return (get_final_color(trace, color1, light_int));
-}
-
-//for multiple lights later
-/* unsigned int	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
-{
-	t_vec3	int_pnt;
-	t_vec3	light_dir; 
-	double	light_int;
-	t_plane	*plane;
-
-	plane = (t_plane *)closest->object;
-
-	t_light			*curr_lt;
-
-	light_int = 0;
-	if (trace->lights)
-	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		if (dot_product(plane->norm, r.dir) > 0)
-			plane->norm = neg(plane->norm);
-		curr_lt = trace->lights;
-		while (true)
-		{
-			light_dir = norm_vec(subtract_vec(curr_lt->center, int_pnt));
-			//hard shadows...
-			//if (!obscured(trace, int_pnt, light_dir, plane->norm))
-			if (!obscured_b(trace, ray(light_dir, add_vec(int_pnt, scale_vec(1e-5, plane->norm))), curr_lt->center, int_pnt))
-				light_int += curr_lt->brightness * get_light_int(plane->norm, light_dir, neg(r.dir));//diff + spec here for each light
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
-				break;
-		}	
-	}
-	//plane->color = stripe(int_pnt);//trying color function
 	return (get_final_color(trace, plane->color, light_int));
-} */
+}

@@ -69,7 +69,6 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, 
 	return (false);
 }
 
-
 //check it any object in any list blocks light
 
 static inline bool	check_all_dist(t_trace *trace, double dist, t_ray s_ray)
@@ -101,15 +100,6 @@ bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 
 	s_ray.dir = light_dir;
 	s_ray.origin = add_vec(pnt, scale_vec(1e-6, normal));	
-	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));// use in previous to get light dir test times.
-	return (check_all_dist(trace, light_dist, s_ray));
-}
-
-//in bonus must use the center of the correct light.
-bool	obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt)
-{
-	double	light_dist;
-
-	light_dist = magnitude(subtract_vec(lt_pos, int_pnt));
+	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));
 	return (check_all_dist(trace, light_dist, s_ray));
 }

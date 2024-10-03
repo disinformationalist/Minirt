@@ -2,10 +2,9 @@
 # define MINIRT_H
 
 # include "tools.h"
-//# include "keyboard (42).h"//figure out how to automatically select correct one
-# include "keyboard.h"
+# include "keyboard (42).h"
+//# include "keyboard.h"
 # include <sys/time.h>//testing speed
-# include "extras.h"
 
 # define ASPECT (16.0 / 9.0)
 
@@ -18,25 +17,14 @@ typedef struct s_track_hits
 	t_type	object_type;
 }	t_track_hits;
 
-// gives vals for material TOFINISH
-
-typedef struct s_mat
-{
-	double	amb;
-	double	diff;
-	double	spec;
-	double	shine;
-}	t_mat;
-
-/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
+/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
 
 typedef struct s_sphere
 {
 	int				id;
 	t_point			center;
 	double			radius;
-	t_norm_color 	color;//color will move into mat
-	t_mat			mat;
+	t_norm_color 	color;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
@@ -50,7 +38,6 @@ typedef struct s_plane
 	t_point			point;
 	t_vec3			norm;
 	t_norm_color	color;
-	t_mat			mat;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
@@ -66,7 +53,6 @@ typedef struct s_cylinder
 	double				radius;
 	double				height;
 	t_norm_color		color;
-	t_mat				mat;
 	t_matrix_4x4		transform;
 	t_matrix_4x4		curr_scale;
 	t_matrix_4x4		curr_rottran;
@@ -74,56 +60,26 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 }	t_cylinder;
 
-typedef struct s_light
-{
-	t_vec3				center;
-	double				brightness;
-	t_ltype				type;
-	int					id;
-	t_point				pos;
-	t_vec3				dir;
-	double				inner_cone;
-	double				outer_cone;
-	double				inten;
-	struct s_light		*prev;
-	struct s_light		*next;
-}	t_light;
-
-
 /***MAIN STRUCT***/
 
 typedef struct s_trace
 {
 	t_img			img;
-	
 	t_amb			*amb;
 	t_cam			*cam;
-
 	t_track_hits	*closest;
 	t_on			*on;
-	
-	//linked list objects
 	t_sphere		*spheres;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
-
 	t_light			*lights;
-
-	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
-
 	t_light			*curr_sl;
-
-	//mlx
 	void			*mlx_connect;
 	void			*mlx_win;
-	
-	//other
 	bool			layer;
-
-	//dimension and view
 	int				height;
 	int				width;
 	double			pixel_width;
@@ -131,30 +87,13 @@ typedef struct s_trace
 	t_point			pixel00;
 	t_vec3			pix_delta_down;
 	t_vec3 			pix_delta_rht;
-	
-	//for supersampling
 	bool			supersample;
 	double			n;
 	t_vec3			move_x;
 	t_vec3			move_y;
 	double			n2;
-	
-	//threading	
-	int				num_cols;
-	int				num_rows;
-	pthread_t		*threads;
 
 }	t_trace;
-
-typedef struct s_piece //for threads
-{
-	int			x_s;
-	int			x_e;
-	int			y_s;
-	int			y_e;
-	t_trace		*trace;
-	t_track_hits *closest;
-}	t_piece;
 
 /***PARSING***/
 
@@ -209,13 +148,10 @@ bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
 
-bool			append_light(t_light **start, char **line);
-
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
-
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
@@ -230,18 +166,8 @@ void			pop_pl(t_trace *trace, t_plane **current);
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
 void			render(t_trace *trace);
-void			*ray_trace(void *arg);
-
-//super
-void			*ray_trace_s(void *arg);
-
-//thread
-void			join_threads(t_trace *trace);
-void			thread_error(t_trace *trace, int i);
-int				set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
-void			free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
-
-
+void			compute_pixels(t_trace *trace, t_track_hits *closest);
+void			compute_pixels_s(t_trace *trace, t_track_hits *closest);
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
@@ -265,17 +191,11 @@ void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, 
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
-//light
-double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
-
-
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
-bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
 
 //view
 void			reinit_viewing(t_trace *trace);
-
 
 /***MATH UTILS***/
 uint8_t			round_c(double d);
@@ -292,7 +212,6 @@ t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
-
 t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
 t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
@@ -300,25 +219,17 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 /***COLOR UTILS***/
 
 t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
-
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 int				ft_round(double num);
 
-//used in mthread
+//supersample utils
 unsigned int	avg_samples(t_norm_color sum, double n);
 t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
-
-//patterns
-t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
-t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
-t_norm_color 	checker_at(t_point point, t_matrix_4x4 transform);//, t_norm_color color1, t_norm_color color2
-t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
-
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
@@ -341,19 +252,6 @@ void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
 void			free_all_objects(t_trace *trace);
-
-/***EXTRAS ***/ //extras only remain in bonus version here or in extras header.
-
-//forge rt file, builds rt file from current scene.
-void			forge_rt(const char *path, t_trace *trace);
-char			*build_sp_line(t_sphere *sphere);
-void			write_spheres(t_sphere *spheres, int fd);
-void			write_planes(t_plane *plane, int fd);
-void			write_cylinders(t_cylinder *cylinders, int fd);
-int				count_chars(double n);
-char			*get_nxt_name_rt(char *name);
-void			forge_or_export(int keycode, t_trace *trace);
-int				supersample_handle(int keycode, t_trace *trace);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);

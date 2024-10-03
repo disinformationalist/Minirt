@@ -13,16 +13,10 @@
 # include <X11/keysym.h>
 # include "ansi_colors.h"
 # include "limits.h"
-# include <stdint.h>//uint8_t
+# include <stdint.h>
 # include "matrix_ops.h"
 
-
-//used for bones
-# include <pthread.h>
-# include <png.h>//for export/import bones only
-
 # define DEG_TO_RAD  (M_PI / 180.0)
-
 
 typedef struct s_norm_color
 {
@@ -107,6 +101,13 @@ typedef struct s_cam
 	t_matrix_4x4	transform;
 	t_matrix_4x4	transform_up;
 }	t_cam;
+
+typedef struct s_light
+{
+	t_point				center;
+	double				brightness;
+	int					id;
+}	t_light;
 
 //parse utils
 

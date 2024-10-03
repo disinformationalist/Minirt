@@ -99,17 +99,11 @@ void	print_lights(t_light *lights)
 		return ;
 	curr_lt = lights;
 	printf("\n----------------------------LIGHTS-----------------------------\n");
-	while (true)
-	{
-		printf("\n----------------------light id: %d ----------------- \n", curr_lt->id);
-		printf("centerx: %f\n", curr_lt->center.x);
-		printf("centery: %f\n", curr_lt->center.y);
-		printf("centerz: %f\n\n", curr_lt->center.z);
-		printf("brightness ratio:%f\n", curr_lt->brightness);
-		curr_lt = curr_lt->next;
-		if (curr_lt == lights)
-			break;
-	}
+	printf("\n----------------------light id: %d ----------------- \n", curr_lt->id);
+	printf("centerx: %f\n", curr_lt->center.x);
+	printf("centery: %f\n", curr_lt->center.y);
+	printf("centerz: %f\n\n", curr_lt->center.z);
+	printf("brightness ratio:%f\n", curr_lt->brightness);
 }
 
 void	print_all_objects(t_trace *trace)
