@@ -34,6 +34,14 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_le->curr_rottran);
 		trace->curr_le->transform = \
 			mat_mult(trace->curr_le->curr_scale, trace->curr_le->curr_rottran);
+		/* trace->curr_le->sphere_1.curr_rottran = \
+			mat_mult(rot, trace->curr_le->sphere_1.curr_rottran);
+		trace->curr_le->sphere_1.transform = \
+			mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
+		trace->curr_le->sphere_2.curr_rottran = \
+			mat_mult(rot, trace->curr_le->sphere_2.curr_rottran);
+		trace->curr_le->sphere_2.transform = \
+			mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran); */
 	}
 	else if (on->type == CAM)
 		rotate_cam(trace, rot);

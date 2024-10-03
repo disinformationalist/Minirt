@@ -47,10 +47,13 @@ SRCS := ./src/main.c \
 ./src/parsing/parse_rt_utils.c \
 ./src/trace_objects/trace_planes.c \
 ./src/trace_objects/trace_spheres.c \
+./src/trace_objects/trace_spheres2.c \
 ./src/trace_objects/trace_capped_cylinders.c \
 ./src/trace_objects/trace_capped_cylinders2.c \
+./src/trace_objects/trace_capped_cylinders3.c \
 ./src/trace_objects/shadow_rays.c \
 ./src/testing/print_all_objects.c \
+./src/testing/print_all_objects2.c \
 ./src/testing/print_utils.c \
 ./src/free_all_objects.c \
 ./src/color_utils.c \

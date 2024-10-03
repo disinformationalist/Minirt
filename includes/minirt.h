@@ -6,7 +6,7 @@
 //# include "keyboard.h"
 # include <sys/time.h>//testing speed
 
-# define ASPECT (16.0 / 9.0)
+# define ASPECT 1.7778 // (16.0 / 9.0)
 
 // holds the current closest object
 
@@ -24,15 +24,15 @@ typedef struct s_sphere
 	int				id;
 	t_point			center;
 	double			radius;
-	t_norm_color 	color;
+	t_norm_color	color;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	struct s_sphere	*next;
-	struct s_sphere *prev;
+	struct s_sphere	*prev;
 }	t_sphere;
 
-typedef struct s_plane 
+typedef struct s_plane
 {
 	int				id;
 	t_point			point;
@@ -52,6 +52,7 @@ typedef struct s_cylinder
 	t_vec3				norm;
 	double				radius;
 	double				height;
+	double				half_h;
 	t_norm_color		color;
 	t_matrix_4x4		transform;
 	t_matrix_4x4		curr_scale;
@@ -74,7 +75,7 @@ typedef struct s_trace
 	t_cylinder		*cylinders;
 	t_light			*lights;
 	t_sphere		*curr_sp;
-	t_plane 		*curr_pl;
+	t_plane			*curr_pl;
 	t_cylinder		*curr_cy;
 	t_light			*curr_sl;
 	void			*mlx_connect;
@@ -86,7 +87,7 @@ typedef struct s_trace
 	double			pixel_height;
 	t_point			pixel00;
 	t_vec3			pix_delta_down;
-	t_vec3 			pix_delta_rht;
+	t_vec3			pix_delta_rht;
 	bool			supersample;
 	double			n;
 	t_vec3			move_x;
@@ -124,18 +125,20 @@ void			check_cy(char **line, char ***rt_file);
 
 //check line utils
 int				check_param_num(char **line, int num);
-int				check_double(char **ratio_str, double lower_lim, double upper_lim);
+int				check_double(char **ratio_str, double lower_lim,
+					double upper_lim);
 int				check_color(char *color_str);
 int				check_fov(char *fov_str);
 int				check_orientation(char *orient_str);
 int				check_normalization(char *orient_str);
 int				check_coordinates(char *coord_str);
 void			free_exit(char ***rt_file, char *msg1, char *msg2);
-int				check_spheres_intersect(char *center_str_1, char *diam_str_1, char *center_str_2, char *diam_str_2);
+int				check_spheres_intersect(char *center_str_1, char *diam_str_1,
+					char *center_str_2, char *diam_str_2);
 
 /***INIT***/
 
-void 			trace_init(t_trace *trace);
+void			trace_init(t_trace *trace);
 void			init_viewing(t_trace *trace);
 void			reinit_viewing(t_trace *trace);
 
@@ -177,22 +180,29 @@ int				new_img_init(void *mlx_con, t_img *img, int width, int height);
 void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
 //sphere utils
-void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
+void			check_spheres(t_sphere *spheres, t_track_hits *closest,
+					t_ray ray, double *t);
 t_norm_color	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //plane utils
-void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
+void			check_planes(t_plane *planes, t_track_hits *closest,
+					t_ray ray, double *t);
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
-void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
+void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest,
+					t_ray ray, double *t);
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
+bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray,
+					double *t);
+bool			check_trunk_solutions(t_vec3 abc, double *t1, double *t2);
+void			compute_abc(t_vec3 *abc, t_ray ray);
 
 //shadows
-bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir,
+					t_vec3 normal);
 
 //view
 void			reinit_viewing(t_trace *trace);
@@ -202,14 +212,14 @@ uint8_t			round_c(double d);
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
 t_vec3			vec(double x, double y, double z, double w);
-t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
+t_vec3			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scale_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			norm_vec(t_vec3 vec);
 bool			is_normalized(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
-t_vec3 			neg(t_vec3 vec);
+t_vec3			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
@@ -218,7 +228,8 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 /***COLOR UTILS***/
 
-t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+t_norm_color	get_final_color(t_trace *trace, t_norm_color color,
+					double light_int);
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 int				ft_round(double num);
@@ -255,6 +266,7 @@ void			free_all_objects(t_trace *trace);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
+void			print_all_objects2(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);

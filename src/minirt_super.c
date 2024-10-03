@@ -1,6 +1,7 @@
 #include "minirt.h"
 
-static inline void	find_closest_s(t_trace *trace, t_ray ray, t_track_hits *closest)
+static inline void	find_closest_s(t_trace *trace, t_ray ray,
+				t_track_hits *closest)
 {
 	double	t;
 
@@ -15,12 +16,12 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_track_hits *close
 	check_cylinders(trace->cylinders, closest, ray, &t);
 }
 
-static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_hits *closest)
+static inline t_norm_color	check_intersects_s(t_trace *trace,
+					t_ray r, t_track_hits *closest)
 {
 	t_norm_color	final_color;
-	
-	find_closest_s(trace, r, closest);
 
+	find_closest_s(trace, r, closest);
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		final_color = color_sphere(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
@@ -36,7 +37,8 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_h
 	return (final_color);
 }
 
-static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_track_hits *closest, t_vec3 currpix)
+static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r,
+			t_track_hits *closest, t_vec3 currpix)
 {
 	int				k;
 	int				l;
@@ -78,7 +80,8 @@ void	compute_pixels_s(t_trace *trace, t_track_hits *closest)
 	while (++pos.j < trace->height)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
+		current_pixel = add_vec(current_pixel,
+				scale_vec(pos.j, trace->pix_delta_down));
 		pos.i = -1;
 		while (++pos.i < trace->width)
 		{

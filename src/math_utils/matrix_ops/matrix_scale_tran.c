@@ -36,7 +36,7 @@ static inline void	zero(t_matrix_4x4 *matrix)
 t_matrix_4x4	translation(double x, double y, double z)
 {
 	t_matrix_4x4	matrix;
-	
+
 	identity2(&matrix);
 	matrix.m[0][3] = x;
 	matrix.m[1][3] = y;
@@ -44,10 +44,9 @@ t_matrix_4x4	translation(double x, double y, double z)
 	return (matrix);
 }
 
-
 t_matrix_4x4	scaling(double x, double y, double z)
 {
-	t_matrix_4x4 matrix;
+	t_matrix_4x4	matrix;
 
 	zero(&matrix);
 	matrix.m[0][0] = x;
@@ -59,8 +58,8 @@ t_matrix_4x4	scaling(double x, double y, double z)
 
 t_matrix_4x4	inv_scaling(double x, double y, double z)
 {
-	t_matrix_4x4 matrix;
-	
+	t_matrix_4x4	matrix;
+
 	zero(&matrix);
 	matrix.m[0][0] = 1.0 / x;
 	matrix.m[1][1] = 1.0 / y;

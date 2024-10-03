@@ -28,7 +28,7 @@ int	main(int ac, char **av)
 {
 	char		***rt_file;
 	t_trace		trace;
-	
+
 	if (ac != 2)
 	{
 		free_exit(NULL, "Error\n: Usage: ./minirt [scene.rt]\n", NULL);

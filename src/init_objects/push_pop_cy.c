@@ -41,7 +41,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->prev = new;
 }
 
-//copy a cylinder and place it immediately after the current cylinder in the list
+//copy a cylinder and place it right after the current cylinder in the list
 
 bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 {
@@ -68,11 +68,11 @@ bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 	return (false);
 }
 
-static inline void set_empty_cylinders(t_trace *trace)
+static inline void	set_empty_cylinders(t_trace *trace)
 {
 	trace->cylinders = NULL;
 	trace->curr_cy = NULL;
-	trace->on->object = trace->curr_cy;	
+	trace->on->object = trace->curr_cy;
 }
 
 //remove cylinder from list

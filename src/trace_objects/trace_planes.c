@@ -3,7 +3,6 @@
 bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	ray = transform(ray, plane.transform);
-
 	if (fabs(ray.dir.y) < 1e-5)
 		return (false);
 	*t = -ray.origin.y / ray.dir.y;
@@ -12,7 +11,8 @@ bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 	return (false);
 }
 
-void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
+void	check_planes(t_plane *planes, t_track_hits *closest,
+		t_ray ray, double *t)
 {
 	t_plane		*curr_pl;
 
@@ -32,13 +32,14 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 		}
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
-			break;
+			break ;
 	}
 }
 
 //diff plus specular for sp
 
-static inline double	get_pllight_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)
+static inline double	get_pllight_int(t_vec3 norm, t_vec3 light_dir,
+				t_vec3 view_dir)
 {
 	t_vec3	ref;
 	double	spec;
@@ -56,7 +57,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_plane	*plane;
 	t_vec3	int_pnt;
-	t_vec3	light_dir; 
+	t_vec3	light_dir;
 	t_vec3	norm;
 	double	light_int;
 
@@ -70,7 +71,8 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		if (dot_product(norm, r.dir) > 0)
 			norm = neg(norm);
 		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_pllight_int(norm, light_dir, neg(r.dir));
+			light_int = trace->lights->brightness * get_pllight_int(norm,
+					light_dir, neg(r.dir));
 	}
 	return (get_final_color(trace, plane->color, light_int));
 }

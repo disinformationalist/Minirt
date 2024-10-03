@@ -36,6 +36,4 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
 			trace->curr_cy->curr_rottran);
 	}
-	//else
-		//scale_object2(trace, on, vec1);
 }

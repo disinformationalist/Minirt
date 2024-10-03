@@ -1,4 +1,4 @@
-# include "minirt.h"
+#include "minirt.h"
 
 static inline void	next_list_ob2(t_trace *trace, t_on *on)
 {
@@ -19,7 +19,7 @@ static inline void	next_list_ob2(t_trace *trace, t_on *on)
 void	next_list_ob(t_trace *trace, t_on *on)
 {
 	t_sphere		*curr_sp;
-	t_plane 		*curr_pl;
+	t_plane			*curr_pl;
 
 	if (on->object == NULL)
 		return ;
@@ -36,7 +36,7 @@ void	next_list_ob(t_trace *trace, t_on *on)
 		on->object = trace->curr_pl;
 	}
 	else
-		next_list_ob2(trace, on);	
+		next_list_ob2(trace, on);
 }
 
 static inline void	prev_list_ob2(t_trace *trace, t_on *on)
@@ -58,7 +58,7 @@ static inline void	prev_list_ob2(t_trace *trace, t_on *on)
 void	prev_list_ob(t_trace *trace, t_on *on)
 {
 	t_sphere		*curr_sp;
-	t_plane 		*curr_pl;
+	t_plane			*curr_pl;
 
 	if (on->object == NULL)
 		return ;

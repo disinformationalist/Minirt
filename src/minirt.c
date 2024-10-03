@@ -2,7 +2,8 @@
 
 //find closest object hit by ray
 
-static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
+static inline void	find_closest(t_trace *trace, t_ray ray,
+				t_track_hits *closest)
 {
 	double	t;
 
@@ -19,13 +20,13 @@ static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest
 
 //checking for the closest intersection and computing color
 
-static inline unsigned int	check_intersects(t_trace *trace, t_ray r, t_track_hits *closest)
+static inline unsigned int	check_intersects(t_trace *trace,
+					t_ray r, t_track_hits *closest)
 {
 	t_norm_color	color;
 	t_color			clamped;
-	
-	find_closest(trace, r, closest);
 
+	find_closest(trace, r, closest);
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		color = color_sphere(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
@@ -52,7 +53,8 @@ void	compute_pixels(t_trace *trace, t_track_hits *closest)
 	while (++pos.j < trace->height)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
+		current_pixel = add_vec(current_pixel,
+				scale_vec(pos.j, trace->pix_delta_down));
 		pos.i = -1;
 		while (++pos.i < trace->width)
 		{

@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-uint8_t round_c(double d)
+uint8_t	round_c(double d)
 {
 	return (floor(d + .5));
 }
@@ -30,14 +30,14 @@ bool	set_cam(t_cam **cam, char **line)
 		return (1);
 	(*cam)->center = get_coordinates(line[1], 1.0);
 	(*cam)->orient = get_coordinates(line[2], 0.0);
-	(*cam)->fov = ft_atoi(line[3]);	
+	(*cam)->fov = ft_atoi(line[3]);
 	return (0);
 }
 
 bool	set_light(t_light **light, char **line)
 {
 	char	*bright_ratio;
-	
+
 	bright_ratio = line[2];
 	*light = (t_light *)malloc(sizeof(t_light));
 	if (!*light)

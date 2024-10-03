@@ -35,7 +35,7 @@ int	new_img_init(void *mlx_con, t_img *img, int width, int height)
 	return (0);
 }
 
-void info_init(t_trace *trace)
+void	info_init(t_trace *trace)
 {
 	trace->width = 860;
 	trace->height = (int)((double)trace->width / ASPECT);
@@ -48,13 +48,14 @@ void info_init(t_trace *trace)
 	init_viewing(trace);
 }
 
-static void events_init(t_trace *trace)
+static void	events_init(t_trace *trace)
 {
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
-	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
+	mlx_hook(trace->mlx_win, DestroyNotify,
+		StructureNotifyMask, close_win, trace);
 }
 
-void trace_init(t_trace *trace)
+void	trace_init(t_trace *trace)
 {
 	info_init(trace);
 	trace->mlx_connect = mlx_init();
@@ -64,10 +65,12 @@ void trace_init(t_trace *trace)
 		perror("Mlx init() failure\n");
 		exit(EXIT_FAILURE);
 	}
-	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MiniRT***");
+	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width,
+			trace->height, "***MiniRT***");
 	if (trace->mlx_win == NULL)
 		clear_some(trace);
-	if (new_img_init(trace->mlx_connect, &trace->img, trace->width, trace->height) == -1)
+	if (new_img_init(trace->mlx_connect, &trace->img, trace->width,
+			trace->height) == -1)
 		clear_all(trace);
 	trace->on = (t_on *)malloc(sizeof(t_on));
 	if (!trace->on)

@@ -8,9 +8,9 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 	t_vec3	move;
 
 	right = cross_prod(trace->cam->true_up, trace->cam->orient);
-	move = scale_vec(vec1.x , right);
-	move = add_vec(move, scale_vec(vec1.y , trace->cam->true_up));
-	move = add_vec(move, scale_vec(vec1.z , trace->cam->orient));
+	move = scale_vec(vec1.x, right);
+	move = add_vec(move, scale_vec(vec1.y, trace->cam->true_up));
+	move = add_vec(move, scale_vec(vec1.z, trace->cam->orient));
 	trace->cam->center = add_vec(trace->cam->center, move);
 	reinit_viewing(trace);
 }
@@ -33,18 +33,24 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1)
 		return ;
 	if (on->type == SPHERE)
 	{
-		trace->curr_sp->curr_rottran = mat_mult(trace->curr_sp->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
+		trace->curr_sp->curr_rottran = mat_mult(trace->curr_sp->curr_rottran,
+				translation(-vec1.x, -vec1.y, -vec1.z));
+		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale,
+				trace->curr_sp->curr_rottran);
 	}
 	else if (on->type == PLANE)
 	{
-		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
+		trace->curr_pl->curr_rottran = mat_mult(trace->curr_pl->curr_rottran,
+				translation(-vec1.x, -vec1.y, -vec1.z));
+		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale,
+				trace->curr_pl->curr_rottran);
 	}
 	else if (on->type == CYLINDER)
 	{
-		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran,
+				translation(-vec1.x, -vec1.y, -vec1.z));
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale,
+				trace->curr_cy->curr_rottran);
 	}
 	else
 		translate_object2(trace, on, vec1);

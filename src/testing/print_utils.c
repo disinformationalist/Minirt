@@ -42,6 +42,5 @@ void	print_times(long start, long end, char *msg)
 	double	duration;
 
 	duration = (double)(end - start) / 1000;
-	//ft_putstr_color(title, color);
 	printf(msg, duration);
 }

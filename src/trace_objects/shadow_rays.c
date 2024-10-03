@@ -2,7 +2,8 @@
 
 //check spheres for intersection within dist
 
-static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, double t)
+static inline bool	check_sp_dist(t_sphere *spheres, double dist,
+				t_ray ray, double t)
 {
 	t_sphere	*curr_sp;
 
@@ -18,14 +19,15 @@ static inline bool	check_sp_dist(t_sphere *spheres, double dist, t_ray ray, doub
 		}
 		curr_sp = curr_sp->next;
 		if (curr_sp == spheres)
-			break;
+			break ;
 	}
 	return (false);
 }
 
 //check planes for intersection within dist
 
-static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double t)
+static inline bool	check_pl_dist(t_plane *planes, double dist,
+				t_ray ray, double t)
 {
 	t_plane	*curr_pl;
 
@@ -41,14 +43,15 @@ static inline bool	check_pl_dist(t_plane *planes, double dist, t_ray ray, double
 		}
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
-			break;
+			break ;
 	}
 	return (false);
 }
 
 //check cylinders for intersection within dist
 
-static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, double t)
+static inline bool	check_cy_dist(t_cylinder *cylinders, double dist,
+				t_ray ray, double t)
 {
 	t_cylinder	*curr_cy;
 
@@ -64,7 +67,7 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, double dist, t_ray ray, 
 		}
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
-			break;
+			break ;
 	}
 	return (false);
 }
@@ -99,7 +102,7 @@ bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 	double	light_dist;
 
 	s_ray.dir = light_dir;
-	s_ray.origin = add_vec(pnt, scale_vec(1e-6, normal));	
+	s_ray.origin = add_vec(pnt, scale_vec(1e-6, normal));
 	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));
 	return (check_all_dist(trace, light_dist, s_ray));
 }

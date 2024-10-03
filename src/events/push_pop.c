@@ -20,15 +20,13 @@ void	push_new_object(t_trace *trace, t_on *on)
 	else if (on->type == PLANE)
 	{
 		if (insert_plcopy_after(trace, &trace->curr_pl))
-			close_win(trace);	
+			close_win(trace);
 	}
 	else if (on->type == CYLINDER)
 	{
 		if (insert_cycopy_after(trace, &trace->curr_cy))
-			close_win(trace);	
+			close_win(trace);
 	}
-	//else
-	//	push_new2(trace, on);
 	next_list_ob(trace, trace->on);
 }
 

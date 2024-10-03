@@ -62,7 +62,7 @@ t_matrix_4x4	inverse(t_matrix_4x4 matrix)
 	int				j;
 	double			cofactor;
 	double			det;
-	t_matrix_4x4 	inv;
+	t_matrix_4x4	inv;
 
 	det = det_4(matrix);
 	if (fabs(det) < 1e-9)

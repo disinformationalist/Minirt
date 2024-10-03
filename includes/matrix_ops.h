@@ -40,7 +40,7 @@ typedef struct s_vec3
 	double	w;
 }	t_vec3;
 
-typedef t_vec3 t_point;
+typedef t_vec3	t_point;
 
 //matrix ops
 void			identity(t_matrix_4x4 *matrix);
@@ -80,14 +80,12 @@ void			print_matrix_3(t_matrix_3x3 *matrix);
 void			print_matrix_2(t_matrix_2x2 *matrix);
 void			print_vec(t_vec3 vec);
 
-
-
-
 /* stuff in unused matices folder */
 //add/remove stack in rt_matrix_transf.c
 void			init_matrix_3(double matrix[3][3]);
 void			init_matrix_2(double matrix[2][2]);
-int				are_matrices_equal(t_matrix_4x4 *matrix_1, t_matrix_4x4 *matrix_2);
+int				are_matrices_equal(t_matrix_4x4 *matrix_1,
+					t_matrix_4x4 *matrix_2);
 void			init_identity_matrix(t_matrix_4x4 *matrix);
 
 #endif

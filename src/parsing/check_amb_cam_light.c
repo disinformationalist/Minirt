@@ -53,11 +53,4 @@ void	check_light(char **line, char ***rt_file)
 	if (check_double(&bright_ratio, 0.0, 1.0))
 		free_exit(rt_file, "Error\n Invalid light brightness\n", \
 	" Light brightness must be between 0.0 and 1.0\n");
-	if (line[3])
-	{
-		if (check_color(line[3])) //JUST FOR THE BONES
-			free_exit(rt_file, "Error\n Invalid light color value\n", \
-		" Light color channel values must be between 0 and 255" \
-		" in the format r,g,b\n");
-	}
 }

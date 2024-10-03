@@ -16,19 +16,19 @@
 # include <stdint.h>
 # include "matrix_ops.h"
 
-# define DEG_TO_RAD  (M_PI / 180.0)
+# define DEG_TO_RAD  0.01745 //(M_PI / 180.0)
 
 typedef struct s_norm_color
 {
-	double r;
-	double g;
-	double b;
+	double	r;
+	double	g;
+	double	b;
 }	t_norm_color;
 
 typedef struct s_vec2
 {
-	double x;
-	double y;
+	double	x;
+	double	y;
 }	t_vec_2;
 
 typedef struct s_position
@@ -50,13 +50,13 @@ typedef enum e_type
 	CYLINDER,
 	LIGHT,
 	CAM
-} 	t_type;
+}	t_type;
 
 typedef enum e_ltype
 {
 	POINT,
 	SPOT
-} 	t_ltype;
+}	t_ltype;
 
 /***UTILS***/
 
@@ -71,9 +71,9 @@ typedef struct s_img
 
 typedef struct s_color
 {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
 }	t_color;
 
 typedef struct s_on
@@ -88,7 +88,7 @@ typedef struct s_on
 
 typedef struct s_amb
 {
-	double	ratio;
+	double			ratio;
 	t_norm_color	color;
 }	t_amb;
 

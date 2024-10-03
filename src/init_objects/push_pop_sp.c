@@ -9,7 +9,6 @@ static inline void	update_sphere_ids(t_sphere *sphere)
 
 	start = sphere;
 	id = 1;
-
 	sphere->id = id++;
 	sphere = sphere->next;
 	while (sphere != start)
@@ -23,7 +22,7 @@ static inline void	update_sphere_ids(t_sphere *sphere)
 
 static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 {
-	t_matrix_4x4 transform;
+	t_matrix_4x4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
@@ -67,7 +66,7 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 	return (false);
 }
 
-static inline void set_empty_spheres(t_trace *trace)
+static inline void	set_empty_spheres(t_trace *trace)
 {
 	trace->spheres = NULL;
 	trace->curr_sp = NULL;

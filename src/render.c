@@ -2,15 +2,16 @@
 
 void	render(t_trace *trace)
 {
-	t_track_hits	*closest;	
+	t_track_hits	*closest;
+	long			start;	
 
 	closest = (t_track_hits *)malloc(sizeof(t_track_hits));
-	if(!closest)
+	if (!closest)
 	{
 		perror("Malloc error\n");
 		clear_all(trace);
 	}
-	long start = get_time();//test
+	start = get_time();
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);
@@ -22,5 +23,5 @@ void	render(t_trace *trace)
 	free(closest);
 	mlx_put_image_to_window(trace->mlx_connect,
 		trace->mlx_win, trace->img.img_ptr, 0, 0);
-	print_times(start, get_time(), "RENDER TIME: %f seconds\n");//test
+	print_times(start, get_time(), "RENDER TIME: %f seconds\n");
 }

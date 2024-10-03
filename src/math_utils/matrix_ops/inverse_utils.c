@@ -12,10 +12,10 @@ t_matrix_3x3	submat_4(t_matrix_4x4 matrix, int row, int column)
 {
 	t_matrix_3x3	res;
 	int				i;
-	int 			j;
-	int 			k;
-	int 			l;
-	
+	int				j;
+	int				k;
+	int				l;
+
 	k = 0;
 	i = -1;
 	while (++i < 4)
@@ -69,4 +69,3 @@ double	min_3(t_matrix_3x3 mat, int row, int column)
 	new = submat_3(mat, row, column);
 	return (det_2(new));
 }
-
