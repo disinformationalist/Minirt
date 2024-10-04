@@ -10,7 +10,19 @@ uint8_t clamp_color(double color)
 	//	return (0);
 }
 
-t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add)
+
+t_norm_color color(double r, double g, double b)
+{
+	t_norm_color col;
+
+	col.r = r;
+	col.g = g;
+	col.b = b;
+	return(col);
+}
+
+
+t_norm_color sum_rgbs(t_norm_color sum, t_norm_color to_add)
 {
 	sum.r += to_add.r;
 	sum.g += to_add.g;
@@ -32,7 +44,8 @@ unsigned int avg_samples(t_norm_color sum, double n)
 	return (r << 16 | g << 8 | b);
 }
 
-//using for other supersample method
+//send in material here? mult mat.amb * ambcomponent....
+
 t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
 {
 	t_norm_color color_out;

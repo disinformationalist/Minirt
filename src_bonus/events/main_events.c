@@ -41,6 +41,10 @@ J,L => x dirs
 I,K => y dirs
 U,O => z dirs
 
+--------------IN PROGRESS--------------------
+
+NUM PAD 1 - 5 => change material of current object
+
 -----------------TODO--------------------
 
 //Color disruption

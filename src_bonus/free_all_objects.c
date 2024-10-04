@@ -101,11 +101,11 @@ void	free_all_objects(t_trace *trace)
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);
 	free_le_list(&trace->lenses);
-	//free_lt_list(&trace->cylinders);
+	free_lt_list(&trace->lights);
 	if (trace->amb)
 		free(trace->amb);
 	if (trace->cam)
 		free(trace->cam);
-	if (trace->lights)
-		free(trace->lights);
+	//if (trace->lights)
+	//	free(trace->lights);
 }

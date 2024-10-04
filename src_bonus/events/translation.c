@@ -27,7 +27,7 @@ static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
 	else if (on->type == LIGHT)
-		trace->lights->center = add_vec(trace->lights->center, vec1);
+		trace->curr_lt->center = add_vec(trace->curr_lt->center, vec1);
 	else if (on->type == CAM)
 		translate_cam(trace, vec1);
 }

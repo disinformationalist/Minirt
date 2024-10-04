@@ -10,7 +10,7 @@ uint8_t clamp_color(double color)
 	//	return (0);
 }
 
-t_norm_color sum_sample_rgbs(t_norm_color sum, t_norm_color to_add)
+t_norm_color sum_rgbs(t_norm_color sum, t_norm_color to_add)
 {
 	sum.r += to_add.r;
 	sum.g += to_add.g;

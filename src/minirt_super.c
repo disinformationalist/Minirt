@@ -56,7 +56,7 @@ static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_track_hits *
 		while (++k < trace->n)
 		{
 			r.dir = norm_vec(subtract_vec(subpix, r.origin));
-			sum = sum_sample_rgbs(sum, check_intersects_s(trace, r, closest));
+			sum = sum_rgbs(sum, check_intersects_s(trace, r, closest));
 			subpix = add_vec(subpix, trace->move_x);
 		}
 		row_start = add_vec(row_start, trace->move_y);

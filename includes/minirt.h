@@ -225,7 +225,7 @@ int				ft_round(double num);
 
 //supersample utils
 unsigned int	avg_samples(t_norm_color sum, double n);
-t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
+t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);

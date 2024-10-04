@@ -12,8 +12,9 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 				"Error\n Only one camera allowed\n", rt_file);
 		else if (!ft_strcmp(*(rt_file[*k]), "L"))
 		{
-			count_check(&counts->light_count,
-				"Error\n Only one light source allowed\n", rt_file);
+			counts->light_count++;
+			//count_check(&counts->light_count,
+			//	"Error\n Only one light source allowed\n", rt_file);
 		}
 		else if (!ft_strcmp(*(rt_file[*k]), "sp"))
 			counts->sphere_count++;
@@ -70,8 +71,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = set_cam(&trace->cam, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
 		{
-			status = set_light(&trace->lights, rt_file[k]); //non bonus
-			//status = append_light(&trace->lights, rt_file[k]);
+			//status = set_light(&trace->lights, rt_file[k]); //non bonus
+			status = append_light(&trace->lights, rt_file[k]);
 		}
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
 			status = append_sp(&trace->spheres, rt_file[k]);
