@@ -2,8 +2,8 @@
 # define MINIRT_H
 
 # include "tools.h"
-# include "keyboard (42).h"//figure out how to automatically select correct one
-//# include "keyboard.h"
+//# include "keyboard (42).h"//figure out how to automatically select correct one
+# include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
 # include "materials.h"
@@ -86,7 +86,7 @@ typedef struct s_light
 {
 	t_vec3				center;
 	double				brightness;
-	t_norm_color		color;//rbg colors t_color for the bones
+	t_norm_color		color;
 //stuff for bring sp lights in
 	t_ltype				type;
 	int					id;
@@ -236,7 +236,6 @@ bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
 
-bool			append_light(t_light **start, char **line);
 
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
@@ -244,18 +243,21 @@ bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 
+bool			append_light(t_light **start, char **line);
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
 bool			insert_lecopy_after(t_trace *trace, t_lens **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
 bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
+bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
 void			pop_le(t_trace *trace, t_lens **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
 void			pop_pl(t_trace *trace, t_plane **current);
+void			pop_lt(t_trace *trace, t_light **current);
 
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
@@ -302,14 +304,17 @@ t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
+
 //double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
 double			get_light_int(t_comps comps, t_mat mat);
+double 			spotlight(t_vec3 light_dir);
+
 
 
 
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
-bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);//bones
+bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
 
 //view
 void			reinit_viewing(t_trace *trace);

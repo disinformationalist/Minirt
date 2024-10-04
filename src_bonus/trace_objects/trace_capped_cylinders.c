@@ -154,6 +154,7 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 	}
 }
 
+
 t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
 {
 	t_vec3	norm;
@@ -172,32 +173,95 @@ t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
 	return (norm_vec(norm));
 }
 
+t_comps	set_cycomps(t_cylinder *cylinder, double t, t_ray r)
+{
+	t_comps	comps;
+	
+	comps.t = t;
+	comps.point = add_vec(r.origin, scale_vec(t, r.dir));
+	comps.normal = cyl_normal_at(comps.point, cylinder->transform, cylinder->height / 2.0);
+	comps.eyev = neg(r.dir);
+	if (dot_product(comps.normal, comps.eyev) < 0)
+	{
+		comps.inside = true;
+		comps.normal = neg(comps.normal);
+	}
+	else
+		comps.inside = false;
+	return (comps);
+}
+
+
 t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 {
 	t_cylinder		*cylinder;
-	t_vec3			int_pnt;
-	t_vec3			normal;
-	t_vec3			light_dir;
-	double			light_int;
+	t_comps			comps;
+	t_norm_color	lt_color;
+	t_norm_color	color1;
+	t_light			*curr_lt;
 
 	cylinder = (t_cylinder *)closest->object;
-	light_int = 0;
+	lt_color = color(0, 0, 0);
 	if (trace->lights)
 	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		normal = cyl_normal_at(int_pnt, cylinder->transform, cylinder->height / 2);
-		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		if (dot_product(normal, r.dir) > 0)
-			normal = neg(normal);
-		if (!obscured(trace, int_pnt, light_dir, normal))
-			light_int = trace->lights->brightness * get_light_int(normal, light_dir, neg(r.dir));
+		comps = set_cycomps(cylinder, closest->t, r);
+		curr_lt = trace->lights;
+		while (true)
+		{
+			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
+			comps.cos_angle = dot_product(comps.normal, comps.light_dir);
+			comps.reflectv = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
+			if (!obscured_b(trace, ray(comps.light_dir, add_vec(comps.point, scale_vec(1e-5, comps.normal))), curr_lt->center, comps.point))
+				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_light_int(comps, cylinder->mat), curr_lt->color));
+			curr_lt = curr_lt->next;
+			if (curr_lt == trace->lights)
+				break;
+		}	
 	//cylinder->color = stripe_at(int_pnt, cylinder->transform);//trying color function
 	}
-
-	return (get_final_color(trace, cylinder->color, light_int));
+	color1 = cylinder->color;
+	return (get_final_color1(trace, color1, lt_color));
+	//return (get_final_color(trace, cylinder->color, light_int));
 }
-			/* double cos_angle = dot_product(normal, light_dir);
-			light_int	= trace->lights->brightness * fmax(cos_angle, 0.0); */
+
+/* 
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//working. now make lights have color WORKING! SEND IT! then do spotlights...
+{
+	t_sphere		*sphere;
+	t_comps			comps;
+	t_norm_color	lt_color;
+	t_norm_color	color1;
+	t_light			*curr_lt;
+
+	sphere = (t_sphere *)closest->object;
+	lt_color = color(0, 0, 0);
+	if (trace->lights)
+	{
+		comps = set_spcomps(sphere, closest->t, r);
+		curr_lt = trace->lights;
+		while (true)
+		{
+			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
+			comps.cos_angle = dot_product(comps.normal, comps.light_dir);
+			comps.reflectv = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
+			if (!obscured_b(trace, ray(comps.light_dir, add_vec(comps.point, scale_vec(1e-5, comps.normal))), curr_lt->center, comps.point))
+				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_light_int(comps, sphere->mat), curr_lt->color));
+			curr_lt = curr_lt->next;
+			if (curr_lt == trace->lights)
+				break;
+		}	
+
+	//sphere->color = stripe(int_pnt);//trying color function
+	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
+	//color1 = checker_at(int_pnt, sphere->transform);
+	//color1 = gradient_at(int_pnt, sphere->transform, color(0, 255, 0), color(0, 0, 255));
+
+	}
+	color1 = sphere->color;
+	return (get_final_color1(trace, color1, lt_color));
+} */
+
+
 //old
 /* unsigned int color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 {

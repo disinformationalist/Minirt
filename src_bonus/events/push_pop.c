@@ -7,11 +7,11 @@ static inline void push_new2(t_trace *trace, t_on *on)
 		if (insert_lecopy_after(trace, &trace->curr_le))
 			close_win(trace);	
 	}
-	/* else if (on->type == LIGHT)////---------------
+	else if (on->type == LIGHT)////---------------
 	{
-		if (insert_ltcopy_after(trace, &trace->lights))
+		if (insert_ltcopy_after(trace, &trace->curr_lt))
 			close_win(trace);	
-	} */
+	}
 	return ;
 }
 
@@ -47,6 +47,8 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_cy(trace, &trace->curr_cy);
 	else if (on->type == LENS)
 		pop_le(trace, &trace->curr_le);
+	else if (on->type == LIGHT)
+		pop_lt(trace, &trace->curr_lt);
 	else
 		return ;
 }

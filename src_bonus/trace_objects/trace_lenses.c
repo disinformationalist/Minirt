@@ -132,7 +132,7 @@ void	check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t)
 
 //diff plus specular for sp
 
-/*double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat sphere->mat)
+double	get_lelight_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat sphere->mat)
 {
 	t_vec3	ref;
 	double	spec;
@@ -148,7 +148,7 @@ void	check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t)
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);//trying sp_light
 
-}*/
+}
 
 //transform testing
 
@@ -217,7 +217,7 @@ t_norm_color color_lens(t_trace *trace, t_ray r, t_track_hits *closest)
 		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
 		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
 		if (!obscured(trace, int_pnt, light_dir, norm_1))
-			light_int = trace->lights->brightness * get_light_int(norm_1, light_dir, neg(r.dir));//diff + spec here for each light
+			light_int = trace->lights->brightness * get_lelight_int(norm_1, light_dir, neg(r.dir));//diff + spec here for each light
 		//if (!obscured(trace, int_pnt, light_dir, norm_2))
 		//	light_int = trace->lights->brightness * get_light_int(norm_2, light_dir, neg(r.dir));//diff + spec here for each light
 	}

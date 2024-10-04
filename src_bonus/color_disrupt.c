@@ -49,6 +49,7 @@ t_norm_color checker_at(t_point point, t_matrix_4x4 transform)//, t_norm_color c
 
 	obj_pnt = mat_vec_mult(transform, point);
 	
+//	if (((int)floor(obj_pnt.x) + (int)floor(obj_pnt.y) + (int)floor(obj_pnt.z)) % 2 == 0)
 	if ((ft_round(obj_pnt.x) + ft_round(obj_pnt.y) + ft_round(obj_pnt.z)) % 2 == 0)
 		col = color(40.0, 40.0, 40.0);
 	else

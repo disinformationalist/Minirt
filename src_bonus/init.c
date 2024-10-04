@@ -25,7 +25,7 @@
 
 void info_init(t_trace *trace)
 {
-	trace->width = 1080;
+	trace->width = 800;
 	trace->height = (int)((double)trace->width / ASPECT);
 	
 	trace->curr_sp = trace->spheres;

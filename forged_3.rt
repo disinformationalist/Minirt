@@ -1,5 +1,5 @@
 #Ambient:   Intensity 																     	 R | G | B
-A           0.700                                                                            255,255,255
+A           0.100                                                                            255,255,255
 
 
 #Camera:    Cen_x | Cen_y | Cen_z   	  Ori_x | Ori_y | Ori_z  	  			   FOV

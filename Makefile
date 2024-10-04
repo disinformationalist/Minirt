@@ -101,6 +101,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/push_pop_cy.c \
 ./src_bonus/init_objects/lens_list_utils.c \
 ./src_bonus/init_objects/push_pop_le.c \
+./src_bonus/init_objects/light_list_utils.c \
+./src_bonus/init_objects/push_pop_lt.c \
 ./src_bonus/init_objects/get_line_vals.c \
 ./src_bonus/init_objects/set_amb_cam_lights.c \
 ./src_bonus/init_objects/init_cam.c \
@@ -136,7 +138,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/png/get_png_name.c \
 ./src_bonus/threader.c \
 ./src_bonus/color_disrupt.c \
-./src_bonus/init_objects/light_list_utils.c \
 ./src_bonus/materials.c \
 
 

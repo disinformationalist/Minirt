@@ -68,24 +68,6 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 
 //diff plus specular for sp
 
-/* double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat mat)
-{
-	t_vec3	ref;
-	double	spec;
-	double	light_int;
-	double	cos_angle;
-
-	cos_angle = dot_product(norm, light_dir);
-	ref = subtract_vec(scale_vec(2 * cos_angle, norm), light_dir);
-	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
-	//spec = pow(fmax(dot_product(ref, view_dir), 0), mat.shine); //use these when mat is assigned
-	light_int = fmax(cos_angle, 0.0) + .5 * spec;
-	//light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
-	//return (spotlight(light_dir) * light_int);//trying sp_light
-	return (light_int);
-} */
-//trying with materials now..
-
 double	get_light_int(t_comps comps, t_mat mat)
 {
 	t_vec3	ref;
@@ -95,7 +77,7 @@ double	get_light_int(t_comps comps, t_mat mat)
 	ref = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
 	spec = pow(fmax(dot_product(ref, comps.eyev), 0), mat.shine);
 	light_int = mat.diff * fmax(comps.cos_angle, 0.0) + mat.spec * spec;
-	//return (spotlight(light_dir) * light_int);//trying sp_light
+	//return (spotlight(comps.light_dir) * light_int);//trying sp_light
 	return (light_int);
 }
 
@@ -143,7 +125,7 @@ t_comps	set_spcomps(t_sphere *sphere, double t, t_ray r)
 	return (comps);
 }
 
-t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//working. now make lights have color WORKING! SEND IT! then do spotlights...
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//working. now make spotlights...
 {
 	t_sphere		*sphere;
 	t_comps			comps;

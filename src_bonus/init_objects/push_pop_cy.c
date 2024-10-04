@@ -35,6 +35,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
+	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->next = new;

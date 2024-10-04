@@ -34,6 +34,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->transform = transform;
 	identity(&transform);
 	new->curr_scale = transform;
+	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->next = new;

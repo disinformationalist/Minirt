@@ -11,7 +11,8 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->norm = get_coordinates(line[2], 0.0);
 	new->radius = get_double(&diam_str) / 2;
 	new->height = get_double(&height_str);
-	new->color = get_color(line[5], 1.0);	
+	new->color = get_color(line[5], 1.0);
+	new->mat = get_mat(DEFAULT);
 }
 
 t_cylinder *create_cylinder(char **line)
