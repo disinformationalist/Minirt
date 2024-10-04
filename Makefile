@@ -137,6 +137,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/threader.c \
 ./src_bonus/color_disrupt.c \
 ./src_bonus/init_objects/light_list_utils.c \
+./src_bonus/materials.c \
+
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 

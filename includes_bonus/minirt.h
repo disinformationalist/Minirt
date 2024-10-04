@@ -2,10 +2,11 @@
 # define MINIRT_H
 
 # include "tools.h"
-//# include "keyboard (42).h"//figure out how to automatically select correct one
-# include "keyboard.h"
+# include "keyboard (42).h"//figure out how to automatically select correct one
+//# include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
+# include "materials.h"
 
 # define ASPECT (16.0 / 9.0)
 
@@ -17,16 +18,6 @@ typedef struct s_track_hits
 	void	*object;
 	t_type	object_type;
 }	t_track_hits;
-
-// gives vals for material TOFINISH
-
-typedef struct s_mat
-{
-	double	amb;
-	double	diff;
-	double	spec;
-	double	shine;
-}	t_mat;
 
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
 
@@ -53,6 +44,7 @@ typedef struct s_lens
 	t_vec3			center;
 	double			radius;
 	t_vec3			axis;
+	t_mat			mat;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
@@ -134,7 +126,7 @@ typedef struct s_trace
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 
-	t_light			*curr_sl;
+	t_light			*curr_lt;
 
 	//mlx
 	void			*mlx_connect;
@@ -175,6 +167,20 @@ typedef struct s_piece //for threads
 	t_trace		*trace;
 	t_track_hits *closest;
 }	t_piece;
+
+typedef struct t_comps
+{
+	double	t;
+	//void	*object;
+	//t_type	object_type;
+	t_vec3	point;
+	t_vec3	eyev;
+	t_vec3	normal;
+	t_vec3 	light_dir;
+	t_vec3	reflectv;
+	double	cos_angle;
+	bool	inside;
+}	t_comps;
 
 /***PARSING***/
 
@@ -334,10 +340,19 @@ t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_in
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 int				ft_round(double num);
+t_norm_color 	color(double r, double g, double b);
+
+
+//materials
+void	change_mat(t_trace *trace,t_on *on, const t_mat mat);
+t_mat	get_mat(t_material material);
+
+
+
 
 //used in mthread
 unsigned int	avg_samples(t_norm_color sum, double n);
-t_norm_color	sum_sample_rgbs(t_norm_color sum, t_norm_color to_add);
+t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
 
 //patterns
 t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);

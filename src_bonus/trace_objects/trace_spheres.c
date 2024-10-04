@@ -84,6 +84,22 @@ double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat ma
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);
 }
+//trying with materials now..
+
+double	get_splight_int(t_comps comps, t_mat mat)
+{
+	t_vec3	ref;
+	double	spec;
+	double	light_int;
+	//double	cos_angle;
+
+	//cos_angle = dot_product(norm, light_dir);
+	ref = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
+	spec = pow(fmax(dot_product(ref, comps.eyev), 0), mat.shine);
+	light_int = mat.diff * fmax(comps.cos_angle, 0.0) + mat.spec * spec;
+	//return (spotlight(light_dir) * light_int);//trying sp_light
+	return (light_int);
+}
 
 t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 {
@@ -96,13 +112,103 @@ t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 	return (norm_vec(norm));
 }
 
+/* typedef struct t_comps
+{
+	double	t;
+	//void	*object;
+	//t_type	object_type;
+	t_vec3	point;
+	t_vec3	eyev;
+	t_vec3	normal;
+	t_vec3	reflectv;
+	bool	inside;
+}	t_comps; */
 //this function will check each sphere passed to it
 
-t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
+
+t_comps	set_spcomps(t_sphere *sphere, double t, t_ray r)
+{
+	t_comps	comps;
+	
+	comps.t = t;
+	comps.point = add_vec(r.origin, scale_vec(t, r.dir));
+	comps.normal = sp_normal_at(comps.point, sphere->transform);
+	comps.eyev = neg(r.dir);
+	if (dot_product(comps.normal, comps.eyev) < 0)
+	{
+		comps.inside = true;
+		comps.normal = neg(comps.normal);
+	}
+	else
+		comps.inside = false;
+	return (comps);
+}
+
+t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color)
+{
+	t_norm_color color_out;
+
+	color_out.r = color.r * (light_color.r + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = color.g * (light_color.g + trace->amb->color.g);
+	color_out.b = color.b * (light_color.b + trace->amb->color.b);
+
+	return (color_out);
+}
+
+t_norm_color mult_color(double scalar, t_norm_color color)
+{
+	t_norm_color col;
+
+	col.r = scalar * color.r;
+	col.g = scalar * color.g;
+	col.b = scalar * color.b;
+	return (col);
+}
+
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//working. now make lights have color WORKING! SEND IT! then do spotlights...
 {
 	t_sphere		*sphere;
-	t_vec3			norm;
-	t_point			int_pnt;
+	t_comps			comps;
+	t_norm_color	lt_color;
+	t_norm_color	color1;
+	t_light			*curr_lt;
+
+	sphere = (t_sphere *)closest->object;
+	lt_color = color(0, 0, 0);
+	if (trace->lights)
+	{
+		comps = set_spcomps(sphere, closest->t, r);
+		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light// SEP FUNCITON?
+		curr_lt = trace->lights;
+		while (true)
+		{
+			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
+			comps.cos_angle = dot_product(comps.normal, comps.light_dir);
+			comps.reflectv = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
+			/* if (!obscured(trace, comps.point, comps.light_dir, comps.normal))
+				light_int = trace->lights->brightness * get_splight_int(comps, sphere->mat); */
+			if (!obscured_b(trace, ray(comps.light_dir, add_vec(comps.point, scale_vec(1e-5, comps.normal))), curr_lt->center, comps.point))
+				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_splight_int(comps, sphere->mat), curr_lt->color));
+			curr_lt = curr_lt->next;
+			if (curr_lt == trace->lights)
+				break;
+		}	
+
+	//sphere->color = stripe(int_pnt);//trying color function
+	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
+	//color1 = checker_at(int_pnt, sphere->transform);
+	//color1 = gradient_at(int_pnt, sphere->transform, color(0, 255, 0), color(0, 0, 255));
+
+	}
+	color1 = sphere->color;
+	return (get_final_color1(trace, color1, lt_color));//send in material here? mult mat.amb * ambcomponent....
+}
+
+//old
+/* t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
+{
+	t_sphere		*sphere;
+	t_comps			comps;
 	t_vec3			light_dir; 
 	double			light_int;
 	t_norm_color	color1;
@@ -111,14 +217,18 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	light_int = 0;
 	if (trace->lights)
 	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		norm = sp_normal_at(int_pnt, sphere->transform);
-		if (dot_product(norm, r.dir) > 0)
-			norm = neg(norm);
+		comps = set_spcomps(sphere, closest->t, r);
+		//int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
+		//norm = sp_normal_at(int_pnt, sphere->transform);
+		//if (dot_product(norm, r.dir) > 0)
+		//	norm = neg(norm);
 		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
-		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
+		light_dir = norm_vec(subtract_vec(trace->lights->center, comps.point));
+		if (!obscured(trace, comps.point, light_dir, comps.normal))
+			light_int = trace->lights->brightness * get_splight_int(comps.normal, light_dir, comps.eyev, sphere->mat);
+
+
+
 	//sphere->color = stripe(int_pnt);//trying color function
 	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
 	//color1 = checker_at(int_pnt, sphere->transform);
@@ -127,43 +237,4 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	}
 	color1 = sphere->color;
 	return (get_final_color(trace, color1, light_int));
-}
-
-//loop version through all lights, seems to be working... add checks for type, early exit opti in spotlights, color handling..
-//needs some changes now, using transforms
-/* unsigned int color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
-{
-	t_sphere		*sphere;
-	t_point			int_pnt;//light intersect with surface
-	t_vec3			norm;
-	t_vec3			light_dir; 
-	double			light_int;//total non amb lt intensity
-
-	t_light			*curr_lt;
-
-	sphere = (t_sphere *)closest->object;
-
-	light_int = 0;//use this simplification on all
-	if (trace->lights)// getting the light intensity at each intersection point
-	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		norm = norm_vec(subtract_vec(int_pnt, sphere->center));
-		if (dot_product(norm, r.dir) > 0)
-			norm = neg(norm);
-		//loop here for multiple lights. sum total lights * lt_colors *intensity, return a total color due to colored light
-		curr_lt = trace->lights;
-		while (true)
-		{
-			light_dir = norm_vec(subtract_vec(curr_lt->center, int_pnt));
-			//hard shadows...
-
-			if (!obscured_b(trace, ray(light_dir, add_vec(int_pnt, scale_vec(1e-5, norm))), curr_lt->center, int_pnt))
-				light_int += curr_lt->brightness * get_light_int(norm, light_dir, neg(r.dir));//diff + spec here for each light
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
-				break;
-		}	
-	}
-	//sphere->color = stripe(int_pnt);//trying color function
-	return (get_final_color(trace, sphere->color, light_int));
 } */

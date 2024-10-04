@@ -34,6 +34,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
+	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->next = new;

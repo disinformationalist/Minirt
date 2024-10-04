@@ -32,6 +32,7 @@ void info_init(t_trace *trace)
 	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
+	trace->curr_lt = trace->lights;
 
 	trace->supersample = false;
 	trace->layer = false;

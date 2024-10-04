@@ -8,16 +8,6 @@ int	ft_round(double num)
 //playing with color reassign, do in keyhooks
 //may need rework closer to book method, these are proof of concepts..
 
-t_norm_color color(double r, double g, double b)
-{
-	t_norm_color col;
-
-	col.r = r;
-	col.g = g;
-	col.b = b;
-	return(col);
-}
-
 //places alternating stripes on object
 
 t_norm_color stripe_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)

@@ -26,7 +26,7 @@ static inline void	switch_list2(int keycode, t_trace *trace, t_on *on)
 {
 	if (keycode == N_9)
 	{
-		on->object = trace->lights;
+		on->object = trace->curr_lt;
 		on->type = LIGHT;
 	}
 	else if (keycode == N_0)
