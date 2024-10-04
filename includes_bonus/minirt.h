@@ -302,7 +302,9 @@ t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 
 //light
-double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
+//double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
+double			get_light_int(t_comps comps, t_mat mat);
+
 
 
 //shadows
@@ -344,15 +346,15 @@ t_norm_color 	color(double r, double g, double b);
 
 
 //materials
-void	change_mat(t_trace *trace,t_on *on, const t_mat mat);
-t_mat	get_mat(t_material material);
-
-
+void			change_mat(t_trace *trace,t_on *on, const t_mat mat);
+t_mat			get_mat(t_material material);
 
 
 //used in mthread
 unsigned int	avg_samples(t_norm_color sum, double n);
 t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
+t_norm_color	get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color);
+t_norm_color	mult_color(double scalar, t_norm_color color);
 
 //patterns
 t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);

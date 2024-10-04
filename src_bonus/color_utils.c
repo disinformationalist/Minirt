@@ -6,10 +6,7 @@ uint8_t clamp_color(double color)
 		return (255);
 	else
 		return ((uint8_t)color);
-	//if (color < 0)
-	//	return (0);
 }
-
 
 t_norm_color color(double r, double g, double b)
 {
@@ -20,7 +17,6 @@ t_norm_color color(double r, double g, double b)
 	col.b = b;
 	return(col);
 }
-
 
 t_norm_color sum_rgbs(t_norm_color sum, t_norm_color to_add)
 {
@@ -50,20 +46,30 @@ t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_in
 {
 	t_norm_color color_out;
 
-	color_out.r = color.r * (light_int + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.r = color.r * (light_int + trace->amb->color.r);
 	color_out.g = color.g * (light_int + trace->amb->color.g);
 	color_out.b = color.b * (light_int + trace->amb->color.b);
 
 	return (color_out);
 }
 
+t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color)
+{
+	t_norm_color color_out;
 
-//full phong: total_light = ambient + diff + specular
+	color_out.r = color.r * (light_color.r + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = color.g * (light_color.g + trace->amb->color.g);
+	color_out.b = color.b * (light_color.b + trace->amb->color.b);
 
-	/* //original for clarity
-	//					diffuse component		+		ambient component
-	r = clamp_color((color.r * light_int + color.r * trace->amb->color.r) * 255.0);
-	g = clamp_color((color.g * light_int + color.g * trace->amb->color.g) * 255.0);
-	b = clamp_color((color.b * light_int + color.b * trace->amb->color.b) * 255.0); */
-	
-	//moved * 255.0 back into object color during parse for opti...
+	return (color_out);
+}
+
+t_norm_color mult_color(double scalar, t_norm_color color)
+{
+	t_norm_color col;
+
+	col.r = scalar * color.r;
+	col.g = scalar * color.g;
+	col.b = scalar * color.b;
+	return (col);
+}

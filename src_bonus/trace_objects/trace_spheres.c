@@ -68,7 +68,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 
 //diff plus specular for sp
 
-double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat mat)
+/* double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat mat)
 {
 	t_vec3	ref;
 	double	spec;
@@ -83,17 +83,15 @@ double	get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat ma
 	//light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);
-}
+} */
 //trying with materials now..
 
-double	get_splight_int(t_comps comps, t_mat mat)
+double	get_light_int(t_comps comps, t_mat mat)
 {
 	t_vec3	ref;
 	double	spec;
 	double	light_int;
-	//double	cos_angle;
 
-	//cos_angle = dot_product(norm, light_dir);
 	ref = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
 	spec = pow(fmax(dot_product(ref, comps.eyev), 0), mat.shine);
 	light_int = mat.diff * fmax(comps.cos_angle, 0.0) + mat.spec * spec;
@@ -101,16 +99,6 @@ double	get_splight_int(t_comps comps, t_mat mat)
 	return (light_int);
 }
 
-t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
-{
-	t_vec3	norm;
-	t_point obj_pnt;
-
-	obj_pnt = mat_vec_mult(transform, int_pnt);
-	norm = mat_vec_mult(transpose(transform), obj_pnt);
-	norm.w = 0;
-	return (norm_vec(norm));
-}
 
 /* typedef struct t_comps
 {
@@ -125,6 +113,17 @@ t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 }	t_comps; */
 //this function will check each sphere passed to it
 
+
+t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
+{
+	t_vec3	norm;
+	t_point obj_pnt;
+
+	obj_pnt = mat_vec_mult(transform, int_pnt);
+	norm = mat_vec_mult(transpose(transform), obj_pnt);
+	norm.w = 0;
+	return (norm_vec(norm));
+}
 
 t_comps	set_spcomps(t_sphere *sphere, double t, t_ray r)
 {
@@ -142,27 +141,6 @@ t_comps	set_spcomps(t_sphere *sphere, double t, t_ray r)
 	else
 		comps.inside = false;
 	return (comps);
-}
-
-t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color)
-{
-	t_norm_color color_out;
-
-	color_out.r = color.r * (light_color.r + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
-	color_out.g = color.g * (light_color.g + trace->amb->color.g);
-	color_out.b = color.b * (light_color.b + trace->amb->color.b);
-
-	return (color_out);
-}
-
-t_norm_color mult_color(double scalar, t_norm_color color)
-{
-	t_norm_color col;
-
-	col.r = scalar * color.r;
-	col.g = scalar * color.g;
-	col.b = scalar * color.b;
-	return (col);
 }
 
 t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//working. now make lights have color WORKING! SEND IT! then do spotlights...
@@ -188,7 +166,7 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)//worki
 			/* if (!obscured(trace, comps.point, comps.light_dir, comps.normal))
 				light_int = trace->lights->brightness * get_splight_int(comps, sphere->mat); */
 			if (!obscured_b(trace, ray(comps.light_dir, add_vec(comps.point, scale_vec(1e-5, comps.normal))), curr_lt->center, comps.point))
-				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_splight_int(comps, sphere->mat), curr_lt->color));
+				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_light_int(comps, sphere->mat), curr_lt->color));
 			curr_lt = curr_lt->next;
 			if (curr_lt == trace->lights)
 				break;
