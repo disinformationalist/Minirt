@@ -28,6 +28,10 @@ void info_init(t_trace *trace)
 	trace->width = 800;
 	trace->height = (int)((double)trace->width / ASPECT);
 	
+	printf("width: %d\n", trace->width);
+	printf("height: %d\n", trace->height);
+
+
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;

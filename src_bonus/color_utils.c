@@ -40,8 +40,7 @@ unsigned int avg_samples(t_norm_color sum, double n)
 	return (r << 16 | g << 8 | b);
 }
 
-//send in material here? mult mat.amb * ambcomponent....
-
+//currently only used in lens
 t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
 {
 	t_norm_color color_out;
@@ -53,13 +52,15 @@ t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_in
 	return (color_out);
 }
 
-t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color)
+//send in material here? mult mat.amb * ambcomponent....
+
+t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color, double mat_amb)
 {
 	t_norm_color color_out;
 
-	color_out.r = color.r * (light_color.r + trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
-	color_out.g = color.g * (light_color.g + trace->amb->color.g);
-	color_out.b = color.b * (light_color.b + trace->amb->color.b);
+	color_out.r = color.r * (light_color.r + mat_amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = color.g * (light_color.g + mat_amb * trace->amb->color.g);
+	color_out.b = color.b * (light_color.b + mat_amb * trace->amb->color.b);
 
 	return (color_out);
 }

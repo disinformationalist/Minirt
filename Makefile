@@ -109,8 +109,11 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/parsing/parse_rt_utils.c \
 ./src_bonus/trace_objects/trace_planes.c \
 ./src_bonus/trace_objects/trace_spheres.c \
+./src_bonus/trace_objects/color_spheres.c \
 ./src_bonus/trace_objects/trace_lenses.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
+./src_bonus/trace_objects/color_cylinders.c \
+./src_bonus/trace_objects/light_utils.c \
 ./src_bonus/trace_objects/shadow_rays.c \
 ./src_bonus/testing/print_all_objects.c \
 ./src_bonus/testing/print_utils.c \
@@ -129,6 +132,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/forge/write_spheres.c \
 ./src_bonus/forge/write_planes.c \
 ./src_bonus/forge/write_cylinders.c \
+./src_bonus/forge/write_lights.c \
+./src_bonus/forge/write_splights.c \
 ./src_bonus/forge/write_lenses.c \
 ./src_bonus/forge/get_rt_name.c \
 ./src_bonus/png/export_png.c \

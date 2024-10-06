@@ -27,6 +27,7 @@ static inline void	make_default_lt(t_light **start, t_light *new)
 	new->color = color(1, 1, 1);
 	*start = new;
 	new->id = 1;
+	new->type = POINT;
 	new->next = new;
 	new->prev = new;
 }

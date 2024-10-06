@@ -1,37 +1,4 @@
 #include "minirt.h"
-/* 		   soft
-		   spot
-		  light 
-		 / 	|  \
-		/  / \  \
-	   /  /   \  \
-	  /  /     \  \
-	 /  /	    \  \
-			^	  ^
-			|	  |
-	inner cone    outer cone
-(full intensity)  (attenuating toward outer edge)	 */	
-//playing with spotlight adjustment here
-//check the condition first to see if there is any need for the compute of diff/spec to opti.
-
-double spotlight(t_vec3 light_dir)
-{
-	t_vec3	ln;//spot light pointing direction
-	double	cos_theta;
-	double	inner_cone = cos(M_PI / 12);
-	double	outer_cone = cos(M_PI / 8);
-
-	ln = norm_vec(vec(0, 1, 0, 0));//neg orientation 
-	cos_theta = dot_product(ln, light_dir);
-	if (cos_theta > inner_cone)
-		return (1.0);
-	else if (cos_theta > outer_cone)
-	{
-		return ((cos_theta - outer_cone) / (inner_cone - outer_cone));
-	}
-	else
-		return (0);
-}
 
 bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
@@ -69,20 +36,6 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	}
 }
 
-/* typedef struct t_comps
-{
-	double	t;
-	//void	*object;
-	//t_type	object_type;
-	t_vec3	point;
-	t_vec3	eyev;
-	t_vec3	normal;
-	t_vec3	reflectv;
-	bool	inside;
-}	t_comps; */
-//this function will check each sphere passed to it
-
-
 t_comps	set_plcomps(t_plane *plane, double t, t_ray r)
 {
 	t_comps	comps;
@@ -91,6 +44,7 @@ t_comps	set_plcomps(t_plane *plane, double t, t_ray r)
 	comps.point = add_vec(r.origin, scale_vec(t, r.dir));
 	comps.normal = plane->norm;
 	comps.eyev = neg(r.dir);
+	comps.mat = plane->mat;
 	if (dot_product(comps.normal, comps.eyev) < 0)
 	{
 		comps.inside = true;
@@ -98,6 +52,7 @@ t_comps	set_plcomps(t_plane *plane, double t, t_ray r)
 	}
 	else
 		comps.inside = false;
+	comps.over_pnt = add_vec(comps.point, scale_vec(1e-5, comps.normal));
 	return (comps);
 }
 
@@ -107,7 +62,6 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
-
 	t_norm_color	color1;
 
 	plane = (t_plane *)closest->object;
@@ -119,10 +73,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 		while (true)
 		{
 			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
-			comps.cos_angle = dot_product(comps.normal, comps.light_dir);
-			comps.reflectv = subtract_vec(scale_vec(2 * comps.cos_angle, comps.normal), comps.light_dir);
-			if (!obscured_b(trace, ray(comps.light_dir, add_vec(comps.point, scale_vec(1e-5, comps.normal))), curr_lt->center, comps.point))
-				lt_color = sum_rgbs(lt_color, mult_color(curr_lt->brightness * get_light_int(comps, plane->mat), curr_lt->color));
+			handle_light(trace, &comps, &lt_color, curr_lt);
 			curr_lt = curr_lt->next;
 			if (curr_lt == trace->lights)
 				break;
@@ -135,5 +86,5 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
 	}
 	else
 		color1 = plane->color;
-	return (get_final_color1(trace, color1, lt_color));
+	return (get_final_color1(trace, color1, lt_color, comps.mat.amb));
 }

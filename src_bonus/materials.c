@@ -5,7 +5,7 @@ t_mat	get_mat(t_material material)
 	t_mat	mat;	
 
 	if (material == DEFAULT)
-		mat = (t_mat){0.1, 0.9, 0.9, 200};
+		mat = (t_mat){1.0, 0.9, 0.9, 200};
 	else if (material == METAL)
 		mat = (t_mat){0.2, 0.3, 1.0, 128.0};
 	else if (material == MATTE)

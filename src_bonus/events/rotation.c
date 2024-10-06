@@ -17,7 +17,6 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 }
 
 //continued below ft
-	//for spotlight rotation should work
 
 static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 {
@@ -42,6 +41,11 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_le->sphere_2.curr_rottran);
 		trace->curr_le->sphere_2.transform = \
 			mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran); */
+	}
+	else if (on->type == LIGHT)
+	{
+		if (trace->curr_lt->type == SPOT)
+			trace->curr_lt->dir = mat_vec_mult(rot, trace->curr_lt->dir);
 	}
 	else if (on->type == CAM)
 		rotate_cam(trace, rot);

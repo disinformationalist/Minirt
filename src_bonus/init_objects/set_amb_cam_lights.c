@@ -1,10 +1,10 @@
 #include "minirt.h"
 
-uint8_t round_c(double d)
+/* uint8_t round_c(double d)
 {
 	return (floor(d + .5));
 }
-
+ */
 //ambient has already adjusted its color based on intensity
 
 bool	set_amb(t_amb **amb, char **line)

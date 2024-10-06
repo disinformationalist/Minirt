@@ -106,8 +106,17 @@ void	print_lights(t_light *lights)
 		printf("centery: %f\n", curr_lt->center.y);
 		printf("centerz: %f\n\n", curr_lt->center.z);
 		printf("brightness ratio:%f\n", curr_lt->brightness);
-		if (curr_lt->color.r)
+		if (curr_lt->color.r || curr_lt->color.g || curr_lt->color.b)
 			printf("light color rgb: r: %f, g: %f, b %f\n", curr_lt->color.r, curr_lt->color.g, curr_lt->color.b);
+		if (curr_lt->type == SPOT)
+		{
+			printf("dir_x: %f\n", curr_lt->dir.x);
+			printf("dir_y: %f\n", curr_lt->dir.y);
+			printf("dir_z: %f\n\n", curr_lt->dir.z);
+			printf("type: SPOT\n");
+		}
+		if (curr_lt->type == POINT)
+			printf("type: POINT\n");
 		curr_lt = curr_lt->next;
 		if (curr_lt == lights)
 			break;

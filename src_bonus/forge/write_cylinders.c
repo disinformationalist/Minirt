@@ -13,7 +13,7 @@ void	add_cy_color(t_cylinder *cyl, char *line)
 	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), "%d,%d,%d\n", r, g, b);
 }
 
-char	*build_cy_line(t_cylinder *cyl)//maybe just save and apply the transform for later version do this
+char	*build_cy_line(t_cylinder *cyl)
 {
 	static char 	line[200];
 	t_point			cen;

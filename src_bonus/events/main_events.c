@@ -48,7 +48,6 @@ NUM PAD 1 - 5 => change material of current object
 -----------------TODO--------------------
 
 //Color disruption
-//change material
 */
 
 int	close_win(t_trace *trace)
@@ -86,17 +85,17 @@ int transfigure(int keycode, t_trace *trace)
 int key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)
-		rotate_object(trace, trace->on, rot_x(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(-M_PI / 12));
 	else if (keycode == D)
-		rotate_object(trace, trace->on, rot_x(M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(M_PI / 12));
 	else if (keycode == W)
-		rotate_object(trace, trace->on, rot_y(M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(M_PI / 12));
 	else if (keycode == S)
-		rotate_object(trace, trace->on, rot_y(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(-M_PI / 12));
 	else if (keycode == Q)
-		rotate_object(trace, trace->on, rot_z(M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(M_PI / 12));
 	else if (keycode == E)
-		rotate_object(trace, trace->on, rot_z(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(-M_PI / 12));
 	else
 		transfigure(keycode, trace);
 	return (0);

@@ -10,12 +10,12 @@ void	write_amb(t_amb *amb, int fd)
 
 	if (amb == NULL)
 		return ;
-	ft_putstr_fd("#Ambient:   Intensity 																     	 R | G | B\n", fd);
+	ft_putstr_fd("#Ambient:   Intensity 																       	  R | G | B\n", fd);
 	ratio = amb->ratio;
 	r = round((1.0 / ratio) * amb->color.r * 255.0);
 	g = round((1.0 / ratio) * amb->color.g * 255.0);
 	b = round((1.0 / ratio) * amb->color.b * 255.0);
-	snprintf(line, sizeof(line), "A           %.3f                                                                            %d,%d,%d", ratio, r, g, b);
+	snprintf(line, sizeof(line), "A           %.3f                                                                             %d,%d,%d", ratio, r, g, b);
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n\n\n", 3);
 }
@@ -28,7 +28,7 @@ void	write_cam(t_cam *cam, int fd)
 	int 	spaces;
 	int		spaces2;
 
-//	must track forward vector later when bones is made
+//	must track upward vector later when bones is made
 	cen = cam->center;
 	ori = cam->orient;
 	
@@ -42,33 +42,10 @@ void	write_cam(t_cam *cam, int fd)
 	write(fd, "\n\n\n", 3);
 }
 
-void	write_lights(t_light *light, int fd)
-{
-	char 	line[200];
-	t_point	cen;
-	double	bright;
-	int 	spaces;
-	int		spaces2;
-	
-	//t_norm_color in the bones
-
-	if (light == NULL)
-		return ;
-	ft_putstr_fd("#Lights:    Cen_x | Cen_y | Cen_z    								    Intensity\n", fd);
-	cen = light->center;
-	bright = light->brightness;
-	spaces = 46 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
-	spaces2 = 18 - count_chars(bright); 
-	snprintf(line, sizeof(line), "L           %.3f,%.3f,%.3f%*s%.3f%*s", cen.x, cen.y, cen.z, spaces, "", bright, spaces2, "");
-	write(fd, line, ft_strlen(line));
-	write(fd, "\n\n\n", 3);
-}
-
 void	forge_rt(const char *path, t_trace *trace)
 {
 	int			fd;
 
-	//path = "forged.rt";
 	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
@@ -79,6 +56,7 @@ void	forge_rt(const char *path, t_trace *trace)
 	write_amb(trace->amb, fd);
 	write_cam(trace->cam, fd);
 	write_lights(trace->lights, fd);
+	write_splights(trace->lights, fd);
 	write_spheres(trace->spheres, fd);
 	write_planes(trace->planes, fd);
 	write_cylinders(trace->cylinders, fd);

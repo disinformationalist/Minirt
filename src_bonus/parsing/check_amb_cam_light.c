@@ -55,9 +55,58 @@ void	check_light(char **line, char ***rt_file)
 	" Light brightness must be between 0.0 and 1.0\n");
 	if (line[3])
 	{
-		if (check_color(line[3])) //JUST FOR THE BONES
+		if (check_color(line[3]))
 			free_exit(rt_file, "Error\n Invalid light color value\n", \
 		" Light color channel values must be between 0 and 255" \
 		" in the format r,g,b\n");
+	}
+}
+
+void	check_sl(char **line, char ***rt_file)
+{
+	char	*bright_ratio;
+	int		len;
+
+	len = ft_matrix_len(line);
+	bright_ratio = line[3];
+	if ( len != 6 && len != 7)
+		free_exit(rt_file, "Error\n Invalid light parameters\n", \
+	" Spot Lt must be in the format <type id> <x,y,z> <x,y,z> <brightness>\n"
+		"<rgb> <inner cone angle> <outer cone angle> (<rgb> is optional)\n");
+	if (check_coordinates(line[1]))
+		free_exit(rt_file, "Error\n Invalid light coordinates\n", \
+	" Light coordinates must be in the format x,y,z\n");
+	if (check_orientation(line[2]))
+		free_exit(rt_file, "Error\n Invalid camera orientation\n", \
+	" Camera orientation must be in the format x,y,z," \
+	" with values between zero and one\n");
+	if (check_normalization(line[2]))
+		free_exit(rt_file, "Error\n Invalid camera orientation vector\n", \
+	"Camera orientation vector must be normalized," \
+	" with magnitude of one\n");
+	if (check_double(&bright_ratio, 0.0, 1.0))
+		free_exit(rt_file, "Error\n Invalid light brightness\n", \
+	" Light brightness must be between 0.0 and 1.0\n");
+	if (len == 6)
+	{
+		if (check_fov(line[4]))
+			free_exit(rt_file, "Error\n Invalid light inner cone angle\n", \
+		" light inner cone angle must be between 0 and 180\n");
+		if (check_fov(line[5]))
+			free_exit(rt_file, "Error\n Invalid light outer cone angle\n", \
+		" light outer cone angle must be between 0 and 180\n");
+	}
+	else if (len == 7)
+	{
+		if (check_color(line[4]))
+			free_exit(rt_file, "Error\n Invalid light color value\n", \
+		" Light color channel values must be between 0 and 255" \
+		" in the format r,g,b\n");
+		if (check_fov(line[5]))
+			free_exit(rt_file, "Error\n Invalid light inner cone angle\n", \
+		" light inner cone angle must be between 0 and 180\n");
+		if (check_fov(line[6]))
+			free_exit(rt_file, "Error\n Invalid light outer cone angle\n", \
+		" light outer cone angle must be between 0 and 180\n");
 	}
 }

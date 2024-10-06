@@ -11,11 +11,9 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			count_check(&counts->cam_count,
 				"Error\n Only one camera allowed\n", rt_file);
 		else if (!ft_strcmp(*(rt_file[*k]), "L"))
-		{
 			counts->light_count++;
-			//count_check(&counts->light_count,
-			//	"Error\n Only one light source allowed\n", rt_file);
-		}
+		else if (!ft_strcmp(*(rt_file[*k]), "SL"))
+			counts->light_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "sp"))
 			counts->sphere_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "pl"))
@@ -51,8 +49,8 @@ void	check_ids(char ***rt_file)
 			check_cy(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "le"))
 			check_le(rt_file[k], rt_file);
-		/* if (!ft_strcmp(*(rt_file[k]), "sl"))//spot lights check needed
-			check_sl(rt_file[k], rt_file); */
+		if (!ft_strcmp(*(rt_file[k]), "SL"))
+			check_sl(rt_file[k], rt_file);
 	}
 }
 
@@ -70,10 +68,7 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			status = set_cam(&trace->cam, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
-		{
-			//status = set_light(&trace->lights, rt_file[k]); //non bonus
 			status = append_light(&trace->lights, rt_file[k]);
-		}
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
 			status = append_sp(&trace->spheres, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "pl"))
@@ -82,8 +77,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_cy(&trace->cylinders, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "le"))
 			status = append_le(&trace->lenses, rt_file[k]);
-		/* else if (!ft_strcmp(*(rt_file[k]), "sl"))//using sep identifier for sl, appending the same way
-			status = append_lt(&trace->spotlights, rt_file[k]);*/
+		else if (!ft_strcmp(*(rt_file[k]), "SL"))//using sep identifier for sl, appending the same way
+			status = append_light(&trace->lights, rt_file[k]);
 		if (status)
 			break ;
 	}
@@ -114,4 +109,5 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);
 	}
+	//print_all_objects(trace);
 }

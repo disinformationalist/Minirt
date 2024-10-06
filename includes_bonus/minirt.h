@@ -90,11 +90,10 @@ typedef struct s_light
 //stuff for bring sp lights in
 	t_ltype				type;
 	int					id;
-	t_point				pos;
 	t_vec3				dir;
 	double				inner_cone;
 	double				outer_cone;
-	double				inten;
+	double				inv_conediff;
 	struct s_light		*prev;
 	struct s_light		*next;
 }	t_light;
@@ -178,8 +177,14 @@ typedef struct t_comps
 	t_vec3	normal;
 	t_vec3 	light_dir;
 	t_vec3	reflectv;
+
+	t_mat	mat;
 	double	cos_angle;
 	bool	inside;
+	double  spot_int;
+
+	t_vec3	over_pnt;
+
 }	t_comps;
 
 /***PARSING***/
@@ -209,6 +214,8 @@ void			check_sp(char **line, char ***rt_file);
 void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
+void	check_sl(char **line, char ***rt_file);
+
 
 //check line utils
 int				check_param_num(char **line, int num);
@@ -306,8 +313,13 @@ bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
 //light
 
 //double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
-double			get_light_int(t_comps comps, t_mat mat);
-double 			spotlight(t_vec3 light_dir);
+//double	get_light_int(t_comps comps, t_mat mat, t_ltype type);
+
+//double			get_light_int(t_comps comps, t_mat mat);
+
+//double			get_spot_int(t_vec3 light_dir, t_light *splight);
+
+void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
 
 
 
@@ -343,6 +355,7 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 /***COLOR UTILS***/
 
 t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
+t_norm_color	get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color, double mat_amb);
 
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
@@ -358,7 +371,6 @@ t_mat			get_mat(t_material material);
 //used in mthread
 unsigned int	avg_samples(t_norm_color sum, double n);
 t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
-t_norm_color	get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color);
 t_norm_color	mult_color(double scalar, t_norm_color color);
 
 //patterns
@@ -404,6 +416,10 @@ void			write_spheres(t_sphere *spheres, int fd);
 void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
 void			write_lenses(t_lens *lenses, int fd);
+void			write_lights(t_light *lights, int fd);
+void			write_splights(t_light *lights, int fd);
+
+
 int				count_chars(double n);
 char			*get_nxt_name_rt(char *name);
 void			forge_or_export(int keycode, t_trace *trace);

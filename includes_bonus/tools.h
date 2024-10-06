@@ -16,10 +16,8 @@
 # include <stdint.h>//uint8_t
 # include "matrix_ops.h"
 
-
-//used for bones
 # include <pthread.h>
-# include <png.h>//for export/import bones only
+# include <png.h>
 
 # define DEG_TO_RAD  (M_PI / 180.0)
 
