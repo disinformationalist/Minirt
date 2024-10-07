@@ -41,6 +41,9 @@ J,L => x dirs
 I,K => y dirs
 U,O => z dirs
 
+//COLOR SHIFT
+mouse wheel shifts color of on object or light.
+
 --------------IN PROGRESS--------------------
 
 NUM PAD 1 - 5 => change material of current object
@@ -54,6 +57,7 @@ int	close_win(t_trace *trace)
 {	
 	free_all_objects(trace);
 	free(trace->on);
+	free(trace->w_colors);
 	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
 	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);
 	mlx_destroy_display(trace->mlx_connect);

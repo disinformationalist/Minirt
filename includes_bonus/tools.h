@@ -107,6 +107,21 @@ typedef struct s_cam
 	t_matrix_4x4	transform_up;
 }	t_cam;
 
+// util for making a color wheel
+
+typedef struct s_wheel
+{
+	int		*colors;
+	double	hue_step;
+	double	c;
+	double	x;
+	double	m;
+	double	r_;
+	double	g_;
+	double	b_;
+	int		hue;
+}	t_wheel;
+
 //parse utils
 
 typedef struct s_obj_counts
@@ -120,6 +135,7 @@ typedef struct s_obj_counts
 	int				cyl_count;
 }	t_obj_counts;
 
-t_ray	transform(t_ray r, t_matrix_4x4 m);
+t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
+t_ray			transform(t_ray r, t_matrix_4x4 m);
 
 #endif

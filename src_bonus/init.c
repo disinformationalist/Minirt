@@ -30,7 +30,8 @@ void info_init(t_trace *trace)
 	
 	printf("width: %d\n", trace->width);
 	printf("height: %d\n", trace->height);
-
+	trace->color_i = 0;
+	trace->num_colors = 120;
 
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
@@ -54,8 +55,18 @@ static void events_init(t_trace *trace)
 	//mlx_hook(trace->mlx_win, ButtonRelease, ButtonReleaseMask, mouse_release, trace);
 	//mlx_hook(trace->mlx_win, MotionNotify, PointerMotionMask, mouse_move, trace);
 	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
+	mlx_hook(trace->mlx_win, ButtonPress, \
+	ButtonPressMask, mouse_handler, trace);
 	/* mlx_loop_hook(trace->mlx_connect, render, trace);
 	mlx_loop(trace->mlx_connect); */
+}
+
+void init_transforms(t_trace *trace)
+{
+	set_sp_transforms(trace);
+	set_pl_transforms(trace);
+	set_cy_transforms(trace);
+	set_le_transforms(trace);
 }
 
 void trace_init(t_trace *trace)
@@ -77,11 +88,11 @@ void trace_init(t_trace *trace)
 	trace->on = (t_on *)malloc(sizeof(t_on));
 	if (!trace->on)
 		clear_all(trace);
+	trace->w_colors = set_color_wheel(trace->num_colors, 1.0, 0.5, 202);//num colors, sat, lightness, base hue
+	if (!trace->w_colors)
+		clear_all(trace);//check protect here, frees where needed elsweher and closing already. need in push_object_function safeties...
 	trace->on->object = trace->spheres;
 	trace->on->type = SPHERE;
 	events_init(trace);
-	set_sp_transforms(trace);
-	set_pl_transforms(trace);
-	set_cy_transforms(trace);
-	set_le_transforms(trace);
+	init_transforms(trace);
 }

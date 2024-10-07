@@ -3,6 +3,7 @@
 static inline void free_all(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	free_closests(trace, piece, i, j);
+	free(trace->w_colors);
 	clear_all(trace);
 }
 
@@ -48,7 +49,7 @@ void	render_scene(t_trace *trace)
 		while (++j < trace->num_cols)
 		{
 			if (set_pieces(trace, piece, i, j))
-				free_closests(trace, piece, i, j);
+				free_all(trace, piece, i, j);
 			if (pthread_create(&trace->threads[i * trace->num_cols + j], \
 				NULL, ray_trace, (void *)&piece[i][j]) != 0)
 			{

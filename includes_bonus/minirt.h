@@ -131,8 +131,11 @@ typedef struct s_trace
 	void			*mlx_connect;
 	void			*mlx_win;
 	
-	//other
+	//other and color
 	bool			layer;
+	t_norm_color	*w_colors;
+	int				color_i;
+	int 			num_colors;
 
 	//dimension and view
 	int				height;
@@ -156,6 +159,8 @@ typedef struct s_trace
 	pthread_t		*threads;
 
 }	t_trace;
+
+//struct for each thread containing its limits
 
 typedef struct s_piece //for threads
 {
@@ -363,6 +368,8 @@ int				ft_round(double num);
 t_norm_color 	color(double r, double g, double b);
 
 
+
+
 //materials
 void			change_mat(t_trace *trace,t_on *on, const t_mat mat);
 t_mat			get_mat(t_material material);
@@ -391,6 +398,9 @@ void			push_new_object(t_trace *trace, t_on *on);
 void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);
+
+int				mouse_handler(int button, int x, int y, t_trace *trace);
+
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);
