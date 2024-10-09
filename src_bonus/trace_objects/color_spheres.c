@@ -60,6 +60,8 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest)
 	//color1 = gradient_at(int_pnt, sphere->transform, color(0, 255, 0), color(0, 0, 255));
 
 	}
-	color1 = sphere->color;
+	//color1 = sphere->color;
+	color1 = texture_sp_at(trace, comps.point, sphere->transform);//place height / width with the image
+
 	return (get_final_color1(trace, color1, lt_color, comps.mat.amb));
 }

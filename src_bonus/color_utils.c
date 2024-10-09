@@ -2,10 +2,10 @@
 
 uint8_t clamp_color(double color)
 {
-	if (color > 255)
+	if (color >= 255)
 		return (255);
 	else
-		return ((uint8_t)color);
+		return ((uint8_t)(color));
 }
 
 t_norm_color color(double r, double g, double b)
@@ -52,7 +52,7 @@ t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_in
 	return (color_out);
 }
 
-//send in material here? mult mat.amb * ambcomponent....
+//send in material here? mult mat.amb * ambcomponent....//revisit handling and clamps here....
 
 t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color, double mat_amb)
 {

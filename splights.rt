@@ -1,5 +1,5 @@
 #Ambient:   Intensity 																     	 R | G | B
-A           0.100                                                                            255,255,255
+A           0.10                                                                            255,255,255
 
 
 #Camera:    Cen_x | Cen_y | Cen_z   	  Ori_x | Ori_y | Ori_z  	  			   FOV
@@ -7,7 +7,9 @@ C           0.000,6.232,-3.634            0.000,-0.866,0.500                    
 
 
 #Lights:    Cen_x | Cen_y | Cen_z    								    Intensity
-L           0.001,4.501,1.001                                           0.750 				255,255,255
+L           0.001,4.501,1.001                                           1.000 				255,255,255
+
+#sp          0.000,0.000,0.00                                            2.000                 255,255,255
 
 
 #SpLights:  Cen_x | Cen_y | Cen_z     	  Ori_x | Ori_y | Ori_z  		Intensity			  R | G | B       INNERCONE	OUTERCONE

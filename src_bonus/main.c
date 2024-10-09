@@ -61,6 +61,7 @@ int	main(int ac, char **av)
 		printf("Error: Thread Malloc failed\n");
 		return (EXIT_FAILURE);
 	}
+
 //-----------------------	
 
 	trace_init(&trace);

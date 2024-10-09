@@ -146,6 +146,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_disrupt.c \
 ./src_bonus/materials.c \
 ./src_bonus/color_wheel.c \
+./src_bonus/texture_utils.c \
+
 
 
 

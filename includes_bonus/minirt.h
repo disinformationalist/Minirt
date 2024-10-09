@@ -105,6 +105,11 @@ typedef struct s_trace
 {
 	t_img			img;
 	
+	t_img			*image1;//for importing an image for texture/backround
+	int				image1_w;
+	int				image1_h;
+
+
 	t_amb			*amb;
 	t_cam			*cam;
 
@@ -366,6 +371,15 @@ t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 int				ft_round(double num);
 t_norm_color 	color(double r, double g, double b);
+
+t_norm_color pixel_color_get(int x, int y, t_img *img);
+
+//texture map
+t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform);
+t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform);//place height / width with the image
+
+
+
 
 
 

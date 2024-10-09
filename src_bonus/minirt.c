@@ -38,6 +38,8 @@ static inline unsigned int	check_intersects(t_trace *trace, t_ray r, t_track_hit
 		color = color_cylinder(trace, r, closest);
 	else
 		return (0);//backround
+		//color = pixel_color_get(pos.i, pos.j, trace->image1);
+		//return (pixel_color_get(pos.i, pos.j, trace->image1));
 	clamped.r = clamp_color(color.r);
 	clamped.g = clamp_color(color.g);
 	clamped.b = clamp_color(color.b);
@@ -62,6 +64,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
 			color = check_intersects(trace, r, closest);
+			
+			//color = check_intersects(trace, r, closest);
 			my_pixel_put(pos.i, pos.j, &trace->img, color);
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}

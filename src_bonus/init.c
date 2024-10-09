@@ -25,13 +25,13 @@
 
 void info_init(t_trace *trace)
 {
-	trace->width = 800;
+	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
 	
 	printf("width: %d\n", trace->width);
 	printf("height: %d\n", trace->height);
 	trace->color_i = 0;
-	trace->num_colors = 120;
+	trace->num_colors = 128;
 
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
@@ -95,4 +95,10 @@ void trace_init(t_trace *trace)
 	trace->on->type = SPHERE;
 	events_init(trace);
 	init_transforms(trace);
+
+	trace->image1 = import_png(trace->mlx_connect, "earth.png", &trace->image1_w, &trace->image1_h);//protect and protect elsewhere.
+	//make some list of imgs in to manip and perform frees
+	//img type specifier for bringing in images
+	//mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);
+	//free(trace->image1);
 }
