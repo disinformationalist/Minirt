@@ -65,6 +65,23 @@ t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color l
 	return (color_out);
 }
 
+
+t_norm_color get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col)
+{
+	t_norm_color color_out;
+
+	color_out.r = comps.color.r * (light_color.r + comps.mat.amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = comps.color.g * (light_color.g + comps.mat.amb * trace->amb->color.g);
+	color_out.b = comps.color.b * (light_color.b + comps.mat.amb * trace->amb->color.b);
+
+ 	color_out.r =  color_out.r + comps.mat.ref * ref_col.r;
+    color_out.g =  color_out.g + comps.mat.ref * ref_col.g;
+    color_out.b =  color_out.b + comps.mat.ref * ref_col.b;
+	
+	return (color_out);
+}
+
+
 t_norm_color mult_color(double scalar, t_norm_color color)
 {
 	t_norm_color col;

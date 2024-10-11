@@ -19,6 +19,7 @@ typedef struct s_png_io
 	int			x;
 	int			pixel_size;
 	int			depth;
+	int			color_type;
 	t_pixel		temp_pixel;
 	png_byte	**row_pointers;
 	png_infop	info;
@@ -34,17 +35,20 @@ int				export_png(const char *filename, t_img *img, int width, int height);
 void			get_pixel(t_pixel *pix_t, t_img *img, int x, int y);
 void			clean_memory(t_png_io *png_img, int j, bool export);
 char 			*get_nxt_name(char *name);
+void			init_vars(t_png_io *png_img);
 
 //export/import utils
 int				error_1(t_png_io *png_img, const char *msg);
 void			free_png_rows(png_structp png_ptr, png_byte **row_pointers, int j);
 void			clean_memory(t_png_io *png_img, int j, bool export);
-void			init_vars(t_png_io *png_img);
 
 //import png img.
 t_img			*import_png(void *mlx_ptr, const char *file, int *width, int *height);
+int				init_import_vars(t_png_io *png_img);
 void			*error_2(t_png_io *png_img, const char *msg);
 int				error_3(t_png_io *png_img, const char *msg);
+void			set_img_pixels_rgb(t_png_io *png_img, t_img *image, int width, int height);
+void			set_img_pixels_rgba(t_png_io *png_img, t_img *image, int width, int height);
 
 //mthread
 int				get_num_cores(void);

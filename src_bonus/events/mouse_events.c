@@ -71,7 +71,9 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 
 int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in progress...
 {
-	t_norm_color curr_col;
+	t_norm_color	curr_col;
+	/* double			inten;
+	t_norm_color	shade; */
 
 	(void)x;
 	(void)y;
@@ -85,18 +87,18 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 			trace->color_i = match_index(trace->num_colors, trace->w_colors, curr_col);	
 		set_obj_color(trace->on, trace->w_colors[trace->color_i]);
 	}
-	else
+	/* else //scroll through textures. strg bump map on/off
 	{
-		double inten = (double)trace->color_i / 128;
-		t_norm_color shade = color(inten, inten, inten);
-		/* if (get_diff(curr_col, shade) > .1)
-			trace->color_i = match_index(trace->num_colors, trace-) */
+		inten = get_lumin(curr_col) * 255.0;
+		shade = color(inten, inten, inten);
+		//if (get_diff(curr_col, shade) > .1)
+		//	trace->color_i = match_index(trace->num_colors, trace-)
 		set_obj_color(trace->on, shade);
-	}
+	} */
 	if (button == 5)
-		trace->color_i = (trace->color_i + 1) % trace->num_colors;
+		trace->color_i = (trace->color_i + 7) % trace->num_colors;
 	else if (button == 4)
-		trace->color_i = (trace->color_i - 1 + trace->num_colors) % trace->num_colors;
+		trace->color_i = (trace->color_i - 7 + trace->num_colors) % trace->num_colors;
 
 	render(trace);
 	return (0);

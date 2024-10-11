@@ -2,7 +2,7 @@
 
 //find closest object hit by ray
 
-static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
+void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest)
 {
 	double	t;
 
@@ -19,31 +19,40 @@ static inline void	find_closest(t_trace *trace, t_ray ray, t_track_hits *closest
 	check_cylinders(trace->cylinders, closest, ray, &t);
 }
 
+
+unsigned int	clamped_col(t_norm_color col)
+{
+	t_color clamped;
+	
+	clamped.r = clamp_color(col.r);
+	clamped.g = clamp_color(col.g);
+	clamped.b = clamp_color(col.b);
+
+	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
+}
+
 //checking for the closest intersection and computing color
 
-static inline unsigned int	check_intersects(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color	check_intersects(t_trace *trace, t_ray r, t_track_hits *closest, int depth)
 {
-	t_norm_color	color;
-	t_color			clamped;
+	t_norm_color	color_out;
+
+	if (depth <= 0)
+		return (color(0, 0, 0));
 	
 	find_closest(trace, r, closest);
 
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
-		color = color_sphere(trace, r, closest);
+		color_out = color_sphere(trace, r, closest, depth);
 	else if (closest->t != INFINITY && closest->object_type == LENS)
-		color = color_lens(trace, r, closest);
+		color_out = color_lens(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
-		color = color_plane(trace, r, closest);
+		color_out = color_plane(trace, r, closest, depth);
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
-		color = color_cylinder(trace, r, closest);
+		color_out = color_cylinder(trace, r, closest);
 	else
-		return (0);//backround
-		//color = pixel_color_get(pos.i, pos.j, trace->image1);
-		//return (pixel_color_get(pos.i, pos.j, trace->image1));
-	clamped.r = clamp_color(color.r);
-	clamped.g = clamp_color(color.g);
-	clamped.b = clamp_color(color.b);
-	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
+		return (color(0, 0, 0));
+	return (color_out);
 }
 
 static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *closest)
@@ -63,8 +72,7 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_track_hits *
 		while (++pos.i < piece->x_e)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
-			color = check_intersects(trace, r, closest);
-			
+			color = clamped_col(check_intersects(trace, r, closest, trace->depth));
 			//color = check_intersects(trace, r, closest);
 			my_pixel_put(pos.i, pos.j, &trace->img, color);
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);

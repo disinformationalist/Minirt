@@ -31,7 +31,7 @@ void info_init(t_trace *trace)
 	printf("width: %d\n", trace->width);
 	printf("height: %d\n", trace->height);
 	trace->color_i = 0;
-	trace->num_colors = 128;
+	trace->num_colors = 384;
 
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
@@ -42,6 +42,8 @@ void info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 3.0;
+
+	trace->depth = 5;
 	init_viewing(trace);
 }
 
@@ -96,7 +98,7 @@ void trace_init(t_trace *trace)
 	events_init(trace);
 	init_transforms(trace);
 
-	trace->image1 = import_png(trace->mlx_connect, "earth.png", &trace->image1_w, &trace->image1_h);//protect and protect elsewhere.
+	trace->image1 = import_png(trace->mlx_connect, "image_1.png", &trace->image1_w, &trace->image1_h);//protect and protect elsewhere.
 	//make some list of imgs in to manip and perform frees
 	//img type specifier for bringing in images
 	//mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);

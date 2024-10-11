@@ -9,11 +9,17 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_2.curr_scale);
 		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
+	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?
+	{
+		trace->curr_lt->brightness *= vec1.y;
+		if (trace->curr_lt->brightness > 1.0)
+			trace->curr_lt->brightness = 1.0;
+		if (trace->curr_lt->brightness < 0.05)
+			trace->curr_lt->brightness = 0.05;
+	}
 	else
-		return;
-	/* 	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?
-		trace->lights->center = add_vec(trace->lights->center, vec1);
-	else if (on->type == CAM)// no use case yet?!
+		return ;
+	/* else if (on->type == CAM)// no use case yet?! fov?
 	{
 		trace->cam->center = add_vec(trace->cam->center, vec1);
 		init_viewing(trace);

@@ -50,7 +50,6 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 		if (comps->spot_int)
 		{
 			comps->cos_angle = dot_product(comps->normal, comps->light_dir);
-			comps->reflectv = subtract_vec(scale_vec(2 * comps->cos_angle, comps->normal), comps->light_dir);
 			if (!obscured_b(trace, ray(comps->light_dir, comps->over_pnt), curr_lt->center, comps->point))
 				*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_int(*comps, comps->mat), curr_lt->color));
 		}
@@ -58,8 +57,25 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 	else
 	{
 		comps->cos_angle = dot_product(comps->normal, comps->light_dir);
-		comps->reflectv = subtract_vec(scale_vec(2 * comps->cos_angle, comps->normal), comps->light_dir);
 		if (!obscured_b(trace, ray(comps->light_dir, comps->over_pnt), curr_lt->center, comps->point))
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));
 	}
+}
+
+t_norm_color get_reflected(t_trace *trace, t_comps comps, t_track_hits *closest, int depth)
+{
+	t_norm_color ref_col;
+
+	if (comps.mat.ref && depth > 0)
+	{
+		
+		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
+		
+		
+		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), closest, depth - 1);
+
+	}
+	else
+		ref_col = color(0, 0, 0);		
+	return (ref_col);
 }

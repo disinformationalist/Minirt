@@ -24,28 +24,6 @@ static int	init_png_structs_in(t_png_io *png_img, const char *file)
 	return (0);
 }
 
-static void	set_img_pixels(t_png_io *png_img, t_img *image, int width, int height)
-{
-	png_bytep		row;
-	png_bytep		px;
-	unsigned int	color;
-
-	png_img->y = -1;
-	while (++png_img->y < height)
-	{
-		row = png_img->row_pointers[png_img->y];
-		png_img->x = -1;
-		while (++png_img->x < width)
-		{
-			px = &(row[png_img->x * 4]);
-			color = ((unsigned int)px[0]) << 16 | ((unsigned int)px[1] << 8) \
-			| (unsigned int)px[2] | ((unsigned int)px[3] << 24);
-			*(unsigned int *)(image->pixels_ptr + (4 * width * png_img->y) \
-			+ (4 * png_img->x)) = color;
-		}
-	}
-}
-
 static int	malloc_rowptrs(t_png_io *png_img, int height)
 {
 	png_img->row_pointers = png_malloc(png_img->png_ptr, height \
@@ -58,7 +36,7 @@ static int	malloc_rowptrs(t_png_io *png_img, int height)
 	while (++png_img->y < height)
 	{
 		png_img->row_pointers[png_img->y] = \
-		(png_byte *)malloc(png_get_rowbytes(png_img->png_ptr, png_img->info));
+		png_malloc(png_img->png_ptr, png_get_rowbytes(png_img->png_ptr, png_img->info));
 		if (!png_img->row_pointers[png_img->y])
 		{
 			free_png_rows(png_img->png_ptr, png_img->row_pointers, png_img->y);
@@ -73,17 +51,33 @@ static int	init_import(t_png_io **png_img, t_img **image, const char *file)
 	*png_img = (t_png_io *)malloc(sizeof(t_png_io));
 	if (!(*png_img))
 		return (1);
-	init_vars(*png_img);
+	(*png_img)->png_ptr = NULL;
+	(*png_img)->info = NULL;
+	(*png_img)->row_pointers = NULL;
 	if (init_png_structs_in(*png_img, file) == -1)
 		return (1);
 	if (setjmp(png_jmpbuf((*png_img)->png_ptr)))
 		return (error_3(*png_img, "Error: Failed to setjmp.\n"));
 	png_init_io((*png_img)->png_ptr, (*png_img)->fp);
 	png_read_info((*png_img)->png_ptr, (*png_img)->info);
+	(*png_img)->color_type = \
+		png_get_color_type((*png_img)->png_ptr, (*png_img)->info);//
+	if (init_import_vars(*png_img))
+		return (error_3(*png_img, "Unsupported color type.\n"));
 	*image = (t_img *)malloc(sizeof(t_img));
 	if (!*image)
 		return (error_3(*png_img, "Failed to allocate memory for image.\n"));
 	return (0);
+}
+
+void	set_pixels(t_png_io *png_img, t_img *image, int width, int height)
+{
+	if (png_img->color_type == PNG_COLOR_TYPE_RGBA)
+		set_img_pixels_rgba(png_img, image, width, height);
+	else if (png_img->color_type == PNG_COLOR_TYPE_RGB)
+		set_img_pixels_rgb(png_img, image, width, height);
+	else
+		return ;
 }
 
 /* import_img() accepts an mlx_init() pointer, the path of a png img, and 
@@ -104,10 +98,7 @@ t_img	*import_png(void *mlx_ptr, const char *file, int *width, int *height)
 	*width = png_get_image_width(png_img->png_ptr, png_img->info);
 	*height = png_get_image_height(png_img->png_ptr, png_img->info);
 	if (new_img_init(mlx_ptr, image, *width, *height) == -1)
-	{
-		free(image);
-		return (error_2(png_img, "Error: new_img_init failure.\n"));
-	}
+		return (free(image), error_2(png_img, "Error: img_init failure.\n"));
 	if (malloc_rowptrs(png_img, *height))
 	{
 		mlx_destroy_image(mlx_ptr, image->img_ptr);
@@ -115,7 +106,7 @@ t_img	*import_png(void *mlx_ptr, const char *file, int *width, int *height)
 		return (NULL);
 	}
 	png_read_image(png_img->png_ptr, png_img->row_pointers);
-	set_img_pixels(png_img, image, *width, *height);
+	set_pixels(png_img, image, *width, *height);
 	clean_memory(png_img, *height, false);
 	return (image);
 }

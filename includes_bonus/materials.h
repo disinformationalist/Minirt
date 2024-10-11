@@ -10,6 +10,9 @@ typedef struct s_mat
 	double	spec;
 	double	shine;
 	double	ref;
+
+	double	transp;
+	double	refract;
 }	t_mat;
 
 typedef enum e_material

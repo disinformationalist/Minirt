@@ -103,12 +103,15 @@ typedef struct s_light
 
 typedef struct s_trace
 {
+	int				depth;
+	
 	t_img			img;
 	
 	t_img			*image1;//for importing an image for texture/backround
 	int				image1_w;
 	int				image1_h;
 
+	t_vec3			perturb;
 
 	t_amb			*amb;
 	t_cam			*cam;
@@ -179,23 +182,34 @@ typedef struct s_piece //for threads
 
 typedef struct t_comps
 {
-	double	t;
+	double			t;
 	//void	*object;
 	//t_type	object_type;
-	t_vec3	point;
-	t_vec3	eyev;
-	t_vec3	normal;
-	t_vec3 	light_dir;
-	t_vec3	reflectv;
+	t_vec3			point;
+	t_vec3			eyev;
+	t_vec3			normal;
+	t_vec3 			light_dir;
+	t_ray			ray;
+	t_vec3			reflectv;
 
-	t_mat	mat;
-	double	cos_angle;
-	bool	inside;
-	double  spot_int;
+	t_mat			mat;
+	double			cos_angle;
+	bool			inside;
+	double  		spot_int;
 
-	t_vec3	over_pnt;
+	t_vec3			over_pnt;
+	t_norm_color	color;
 
 }	t_comps;
+
+
+t_norm_color	check_intersects(t_trace *trace, t_ray r, t_track_hits *closest, int depth);
+void			find_closest(t_trace *trace, t_ray ray, t_track_hits *closest);
+t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);
+t_vec3			reflect(t_vec3 in, t_vec3 normal);
+t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_track_hits *closest, int depth);
+
+
 
 /***PARSING***/
 
@@ -302,7 +316,9 @@ void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
 //sphere utils
 void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
-t_norm_color	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest, int depth);
+
+//t_norm_color	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
 
 //lens utils
@@ -312,7 +328,7 @@ bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest);
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, int depth);
 bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
 
 //cylinder utils
@@ -372,11 +388,17 @@ uint8_t			clamp_color(double color);
 int				ft_round(double num);
 t_norm_color 	color(double r, double g, double b);
 
+unsigned int	clamped_col(t_norm_color col);
+
+
 t_norm_color pixel_color_get(int x, int y, t_img *img);
 
+double get_lumin(t_norm_color color);
+
+
 //texture map
-t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform);
-t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform);//place height / width with the image
+t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
+t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);//place height / width with the image
 
 
 
