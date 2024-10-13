@@ -17,21 +17,21 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_track_hits *close
 	check_cylinders(trace->cylinders, closest, ray, &t);
 }
 
-static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_hits *closest, int depth)
+static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths)
 {
 	t_norm_color	final_color;
 	
-	if (depth <= 0)
+	if (depths.refl <= 0)
 		return (color(0, 0, 0));
 
 	find_closest_s(trace, r, closest);
 
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
-		final_color = color_sphere(trace, r, closest, depth);
+		final_color = color_sphere(trace, r, closest, depths);
 	else if (closest->t != INFINITY && closest->object_type == LENS)
 		final_color = color_lens(trace, r, closest);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
-		final_color = color_plane(trace, r, closest, depth);
+		final_color = color_plane(trace, r, closest, depths);
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
 		final_color = color_cylinder(trace, r, closest);
 	else
@@ -58,7 +58,7 @@ static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_track_hits *
 		while (++k < trace->n)
 		{
 			r.dir = norm_vec(subtract_vec(subpix, r.origin));
-			sum = sum_rgbs(sum, check_intersects_s(trace, r, closest, trace->depth));
+			sum = sum_rgbs(sum, check_intersects_s(trace, r, closest, trace->depths));
 			subpix = add_vec(subpix, trace->move_x);
 		}
 		row_start = add_vec(row_start, trace->move_y);

@@ -8,11 +8,15 @@ void	set_le_vals(t_lens *new, char **line)
 	diam_str_1 = line[2];
 	new->sphere_1.center = get_coordinates(line[1], 1.0);
 	new->sphere_1.radius = get_double(&diam_str_1) / 2.0;
-	new->sphere_1.color = get_color(line[3], 1.0);	
+	new->sphere_1.color = get_color(line[3], 1.0);
+	new->sphere_1.mat = get_mat(DEFAULT);
+
 	diam_str_2 = line[5];
 	new->sphere_2.center = get_coordinates(line[4], 1.0);
 	new->sphere_2.radius = get_double(&diam_str_2) / 2.0;
 	new->sphere_2.color = get_color(line[6], 1.0);
+	new->sphere_2.mat = get_mat(DEFAULT);
+
 
 }
 void	calculate_more_vals(t_lens *new)

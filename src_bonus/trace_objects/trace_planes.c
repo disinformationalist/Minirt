@@ -59,10 +59,11 @@ t_comps	set_plcomps(t_plane *plane, double t, t_ray r, t_trace *trace)
 	else
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	return (comps);
 }
 
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, int depth)
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths)
 {
 	t_plane			*plane;
 	t_comps			comps;
@@ -85,7 +86,7 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, int dep
 				break;
 		}
 	}
-	ref_col = get_reflected(trace, comps, closest, depth);
+	ref_col = get_reflected(trace, comps, closest, depths);
 	return (get_final_color2(trace, comps, lt_color, ref_col));
 }
 

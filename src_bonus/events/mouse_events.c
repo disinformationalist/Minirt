@@ -85,6 +85,10 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 	{
 		if (get_diff(curr_col, trace->w_colors[trace->color_i]) > .5)
 			trace->color_i = match_index(trace->num_colors, trace->w_colors, curr_col);	
+		if (button == 5)
+			trace->color_i = (trace->color_i + 5) % trace->num_colors;
+		else if (button == 4)
+			trace->color_i = (trace->color_i - 5 + trace->num_colors) % trace->num_colors;
 		set_obj_color(trace->on, trace->w_colors[trace->color_i]);
 	}
 	/* else //scroll through textures. strg bump map on/off
@@ -95,10 +99,6 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 		//	trace->color_i = match_index(trace->num_colors, trace-)
 		set_obj_color(trace->on, shade);
 	} */
-	if (button == 5)
-		trace->color_i = (trace->color_i + 7) % trace->num_colors;
-	else if (button == 4)
-		trace->color_i = (trace->color_i - 7 + trace->num_colors) % trace->num_colors;
 
 	render(trace);
 	return (0);

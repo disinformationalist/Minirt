@@ -48,20 +48,6 @@ t_vec3	reflect(t_vec3 in, t_vec3 normal)
 {
 	double cos_angle;
 
-	/* in = norm_vec(in);
-	normal = norm_vec(normal); */
-	//in = neg(in);
-
 	cos_angle = dot_product(in, normal);
-
-	
-
-	t_vec3 ref = subtract_vec(in, scale_vec(2 * cos_angle, normal));
-	/* ref.x = -fabs(ref.x);
-	ref.y = -fabs(ref.y);
-	ref.z = -fabs(ref.z); */
-
-	
-		return (ref);
- 	
+	return (subtract_vec(in, scale_vec(2 * cos_angle, normal)));
 }

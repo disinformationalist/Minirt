@@ -33,7 +33,13 @@ typedef struct s_vec2
 {
 	double x;
 	double y;
-}	t_vec_2;
+}	t_vec2;
+
+typedef struct s_depths
+{
+	int	refl;
+	int	refr;
+}	t_depths;
 
 typedef struct s_position
 {

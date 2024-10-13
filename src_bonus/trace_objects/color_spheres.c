@@ -33,17 +33,17 @@ static inline t_comps	set_spcomps(t_sphere *sphere, double t, t_ray r, t_trace *
 	else
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	return (comps);
 }
 
-t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest, int depth)
+t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths)
 {
 	t_sphere		*sphere;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	//t_norm_color	color1;
 	t_light			*curr_lt;
-	t_norm_color	ref_col;
+	t_norm_color	refl_col;
 
 	sphere = (t_sphere *)closest->object;
 	lt_color = color(0, 0, 0);
@@ -62,8 +62,9 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest, int de
 
 
 	}
-	ref_col = get_reflected(trace, comps, closest, depth);
-	return (get_final_color2(trace, comps, lt_color, ref_col));
+	refl_col = get_reflected(trace, comps, closest, depths);
+	//refr_col = get refracted();//todo
+	return (get_final_color2(trace, comps, lt_color, refl_col));
 	//return (get_final_color1(trace, comps.color, lt_color, comps.mat.amb));
 }
 	//color1 = sphere->color;

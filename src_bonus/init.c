@@ -43,7 +43,9 @@ void info_init(t_trace *trace)
 	trace->layer = false;
 	trace->n = 3.0;
 
-	trace->depth = 5;
+	trace->depths.refl = 3;
+	trace->depths.refr = 3;
+
 	init_viewing(trace);
 }
 
