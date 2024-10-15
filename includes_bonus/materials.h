@@ -9,8 +9,8 @@ typedef struct s_mat
 	double	diff;
 	double	spec;
 	double	shine;
-	double	ref;
 
+	double	ref;
 	double	transp;
 	double	refract;
 }	t_mat;
@@ -21,7 +21,11 @@ typedef enum e_material
 	METAL,
 	MATTE,
 	GLASS,
-	MIRROR
+	MIRROR,
+	DIAMOND,
+	WATER,
+	CHROME,
+	AIR
 }	t_material;
 
 # endif

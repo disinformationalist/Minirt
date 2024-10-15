@@ -41,10 +41,10 @@ void info_init(t_trace *trace)
 
 	trace->supersample = false;
 	trace->layer = false;
-	trace->n = 3.0;
+	trace->n = 4.0;
 
-	trace->depths.refl = 3;
-	trace->depths.refr = 3;
+	trace->depths.refl = 5;
+	trace->depths.refr = 5;
 
 	init_viewing(trace);
 }
@@ -99,6 +99,7 @@ void trace_init(t_trace *trace)
 	trace->on->type = SPHERE;
 	events_init(trace);
 	init_transforms(trace);
+	
 
 	trace->image1 = import_png(trace->mlx_connect, "image_1.png", &trace->image1_w, &trace->image1_h);//protect and protect elsewhere.
 	//make some list of imgs in to manip and perform frees

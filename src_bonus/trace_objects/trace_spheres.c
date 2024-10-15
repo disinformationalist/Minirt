@@ -18,7 +18,7 @@ static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)//change  
 
 //using object space
 
-bool	ray_sphere_intersect(t_sphere sphere, t_ray ray, double *t)
+void	ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects)
 {
 	double	t1;
 	double	t2;
@@ -26,23 +26,37 @@ bool	ray_sphere_intersect(t_sphere sphere, t_ray ray, double *t)
 	double	b;
 	double	c;
 
-	ray = transform(ray, sphere.transform);
+	ray = transform(ray, sphere->transform);
 	a = dot_product(ray.dir, ray.dir);
 	b = 2.0 * dot_product(ray.origin, ray.dir);
 	c = dot_product(ray.origin, ray.origin) - 1;
 	if (check_solutions(vec(a, b, c, 0), &t1, &t2))
 	{
-		if (t1 > 0 && t1 < *t)
-			*t = t1;
-		if (t2 > 0 && t2 < *t)
-			*t = t2;
+		intersect(intersects, sphere, t1, SPHERE);
+		intersect(intersects, sphere, t2, SPHERE);
 	}
-	if (*t < INFINITY)
-		return (true);
-	return (false);
 }
 
-void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t)
+//add an intersection to the list
+
+void	intersect(t_intersects *intersects, void *object, double t, t_type type)
+{
+	int i;
+
+	i = intersects->count - 1;
+	while (i >= 0 && intersects->hits[i].t > t)
+	{
+		intersects->hits[i + 1] = intersects->hits[i];
+		i--;
+	}
+	i++;
+	intersects->hits[i].t = t;
+	intersects->hits[i].object = object;
+	intersects->hits[i].object_type = type;
+	intersects->count++;
+}
+
+void	check_spheres(t_sphere *spheres, t_intersects *intersects, t_ray ray)
 {
 	t_sphere	*curr_sp;
 
@@ -51,15 +65,7 @@ void	check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *
 	curr_sp = spheres;
 	while (true)
 	{
-		if (ray_sphere_intersect(*curr_sp, ray, t))
-		{
-			if (*t < closest->t && *t > 0)
-			{
-				closest->t = *t;
-				closest->object = curr_sp;
-				closest->object_type = SPHERE;
-			}
-		}
+		ray_sphere_intersect(curr_sp, ray, intersects);
 		curr_sp = curr_sp->next;
 		if (curr_sp == spheres)
 			break;

@@ -57,6 +57,7 @@ bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 		make_default_cy(&trace->cylinders, new);
 		trace->on->object = trace->cylinders;
 		trace->on->type = CYLINDER;
+		trace->total_ints += 4;
 		return (false);
 	}
 	cy_to_copy = *current;
@@ -65,6 +66,7 @@ bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 	new->prev = cy_to_copy;
 	cy_to_copy->next->prev = new;
 	cy_to_copy->next = new;
+	trace->total_ints += 4;
 	update_cylinder_ids(trace->cylinders);
 	return (false);
 }
@@ -102,6 +104,7 @@ void	pop_cy(t_trace *trace, t_cylinder **current)
 	}
 	free(to_destroy);
 	to_destroy = NULL;
+	trace->total_ints -= 4;
 	if (trace->cylinders)
 		update_cylinder_ids(trace->cylinders);
 }

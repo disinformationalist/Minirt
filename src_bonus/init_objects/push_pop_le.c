@@ -54,6 +54,7 @@ bool	insert_lecopy_after(t_trace *trace, t_lens **current)
 		make_default_le(&trace->lenses, new);
 		trace->on->object = trace->lenses;
 		trace->on->type = LENS;
+		trace->total_ints += 4;
 		return (false);
 	}
 	le_to_copy = *current;
@@ -62,6 +63,7 @@ bool	insert_lecopy_after(t_trace *trace, t_lens **current)
 	new->prev = le_to_copy;
 	le_to_copy->next->prev = new;
 	le_to_copy->next = new;
+	trace->total_ints += 4;
 	update_lens_ids(trace->lenses);
 	return (false);
 }
@@ -99,6 +101,7 @@ void	pop_le(t_trace *trace, t_lens **current)
 	}
 	free(to_destroy);
 	to_destroy = NULL;
+	trace->total_ints -= 4;
 	if (trace->lenses)
 		update_lens_ids(trace->lenses);
 }

@@ -84,6 +84,14 @@ int transfigure(int keycode, t_trace *trace)
 		change_mat(trace, trace->on, get_mat(GLASS));
 	else if (keycode == PAD_5)
 		change_mat(trace, trace->on, get_mat(MIRROR));
+	else if (keycode == PAD_6)
+		change_mat(trace, trace->on, get_mat(DIAMOND));
+	else if (keycode == PAD_7)
+		change_mat(trace, trace->on, get_mat(WATER));
+	else if (keycode == PAD_8)
+		change_mat(trace, trace->on, get_mat(CHROME));
+	else if (keycode == PAD_9)
+		change_mat(trace, trace->on, get_mat(AIR));
 	else
 		supersample_handle(keycode, trace);
 	return (0);

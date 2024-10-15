@@ -18,15 +18,20 @@ static inline t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, doub
 	return (norm_vec(norm));
 }
 
-static inline t_comps	set_cycomps(t_cylinder *cylinder, double t, t_ray r)
+static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects, t_ray r, t_trace *trace)
 {
 	t_comps	comps;
 	
-	comps.t = t;
-	comps.point = add_vec(r.origin, scale_vec(t, r.dir));
+	(void)trace;
+	comps.t = intersects->closest->t;
+	comps.ray = r;
+	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	comps.normal = cyl_normal_at(comps.point, cylinder->transform, cylinder->height / 2.0);
+	//comps.color = texture_cy_at(trace, comps.point, cylinder->transform, &comps.normal);//if texturing sets texture and bumps//todo for cyl
+	comps.color = cylinder->color;//no texture, build out color options with patterns or texture
 	comps.eyev = neg(r.dir);
 	comps.mat = cylinder->mat;
+	set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
 	{
 		comps.inside = true;
@@ -34,23 +39,25 @@ static inline t_comps	set_cycomps(t_cylinder *cylinder, double t, t_ray r)
 	}
 	else
 		comps.inside = false;
-	comps.over_pnt = add_vec(comps.point, scale_vec(1e-5, comps.normal));
+	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	return (comps);
 }
 
-t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
+t_norm_color color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
 {
 	t_cylinder		*cylinder;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	t_norm_color	color1;
 	t_light			*curr_lt;
-
-	cylinder = (t_cylinder *)closest->object;
+	t_norm_color	refl_col;
+	t_norm_color	refr_col;
+	
+	cylinder = (t_cylinder *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
 	if (trace->lights)
 	{
-		comps = set_cycomps(cylinder, closest->t, r);
+		comps = set_cycomps(cylinder, intersects, r, trace);
 		curr_lt = trace->lights;
 		while (true)
 		{
@@ -60,8 +67,9 @@ t_norm_color color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
 			if (curr_lt == trace->lights)
 				break;
 		}	
-	//cylinder->color = stripe_at(int_pnt, cylinder->transform);//trying color function
 	}
-	color1 = cylinder->color;
-	return (get_final_color1(trace, color1, lt_color, comps.mat.amb));
+	refl_col = get_reflected(trace, comps, intersects, depths);
+	refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color3(trace, comps, lt_color, refl_col, refr_col));
 }
+//	return (get_final_color1(trace, color1, lt_color, comps.mat.amb));

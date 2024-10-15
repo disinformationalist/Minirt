@@ -106,23 +106,29 @@ bool	ray_lens_intersect(t_lens lens, t_ray ray, double *t)
 
 //using object space
 
-void	check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t)
+void	check_lenses(t_lens *lenses, t_intersects *intersects, t_track_hits *closest, t_ray ray)
 {
 	t_lens		*curr_le;
+	double		t;
 
 	if (lenses == NULL)
 		return ;
 	curr_le = lenses;
+	t = INFINITY;
 	while (true)
 	{
-		if (ray_lens_intersect(*curr_le, ray, t))
+		if (ray_lens_intersect(*curr_le, ray, &t))
 		{
-			if (*t < closest->t && *t > 0)
+			if (t < closest->t && t > 0)
 			{
-				closest->t = *t;
+				closest->t = t;
 				closest->object = curr_le;
 				closest->object_type = LENS;
 			}
+			intersects->hits[intersects->count].t = t;
+			intersects->hits[intersects->count].object = curr_le;
+			intersects->hits[intersects->count].object_type = LENS;
+			intersects->count++;
 		}
 		curr_le = curr_le->next;
 		if (curr_le == lenses)

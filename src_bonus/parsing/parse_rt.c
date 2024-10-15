@@ -85,6 +85,18 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 	return (status);
 }
 
+void	count_ints(t_trace *trace, t_obj_counts counts)
+{
+	int	total_intersects;
+
+	total_intersects = 0;
+	total_intersects += 2 * counts.sphere_count;
+	total_intersects += 4 * counts.lens_count; 
+	total_intersects += 4 * counts.cyl_count;
+	total_intersects += counts.plane_count;
+	trace->total_ints = total_intersects;
+}
+
 void	parse_rt(t_trace *trace, char ***rt_file)
 {
 	t_obj_counts	counts;
@@ -100,6 +112,7 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 	if (counts.cam_count == 0)
 		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
 	" Camera line must begin with 'C'\n");
+	count_ints(trace, counts);
 	check_ids(rt_file);
 	init_obs(trace);
 	if (build_lists(trace, rt_file))

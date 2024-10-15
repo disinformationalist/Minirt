@@ -62,7 +62,7 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 	}
 }
 
-t_norm_color get_reflected(t_trace *trace, t_comps comps, t_track_hits *closest, t_depths depths)
+t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)
 {
 	t_norm_color ref_col;
 
@@ -70,7 +70,7 @@ t_norm_color get_reflected(t_trace *trace, t_comps comps, t_track_hits *closest,
 	{
 		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
 		depths.refl--;
-		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), closest, depths);
+		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), intersects, depths);
 	}
 	else
 		ref_col = color(0, 0, 0);
@@ -93,7 +93,7 @@ bool	refract(double n_ratio, t_vec3 eyev, t_vec3 normal, t_vec3 *refr_dir)
 	return (true);
 }
 
-t_norm_color get_refracted(t_trace *trace, t_comps comps, t_track_hits *closest, t_depths depths)
+t_norm_color get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	refr_col;
 	t_vec3			refractv;
@@ -105,9 +105,34 @@ t_norm_color get_refracted(t_trace *trace, t_comps comps, t_track_hits *closest,
 		if (!refracted)
 			return (color(0, 0, 0));
 		depths.refr--;
-		refr_col = check_intersects(trace, ray(refractv, comps.under_pnt), closest, depths);
+		refr_col = check_intersects(trace, ray(refractv, comps.under_pnt), intersects, depths);
 	}
 	else
 		refr_col = color(0, 0, 0);
 	return (refr_col);
+}
+
+double schlick(t_comps comps)
+{
+	double n;
+	double cos;
+	double sin2_t;
+	double cos_t;
+	double res;
+
+	cos = dot_product(comps.eyev, comps.normal);
+	if (comps.n1 > comps.n2)
+	{
+		n = comps.n1 / comps.n2;
+		sin2_t = n * n * (1.0 - cos * cos);
+		if (sin2_t > 1.0)
+			return (1.0);
+		cos_t = sqrt(1.0 - sin2_t);
+		cos = cos_t;
+	}
+	res = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
+	res *= res;
+	cos =  1 - cos;
+	res = res + (1 - res) * cos * cos * cos * cos * cos;
+	return (res);
 }

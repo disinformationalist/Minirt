@@ -95,6 +95,12 @@ typedef struct s_on
 	void	*next;
 }	t_on;
 
+typedef struct s_cons
+{
+	void			*obj;
+	t_type			type;
+}	t_cons;
+
 /***SINGLE OBJECTS***/
 
 typedef struct s_amb

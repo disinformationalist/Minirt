@@ -31,7 +31,7 @@ void	render_scene_s(t_trace *trace)
 		}
 	}
 	join_threads(trace);
-	free_closests(trace, piece, trace->num_rows, trace->num_cols);
+	free_closests(trace, piece, trace->num_rows - 1, trace->num_cols);
 }
 
 //render_scene starts by breaking up the screen into sections of pixels and assigns the limits of each section to a t_peice, each to be worked by a thread
@@ -60,7 +60,7 @@ void	render_scene(t_trace *trace)
 		}
 	}
 	join_threads(trace);
-	free_closests(trace, piece, trace->num_rows, trace->num_cols);
+	free_closests(trace, piece, trace->num_rows - 1, trace->num_cols);
 }
 
 void	render(t_trace *trace)

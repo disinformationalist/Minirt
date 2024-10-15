@@ -95,7 +95,7 @@ bool	within_height(t_ray ray, double min, double max, double t)
 	return (false);
 }
 
-bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
+void	ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects)
 {
 	t_vec3	abc;
 	double	t1;
@@ -104,32 +104,29 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	double 	t4;
 	double	half_h;
 
-	half_h = cylinder.height / 2.0;// store this as cyl height  at parse?
-	ray = transform(ray, cylinder.transform);
+	half_h = cylinder->height / 2.0;// store this as cyl height  at parse?
+	ray = transform(ray, cylinder->transform);
 	compute_abc(&abc, ray);
 	if (abc.x != 0)
 	{
 		if (check_trunk_solutions(abc, &t1, &t2))
 		{
-			if (within_height(ray, -half_h, half_h, t1) && t1 < *t)
-					*t = t1;
-			if (within_height(ray, -half_h, half_h, t2) && t2 < *t)
-					*t = t2;
+			if (within_height(ray, -half_h, half_h, t1))
+				intersect(intersects, cylinder, t1, CYLINDER);
+			if (within_height(ray, -half_h, half_h, t2))
+				intersect(intersects, cylinder, t2, CYLINDER);
 		}
 	}
 	if (intersect_caps(ray, half_h, &t3, &t4))
 	{
-		if (t3 > 0 && t3 < *t)
-			*t = t3;
-		if (t4 > 0 && t4 < *t)
-			*t = t4;
+		if (t3 < INFINITY)
+			intersect(intersects, cylinder, t3, CYLINDER);
+		if (t4 < INFINITY)
+			intersect(intersects, cylinder, t4, CYLINDER);
 	}
-	if (*t < INFINITY)
-		return (true);
-	return (false);
 }
 
-void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t)
+void	check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray)
 {
 	t_cylinder	*curr_cy;
 
@@ -138,16 +135,7 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, do
 	curr_cy = cylinders;
 	while (true)
 	{
-		//*t = INFINITY;
-		if (ray_cylinder_intersect(*curr_cy, ray, t))
-		{
-			if (*t < closest->t)
-			{
-				closest->t = *t;//move these to outer function after checking all t's for a shape, let t track for each shape, close obj must stay..
-				closest->object = curr_cy;
-				closest->object_type = CYLINDER;
-			}
-		}
+		ray_cylinder_intersect(curr_cy, ray, intersects);
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
 			break;

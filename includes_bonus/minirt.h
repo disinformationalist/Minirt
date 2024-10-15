@@ -19,6 +19,14 @@ typedef struct s_track_hits
 	t_type	object_type;
 }	t_track_hits;
 
+typedef struct s_intersects
+{
+	t_track_hits	*hits;
+	int				count;
+	int				size;
+	t_track_hits	*closest;
+}	t_intersects;
+
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
 
 typedef struct s_sphere
@@ -104,6 +112,7 @@ typedef struct s_light
 typedef struct s_trace
 {
 	t_depths		depths;
+	int				total_ints;
 	
 	t_img			img;
 	
@@ -177,7 +186,8 @@ typedef struct s_piece //for threads
 	int			y_s;
 	int			y_e;
 	t_trace		*trace;
-	t_track_hits *closest;
+	//t_track_hits *closest;
+	t_intersects	*intersects;
 }	t_piece;
 
 typedef struct t_comps
@@ -207,12 +217,22 @@ typedef struct t_comps
 }	t_comps;
 
 
-t_norm_color	check_intersects(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths);
-void			find_closest(t_trace *trace, t_ray ray, t_track_hits *closest);
-t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);
+t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
+
 t_vec3			reflect(t_vec3 in, t_vec3 normal);
-t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_track_hits *closest, t_depths depths);
-t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_track_hits *closest, t_depths depths);
+double			schlick(t_comps comps);
+
+
+t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
+t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
+
+void			intersect(t_intersects *intersects, void *object, double t, t_type type);
+void			set_indicies(t_intersects *intersects, double *n1, double *n2);
+
+t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);
+t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
+
 
 
 
@@ -320,36 +340,34 @@ int				new_img_init(void *mlx_con, t_img *img, int width, int height);
 void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
 //sphere utils
-void			check_spheres(t_sphere *spheres, t_track_hits *closest, t_ray ray, double *t);
-t_norm_color color_sphere(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths);
 
-//t_norm_color	color_sphere(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_sphere_intersect(t_sphere sphere, t_ray r, double *t);
+void			check_spheres(t_sphere *spheres, t_intersects *intersects, t_ray ray);
+t_norm_color	color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+
+void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
+bool			ray_sphere_intersect2(t_sphere sphere, t_ray r, double *t);
 
 //lens utils
-void			check_lenses(t_lens *lenses, t_track_hits *closest, t_ray ray, double *t);
+void			check_lenses(t_lens *lenses,  t_intersects *intersects, t_track_hits *closest, t_ray ray);
 t_norm_color	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
 bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
-void			check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t);
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths);
-bool			ray_plane_intersect(t_plane plane, t_ray ray, double *t);
+void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+bool			ray_plane_intersect2(t_plane plane, t_ray ray, double *t);
+
 
 //cylinder utils
-void			check_cylinders(t_cylinder *cylinders, t_track_hits *closest, t_ray ray, double *t);
-t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t);
+void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray);
+t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
-//light
+//t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
+bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double *t);
 
-//double			get_light_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir);//, t_mat sphere->mat
-//double	get_light_int(t_comps comps, t_mat mat, t_ltype type);
+void	ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
-//double			get_light_int(t_comps comps, t_mat mat);
-
-//double			get_spot_int(t_vec3 light_dir, t_light *splight);
-
+//light utils
 void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
 
 

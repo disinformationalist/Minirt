@@ -56,6 +56,7 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 		make_default_sp(&trace->spheres, new);
 		trace->on->object = trace->spheres;
 		trace->on->type = SPHERE;
+		trace->total_ints += 2;
 		return (false);
 	}
 	sp_to_copy = *current;
@@ -65,6 +66,7 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 	sp_to_copy->next->prev = new;
 	sp_to_copy->next = new;
 	update_sphere_ids(trace->spheres);
+	trace->total_ints += 2;
 	return (false);
 }
 
@@ -101,6 +103,7 @@ void	pop_sp(t_trace *trace, t_sphere **current)
 	}
 	free(to_destroy);
 	to_destroy = NULL;
+	trace->total_ints -= 2;
 	if (trace->spheres)
 		update_sphere_ids(trace->spheres);
 }

@@ -56,6 +56,7 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 		make_default_pl(&trace->planes, new);
 		trace->on->object = trace->planes;
 		trace->on->type = PLANE;
+		trace->total_ints += 1;
 		return (false);
 	}
 	pl_to_copy = *current;
@@ -64,6 +65,7 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 	new->prev = pl_to_copy;
 	pl_to_copy->next->prev = new;
 	pl_to_copy->next = new;
+	trace->total_ints += 1;
 	update_plane_ids(trace->planes);
 	return (false);
 }
@@ -101,6 +103,7 @@ void	pop_pl(t_trace *trace, t_plane **current)
 	}
 	free(to_destroy);
 	to_destroy = NULL;
+	trace->total_ints -= 1;
 	if (trace->planes)
 		update_plane_ids(trace->planes);
 }

@@ -1,18 +1,17 @@
 #include "minirt.h"
 
-bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
+static inline void	ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects)
 {
-	ray = transform(ray, plane.transform);
+	double	t;
 
+	ray = transform(ray, plane->transform);
 	if (fabs(ray.dir.y) < 1e-6)
-		return (false);
-	*t = -ray.origin.y / ray.dir.y;
-	if (*t > 0)
-		return (true);
-	return (false);
+		return ;
+	t = -ray.origin.y / ray.dir.y;
+	intersect(intersects, plane, t, PLANE);
 }
 
-void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
+void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 {
 	t_plane		*curr_pl;
 
@@ -21,29 +20,21 @@ void	check_planes(t_plane *planes, t_track_hits *closest, t_ray ray, double *t)
 	curr_pl = planes;
 	while (true)
 	{
-		if (ray_plane_intersect(*curr_pl, ray, t))
-		{
-			if (*t < closest->t)
-			{
-				closest->t = *t;
-				closest->object = curr_pl;
-				closest->object_type = PLANE;
-			}
-		}
+		ray_plane_intersect(curr_pl, ray, intersects);
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
 			break;
 	}
 }
 
-t_comps	set_plcomps(t_plane *plane, double t, t_ray r, t_trace *trace)
+t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *trace)
 {
 	t_comps	comps;
 	
 	(void)trace;
-	comps.t = t;
+	comps.t = intersects->closest->t;
 	comps.ray = r;
-	comps.point = add_vec(r.origin, scale_vec(t, r.dir));
+	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	comps.normal = plane->norm;
 	//comps.color = texture_plane_at(trace, comps.point, plane->transform, &comps.normal);//if texturing
 	//comps.color = plane->color;
@@ -51,6 +42,7 @@ t_comps	set_plcomps(t_plane *plane, double t, t_ray r, t_trace *trace)
 
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;
+	set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
 	{
 		comps.inside = true;
@@ -63,19 +55,21 @@ t_comps	set_plcomps(t_plane *plane, double t, t_ray r, t_trace *trace)
 	return (comps);
 }
 
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, t_depths depths)
+t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
 {
 	t_plane			*plane;
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
 	t_norm_color	 ref_col;
+	t_norm_color	refr_col;
 
-	plane = (t_plane *)closest->object;
+
+	plane = (t_plane *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
+	comps = set_plcomps(plane, intersects, r, trace);
 	if (trace->lights)//maybe require light?not handling just amb reflect? or place outside of this.
 	{
-		comps = set_plcomps(plane, closest->t, r, trace);
 		curr_lt = trace->lights;
 		while (true)
 		{
@@ -86,10 +80,13 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest, t_depth
 				break;
 		}
 	}
-	ref_col = get_reflected(trace, comps, closest, depths);
-	return (get_final_color2(trace, comps, lt_color, ref_col));
+	ref_col = get_reflected(trace, comps, intersects, depths);
+	refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color3(trace, comps, lt_color, ref_col, refr_col));
 }
 
+	//ref_col = color(0, 0, 0);
+	//(void)depths;
 
 
 
