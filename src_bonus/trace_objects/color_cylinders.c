@@ -55,9 +55,9 @@ t_norm_color color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t
 	
 	cylinder = (t_cylinder *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
+	comps = set_cycomps(cylinder, intersects, r, trace);
 	if (trace->lights)
 	{
-		comps = set_cycomps(cylinder, intersects, r, trace);
 		curr_lt = trace->lights;
 		while (true)
 		{

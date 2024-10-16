@@ -1,5 +1,5 @@
 #Ambient:   Intensity 																     	 R | G | B
-A           0.100                                                                            255,255,255
+A           0.150                                                                            255,255,255
 
 
 #Camera:    Cen_x | Cen_y | Cen_z   	  Ori_x | Ori_y | Ori_z  	  		 	   FOV
@@ -8,13 +8,13 @@ C           0.000,0.000,-6.00             0.000,0.000,1.000                     
 #SpLights:    Cen_x | Cen_y | Cen_z     	  Ori_x | Ori_y | Ori_z  		Intensity			R | G | B       INNERCONE	OUTERCONE
 
 #Lights:    Cen_x | Cen_y | Cen_z    								    Intensity
-L           5.001,4.501,4.001                                           0.750   		     0,0,255
+L           5.001,4.501,0.001                                           0.750   		     255,255,255
 
-L           -5.001,4.501,4.001                                          0.750                255,0,0             
+#L           -5.001,4.501,4.001                                          0.750                255,0,0             
 
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z         								Diameter      		  R | G | B
-sp          0.000,0.000,0.00                                            2.000                 200,50,200
+sp          0.000,0.000,0.00                                            2.000                 55,0,0
 
 
