@@ -81,6 +81,7 @@ typedef struct s_cylinder
 	t_vec3				norm;
 	double				radius;
 	double				height;
+	double				half_h;
 	t_norm_color		color;
 	t_mat				mat;
 	t_matrix_4x4		transform;
@@ -116,7 +117,7 @@ typedef struct s_trace
 	
 	t_img			img;
 	
-	t_img			*image1;//for importing an image for texture/backround
+	t_img			*image1;//for importing an image for texture/backround.. MAKE LIST or array FOR THESE
 	int				image1_w;
 	int				image1_h;
 
@@ -343,9 +344,10 @@ void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
 void			check_spheres(t_sphere *spheres, t_intersects *intersects, t_ray ray);
 t_norm_color	color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-
 void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
-bool			ray_sphere_intersect2(t_sphere sphere, t_ray r, double *t);
+
+//sp shadow
+bool			check_sp_dist(t_sphere *spheres, t_ray ray, double dist);
 
 //lens utils
 void			check_lenses(t_lens *lenses,  t_intersects *intersects, t_track_hits *closest, t_ray ray);
@@ -355,7 +357,10 @@ bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 //plane utils
 void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-bool			ray_plane_intersect2(t_plane plane, t_ray ray, double *t);
+
+//pl shadow
+bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
+
 
 
 //cylinder utils
@@ -363,7 +368,9 @@ void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ra
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 //t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double *t);
+//bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double *t);
+bool	ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
+
 
 void	ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 

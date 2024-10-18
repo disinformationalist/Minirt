@@ -26,7 +26,7 @@ static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = cyl_normal_at(comps.point, cylinder->transform, cylinder->height / 2.0);
+	comps.normal = cyl_normal_at(comps.point, cylinder->transform, cylinder->half_h);
 	//comps.color = texture_cy_at(trace, comps.point, cylinder->transform, &comps.normal);//if texturing sets texture and bumps//todo for cyl
 	comps.color = cylinder->color;//no texture, build out color options with patterns or texture
 	comps.eyev = neg(r.dir);

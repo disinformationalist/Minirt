@@ -115,6 +115,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/color_cylinders.c \
 ./src_bonus/trace_objects/light_utils.c \
 ./src_bonus/trace_objects/shadow_rays.c \
+./src_bonus/trace_objects/cyl_shadow.c \
+./src_bonus/trace_objects/sp_shadow.c \
 ./src_bonus/trace_objects/set_indicies.c \
 ./src_bonus/testing/print_all_objects.c \
 ./src_bonus/testing/print_utils.c \
