@@ -40,6 +40,51 @@ static inline double	get_light_int(t_comps comps, t_mat mat)
 	return (light_int);
 }
 
+static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
+{
+	t_vec3		move_u;
+	t_vec3		move_v;
+	t_point		pos;
+	static int	i = 0;
+
+	move_u = scale_vec(u + light.jitter[i % light.samples], light.uvec);
+	i++;
+	move_v = scale_vec(v + light.jitter[i % light.samples], light.vvec);
+	pos = add_vec(light.corner, add_vec(move_u, move_v));
+	return (pos);
+}
+
+static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comps)
+{
+	double	tot_int;
+	int		i;
+	int		j;
+	t_point lt_pos;
+	t_vec3	light_dir;
+
+	tot_int = 0.0;
+	comps->sqlt_int = 0.0;
+	j = -1;
+	while (++j < light.vsteps)
+	{
+		i = -1;
+		while(++i < light.usteps)
+		{
+			lt_pos = pnt_on_light(light, i, j);
+			light_dir = norm_vec(subtract_vec(lt_pos, comps->point));
+			comps->light_dir = norm_vec(subtract_vec(lt_pos, comps->point));
+			comps->cos_angle = dot_product(comps->normal, comps->light_dir);
+			comps->sqlt_int += get_light_int(*comps, comps->mat);
+			if (!obscured_b(trace, ray(light_dir, comps->over_pnt), lt_pos, comps->point))
+				tot_int += 1.0;
+		}
+	}
+	comps->sqlt_int /= light.samples;
+	return (tot_int / light.samples);
+}
+
+//-------------------------------------
+
 //handle all non ambient light contribution for each source
 
 void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt)
@@ -56,83 +101,14 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 	}
 	else
 	{
+		/* // for sqlight if (curr_lt->type == AREA, sq)
+		double sqlt_inten;
+		sqlt_inten = intensity_at(trace, *(trace->sqlt), comps);
+		*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color)); */
+		
+		//point light
 		comps->cos_angle = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, ray(comps->light_dir, comps->over_pnt), curr_lt->center, comps->point))
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));
 	}
-}
-
-t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)
-{
-	t_norm_color ref_col;
-
-	if (comps.mat.ref && depths.refl > 0)
-	{
-		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
-		depths.refl--;
-		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), intersects, depths);
-	}
-	else
-		ref_col = color(0, 0, 0);
-	return (ref_col);
-}
-
-bool	refract(double n_ratio, t_vec3 eyev, t_vec3 normal, t_vec3 *refr_dir)
-{
-	double sin2_t;
-	double cos_i;
-	double cos_t;
-
-	cos_i = dot_product(eyev, normal);
-	sin2_t = n_ratio * n_ratio * ( 1 - cos_i * cos_i);
-	if (sin2_t > 1.0)//handle tot int reflect.
-		return (false);
-	cos_t = sqrt(1.0 - sin2_t);
-	*refr_dir = scale_vec(n_ratio * cos_i - cos_t, normal); 
-	*refr_dir = norm_vec(subtract_vec(*refr_dir, scale_vec(n_ratio, eyev)));
-	return (true);
-}
-
-t_norm_color get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)
-{
-	t_norm_color	refr_col;
-	t_vec3			refractv;
-	bool			refracted;
-
-	if (comps.mat.transp && depths.refr > 0)
-	{
-		refracted = refract(comps.n1 / comps.n2, comps.eyev, comps.normal, &refractv);
-		if (!refracted)
-			return (color(0, 0, 0));
-		depths.refr--;
-		refr_col = check_intersects(trace, ray(refractv, comps.under_pnt), intersects, depths);
-	}
-	else
-		refr_col = color(0, 0, 0);
-	return (refr_col);
-}
-
-double schlick(t_comps comps)
-{
-	double n;
-	double cos;
-	double sin2_t;
-	double cos_t;
-	double res;
-
-	cos = dot_product(comps.eyev, comps.normal);
-	if (comps.n1 > comps.n2)
-	{
-		n = comps.n1 / comps.n2;
-		sin2_t = n * n * (1.0 - cos * cos);
-		if (sin2_t > 1.0)
-			return (1.0);
-		cos_t = sqrt(1.0 - sin2_t);
-		cos = cos_t;
-	}
-	res = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
-	res *= res;
-	cos =  1 - cos;
-	res = res + (1 - res) * cos * cos * cos * cos * cos;
-	return (res);
 }

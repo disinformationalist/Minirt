@@ -65,6 +65,7 @@ t_norm_color get_final_color1(t_trace *trace, t_norm_color color, t_norm_color l
 	return (color_out);
 }
 
+//current in use
 t_norm_color get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col)
 {
 	t_norm_color	color_out;

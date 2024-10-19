@@ -43,11 +43,3 @@ t_vec3	mult_vec(t_vec3 v1, t_vec3 v2)
 	res.w = 0;
 	return (res);
 }
-
-t_vec3	reflect(t_vec3 in, t_vec3 normal)
-{
-	double cos_angle;
-
-	cos_angle = dot_product(in, normal);
-	return (subtract_vec(in, scale_vec(2 * cos_angle, normal)));
-}

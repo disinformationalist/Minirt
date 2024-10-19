@@ -57,6 +57,9 @@ NUM PAD 1 - 5 => change material of current object
 int	close_win(t_trace *trace)
 {	
 	free_all_objects(trace);
+
+	free(trace->sqlt);////-----------
+	free(trace->sqlt->jitter);//---------
 	free(trace->on);
 	free(trace->w_colors);
 	mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);//for freeing the import

@@ -2,13 +2,13 @@
 
 static inline void add_con(t_cons *cons, int *size, void *obj, t_type type)
 {
-	if (*size < 100)
+	if (*size < 200)
 	{
 		cons[*size].obj = obj;
 		cons[*size].type = type;
 		(*size)++;
 	}
-	else//handle too many error
+	else
 		return ;
 }
 
@@ -48,6 +48,7 @@ static inline void check_and_set(int size, double *n, t_cons *cons)
 	else
 		set_n(n, &cons[size - 1]);
 }
+
 //must double check that this works correctly use single ray test...
 static inline int search_cons(int *size, t_track_hits *current, t_cons *cons)
 {
@@ -78,21 +79,15 @@ static inline int search_cons(int *size, t_track_hits *current, t_cons *cons)
 
 void	set_indicies(t_intersects *intersects, double *n1, double *n2)
 {
-	t_cons			cons[100];
+	t_track_hits	*current;
+	t_cons			cons[200];
 	int				size;
 	int				i;
-	t_track_hits	*current;
 	int				found;
 
 	size = 0;
 	*n1 = 1.0;
 	*n2 = 1.0;
-	i = -1;
-	while (++i < 100)//init maybe dont need
-	{
-		cons[i].obj = NULL;
-		cons[i].type = -1;
-	}
 	i = -1;
 	while (++i < intersects->count)
 	{
@@ -110,6 +105,12 @@ void	set_indicies(t_intersects *intersects, double *n1, double *n2)
 	}
 }
 
+	/* i = -1;
+	while (++i < 100)//init maybe dont need
+	{
+		cons[i].obj = NULL;
+		cons[i].type = -1;
+	} */
 
 /* old version 
 void	set_indicies(t_intersects *intersects, double *n1, double *n2)

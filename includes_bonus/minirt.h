@@ -107,11 +107,28 @@ typedef struct s_light
 	struct s_light		*next;
 }	t_light;
 
-
+//---------sqlight test
+typedef struct s_sqlight
+{
+	t_point	corner;
+	t_vec3	v1;
+	t_vec3	v2;
+	t_vec3	uvec;
+	t_vec3	vvec;
+	int		usteps;
+	int		vsteps;
+	int		samples;
+	t_norm_color	color;
+	t_point	pos;
+	double	*jitter;
+} t_sqlight;
+//-----------------------
 /***MAIN STRUCT***/
 
 typedef struct s_trace
 {
+	t_sqlight		*sqlt;
+	
 	t_depths		depths;
 	int				total_ints;
 	
@@ -194,6 +211,7 @@ typedef struct s_piece //for threads
 typedef struct t_comps
 {
 	double			t;
+	double			sqlt_int;
 	//void	*object;
 	//t_type	object_type;
 	t_vec3			point;
@@ -221,7 +239,7 @@ typedef struct t_comps
 t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
 
-t_vec3			reflect(t_vec3 in, t_vec3 normal);
+//t_vec3			reflect(t_vec3 in, t_vec3 normal);
 double			schlick(t_comps comps);
 
 

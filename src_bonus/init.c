@@ -72,6 +72,40 @@ void init_transforms(t_trace *trace)
 	set_cy_transforms(trace);
 	set_le_transforms(trace);
 }
+//---------testing sq
+
+double	randf(void)
+{
+	return ((double)rand() / (double)(RAND_MAX + 1.0));
+}
+
+void	init_sqlight(t_trace *trace, t_sqlight *light)
+{
+	int i;
+
+	light->pos = vec(-7, 4.5, -9, 1);//center
+	light->color = color(1, 1, 1);
+	light->v1 = vec(2, 0, 0, 0);//size of light in each dir
+	light->v2 = vec(0, 0, 2, 0);
+	light->corner = subtract_vec(light->pos, div_vec(2, add_vec(light->v1, light->v2)));
+	light->usteps = 3;
+	light->vsteps = 3;
+	light->uvec = div_vec(light->usteps, light->v1);
+	light->vvec = div_vec(light->vsteps, light->v2);
+	light->samples = light->usteps * light->vsteps;
+	//malloced array of size of samples of randfs
+	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));//this seems to be working
+	if (!light->jitter)
+	{
+		free(trace->sqlt);
+		clear_all(trace);
+		//free textures
+	//protect
+	}
+	i = -1;
+	while (++i < 3 + light->samples)
+		light->jitter[i] = randf();
+}
 
 void trace_init(t_trace *trace)
 {
@@ -106,4 +140,10 @@ void trace_init(t_trace *trace)
 	//img type specifier for bringing in images
 	//mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);
 	//free(trace->image1);
+	trace->sqlt = (t_sqlight *)malloc(sizeof(t_sqlight));
+	if (!trace->sqlt)
+		clear_all(trace);
+		//free all textures
+	//pro
+	init_sqlight(trace, trace->sqlt);
 }
