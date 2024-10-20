@@ -143,14 +143,14 @@ double	get_lelight_int(t_vec3 norm, t_vec3 light_dir, t_vec3 view_dir)//, t_mat 
 	t_vec3	ref;
 	double	spec;
 	double	light_int;
-	double	cos_angle;
+	double	cos_a;
 
-	cos_angle = dot_product(norm, light_dir);
-	ref = subtract_vec(scale_vec(2 * cos_angle, norm), light_dir);
+	cos_a = dot_product(norm, light_dir);
+	ref = subtract_vec(scale_vec(2 * cos_a, norm), light_dir);
 	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
 	//spec = pow(fmax(dot_product(ref, view_dir), 0), mat.shine); //use these when mat is assigned
-	light_int = fmax(cos_angle, 0.0) + .5 * spec;
-	//light_int = mat.diff * fmax(cos_angle, 0.0) + mat.spec * spec;
+	light_int = fmax(cos_a, 0.0) + .5 * spec;
+	//light_int = mat.diff * fmax(cos_a, 0.0) + mat.spec * spec;
 	//return (spotlight(light_dir) * light_int);//trying sp_light
 	return (light_int);//trying sp_light
 

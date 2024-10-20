@@ -38,6 +38,7 @@ void info_init(t_trace *trace)
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
 	trace->curr_lt = trace->lights;
+	trace->curr_cu = trace->cubes;
 
 	trace->supersample = false;
 	trace->layer = false;
@@ -71,6 +72,7 @@ void init_transforms(t_trace *trace)
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
 	set_le_transforms(trace);
+	set_cu_transforms(trace);
 }
 //---------testing sq
 
@@ -83,18 +85,20 @@ void	init_sqlight(t_trace *trace, t_sqlight *light)
 {
 	int i;
 
-	light->pos = vec(-7, 4.5, -9, 1);//center
+//	light->center = vec(-7, 4.5, -9, 1);//center
+	light->center = vec(0, 5, 0, 1);//center
+	light->brightness = 1.0;
 	light->color = color(1, 1, 1);
 	light->v1 = vec(2, 0, 0, 0);//size of light in each dir
 	light->v2 = vec(0, 0, 2, 0);
-	light->corner = subtract_vec(light->pos, div_vec(2, add_vec(light->v1, light->v2)));
-	light->usteps = 3;
-	light->vsteps = 3;
+	light->corner = subtract_vec(light->center, div_vec(2, add_vec(light->v1, light->v2)));
+	light->usteps = 8;
+	light->vsteps = 8;
 	light->uvec = div_vec(light->usteps, light->v1);
 	light->vvec = div_vec(light->vsteps, light->v2);
 	light->samples = light->usteps * light->vsteps;
 	//malloced array of size of samples of randfs
-	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));//this seems to be working
+	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));//this seems to be working, maybe better with one for each thread..in piece
 	if (!light->jitter)
 	{
 		free(trace->sqlt);

@@ -45,12 +45,12 @@ static inline double	get_cylight_int(t_vec3 norm, t_vec3 light_dir,
 	t_vec3	ref;
 	double	spec;
 	double	light_int;
-	double	cos_angle;
+	double	cos_a;
 
-	cos_angle = dot_product(norm, light_dir);
-	ref = subtract_vec(scale_vec(2 * cos_angle, norm), light_dir);
+	cos_a = dot_product(norm, light_dir);
+	ref = subtract_vec(scale_vec(2 * cos_a, norm), light_dir);
 	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
-	light_int = fmax(cos_angle, 0.0) + .5 * spec;
+	light_int = fmax(cos_a, 0.0) + .5 * spec;
 	return (light_int);
 }
 

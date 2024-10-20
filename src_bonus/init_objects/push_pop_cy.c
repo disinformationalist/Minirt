@@ -39,6 +39,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
+	new->shadow = true;
 	new->next = new;
 	new->prev = new;
 }

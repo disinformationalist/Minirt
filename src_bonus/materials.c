@@ -50,6 +50,8 @@ void	change_mat(t_trace *trace, t_on *on, const t_mat mat)
 		trace->curr_cy->mat = mat;
 	else if (on->type == LENS)
 		trace->curr_le->mat = mat;
+	else if (on->type == CUBE)
+		trace->curr_cu->mat = mat;
 	else
 		return ;
 }

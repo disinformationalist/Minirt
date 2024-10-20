@@ -2,10 +2,10 @@
 
 static inline t_vec3	reflect(t_vec3 in, t_vec3 normal)
 {
-	double cos_angle;
+	double cos_a;
 
-	cos_angle = dot_product(in, normal);
-	return (subtract_vec(in, scale_vec(2 * cos_angle, normal)));
+	cos_a = dot_product(in, normal);
+	return (subtract_vec(in, scale_vec(2 * cos_a, normal)));
 }
 
 t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)

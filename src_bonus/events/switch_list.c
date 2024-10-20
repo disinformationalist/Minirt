@@ -8,7 +8,7 @@
 		all list objects are doubly linked circular
 
    		(spheres)		(other)			(planes)
-		SP == SP	(4th ob, bonus)	    PL == PL
+		SP == SP	(objs, bonus)	    PL == PL
 		\\	  //	==>         ==>     \\	  //
 		   SP							   PL
 
@@ -33,6 +33,11 @@ static inline void	switch_list2(int keycode, t_trace *trace, t_on *on)
 	{
 		on->object = trace->cam;
 		on->type = CAM;
+	}
+	else if (keycode == N_5)
+	{
+		on->object = trace->curr_cu;
+		on->type = CUBE;
 	}
 }
 

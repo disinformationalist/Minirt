@@ -45,6 +45,8 @@ static inline t_norm_color	get_obj_color(t_on *on)
 		return (mult_color(1 / 255.0, ((t_plane *)on->object)->color));
 	else if (on->type == CYLINDER)
 		return (mult_color(1 / 255.0, ((t_cylinder *)on->object)->color));
+	else if (on->type == CUBE)
+		return (mult_color(1 / 255.0, ((t_cube *)on->object)->color));
 	/* else if (on->type == LENS)
 		return (mult_color(1 / 255.0, ((t_lens *)on->object)->color)); */
 	else
@@ -61,6 +63,8 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 		((t_plane *)on->object)->color = mult_color(255.0, new_col);
 	else if (on->type == CYLINDER)
 		((t_cylinder *)on->object)->color = mult_color(255.0, new_col);
+	else if (on->type == CUBE)
+		((t_cube *)on->object)->color = mult_color(255.0, new_col);
 	/* else if (on->type == LENS)
 		((t_lens *)on->object)->color = mult_color(255.0, new_col); */
 	else
@@ -103,7 +107,7 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 	render(trace);
 	return (0);
 }
-	//CONSIDER MAKING MOUSE BUTTON TO SWITCH BETWEEN COLORS AND GRAYS. or use for two colors. or when up carat shift grays/blacks/whites 
+	//CONSIDER MAKING MOUSE BUTTON TO SWITCH BETWEEN COLORS AND GRAYS. or use for two colors. or when up carat shift grays/blacks/whites  //shift textures
 	//if (button == 1)
 	//else if (button == 3)
 		

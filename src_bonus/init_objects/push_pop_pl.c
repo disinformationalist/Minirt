@@ -37,6 +37,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
+	new->shadow = true;
 	new->next = new;
 	new->prev = new;
 }

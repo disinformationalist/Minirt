@@ -12,6 +12,11 @@ static inline void push_new2(t_trace *trace, t_on *on)
 		if (insert_ltcopy_after(trace, &trace->curr_lt))
 			close_win(trace);	
 	}
+	else if (on->type == CUBE)
+	{
+		if (insert_cucopy_after(trace, &trace->curr_cu))
+			close_win(trace);	
+	}
 	return ;
 }
 
@@ -49,6 +54,8 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_le(trace, &trace->curr_le);
 	else if (on->type == LIGHT)
 		pop_lt(trace, &trace->curr_lt);
+	else if (on->type == CUBE)
+		pop_cu(trace, &trace->curr_cu);
 	else
 		return ;
 }

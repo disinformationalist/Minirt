@@ -59,6 +59,7 @@ typedef enum e_type
 	LENS,
 	PLANE,
 	CYLINDER,
+	CUBE,
 	LIGHT,
 	CAM
 } 	t_type;
@@ -134,7 +135,7 @@ typedef struct s_wheel
 	int		hue;
 }	t_wheel;
 
-//parse utils
+//parse util
 
 typedef struct s_obj_counts
 {
@@ -145,9 +146,14 @@ typedef struct s_obj_counts
 	int				lens_count;
 	int				plane_count;
 	int				cyl_count;
+	int				cube_count;
 }	t_obj_counts;
+
+//some util functions
 
 t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
 t_ray			transform(t_ray r, t_matrix_4x4 m);
+void			ft_swap(double *a, double *b);
+
 
 #endif

@@ -9,6 +9,7 @@ void	set_sp_vals(t_sphere *new, char **line)
 	new->radius = get_double(&diam_str) / 2.0;
 	new->color = get_color(line[3], 1.0);	
 	new->mat = get_mat(DEFAULT);//handle getting from line in parse of rt, file, along with check for valid material option
+	new->shadow = true;
 }
 
 t_sphere *create_sphere(char **line)

@@ -1,41 +1,43 @@
 #include "minirt.h"
 
-void	set_cy_vals(t_cylinder *new, char **line)
+void	set_cu_vals(t_cube *new, char **line)
 {
-	char *diam_str;
+	char *width_str;
 	char *height_str;	
+	char *depth_str;	
 
-	diam_str = line[3];
+	width_str = line[3];
 	height_str = line[4];
+	depth_str = line[5];
 	new->center = get_coordinates(line[1], 1.0);
 	new->norm = get_coordinates(line[2], 0.0);
-	new->radius = get_double(&diam_str) / 2;
-	new->height = get_double(&height_str);
-	new->half_h = new->height / 2.0;
-	new->color = get_color(line[5], 1.0);
+	new->h_width = get_double(&width_str) / 2.0;
+	new->h_height = get_double(&height_str) / 2.0;
+	new->h_depth = get_double(&depth_str) / 2.0;
+	new->color = get_color(line[6], 1.0);
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 }
 
-t_cylinder *create_cylinder(char **line)
+t_cube *create_cube(char **line)
 {
-	t_cylinder *new;
+	t_cube *new;
 
-	new = (t_cylinder *)malloc(sizeof(t_cylinder));
+	new = (t_cube *)malloc(sizeof(t_cube));
 	if (!new)
 		return (NULL);
-	set_cy_vals(new, line);
+	set_cu_vals(new, line);
 	new->next = new;
 	new->prev = new;
 	return (new);
 }
 
-bool	append_cy(t_cylinder **start, char **line)
+bool	append_cu(t_cube **start, char **line)
 {
-	t_cylinder *new;
-	t_cylinder *last;
+	t_cube *new;
+	t_cube *last;
 
-	new = create_cylinder(line);
+	new = create_cube(line);
 	if (!new)
 		return (true);
 	if (*start == NULL)

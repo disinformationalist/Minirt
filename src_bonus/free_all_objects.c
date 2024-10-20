@@ -76,6 +76,25 @@ void	free_le_list(t_lens **start)
 	*start = NULL;
 }
 
+void	free_cu_list(t_cube **start)
+{
+	t_cube	*curr;
+	t_cube	*temp;
+
+	if (*start == NULL)
+		return ;
+	curr = *start;
+	curr = curr->next;
+	while (curr != *start)
+	{
+		temp = curr->next;
+		free(curr);
+		curr = temp;
+	}
+	free(curr);
+	*start = NULL;
+}
+
 void	free_lt_list(t_light **start)
 {
 	t_light		*curr;
@@ -102,10 +121,10 @@ void	free_all_objects(t_trace *trace)
 	free_cy_list(&trace->cylinders);
 	free_le_list(&trace->lenses);
 	free_lt_list(&trace->lights);
+	free_cu_list(&trace->cubes);
 	if (trace->amb)
 		free(trace->amb);
 	if (trace->cam)
 		free(trace->cam);
-	//if (trace->lights)
-	//	free(trace->lights);
+	
 }

@@ -1,5 +1,20 @@
 # include "minirt.h"
 
+static inline void	next_list_ob3(t_trace *trace, t_on *on)
+ {
+	t_cube *curr_cu;
+
+	if (on->type == CUBE)
+	{
+		curr_cu = (t_cube *)on->object;
+		trace->curr_cu = curr_cu->next;
+		on->object = trace->curr_cu;
+	}
+	else
+		return ;
+ }
+
+
 static inline void	next_list_ob2(t_trace *trace, t_on *on)
 {
 	t_cylinder		*curr_cy;
@@ -25,7 +40,7 @@ static inline void	next_list_ob2(t_trace *trace, t_on *on)
 		on->object = trace->curr_lt;
 	}
 	else
-		return ;
+		next_list_ob3(trace, on);
 }
 
 // go the the next object on the current list, else is cam or non list object
@@ -53,6 +68,20 @@ void	next_list_ob(t_trace *trace, t_on *on)
 		next_list_ob2(trace, on);	
 }
 
+static inline void	prev_list_ob3(t_trace *trace, t_on *on)
+{
+	t_cube *curr_cu;
+
+	if (on->type == CUBE)
+	{
+		curr_cu = (t_cube *)on->object;
+		trace->curr_cu = curr_cu->prev;
+		on->object = trace->curr_cu;
+	}
+	else
+		return ;
+}
+
 static inline void	prev_list_ob2(t_trace *trace, t_on *on)
 {
 	t_cylinder		*curr_cy;
@@ -78,7 +107,7 @@ static inline void	prev_list_ob2(t_trace *trace, t_on *on)
 		on->object = trace->curr_lt;
 	}
 	else
-		return ;
+		prev_list_ob3(trace, on);
 }
 
 //go to the previous object on each list

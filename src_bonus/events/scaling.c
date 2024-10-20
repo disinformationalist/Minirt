@@ -13,6 +13,13 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_2.curr_scale);
 		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
 	}
+	else if (on->type == CUBE)
+	{
+		trace->curr_cu->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
+			vec1.z), trace->curr_cu->curr_scale);
+		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, \
+			trace->curr_cu->curr_rottran);
+	}
 	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?//maybe sep handle for light?
 	{
 		trace->curr_lt->brightness *= vec1.y;//can check vec1.x == 0, etc for spot light resize

@@ -22,6 +22,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->cyl_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "le"))
 			counts->lens_count++;
+		else if (!ft_strcmp(*(rt_file[*k]), "cu"))
+			counts->cube_count++;
 		else
 			return (free_3d_array_i(rt_file, ft_3darray_len(rt_file)),
 				error_exit("Error\n Invalid type identifier\n"));
@@ -49,6 +51,8 @@ void	check_ids(char ***rt_file)
 			check_cy(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "le"))
 			check_le(rt_file[k], rt_file);
+		if (!ft_strcmp(*(rt_file[k]), "cu"))
+			check_cu(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "SL"))
 			check_sl(rt_file[k], rt_file);
 	}
@@ -77,6 +81,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_cy(&trace->cylinders, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "le"))
 			status = append_le(&trace->lenses, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "cu"))
+			status = append_cu(&trace->cubes, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "SL"))//using sep identifier for sl, appending the same way
 			status = append_light(&trace->lights, rt_file[k]);
 		if (status)
@@ -94,6 +100,7 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	total_intersects += 4 * counts.lens_count; 
 	total_intersects += 4 * counts.cyl_count;
 	total_intersects += counts.plane_count;
+	total_intersects += 2 * counts.cube_count;
 	trace->total_ints = total_intersects;
 }
 

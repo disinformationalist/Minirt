@@ -32,6 +32,7 @@ typedef struct s_intersects
 typedef struct s_sphere
 {
 	int				id;
+	bool			shadow;
 	t_point			center;
 	double			radius;
 	t_norm_color 	color;//color will move into mat
@@ -63,6 +64,7 @@ typedef struct s_lens
 typedef struct s_plane 
 {
 	int				id;
+	bool			shadow;
 	t_point			point;
 	t_vec3			norm;
 	t_norm_color	color;
@@ -77,6 +79,7 @@ typedef struct s_plane
 typedef struct s_cylinder
 {
 	int					id;
+	bool				shadow;
 	t_point				center;
 	t_vec3				norm;
 	double				radius;
@@ -90,6 +93,24 @@ typedef struct s_cylinder
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
+
+typedef struct s_cube
+{
+	int				id;
+	bool			shadow;
+	t_point			center;
+	t_vec3			norm;
+	double			h_width;
+	double			h_height;
+	double			h_depth;
+	t_norm_color	color;
+	t_mat			mat;
+	t_matrix_4x4	transform;
+	t_matrix_4x4	curr_scale;
+	t_matrix_4x4	curr_rottran;
+	struct s_cube	*prev;
+	struct s_cube	*next;
+}	t_cube;
 
 typedef struct s_light
 {
@@ -110,7 +131,9 @@ typedef struct s_light
 //---------sqlight test
 typedef struct s_sqlight
 {
+	t_point	center;
 	t_point	corner;
+	double brightness;
 	t_vec3	v1;
 	t_vec3	v2;
 	t_vec3	uvec;
@@ -119,7 +142,6 @@ typedef struct s_sqlight
 	int		vsteps;
 	int		samples;
 	t_norm_color	color;
-	t_point	pos;
 	double	*jitter;
 } t_sqlight;
 //-----------------------
@@ -152,6 +174,8 @@ typedef struct s_trace
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 
+	t_cube			*cubes;
+
 	t_light			*lights;
 
 	//for tracking traversing during events can i move this?
@@ -159,6 +183,8 @@ typedef struct s_trace
 	t_lens			*curr_le;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
+
+	t_cube			*curr_cu;
 
 	t_light			*curr_lt;
 
@@ -199,12 +225,11 @@ typedef struct s_trace
 
 typedef struct s_piece //for threads
 {
-	int			x_s;
-	int			x_e;
-	int			y_s;
-	int			y_e;
-	t_trace		*trace;
-	//t_track_hits *closest;
+	int				x_s;
+	int				x_e;
+	int				y_s;
+	int				y_e;
+	t_trace			*trace;
 	t_intersects	*intersects;
 }	t_piece;
 
@@ -222,7 +247,7 @@ typedef struct t_comps
 	t_vec3			reflectv;
 
 	t_mat			mat;
-	double			cos_angle;
+	double			cos_a;
 	bool			inside;
 	double  		spot_int;
 
@@ -283,6 +308,8 @@ void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 void	check_sl(char **line, char ***rt_file);
+void	check_cu(char **line, char ***rt_file);
+
 
 
 //check line utils
@@ -317,6 +344,8 @@ bool			append_sp(t_sphere **start, char **line);
 bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
+bool			append_cu(t_cube **start, char **line);
+
 
 bool			append_light(t_light **start, char **line);
 
@@ -326,6 +355,7 @@ bool			insert_lecopy_after(t_trace *trace, t_lens **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
 bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
+bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
@@ -333,6 +363,7 @@ void			pop_le(t_trace *trace, t_lens **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
 void			pop_pl(t_trace *trace, t_plane **current);
 void			pop_lt(t_trace *trace, t_light **current);
+void			pop_cu(t_trace *trace, t_cube **current);
 
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
@@ -353,6 +384,9 @@ void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
+
+void			set_cu_transforms(t_trace *trace);
+
 
 //mlx utils
 int				new_img_init(void *mlx_con, t_img *img, int width, int height);
@@ -375,6 +409,12 @@ bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 //plane utils
 void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+
+
+//cube utils
+void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
+t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+
 
 //pl shadow
 bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
@@ -400,7 +440,9 @@ void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_li
 
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
-bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
+//bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
+bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
+
 
 //view
 void			reinit_viewing(t_trace *trace);

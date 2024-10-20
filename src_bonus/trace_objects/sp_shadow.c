@@ -47,6 +47,8 @@ bool	check_sp_dist(t_sphere *spheres, t_ray ray, double dist)
 	curr_sp = spheres;
 	while (true)
 	{
+		if (!curr_sp->shadow)
+			return (false);
 		if (ray_sphere_intersect2(*curr_sp, ray, dist))
 				return (true);
 		curr_sp = curr_sp->next;

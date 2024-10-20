@@ -37,6 +37,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
+	new->shadow = true;
 	new->next = new;
 	new->prev = new;
 }

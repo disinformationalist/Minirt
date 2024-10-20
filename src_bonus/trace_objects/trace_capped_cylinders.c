@@ -12,15 +12,6 @@
 
 #include "minirt.h"
 
-void ft_swap(double *a, double *b)
-{
-	double temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
 static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
 {
 	double	discrim;

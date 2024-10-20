@@ -1,12 +1,14 @@
 #include "minirt.h"
 /****KEY HOOK GUIDE****/
 /*
-1 => 4, 9, 0: switch between object lists (spheres, planes, etc...)
+1 => 5, 9, 0: switch between object lists (spheres, planes, etc...)
 
 1 = sp list;
 2 = pl list;
 3 = cy list;
 4 = 4th object... todo (prisms?)
+
+5 = cu list;
 
 9 = lt list;
 0 = cam;
@@ -25,9 +27,9 @@ F1	 F3								  NUM PAD
 
 SPACE => supersample mode
 
-, => pop current object from current list // second layer scale down all axes
+, => pop current object from current list // second layer scale down all axes, for reduce bright
 
-. => push new object to current list // second layer scale up all axes
+. => push new object to current list // second layer scale up all axes, for light increase bright
 
 //TRANSLATION(first layer) //SCALE(second layer)  
 
@@ -41,13 +43,15 @@ J,L => x dirs
 I,K => y dirs
 U,O => z dirs
 
+//shadow toggle strg(right) key
+
 //COLOR SHIFT
 
 mouse wheel shifts color of on object or light.
 
 --------------IN PROGRESS--------------------
 
-NUM PAD 1 - 5 => change material of current object
+NUM PAD 1 - 9 => change material of current object
 
 -----------------TODO--------------------
 
@@ -58,8 +62,8 @@ int	close_win(t_trace *trace)
 {	
 	free_all_objects(trace);
 
-	free(trace->sqlt);////-----------
 	free(trace->sqlt->jitter);//---------
+	free(trace->sqlt);////-----------
 	free(trace->on);
 	free(trace->w_colors);
 	mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);//for freeing the import
@@ -147,6 +151,23 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	return (0);
 }
 
+void	toggle_shadow(t_trace *trace, t_on *on)
+{
+	if (on->object == NULL)
+		return ;
+	if (on->type == SPHERE)
+		trace->curr_sp->shadow = !trace->curr_sp->shadow;
+	else if (on->type == PLANE)
+		trace->curr_pl->shadow = !trace->curr_pl->shadow;
+	else if (on->type == CYLINDER)
+		trace->curr_cy->shadow = !trace->curr_cy->shadow;
+	else if (on->type == CUBE)
+		trace->curr_cu->shadow = !trace->curr_cu->shadow;
+	else
+		return ;
+}
+
+
 //translation, push, and pop functions
 
 int	key_press_2(int keycode, t_trace *trace)
@@ -167,6 +188,8 @@ int	key_press_2(int keycode, t_trace *trace)
 		push_new_object(trace, trace->on);
 	else if (keycode == COMMA)
 		pop_object(trace, trace->on);
+	else if (keycode == 65508)
+		toggle_shadow(trace, trace->on);
 	else
 		key_press_3(keycode, trace);
 	render(trace);
@@ -175,12 +198,12 @@ int	key_press_2(int keycode, t_trace *trace)
 
 int	key_press(int keycode, t_trace *trace)
 {
-	//printf("key: %d\n", keycode);
+	printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == UP_CARET)
 		trace->layer = !trace->layer;
-	else if (keycode == N_1 || keycode == N_2 || keycode == N_3 || keycode == N_4 || keycode == N_9 || keycode == N_0)
+	else if (keycode == N_1 || keycode == N_2 || keycode == N_3 || keycode == N_4 || keycode == N_9 || keycode == N_0 || keycode == N_5)
 		switch_list(keycode, trace, trace->on);
 	else if (keycode == PAD_PLUS && trace->layer)
 		adjust_super(keycode, trace);

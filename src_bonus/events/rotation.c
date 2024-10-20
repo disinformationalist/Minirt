@@ -27,6 +27,13 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 		trace->curr_cy->transform = \
 			mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
+	else if (on->type == CUBE)
+	{
+		trace->curr_cu->curr_rottran = \
+			mat_mult(rot, trace->curr_cu->curr_rottran);
+		trace->curr_cu->transform = \
+			mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
+	}
 	else if (on->type == LENS)
 	{
 		trace->curr_le->curr_rottran = \
