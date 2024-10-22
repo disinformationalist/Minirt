@@ -19,6 +19,8 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 		norm = vec(0, int_pnt.y, 0, 0);
 	else if (max == absz)
 		norm = vec(0, 0, int_pnt.z, 0);
+	else
+		norm = vec(0, 1, 0, 0);
 	norm = mat_vec_mult(transpose(transform), norm);
 	norm.w = 0;
 	return (norm_vec(norm));
