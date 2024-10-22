@@ -54,7 +54,8 @@ static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
 	return (pos);
 }
 
-static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comps)
+//need this for the sqlt
+/* static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comps)
 {
 	double	tot_int;
 	int		i;
@@ -81,7 +82,7 @@ static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comp
 	}
 	comps->sqlt_int /= light.samples;
 	return (tot_int / light.samples);
-}
+} */
 
 //handle all non ambient light contribution for each source
 
