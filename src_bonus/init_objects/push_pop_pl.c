@@ -40,6 +40,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->shadow = true;
 	new->next = new;
 	new->prev = new;
+	new->texture = NULL;
 }
 
 //copy a plane and place it immediately after the current plane in the list

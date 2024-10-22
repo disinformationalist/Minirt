@@ -114,6 +114,41 @@ void	free_lt_list(t_light **start)
 	*start = NULL;
 }
 
+void	free_curr_tx(void *mlx_con, t_tx *curr)
+{
+	if (curr->i_name)
+		free(curr->i_name);
+	if (curr->m_name)
+		free(curr->m_name);
+	if (curr->image)
+	{
+		mlx_destroy_image(mlx_con, curr->image->img_ptr);
+		
+		free(curr->image);
+	}	
+	free(curr);
+	//bumpmap do the same
+}
+
+void	free_tx_list(void *mlx_con, t_tx **start)
+{
+	t_tx	*curr;
+	t_tx	*temp;
+
+	if (*start == NULL)
+		return ;
+	curr = *start;
+	curr = curr->next;
+	while (curr != *start)
+	{
+		temp = curr->next;
+		free_curr_tx(mlx_con, curr);
+		curr = temp;
+	}
+	free_curr_tx(mlx_con, curr);
+	*start = NULL;
+}
+
 void	free_all_objects(t_trace *trace)
 {
 	free_sp_list(&trace->spheres);
@@ -122,6 +157,7 @@ void	free_all_objects(t_trace *trace)
 	free_le_list(&trace->lenses);
 	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
+	free_tx_list(trace->mlx_connect, &trace->textures);
 	if (trace->amb)
 		free(trace->amb);
 	if (trace->cam)

@@ -28,6 +28,23 @@ typedef struct s_png_io
 	png_text	*text;
 }	t_png_io;
 
+//texures
+
+typedef struct s_tx
+{
+	int				id;
+	char			*i_name;
+	char			*m_name;
+	t_img			*image;
+	t_img			*bump_map;
+	int				i_height;
+	int 			i_width;
+	int				m_height;
+	int 			m_width;
+	struct	s_tx	*prev;
+	struct	s_tx	*next;
+}	t_tx;
+
 /***PNG IMPORT/EXPORT***/
 
 //export lossless png image
@@ -49,6 +66,8 @@ void			*error_2(t_png_io *png_img, const char *msg);
 int				error_3(t_png_io *png_img, const char *msg);
 void			set_img_pixels_rgb(t_png_io *png_img, t_img *image, int width, int height);
 void			set_img_pixels_rgba(t_png_io *png_img, t_img *image, int width, int height);
+void			set_img_pixels_gray(t_png_io *png_img, t_img *image, int width, int height);
+void			set_img_pixels_gray_alpha(t_png_io *png_img, t_img *image, int width, int height);
 
 //mthread
 int				get_num_cores(void);

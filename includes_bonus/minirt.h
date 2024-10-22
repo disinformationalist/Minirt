@@ -27,7 +27,7 @@ typedef struct s_intersects
 	t_track_hits	*closest;
 }	t_intersects;
 
-/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/ //add mats
+/***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
 
 typedef struct s_sphere
 {
@@ -35,11 +35,12 @@ typedef struct s_sphere
 	bool			shadow;
 	t_point			center;
 	double			radius;
-	t_norm_color 	color;//color will move into mat
+	t_norm_color 	color;
 	t_mat			mat;
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
+	t_tx			*texture;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -72,6 +73,7 @@ typedef struct s_plane
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
+	t_tx			*texture;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -90,6 +92,7 @@ typedef struct s_cylinder
 	t_matrix_4x4		transform;
 	t_matrix_4x4		curr_scale;
 	t_matrix_4x4		curr_rottran;
+	t_tx				*texture;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -108,6 +111,7 @@ typedef struct s_cube
 	t_matrix_4x4	transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
+	t_tx			*texture;
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
@@ -155,11 +159,10 @@ typedef struct s_trace
 	int				total_ints;
 	
 	t_img			img;
-	
-	t_img			*image1;//for importing an image for texture/backround.. MAKE LIST or array FOR THESE
-	int				image1_w;
-	int				image1_h;
+//---------------
 
+	t_tx			*textures;
+//---------
 	t_vec3			perturb;
 
 	t_amb			*amb;
@@ -309,6 +312,8 @@ void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 void	check_sl(char **line, char ***rt_file);
 void	check_cu(char **line, char ***rt_file);
+void	check_tx(char **line, char ***rt_file);
+
 
 
 
@@ -345,6 +350,8 @@ bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 bool			append_cu(t_cube **start, char **line);
+
+bool	append_tx(t_tx **start, char **line);
 
 
 bool			append_light(t_light **start, char **line);
@@ -412,8 +419,8 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_de
 
 
 //cube utils
-void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
-t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
+t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
 //pl shadow
@@ -424,13 +431,12 @@ bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray);
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
-//t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest);
-//bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double *t);
-bool	ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
+//shadow
+bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
 
 
-void	ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
 //light utils
 void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
@@ -440,8 +446,8 @@ void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_li
 
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
+bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
 //bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
-bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
 
 
 //view
@@ -481,15 +487,16 @@ t_norm_color 	color(double r, double g, double b);
 unsigned int	clamped_col(t_norm_color col);
 
 
-t_norm_color pixel_color_get(int x, int y, t_img *img);
+//texture utils
 
-double get_lumin(t_norm_color color);
+//t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
+t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane);
+//t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
+t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere);
 
-
-//texture map
-t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
-t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);//place height / width with the image
-
+t_norm_color	pixel_color_get(int x, int y, t_img *img);
+double 			get_lumin(t_norm_color color);
+int				import_textures(void *mlx_con, t_tx *textures);
 
 
 
@@ -501,7 +508,7 @@ void			change_mat(t_trace *trace,t_on *on, const t_mat mat);
 t_mat			get_mat(t_material material);
 
 
-//used in mthread
+//supersampling utils
 unsigned int	avg_samples(t_norm_color sum, double n);
 t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
 t_norm_color	mult_color(double scalar, t_norm_color color);
@@ -543,7 +550,7 @@ void			free_cy_list(t_cylinder **start);
 void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 
-/***EXTRAS ***/ //extras only remain in bonus version here or in extras header.
+/***EXTRAS ***/
 
 //forge rt file, builds rt file from current scene.
 void			forge_rt(const char *path, t_trace *trace);

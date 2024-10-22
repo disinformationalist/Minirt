@@ -42,6 +42,7 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->shadow = true;
 	new->next = new;
 	new->prev = new;
+	new->texture = NULL; //if not assigned
 }
 
 //copy a cube and place it immediately after the current cube in the list
@@ -68,7 +69,7 @@ bool	insert_cucopy_after(t_trace *trace, t_cube **current)
 	new->prev = cu_to_copy;
 	cu_to_copy->next->prev = new;
 	cu_to_copy->next = new;
-	trace->total_ints += 6;
+	trace->total_ints += 2;
 	update_cube_ids(trace->cubes);
 	return (false);
 }

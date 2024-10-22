@@ -76,6 +76,10 @@ void	set_pixels(t_png_io *png_img, t_img *image, int width, int height)
 		set_img_pixels_rgba(png_img, image, width, height);
 	else if (png_img->color_type == PNG_COLOR_TYPE_RGB)
 		set_img_pixels_rgb(png_img, image, width, height);
+	else if (png_img->color_type == PNG_COLOR_TYPE_GRAY)
+		set_img_pixels_gray(png_img, image, width, height);
+	else if (png_img->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
+		set_img_pixels_gray_alpha(png_img, image, width, height);
 	else
 		return ;
 }

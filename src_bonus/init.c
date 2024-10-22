@@ -39,7 +39,7 @@ void info_init(t_trace *trace)
 	trace->curr_cy = trace->cylinders;
 	trace->curr_lt = trace->lights;
 	trace->curr_cu = trace->cubes;
-
+	trace->w_colors = NULL;
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
@@ -54,6 +54,9 @@ void info_init(t_trace *trace)
 
 static void events_init(t_trace *trace)
 {
+	trace->on->object = trace->spheres;
+	trace->on->type = SPHERE;
+	
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
 	//mlx_hook(trace->mlx_win, KeyRelease, KeyReleaseMask, key_release, trace);
 //	mlx_hook(trace->mlx_win, ButtonPress, ButtonPressMask, mouse_press, trace);
@@ -98,12 +101,11 @@ void	init_sqlight(t_trace *trace, t_sqlight *light)
 	light->vvec = div_vec(light->vsteps, light->v2);
 	light->samples = light->usteps * light->vsteps;
 	//malloced array of size of samples of randfs
-	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));//this seems to be working, maybe better with one for each thread..in piece
+	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));
 	if (!light->jitter)
 	{
 		free(trace->sqlt);
 		clear_all(trace);
-		//free textures
 	//protect
 	}
 	i = -1;
@@ -132,22 +134,17 @@ void trace_init(t_trace *trace)
 		clear_all(trace);
 	trace->w_colors = set_color_wheel(trace->num_colors, 1.0, 0.5, 202);//num colors, sat, lightness, base hue
 	if (!trace->w_colors)
-		clear_all(trace);//check protect here, frees where needed elsweher and closing already. need in push_object_function safeties...
-	trace->on->object = trace->spheres;
-	trace->on->type = SPHERE;
+		clear_all(trace);//check need in push_object_function safeties...
 	events_init(trace);
 	init_transforms(trace);
-	
+	if (import_textures(trace->mlx_connect, trace->textures))
+		clear_all(trace);
 
-	trace->image1 = import_png(trace->mlx_connect, "image_1.png", &trace->image1_w, &trace->image1_h);//protect and protect elsewhere.
-	//make some list of imgs in to manip and perform frees
-	//img type specifier for bringing in images
-	//mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);
-	//free(trace->image1);
+	//testing the sqlt light here...
 	trace->sqlt = (t_sqlight *)malloc(sizeof(t_sqlight));
 	if (!trace->sqlt)
 		clear_all(trace);
-		//free all textures
+		
 	//pro
 	init_sqlight(trace, trace->sqlt);
 }

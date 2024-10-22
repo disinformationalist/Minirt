@@ -25,9 +25,7 @@ static inline bool	check_pl_dist(t_plane *planes, t_ray ray, double dist)
 	curr_pl = planes;
 	while (true)
 	{
-		if (!curr_pl->shadow)
-			return (false);
-		if (ray_plane_intersect2(*curr_pl, ray, dist))
+		if (curr_pl->shadow && ray_plane_intersect2(*curr_pl, ray, dist))
 				return (true);
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
@@ -47,9 +45,7 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, t_ray ray, double dist)
 	curr_cy = cylinders;
 	while (true)
 	{
-		if (!curr_cy->shadow)
-			return (false);
-		if (ray_cylinder_intersect2(*curr_cy, ray, dist))
+		if (curr_cy->shadow && ray_cylinder_intersect2(*curr_cy, ray, dist))
 				return (true);
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
@@ -108,9 +104,7 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	curr_cu = cubes;
 	while (true)
 	{
-		if (!curr_cu->shadow)
-			return (false);
-		if (ray_cube_intersect2(curr_cu->transform, ray, dist))
+		if (curr_cu->shadow && ray_cube_intersect2(curr_cu->transform, ray, dist))
 				return (true);
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)

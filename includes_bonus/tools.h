@@ -92,6 +92,7 @@ typedef struct s_on
 {
 	void	*object;
 	t_type	type;
+	int		tx_id;
 	void	*prev;
 	void	*next;
 }	t_on;
@@ -120,6 +121,23 @@ typedef struct s_cam
 	t_matrix_4x4	transform_up;
 }	t_cam;
 
+/***GROUPS AND BVH***/
+
+typedef	struct s_shape
+{
+	void			*shape;
+	void			*parent;
+	t_type			type;
+	t_matrix_4x4	transform;
+}	t_shape;
+
+typedef struct s_group
+{
+	t_shape			**shapes;//pntrs to objs, or groups
+	int				count;
+	t_matrix_4x4	transform;
+}	t_group;
+
 // util for making a color wheel
 
 typedef struct s_wheel
@@ -147,7 +165,9 @@ typedef struct s_obj_counts
 	int				plane_count;
 	int				cyl_count;
 	int				cube_count;
+	int				tx_count;
 }	t_obj_counts;
+
 
 //some util functions
 

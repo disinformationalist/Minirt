@@ -20,7 +20,7 @@ void	thread_error(t_trace *trace, int i)
 		if (trace->threads[i])
 			pthread_join(trace->threads[i], NULL);
 	}
-	free(trace->w_colors);
+	//free(trace->w_colors);
 	clear_all(trace);
 }
 

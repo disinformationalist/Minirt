@@ -3,7 +3,7 @@
 static inline void free_all(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	free_closests(trace, piece, i, j);
-	free(trace->w_colors);
+	//free(trace->w_colors);
 	clear_all(trace);
 }
 

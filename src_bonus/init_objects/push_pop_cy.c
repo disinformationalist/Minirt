@@ -42,6 +42,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->shadow = true;
 	new->next = new;
 	new->prev = new;
+	new->texture = NULL; //if not assigned
 }
 
 //copy a cylinder and place it immediately after the current cylinder in the list

@@ -83,8 +83,6 @@ static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comp
 	return (tot_int / light.samples);
 }
 
-//-------------------------------------
-
 //handle all non ambient light contribution for each source
 
 void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt)

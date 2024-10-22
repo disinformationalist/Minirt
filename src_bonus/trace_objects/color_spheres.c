@@ -1,11 +1,14 @@
 #include "minirt.h"
 
-static inline t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
+/* static inline void	spcolor_option(t_trace *trace, t_point int_pnt, t_sphere *sphere)//see it obj_pnt is better precomp and use for normal at
+{
+
+} */
+
+static inline t_vec3	sp_normal_at(t_point obj_pnt, t_matrix_4x4 transform)
 {
 	t_vec3	norm;
-	t_point	obj_pnt;
 
-	obj_pnt = mat_vec_mult(transform, int_pnt);
 	norm = mat_vec_mult(transpose(transform), obj_pnt);
 	norm.w = 0;
 	return (norm_vec(norm));
@@ -14,14 +17,23 @@ static inline t_vec3	sp_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_ray r, t_trace *trace)
 {
 	t_comps	comps;
+	t_point obj_pnt;
 	
 	(void)trace;
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = sp_normal_at(comps.point, sphere->transform);
-	//comps.color = texture_sp_at(trace, comps.point, sphere->transform, &comps.normal);//if texturing sets texture and bumps
-	comps.color = sphere->color;//no texture, build out color options with patterns or texture
+	obj_pnt = mat_vec_mult(sphere->transform, comps.point);
+	comps.normal = sp_normal_at(obj_pnt, sphere->transform);
+	
+	//make a set color function to choose between color, pattern texture, bump
+	if (sphere->texture)
+		comps.color = texture_sp_at(trace, obj_pnt, sphere);//if texturing
+	else 
+		comps.color = sphere->color;
+	
+	
+	
 	comps.eyev = neg(r.dir);
 	comps.mat = sphere->mat;
 	set_indicies(intersects, &comps.n1, &comps.n2);

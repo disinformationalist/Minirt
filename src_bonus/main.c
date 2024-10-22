@@ -42,6 +42,7 @@ int	main(int ac, char **av)
 	rt_file = split_file(av[1]);
 	if (!rt_file)
 		return (1);
+
 	parse_rt(&trace, rt_file);//PARSING
 	free_3d_array_i(rt_file, ft_3darray_len(rt_file));//free parsing tool 3d split rt_file
 	//free_all_objects(&trace);

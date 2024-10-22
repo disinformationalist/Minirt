@@ -7,6 +7,7 @@ void	set_pl_vals(t_plane *new, char **line)
 	new->color = get_color(line[3], 1.0);
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
+	new->texture = NULL; //if not assigned
 }
 
 t_plane	*create_plane(char **line)

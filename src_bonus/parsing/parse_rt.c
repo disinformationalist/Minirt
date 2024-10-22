@@ -24,6 +24,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->lens_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "cu"))
 			counts->cube_count++;
+		else if (!ft_strcmp(*(rt_file[*k]), "tx"))
+			counts->tx_count++;
 		else
 			return (free_3d_array_i(rt_file, ft_3darray_len(rt_file)),
 				error_exit("Error\n Invalid type identifier\n"));
@@ -53,8 +55,12 @@ void	check_ids(char ***rt_file)
 			check_le(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cu"))
 			check_cu(rt_file[k], rt_file);
+		if (!ft_strcmp(*(rt_file[k]), "tx"))
+			check_tx(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "SL"))
 			check_sl(rt_file[k], rt_file);
+		/* if (!ft_strcmp(*(rt_file[k]), "SQL")) make an sqr light here...
+			check_sl(rt_file[k], rt_file); */
 	}
 }
 
@@ -83,7 +89,9 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_le(&trace->lenses, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cu"))
 			status = append_cu(&trace->cubes, rt_file[k]);
-		else if (!ft_strcmp(*(rt_file[k]), "SL"))//using sep identifier for sl, appending the same way
+		else if (!ft_strcmp(*(rt_file[k]), "tx"))
+			status = append_tx(&trace->textures, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "SL"))//using sep identifier for sl, appending the same way, same for sql?
 			status = append_light(&trace->lights, rt_file[k]);
 		if (status)
 			break ;
@@ -124,7 +132,7 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 	init_obs(trace);
 	if (build_lists(trace, rt_file))
 	{
-		free_all_objects(trace);
+		free_all_objects(trace);//add txs
 		free_3d_array_i(rt_file, ft_3darray_len(rt_file));
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);

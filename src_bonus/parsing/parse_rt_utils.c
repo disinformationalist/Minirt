@@ -10,6 +10,7 @@ void	init_obs(t_trace *trace)
 	trace->cylinders = NULL;
 	trace->lenses = NULL;
 	trace->cubes = NULL;
+	trace->textures = NULL;
 }
 
 void	init_counts(t_obj_counts *counts)
@@ -22,6 +23,7 @@ void	init_counts(t_obj_counts *counts)
 	counts->cyl_count = 0;
 	counts->lens_count = 0;
 	counts->cube_count = 0;
+	counts->tx_count = 0;
 }
 
 void	count_check(int *item_count, char *msg, char ***rt_file)

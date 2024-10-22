@@ -147,3 +147,31 @@ void	check_cu(char **line, char ***rt_file)
 	"Cube width must be between 0.0001 and 9999\n");
 	check_cu2(line, rt_file, height_str, depth_str);
 }
+
+int	is_valid_tx(char *filename)
+{
+	int		len;
+	char	*dot;
+
+	len = ft_strlen(filename);
+	if (len < 5)
+		return (0);
+	dot = ft_strrchr(filename, '.');
+	if (!dot || ft_strcmp(dot, ".png"))
+		return (0);
+	return (1);
+}
+
+void	check_tx(char **line, char ***rt_file)
+{
+	int		len;
+
+	len = ft_matrix_len(line);
+	if (len != 2 && len != 3)
+		free_exit(rt_file, "Error\n Invalid texture parameters\n texture ", \
+	"must be in the format <type id> <image.png>\n");
+	if (!is_valid_tx(line[1]))
+		free_exit(rt_file, "Error\n Invalid texture parameters\n texture ", \
+	"must be in the format <type id> <image.png>\n");
+	//add bump map check if applicable
+}

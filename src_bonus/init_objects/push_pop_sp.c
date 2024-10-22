@@ -40,6 +40,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->shadow = true;
 	new->next = new;
 	new->prev = new;
+	new->texture = NULL; //if not assigned
 }
 
 //copy a sphere and place it immediately after the current sphere in the list

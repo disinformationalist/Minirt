@@ -71,6 +71,56 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 		return ;
 }
 
+void	set_new_tx(t_on *on, t_tx *new)
+{
+	if (on->type == PLANE)
+		((t_plane *)on->object)->texture = new;
+	else if (on->type == SPHERE)
+		((t_sphere *)on->object)->texture = new;
+	/*else if (on->type == CYLINDER)
+		((t_cylinder *)on->object)->texture = new;
+	else if (on->type == CUBE)
+		((t_cube *)on->object)->texture = new;*/
+	else
+		return ;
+}
+
+void	set_next_tx(int button, t_tx *textures, t_on *on)//if not set, sets to first
+{
+	t_tx		*curr_tx;
+	t_tx		*tx;
+
+	if (textures == NULL || on == NULL)
+		return ;
+	tx = textures;
+	if (on->type == PLANE)
+		curr_tx = ((t_plane *)on->object)->texture;
+	else if (on->type == SPHERE)
+		curr_tx = ((t_sphere *)on->object)->texture;
+	/* else if (on->type == CYLINDER)
+		curr_tx = ((t_cylinder *)on->object)->texture;
+	else if (on->type == CUBE)
+		curr_tx = ((t_cube *)on->object)->texture; */
+	else
+		return ;
+	if (curr_tx == NULL)
+	{
+		if (button == 4)
+			set_new_tx(on, tx);//set to first in list
+		if (button == 5)
+			set_new_tx(on, tx->prev);//set to last
+		return ;
+	}
+	while (tx != curr_tx && tx->next != textures)
+		tx = tx->next;
+	if (button == 4)
+		set_new_tx(on, tx->next);//set to next from current
+	else if (button == 5)
+		set_new_tx(on, tx->prev);//set to prev from current
+}
+
+
+
 //handle mouse hooks
 
 int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in progress...
@@ -95,7 +145,9 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 			trace->color_i = (trace->color_i - 5 + trace->num_colors) % trace->num_colors;
 		set_obj_color(trace->on, trace->w_colors[trace->color_i]);
 	}
-	/* else //scroll through textures. strg bump map on/off
+	else if (button == 4 || button == 5)
+		set_next_tx(button, trace->textures, trace->on);
+	/* else //scroll through textures. strg bump map on/off, right strg shadow on off right now
 	{
 		inten = get_lumin(curr_col) * 255.0;
 		shade = color(inten, inten, inten);
@@ -107,6 +159,8 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)//grayscale still in 
 	render(trace);
 	return (0);
 }
+	//make a general bright in the minirt.c / super to multiply final color by up down arrow keys to adjust between 0 and 1., 20 steps possible
+	
 	//CONSIDER MAKING MOUSE BUTTON TO SWITCH BETWEEN COLORS AND GRAYS. or use for two colors. or when up carat shift grays/blacks/whites  //shift textures
 	//if (button == 1)
 	//else if (button == 3)

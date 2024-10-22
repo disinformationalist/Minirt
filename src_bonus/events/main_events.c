@@ -47,11 +47,11 @@ U,O => z dirs
 
 //COLOR SHIFT
 
-mouse wheel shifts color of on object or light.
-
---------------IN PROGRESS--------------------
+mouse wheel shifts color of on object or light.// layer2 textures
 
 NUM PAD 1 - 9 => change material of current object
+--------------IN PROGRESS--------------------
+
 
 -----------------TODO--------------------
 
@@ -66,8 +66,6 @@ int	close_win(t_trace *trace)
 	free(trace->sqlt);////-----------
 	free(trace->on);
 	free(trace->w_colors);
-	mlx_destroy_image(trace->mlx_connect, trace->image1->img_ptr);//for freeing the import
-	free(trace->image1);//import
 	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
 	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);
 	mlx_destroy_display(trace->mlx_connect);
