@@ -1,7 +1,7 @@
 #include "minirt.h"
 
 //builds intersect list, find and set closest object hit by ray
-//when sorting must only sort up through count, get smallest up through count;
+//list is automagically sorted, get smallest up through count that is > 0;
 
 void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 {

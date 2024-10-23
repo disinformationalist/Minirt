@@ -40,6 +40,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
+	new->bump = false;
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL; //if not assigned

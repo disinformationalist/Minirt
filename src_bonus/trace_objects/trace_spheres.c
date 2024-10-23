@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)//change  store vals
+static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)
 {
 	double	discrim;
 	double	inv_2a;

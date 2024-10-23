@@ -33,6 +33,7 @@ typedef struct s_sphere
 {
 	int				id;
 	bool			shadow;
+	bool			bump;
 	t_point			center;
 	double			radius;
 	t_norm_color 	color;
@@ -66,6 +67,7 @@ typedef struct s_plane
 {
 	int				id;
 	bool			shadow;
+	bool			bump;
 	t_point			point;
 	t_vec3			norm;
 	t_norm_color	color;
@@ -82,6 +84,7 @@ typedef struct s_cylinder
 {
 	int					id;
 	bool				shadow;
+	bool				bump;
 	t_point				center;
 	t_vec3				norm;
 	double				radius;
@@ -101,6 +104,7 @@ typedef struct s_cube
 {
 	int				id;
 	bool			shadow;
+	bool			bump;
 	t_point			center;
 	t_vec3			norm;
 	double			h_width;
@@ -259,6 +263,7 @@ typedef struct t_comps
 
 	t_vec3			over_pnt;
 	t_vec3			under_pnt;
+	t_vec3			bump;
 	t_norm_color	color;
 
 }	t_comps;
@@ -492,12 +497,13 @@ unsigned int	clamped_col(t_norm_color col);
 //t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
 t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane);
 //t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
-t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere);
+t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_comps *comps);
 
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
 double 			get_lumin(t_norm_color color);
 int				import_textures(void *mlx_con, t_tx *textures);
-
+//t_vec3 sp_bump(int i, int j, t_img *img);
+t_vec3 sp_bump(t_position pos, t_position dims, t_img *img);
 
 
 

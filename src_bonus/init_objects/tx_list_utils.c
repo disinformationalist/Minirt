@@ -18,9 +18,9 @@ t_tx *create_tx(char **line)
 	new->i_name = ft_strdup(line[1]);
 	if (!new->i_name)
 		return (free(new), NULL);
-	/* if (line[2]) for when bump map activated.
+	if (line[2])
 	{
-		new->m_name = strdup(line[3]);
+		new->m_name = strdup(line[2]);
 		if (!new->m_name)
 		{
 			free(new->i_name);
@@ -28,7 +28,6 @@ t_tx *create_tx(char **line)
 			return (NULL);
 		}
 	}
-	 */
 	new->next = new;
 	new->prev = new;
 	return (new);

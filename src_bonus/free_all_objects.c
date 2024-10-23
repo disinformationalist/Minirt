@@ -123,8 +123,12 @@ void	free_curr_tx(void *mlx_con, t_tx *curr)
 	if (curr->image)
 	{
 		mlx_destroy_image(mlx_con, curr->image->img_ptr);
-		
 		free(curr->image);
+	}	
+	if (curr->bump_map)
+	{
+		mlx_destroy_image(mlx_con, curr->bump_map->img_ptr);
+		free(curr->bump_map);
 	}	
 	free(curr);
 	//bumpmap do the same

@@ -32,7 +32,6 @@ void info_init(t_trace *trace)
 	printf("height: %d\n", trace->height);
 	trace->color_i = 0;
 	trace->num_colors = 384;
-
 	trace->curr_sp = trace->spheres;
 	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
@@ -43,7 +42,6 @@ void info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
-
 	trace->depths.refl = 5;
 	trace->depths.refr = 5;
 
@@ -124,7 +122,7 @@ void trace_init(t_trace *trace)
 		perror("Mlx init() failure\n");
 		exit(EXIT_FAILURE);
 	}
-	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MiniRT***");
+	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MegaRT***");
 	if (trace->mlx_win == NULL)
 		clear_some(trace);
 	if (new_img_init(trace->mlx_connect, &trace->img, trace->width, trace->height) == -1)

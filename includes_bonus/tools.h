@@ -61,13 +61,15 @@ typedef enum e_type
 	CYLINDER,
 	CUBE,
 	LIGHT,
+	GROUP,
 	CAM
 } 	t_type;
 
 typedef enum e_ltype
 {
 	POINT,
-	SPOT
+	SPOT,
+	AREA,
 } 	t_ltype;
 
 /***UTILS***/
@@ -123,18 +125,23 @@ typedef struct s_cam
 
 /***GROUPS AND BVH***/
 
+//using ll for this
+
 typedef	struct s_shape
 {
 	void			*shape;
 	void			*parent;
 	t_type			type;
 	t_matrix_4x4	transform;
+	struct s_shape	*next;
+	struct s_shape	*prev;
+
 }	t_shape;
 
 typedef struct s_group
 {
-	t_shape			**shapes;//pntrs to objs, or groups
-	int				count;
+	t_shape			*shapes;
+	t_type			type;
 	t_matrix_4x4	transform;
 }	t_group;
 
@@ -174,6 +181,8 @@ typedef struct s_obj_counts
 t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
 t_ray			transform(t_ray r, t_matrix_4x4 m);
 void			ft_swap(double *a, double *b);
+unsigned char	pixel_gray_get(int x, int y, t_img *img);
+
 
 
 #endif

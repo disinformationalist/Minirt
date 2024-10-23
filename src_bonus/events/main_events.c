@@ -165,6 +165,21 @@ void	toggle_shadow(t_trace *trace, t_on *on)
 		return ;
 }
 
+void	toggle_bump(t_trace *trace, t_on *on)
+{
+	if (on->object == NULL)
+		return ;
+	if (on->type == SPHERE)
+		trace->curr_sp->bump = !trace->curr_sp->bump;
+	else if (on->type == PLANE)
+		trace->curr_pl->bump = !trace->curr_pl->bump;
+	else if (on->type == CYLINDER)
+		trace->curr_cy->bump = !trace->curr_cy->bump;
+	else if (on->type == CUBE)
+		trace->curr_cu->bump = !trace->curr_cu->bump;
+	else
+		return ;
+}
 
 //translation, push, and pop functions
 
@@ -188,6 +203,8 @@ int	key_press_2(int keycode, t_trace *trace)
 		pop_object(trace, trace->on);
 	else if (keycode == 65508)
 		toggle_shadow(trace, trace->on);
+	else if (keycode == 65507)//lft cntrl
+		toggle_bump(trace, trace->on);
 	else
 		key_press_3(keycode, trace);
 	render(trace);

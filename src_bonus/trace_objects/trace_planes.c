@@ -54,8 +54,8 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *
 	if (plane->texture)
 		comps.color = texture_plane_at(trace, obj_pnt, plane);//if texturing
 	else 
-		comps.color = plane->color;
-	//comps.color = checker_at(comps.point, plane->transform);
+		comps.color = checker_at(comps.point, plane->transform);
+	//	comps.color = plane->color;
 
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;

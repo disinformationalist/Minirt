@@ -17,6 +17,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->color = get_color(line[6], 1.0);
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
+	new->bump = false;
 	new->texture = NULL; //if not assigned
 }
 

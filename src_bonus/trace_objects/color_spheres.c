@@ -26,14 +26,6 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 	obj_pnt = mat_vec_mult(sphere->transform, comps.point);
 	comps.normal = sp_normal_at(obj_pnt, sphere->transform);
 	
-	//make a set color function to choose between color, pattern texture, bump
-	if (sphere->texture)
-		comps.color = texture_sp_at(trace, obj_pnt, sphere);//if texturing
-	else 
-		comps.color = sphere->color;
-	
-	
-	
 	comps.eyev = neg(r.dir);
 	comps.mat = sphere->mat;
 	set_indicies(intersects, &comps.n1, &comps.n2);
@@ -46,6 +38,16 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	
+	//make a set color function to choose between color, pattern texture w/o bump
+	//this must be down here
+	if (sphere->texture)
+	{
+		comps.color = texture_sp_at(trace, obj_pnt, sphere, &comps);//if texturing
+		
+	}
+	else 
+		comps.color = sphere->color;
 	return (comps);
 }
 

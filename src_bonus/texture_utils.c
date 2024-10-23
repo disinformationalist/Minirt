@@ -17,6 +17,16 @@ t_norm_color pixel_color_get(int x, int y, t_img *img)
 	return (pixel_color);
 }
 
+unsigned char pixel_gray_get(int x, int y, t_img *img)
+{
+	unsigned char	gray;
+	int 			offset;
+
+	offset = y * img->line_len + (x * (img->bpp / 8));
+	gray = *(unsigned char *)(img->pixels_ptr + offset);
+	return (gray);
+}
+
 
 t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane)
 {
@@ -33,7 +43,7 @@ t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane)
 	int					i;
 	int					j;
 
-	double xmin =  -5, xmax =  5, zmin = xmin * img_iasp , zmax = xmax * img_iasp;//working
+	double xmin =  -5, xmax =  5, zmin = xmin * img_iasp , zmax = xmax * img_iasp;//working. struct these vals...?
 	u =  (obj_pnt.x - xmin) / (xmax - xmin);
 	v = (obj_pnt.z - zmin) / (zmax - zmin);
 	if (u < 0)
@@ -51,33 +61,42 @@ t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane)
 	return (col);
 }
 
-t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere) //t_matrix_4x4 transform, t_vec3 *norm)//place height / width with the image
+t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_comps *comps)
 {
 	t_norm_color	col;
 	t_position		pos;
 	double			theta;
 	double			phi;
 
+	t_position	dims;
+	
+	dims.i = sphere->texture->i_width;
+	dims.j = sphere->texture->i_height;
+
 	(void)trace;
 	theta = atan2(obj_pnt.z, obj_pnt.x);
 	phi = acos(obj_pnt.y / sphere->radius);
+	
 
-
-	pos.i = ft_round(((theta + M_PI) / (2 * M_PI)) * (sphere->texture->i_width - 1));
-	pos.j = ft_round((phi / M_PI) * (sphere->texture->i_height - 1));
+	pos.i = ft_round(((theta + M_PI) / (2 * M_PI)) * (double)(dims.i - 1));
+	pos.j = ft_round((phi / M_PI) * (double)(dims.j - 1));
 
 	if (pos.i < 0)
 		pos.i = -pos.i;
 	if (pos.j < 0)
 		pos.j = -pos.j;
-	pos.i = pos.i % (sphere->texture->i_width - 1);
-	pos.j = pos.j % (sphere->texture->i_height - 1);
+	pos.i = pos.i % (dims.i - 1);
+	pos.j = pos.j % (dims.j - 1);
 	col = pixel_color_get(pos.i, pos.j, sphere->texture->image);
-	//maybe place if() here
-	//sphere->norm = norm_vec(add_vec(sphere->norm, set_sp_norm_pert(pos.i, pos.j, sphere->texture->image, col)));
-
-//	trace->perturb = set_norm_pert(pos.i, pos.j, trace->image1, col);//set a double in trace struct then apply,
-//make sphere->perturb instead?//lookout threads race
+	if (sphere->bump)
+	{
+		comps->bump = sp_bump(pos, dims, sphere->texture->bump_map);
+		comps->normal = norm_vec(add_vec(comps->normal, comps->bump));
+	}
 	return (col);
 }
 
+
+
+//	trace->perturb = set_norm_pert(pos.i, pos.j, trace->image1, col);//set a double in trace struct then apply,
+//make sphere->perturb instead?//lookout threads race

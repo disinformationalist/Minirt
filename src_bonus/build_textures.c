@@ -11,7 +11,7 @@ uint8_t luminosity(t_norm_color color)
 	return ((uint8_t)(0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b));
 }
 
-t_vec3 set_sp_norm_pert(int i, int j, t_img *img, t_norm_color col)
+t_vec3 set_sp_norm_pert(int i, int j, t_img *img, t_norm_color col)//this color is the color converted before...
 {
 	t_vec3 perturb;
 	double lumin_col;
@@ -20,8 +20,8 @@ t_vec3 set_sp_norm_pert(int i, int j, t_img *img, t_norm_color col)
 	double norm_factor;
 	double bump = .25;
 	
-	lumin_col = get_lumin(col);
-	dfdx = get_lumin(pixel_color_get(i + 1, j, img)) - lumin_col;	
+	lumin_col = get_lumin(col); //current pix val
+	dfdx = get_lumin(pixel_color_get(i + 1, j, img)) - lumin_col;//diff next and curr in x fabs? abs/ 255, and proceed	
 	dfdy = get_lumin(pixel_color_get(i, j + 1, img)) - lumin_col;
 	norm_factor = 1.0 / (sqrt(dfdx * dfdx + dfdy * dfdy + 1));
 	perturb.x = -dfdx * norm_factor * bump;
@@ -69,6 +69,27 @@ t_img 	*create_img(void *mlx_ptr, int width, int height)
 	return (img);
 }
 
+t_vec3 sp_bump(t_position pos, t_position dims, t_img *img)//should use the unperturbed normal for shadows. this for light, once working could set this up at parse..
+{
+	t_vec3 			perturb;
+	unsigned char	curr;
+	double			dfdx;
+	double			dfdy;
+	double			norm_factor;
+	double			bump = 1;
+	
+	curr = pixel_gray_get(pos.i, pos.j, img); //current pix val
+	dfdx = (double)(pixel_gray_get((pos.i + 1) % dims.i, pos.j, img) - curr) / 255.0;
+	dfdy = (double)(pixel_gray_get(pos.i, (pos.j + 1) % dims.j, img) - curr) / 255.0;
+	norm_factor = 1.0 / (sqrt(dfdx * dfdx + dfdy * dfdy + 1));
+	perturb.x = -dfdx * norm_factor * bump;
+	perturb.y = -dfdy * norm_factor * bump;
+	perturb.z = norm_factor * bump;
+	perturb.w = 0;
+	return (perturb);
+}
+
+
 t_img *build_lumin_map(void *mlx_con, t_img *img, int width, int height)
 {
 	t_img			*bump_map;
@@ -109,12 +130,12 @@ int	import_textures(void *mlx_con, t_tx *textures)
 		curr->image = import_png(mlx_con, curr->i_name, &curr->i_width, &curr->i_height);
 		if (!curr->image)
 			return (1);
-		/* if (curr->m_name)
+		if (curr->m_name)
 			curr->bump_map = import_png(mlx_con, curr->m_name, &curr->m_width, &curr->m_height);
 		else
 			curr->bump_map = build_lumin_map(mlx_con, curr->image, curr->i_width, curr->i_height);
 		if (!curr->bump_map)
-			return (1); */
+			return (1);
 		curr = curr->next;
 		if (curr == textures)
 			break;
