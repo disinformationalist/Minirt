@@ -40,7 +40,7 @@ static inline double	get_light_int(t_comps comps, t_mat mat)
 	return (light_int);
 }
 
-static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
+/* static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
 {
 	t_vec3		move_u;
 	t_vec3		move_v;
@@ -52,7 +52,7 @@ static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
 	move_v = scale_vec(v + light.jitter[i % light.samples], light.vvec);
 	pos = add_vec(light.corner, add_vec(move_u, move_v));
 	return (pos);
-}
+} */
 
 //need this for the sqlt
 /* static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comps)

@@ -12,6 +12,78 @@ bool	hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr)
 	return (false);
 }
 
+void	filter_intersections(t_csg *csg, t_intersects **intersects)
+{
+	bool			inl;
+	bool			inr;
+	bool			lhit;
+	int				i;
+	int				j;
+
+	inl = false;
+	inr = false;
+	i = 0;
+	while (i < (*intersects)->count)
+	{
+		lhit = ((*intersects)->hits[i].object == csg->left);
+		if (lhit)
+			inl = !inl;
+		if ((*intersects)->hits[i].object == csg->right)
+			inr = !inr;
+		//printf("csg->op: %d\n", csg->op);
+		//printf("lhit: %d, inl: %d, inr: %d\n", lhit, inl, inr);
+		if (!hit_allowed(csg->op, lhit, inl, inr))
+		{
+			j = i;
+			while (j < (*intersects)->count - 1)
+			{
+				(*intersects)->hits[j] = (*intersects)->hits[j+1];
+				j++;
+			}
+			(*intersects)->count--;
+		}
+		else
+			i++;
+	}
+}
+
+t_csg	*make_new_csg(t_sphere *left, t_sphere *right, t_csg_op op)
+{
+	t_csg	*new_csg;
+
+	new_csg = (t_csg*)malloc(sizeof(t_csg));
+	if (!new_csg)
+		return (NULL); //TODO: handle malloc failure
+	new_csg->left = left;
+	new_csg->right = right;
+	new_csg->op = op;
+	return (new_csg);
+}
+
+void	check_csg_test(t_sphere *spheres, t_intersects *intersects)
+{
+	t_csg		*test_csg;
+
+	if (spheres == NULL)
+		return ;
+	test_csg = make_new_csg(spheres, spheres->next, INTERSECTION);
+	filter_intersections(test_csg, &intersects);
+	free(test_csg);
+}
+
+
+/* bool	hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr)
+{
+	if (op == UNION)
+		return ((lhit && !inr) || (!lhit && !inl));
+	else if (op == INTERSECTION)
+		//return ((lhit && inr) || (!lhit && inl));
+		return ((lhit && inl && inr) || (lhit && !inl && inr) || (!lhit && inl && inr) || (!lhit && inl && !inr));
+	else if (op == DIFFERENCE)
+		return ((lhit && !inr) || (!lhit && inl));
+	return (false);
+}
+
 t_intersects	*filter_intersections(t_csg *csg, t_intersects *intersects, t_ray ray)
 {
 	t_intersects	*filtered;
@@ -184,10 +256,10 @@ void	check_csg_test(t_sphere *spheres, t_intersects *intersects, t_ray ray)
 	if (spheres == NULL)
 		return ;
 	test_csg = make_new_csg(spheres, spheres->next, INTERSECTION);
-	get_csg_intersections(test_csg, intersects, ray);
-	//filter_intersections(test_csg, intersects, ray);
+	//get_csg_intersections(test_csg, intersects, ray);
+	filter_intersections(test_csg, intersects, ray);
 	free(test_csg);
-}
+} */
 
 /* static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)//change  store vals
 {

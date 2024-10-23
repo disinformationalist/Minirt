@@ -113,7 +113,7 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	return (false);
 }
 
-static inline bool	check_le_dist(t_lens *lenses, double dist, t_ray ray, double t)
+/* static inline bool	check_le_dist(t_lens *lenses, double dist, t_ray ray, double t)
 {
 	t_lens	*curr_le;
 
@@ -132,7 +132,7 @@ static inline bool	check_le_dist(t_lens *lenses, double dist, t_ray ray, double 
 			break;
 	}
 	return (false);
-}
+} */
 
 //check for light obstruction. currently used
 bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)

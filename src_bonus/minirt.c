@@ -12,9 +12,9 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	intersects->closest->object = NULL;
 	intersects->closest->object_type = -1;
 	intersects->count = 0;
-	//check_spheres(trace->spheres, intersects, ray);
+	check_spheres(trace->spheres, intersects, ray);
 	//check_lenses(trace->lenses, intersects, closest, ray);
-	check_csg_test(trace->spheres, intersects, ray);
+	check_csg_test(trace->spheres, intersects);
 	check_planes(trace->planes, intersects, ray);
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
