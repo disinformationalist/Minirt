@@ -29,6 +29,20 @@ typedef struct s_intersects
 
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
 
+typedef enum e_csg_op
+{
+	UNION,
+	INTERSECTION,
+	DIFFERENCE,
+}	t_csg_op;
+
+typedef struct s_csg
+{
+	void		*left;
+	void		*right;
+	t_csg_op	op;
+}	t_csg;
+
 typedef struct s_sphere
 {
 	int				id;
@@ -583,5 +597,8 @@ void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
 long			get_time(void);
 void			print_times(long start, long end, char *msg);
+
+/*** CSG ***/
+void			check_csg_test(t_sphere *spheres, t_intersects *intersects);
 
 #endif
