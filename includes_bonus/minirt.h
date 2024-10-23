@@ -593,6 +593,6 @@ long			get_time(void);
 void			print_times(long start, long end, char *msg);
 
 /*** CSG ***/
-void			check_csg_test(t_sphere *spheres, t_intersects *intersects);
+void			check_csg(void *shapes1, void *shapes2, t_intersects *intersects);
 
 #endif
