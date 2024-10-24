@@ -66,7 +66,7 @@ void	check_csg_test(t_sphere *spheres, t_intersects *intersects)
 
 	if (spheres == NULL)
 		return ;
-	test_csg = make_new_csg(spheres, spheres->next, INTERSECTION);
+	test_csg = make_new_csg(spheres, spheres->next, DIFFERENCE);
 	filter_intersections(test_csg, &intersects);
 	free(test_csg);
 }

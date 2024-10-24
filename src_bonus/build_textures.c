@@ -18,7 +18,7 @@ t_vec3 set_sp_norm_pert(int i, int j, t_img *img, t_norm_color col)//this color 
 	double dfdx;
 	double dfdy;
 	double norm_factor;
-	double bump = .25;
+	double bump = 1;
 	
 	lumin_col = get_lumin(col); //current pix val
 	dfdx = get_lumin(pixel_color_get(i + 1, j, img)) - lumin_col;//diff next and curr in x fabs? abs/ 255, and proceed	

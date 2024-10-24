@@ -201,9 +201,9 @@ int	key_press_2(int keycode, t_trace *trace)
 		push_new_object(trace, trace->on);
 	else if (keycode == COMMA)
 		pop_object(trace, trace->on);
-	else if (keycode == 65508)
+	else if (keycode == XK_Control_R)
 		toggle_shadow(trace, trace->on);
-	else if (keycode == 65507)//lft cntrl
+	else if (keycode == XK_Control_L)
 		toggle_bump(trace, trace->on);
 	else
 		key_press_3(keycode, trace);
@@ -216,9 +216,9 @@ int	key_press(int keycode, t_trace *trace)
 	printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
-	else if (keycode == UP_CARET)
+	else if (keycode == XK_Tab)
 		trace->layer = !trace->layer;
-	else if (keycode == N_1 || keycode == N_2 || keycode == N_3 || keycode == N_4 || keycode == N_9 || keycode == N_0 || keycode == N_5)
+	else if (keycode == XK_1 || keycode == XK_2 || keycode == XK_3 || keycode == XK_4 || keycode == XK_9 || keycode == XK_0 || keycode == XK_5)
 		switch_list(keycode, trace, trace->on);
 	else if (keycode == PAD_PLUS && trace->layer)
 		adjust_super(keycode, trace);

@@ -61,7 +61,7 @@ static int	init_import(t_png_io **png_img, t_img **image, const char *file)
 	png_init_io((*png_img)->png_ptr, (*png_img)->fp);
 	png_read_info((*png_img)->png_ptr, (*png_img)->info);
 	(*png_img)->color_type = \
-		png_get_color_type((*png_img)->png_ptr, (*png_img)->info);//
+		png_get_color_type((*png_img)->png_ptr, (*png_img)->info);
 	if (init_import_vars(*png_img))
 		return (error_3(*png_img, "Unsupported color type.\n"));
 	*image = (t_img *)malloc(sizeof(t_img));

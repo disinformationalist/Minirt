@@ -34,7 +34,7 @@ tx			sun.png
 tx			earth2k.png		earthbump2k.png
 
 # earthbump used here for testing fix the gray import on him
-#tx			earthbump2k.png
+tx			earthbump2k.png
 tx			chaos_1.png
 #tx			chaos_2.png
 #tx			chaos_3.png

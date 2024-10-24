@@ -27,6 +27,21 @@ unsigned char pixel_gray_get(int x, int y, t_img *img)
 	return (gray);
 }
 
+/* typedef struct s_tx_vals
+{
+	int		img_h;
+	int		img_w;
+	int		i;
+	int		j;
+	double	xmin;
+	double	xmax;
+	double	zmin;
+	double	zmax;
+	double	u;
+	double 	v;
+	double img_iasp;
+
+}	t_tx_vals; */
 
 t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane)
 {
@@ -91,7 +106,7 @@ t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_
 	if (sphere->bump)
 	{
 		comps->bump = sp_bump(pos, dims, sphere->texture->bump_map);
-		comps->normal = norm_vec(add_vec(comps->normal, comps->bump));
+		comps->normal = norm_vec(add_vec(comps->normal, comps->bump));//make a sepbump normal that sets to normal if bump is off or not present
 	}
 	return (col);
 }

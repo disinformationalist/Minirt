@@ -57,7 +57,7 @@ void	set_img_pixels_rgb(t_png_io *png_img, t_img *image, int width, int height)
 		{
 			px = &(row[png_img->x * 3]);
 			color = ((unsigned int)px[0]) << 16 | ((unsigned int)px[1] << 8) \
-			| (unsigned int)px[2];
+			| (unsigned int)px[2] | (0xFF << 24);
 			*(unsigned int *)(image->pixels_ptr + (4 * width * png_img->y) \
 			+ (4 * png_img->x)) = color;
 		}
@@ -104,7 +104,7 @@ void	set_img_pixels_gray(t_png_io *png_img, t_img *image, int width, int height)
 		png_img->x = -1;
 		while (++png_img->x < width)
 		{
-			px = &(row[png_img->x * 2]);
+			px = &(row[png_img->x]);
 			gray_val = px[0];
 			color = ((unsigned int)gray_val) << 16 | ((unsigned int)gray_val << 8) \
 			| (unsigned int)gray_val | (0xFF << 24);

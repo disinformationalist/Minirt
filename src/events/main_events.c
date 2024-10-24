@@ -57,17 +57,17 @@ int	close_win(t_trace *trace)
 int	key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)
-		rotate_object(trace, trace->on, rot_x(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(-M_PI / 12));
 	else if (keycode == D)
-		rotate_object(trace, trace->on, rot_x(M_PI / 6));
+		rotate_object(trace, trace->on, rot_x(M_PI / 12));
 	else if (keycode == W)
-		rotate_object(trace, trace->on, rot_y(M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(M_PI / 12));
 	else if (keycode == S)
-		rotate_object(trace, trace->on, rot_y(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_y(-M_PI / 12));
 	else if (keycode == Q)
-		rotate_object(trace, trace->on, rot_z(M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(M_PI / 12));
 	else if (keycode == E)
-		rotate_object(trace, trace->on, rot_z(-M_PI / 6));
+		rotate_object(trace, trace->on, rot_z(-M_PI / 12));
 	else
 		supersample_handle(keycode, trace);
 	return (0);
@@ -129,10 +129,10 @@ int	key_press(int keycode, t_trace *trace)
 {
 	if (keycode == XK_Escape)
 		close_win(trace);
-	else if (keycode == UP_CARET)
+	else if (keycode == XK_Tab)
 		trace->layer = !trace->layer;
-	else if (keycode == N_1 || keycode == N_2 || keycode == N_3
-		|| keycode == N_4 || keycode == N_9 || keycode == N_0)
+	else if (keycode == XK_1 || keycode == XK_2 || keycode == XK_3
+		|| keycode == XK_4 || keycode == XK_9 || keycode == XK_0)
 		switch_list(keycode, trace, trace->on);
 	else if (keycode == PAD_PLUS && trace->layer)
 		adjust_super(keycode, trace);
