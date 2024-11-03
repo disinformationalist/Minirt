@@ -78,6 +78,16 @@ t_norm_color get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_col
 	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
 	color_out.g = comps.color.g * (lt_color.g + m.amb * trace->amb->color.g);
 	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
+	
+	//printf("%f\n", comps.color.r);
+	//tring out with irradiance
+	//if (comps.irrad > 0)
+	/* {
+		color_out.r += comps.irrad.r * comps.color.r;// * m.diff; // Scale by diffuse coefficient
+		color_out.g += comps.irrad.g * comps.color.g;// * m.diff;
+    	color_out.b += comps.irrad.b * comps.color.b;// * m.diff;
+	} */
+
 	if (m.ref > 0 && m.transp > 0)//add reflective and refractive
 	{
  		r = schlick(comps);

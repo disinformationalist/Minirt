@@ -19,7 +19,7 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 	t_comps	comps;
 	t_point obj_pnt;
 	
-	(void)trace;
+	//(void)trace;
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
@@ -36,8 +36,9 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 	}
 	else
 		comps.inside = false;
-	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	
 	//make a set color function to choose between color, pattern texture w/o bump
 	//this must be down here
@@ -48,6 +49,10 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 	}
 	else 
 		comps.color = sphere->color;
+
+	//comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
+	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
+	
 	return (comps);
 }
 

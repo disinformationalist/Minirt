@@ -15,6 +15,16 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 	reinit_viewing(trace);
 }
 
+void move_arealt(t_light *lt, t_vec3 v)
+{
+	lt->curr_rottran = mat_mult(lt->curr_rottran, translation(v.x, v.y, v.z));
+	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
+	lt->emitter->curr_rottran = mat_mult(lt->emitter->curr_rottran, translation(-v.x, -v.y, -v.z));
+	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
+	set_arealt(lt);
+}
+
+
 // just a continuation of the function below it
 
 static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
@@ -28,11 +38,17 @@ static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 	}
 	else if (on->type == CUBE)
 	{
+		/* if (trace->curr_cu->emitter)
+			return ; */
 		trace->curr_cu->curr_rottran = mat_mult(trace->curr_cu->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
 	}
 	else if (on->type == LIGHT)
+	{
 		trace->curr_lt->center = add_vec(trace->curr_lt->center, vec1);
+		if (trace->curr_lt->type == AREA)
+			move_arealt(trace->curr_lt, vec1);
+	}
 	else if (on->type == CAM)
 		translate_cam(trace, vec1);
 	else

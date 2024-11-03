@@ -3,7 +3,6 @@
 static inline void free_all(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	free_closests(trace, piece, i, j);
-	//free(trace->w_colors);
 	clear_all(trace);
 }
 
@@ -34,7 +33,8 @@ void	render_scene_s(t_trace *trace)
 	free_closests(trace, piece, trace->num_rows - 1, trace->num_cols);
 }
 
-//render_scene starts by breaking up the screen into sections of pixels and assigns the limits of each section to a t_peice, each to be worked by a thread
+/* render_scene starts by breaking up the screen into groupss of pixels and 
+assigns the limits of each part to a t_peice, each to be worked by a thread */
 
 void	render_scene(t_trace *trace)
 {
@@ -65,16 +65,18 @@ void	render_scene(t_trace *trace)
 
 void	render(t_trace *trace)
 {	
-	long start = get_time();//test
+	long start;
+	
+	start = get_time();
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);
 		render_scene_s(trace);
-		ft_putstr_color_fd(1, "SUPERSAMPLE COMPLETE!\n", BOLD_BRIGHT_GREEN);
+		ft_putstr_color_fd(1, "SUPERSAMPLE COMPLETE\n", BOLD_BRIGHT_GREEN);
 	}
 	else
 		render_scene(trace);
 	mlx_put_image_to_window(trace->mlx_connect,
 		trace->mlx_win, trace->img.img_ptr, 0, 0);
-	print_times(start, get_time(), "RENDER TIME: %f seconds\n");//test
+	print_times(start, get_time(), "RENDER TIME: %f seconds\n");
 }

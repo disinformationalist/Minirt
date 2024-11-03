@@ -23,8 +23,8 @@ char	*build_lt_line(t_light *light)
 	
 	cen = light->center;
 	bright = light->brightness;
-	spaces = 46 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
-	spaces2 = 18 - count_chars(bright); 
+	spaces = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
+	spaces2 = 20 - count_chars(bright); 
 	snprintf(line, sizeof(line), "L           %.3f,%.3f,%.3f%*s%.3f%*s", cen.x, cen.y, cen.z, spaces, "", bright, spaces2, "");
 	add_lt_color(light, line);
 
@@ -61,7 +61,7 @@ void	write_lights(t_light *lights, int fd)
 	
 	if (lights == NULL || !count_lights(lights))
 		return ;
-	ft_putstr_fd("#Lights:    Cen_x | Cen_y | Cen_z    								    Intensity             R | G | B\n", fd);
+	ft_putstr_fd("#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B\n", fd);
 	curr_lt = lights;
 	while (true)
 	{

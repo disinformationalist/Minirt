@@ -1,14 +1,17 @@
 #include "minirt.h"
+//the group contains ll of shapes... a shape that contains all other shapes...
+//doubly linked circular group structure. cells? for shorthand
+
+
 /* typedef	struct s_shape
 {
 	void			*shape;
 	t_type			type;
 	t_matrix_4x4	transform;
 	struct s_shape	*next;
+	struct s_shape	*prev;
 	void			*parent;
 }	t_shape;
-
-//the group contains ll of shapes... a shape that contains all other shapes...
 
 typedef struct s_group 
 {
@@ -16,8 +19,6 @@ typedef struct s_group
 	t_type			type;
 	t_matrix_4x4	transform;//group transform
 }	t_group; */
-
-//doubly linked circular group structure. cells? for shorthand
 
 //create and return a new group instance
 
@@ -40,7 +41,6 @@ int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 {
 	t_shape *new;
 	t_shape *last;
-	t_shape *curr;
 
 	new = (t_shape *)malloc(sizeof(t_shape));
 	if (!new)
@@ -48,7 +48,7 @@ int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 	new->shape = obj;
 	new->type = type;
 	new->parent = group;
-	new->transform = transform;
+	new->transform = mat_mult(group->transform, transform);//when adjusting grouptran it must reapply to all
 	if (group->shapes == NULL)
 	{
 		new->next = new;
@@ -65,8 +65,10 @@ int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 }
 
 //if i group a shape should i remove it from other list?... would have to free group objs themselves here then.. 
+//could group each list as a subgroup to the group structure... then the group free frees all...
 
-//free the groups shapes and the group itself.
+
+//recursively free the groups' shapes and the groups themselves.
 
 void free_group(t_group *group)
 {
@@ -74,19 +76,23 @@ void free_group(t_group *group)
 	t_shape *temp;
 
 	if (!group->shapes)
-	{
 		return free(group);
-	}
 	curr = group->shapes;
-	group->shapes->prev->next = NULL;//next of last elem to null to break circle
+	group->shapes->prev->next = NULL;
 	while (curr != NULL)
 	{
 		temp = curr->next;
+		if (curr->type == GROUP)
+			free_group((t_group *)curr->shape);//currently only frees shape containers not shape actual. below comment for actuals
+		/* else
+			free(curr->shape); */
 		free(curr);
 		curr = temp;
 	}
 	free(group);
 }
+
+//the next 2 fts recursively tests intersections down through group
 
 void	ray_group_intersect(t_shape *curr, t_ray ray, t_intersects *intersects)
 {
@@ -99,11 +105,10 @@ void	ray_group_intersect(t_shape *curr, t_ray ray, t_intersects *intersects)
 	else if (curr->type == CUBE)
 		ray_cube_intersect((t_cube *)curr->shape, ray, intersects);
 	else if (curr->type == GROUP)
-		check_group((t_group *)curr->shape, intersects, ray);//recur!
+		check_group((t_group *)curr->shape, intersects, ray);
 	else
 		return ;
 }
-
 
 //function to check the intersections of a group
 
@@ -117,7 +122,6 @@ void	check_group(t_group *group, t_intersects *intersects, t_ray ray)
 	curr = group->shapes;
 	while (true)
 	{
-		//must type cast and pass into ft based on type//if type is group recur here
 		ray_group_intersect(curr, ray, intersects);
 		curr = curr->next;
 		if (curr == group->shapes)
@@ -126,12 +130,3 @@ void	check_group(t_group *group, t_intersects *intersects, t_ray ray)
 }
 
 //IMPLEMENT FIND CHILD NORMAL WITHIN THE GROUP.
-
-
-
-
-
-
-
-//maybe batch together objects by type into new lnkd list  or array, when intersect test comes, mabey...
-//maybe switch to individual tesing by type...

@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline void	ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects)
+void	ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects)
 {
 	double	t;
 
@@ -50,12 +50,6 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *
 	comps.normal = plane->norm;
 	obj_pnt = mat_vec_mult(plane->transform, comps.point);
 	
-	//make a set color function to choose between color, pattern texture, bump
-	if (plane->texture)
-		comps.color = texture_plane_at(trace, obj_pnt, plane);//if texturing
-	else 
-		comps.color = checker_at(comps.point, plane->transform);
-	//	comps.color = plane->color;
 
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;
@@ -68,7 +62,20 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *
 	else
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+
+	if (plane->texture)
+		comps.color = texture_plane_at(trace, obj_pnt, plane, &comps);//if texturing
+	else 
+		comps.color = checker_at(comps.point, plane->transform);
+		//comps.color = plane->color;
+	//make a set color function to choose between color, pattern texture, bump
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+
+	//testing
+//	comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
+	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
+
+	
 	return (comps);
 }
 

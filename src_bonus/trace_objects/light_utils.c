@@ -13,6 +13,77 @@
 	inner cone    outer cone
 (full intensity)  (attenuating toward outer edge)	 */	
 
+//----------------testing these
+/* double brdf_schlick(t_comps comps)
+{
+	double	cos;
+	double	res;
+	double	cos2;
+
+	cos = fmax(dot_product(comps.eyev, comps.normal), 0.0);
+	res = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
+	res *= res;
+	cos =  1 - cos;
+	cos2 = cos * cos;
+	res = res + (1 - res) * cos2 * cos2 * cos;
+	return (res);
+}
+
+
+double	comp_distr(double ndh, double rough, bool is_beck)
+{
+	double rough2;
+	double ndh2;
+	double ndh4;
+
+	rough2 = rough * rough;
+	ndh2 = ndh * ndh;
+	ndh4 = ndh2 * ndh2;
+
+	if (is_beck)
+		return (exp((ndh2 - 1.0) / (rough2 * ndh2)) / (4.0 * M_PI * rough2 * ndh4));
+	else
+		return (rough2 / (M_PI * (ndh4 * (rough2 - 1.0) + 1.0) * (ndh4 * (rough2 - 1.0) + 1.0)));
+}
+
+double	get_light_brdf(t_comps comps, t_mat mat)
+{
+	t_vec3	h_vec;
+	double	ndl;
+	double	ndh;
+	double	vdh;
+	double	ndv;
+
+	double	diff;
+	double	spec;
+	double	fren;
+	double	geo;
+	double	distr;
+
+	h_vec = norm_vec(add_vec(comps.light_dir, comps.eyev));
+	ndl = fmax(dot_product(comps.normal, comps.light_dir), 0.001);
+	ndv = fmax(dot_product(comps.normal, comps.eyev), 0.001);
+	ndh =  fmax(dot_product(comps.normal, h_vec), 0.001);
+	vdh = fmax(dot_product(comps.eyev, h_vec), 0.001);
+
+	diff = mat.diff * ndl / M_PI;
+
+
+	fren = brdf_schlick(comps);//add to comps to reuse. 
+
+	//double geo = (ndl * ndv) / (ndl * vdh + ndv * nh + 1e-5);
+	geo = fmin(1.0, fmin((2.0 * ndl * ndv) / (vdh + 1e-5), (2.0 * ndv * ndl) / ndh));
+	
+	distr = comp_distr(ndh, mat.rough, true);//make optional
+	
+	//spec = (fren * geo * distr) / (4.0 * ndl * ndv);
+	spec = (fren * geo * distr) / (4.0 * ndl * ndv);
+	spec = fmin(spec, .5);//----
+	return (diff + spec);
+} */
+//--------------------------------
+
+
 //get the spotlight strength
 static inline double get_spot_int(t_vec3 light_dir, t_light *splight)
 {
@@ -40,22 +111,23 @@ static inline double	get_light_int(t_comps comps, t_mat mat)
 	return (light_int);
 }
 
-//need this for the sqlt
-/* static inline t_vec3	pnt_on_light(t_sqlight light, double u, double v)
+//getting the current point to test on an area light
+
+static inline t_vec3	pnt_on_light(t_light light, double u, double v)
 {
 	t_vec3		move_u;
 	t_vec3		move_v;
 	t_point		pos;
-	static int	i = 0;
 
-	move_u = scale_vec(u + light.jitter[i % light.samples], light.uvec);
-	i++;
-	move_v = scale_vec(v + light.jitter[i % light.samples], light.vvec);
+	move_u = scale_vec(u + randf(), light.uvec);
+	move_v = scale_vec(v + randf(), light.vvec);
 	pos = add_vec(light.corner, add_vec(move_u, move_v));
 	return (pos);
 }
- */
-/* static inline double intensity_at(t_trace *trace, t_sqlight light, t_comps *comps)
+
+//delivers light intensity of light from an area light
+
+static inline double intensity_at(t_trace *trace, t_light light, t_comps *comps)
 {
 	double	tot_int;
 	int		i;
@@ -74,20 +146,24 @@ static inline double	get_light_int(t_comps comps, t_mat mat)
 			comps->light_dir = norm_vec(subtract_vec(lt_pos, comps->point));
 			if (!obscured_b(trace, lt_pos, *comps))
 			{
-				comps->cos_a = dot_product(comps->normal, comps->light_dir);
+				comps->cos_a = fmax(0.0, dot_product(comps->normal, comps->light_dir));
 				comps->sqlt_int += get_light_int(*comps, comps->mat);
+				//comps->sqlt_int += get_light_brdf(*comps, comps->mat);
+
 				tot_int += 1.0;
 			}
 		}
 	}
 	comps->sqlt_int /= light.samples;
 	return (tot_int / light.samples);
-} */
+}
 
 //handle all non ambient light contribution for each source
 
 void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt)
 {
+	double sqlt_inten;
+	
 	if (curr_lt->type == SPOT)
 	{
 		comps->spot_int = get_spot_int(comps->light_dir, curr_lt);
@@ -96,20 +172,25 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 			comps->cos_a = dot_product(comps->normal, comps->light_dir);
 			if (!obscured_b(trace, curr_lt->center, *comps))
 				*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_int(*comps, comps->mat), curr_lt->color));
+				//*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_brdf(*comps, comps->mat), curr_lt->color));
+				
 		}
 	}
-	else
+	else if (curr_lt->type == AREA)
 	{
-	/* 	// for sqlight if (curr_lt->type == AREA, sq)
-		double sqlt_inten;
-		sqlt_inten = intensity_at(trace, *(trace->sqlt), comps);
-	//	*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color));
-		*lt_color = sum_rgbs(*lt_color, mult_color(trace->sqlt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color)); */
+		sqlt_inten = intensity_at(trace, *curr_lt, comps);
+		*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color));
+	}
+	else//point
+	{
 
-		
-		//point light
+				//comps->cos_a = fmax(0.0, dot_product(comps->normal, comps->light_dir));
 		comps->cos_a = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, curr_lt->center, *comps))
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));
+			//*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_brdf(*comps, comps->mat), curr_lt->color));
+	
 	}
 }
+
+

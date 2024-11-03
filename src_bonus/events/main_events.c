@@ -61,9 +61,6 @@ NUM PAD 1 - 9 => change material of current object
 int	close_win(t_trace *trace)
 {	
 	free_all_objects(trace);
-
-	free(trace->sqlt->jitter);//---------
-	free(trace->sqlt);////-----------
 	free(trace->on);
 	free(trace->w_colors);
 	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
@@ -173,10 +170,10 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_sp->bump = !trace->curr_sp->bump;
 	else if (on->type == PLANE)
 		trace->curr_pl->bump = !trace->curr_pl->bump;
-	else if (on->type == CYLINDER)
+	/* else if (on->type == CYLINDER)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
 	else if (on->type == CUBE)
-		trace->curr_cu->bump = !trace->curr_cu->bump;
+		trace->curr_cu->bump = !trace->curr_cu->bump; */
 	else
 		return ;
 }

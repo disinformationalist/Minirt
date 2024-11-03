@@ -107,9 +107,13 @@ void	free_lt_list(t_light **start)
 	while (curr != *start)
 	{
 		temp = curr->next;
+		if (curr->type == AREA)
+			free(curr->emitter);
 		free(curr);
 		curr = temp;
 	}
+	if (curr->type == AREA)
+		free(curr->emitter);
 	free(curr);
 	*start = NULL;
 }
@@ -131,7 +135,6 @@ void	free_curr_tx(void *mlx_con, t_tx *curr)
 		free(curr->bump_map);
 	}	
 	free(curr);
-	//bumpmap do the same
 }
 
 void	free_tx_list(void *mlx_con, t_tx **start)
@@ -153,14 +156,38 @@ void	free_tx_list(void *mlx_con, t_tx **start)
 	*start = NULL;
 }
 
+void	free_tri_list(t_tri **start)
+{
+	t_tri	*curr;
+	t_tri	*temp;
+
+	if (*start == NULL)
+		return ;
+	curr = *start;
+	curr = curr->next;
+	while (curr != *start)
+	{
+		temp = curr->next;
+		free(curr);
+		curr = temp;
+	}
+	free(curr);
+	*start = NULL;
+}
+
 void	free_all_objects(t_trace *trace)
 {
+	
+	if (trace->group)
+		free_group(trace->group);
+	//free_mapping(trace);//
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);
 	free_le_list(&trace->lenses);
 	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
+	free_tri_list(&trace->triangles);
 	free_tx_list(trace->mlx_connect, &trace->textures);
 	if (trace->amb)
 		free(trace->amb);

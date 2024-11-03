@@ -49,6 +49,10 @@ static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray 
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	//comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
+	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
+
+
 	return (comps);
 }
 
@@ -63,6 +67,8 @@ t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 	//make ref_cols struct;
 
 	cube = (t_cube *)intersects->closest->object;
+	if (cube->emitter)
+		return (cube->color);
 	lt_color = color(0, 0, 0);
 	comps = set_cucomps(cube, intersects, r, trace);
 	if (trace->lights)

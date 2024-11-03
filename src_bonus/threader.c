@@ -60,15 +60,9 @@ int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 	piece[i][j].y_s = i * (trace->height / trace->num_rows);
 	piece[i][j].y_e = (i + 1) * (trace->height / trace->num_rows);
 	piece[i][j].trace = trace;
-	/* piece[i][j].closest = (t_track_hits *)malloc(sizeof(t_track_hits));
-	if (!piece[i][j].closest)
-		return (1); */
 	piece[i][j].intersects = create_ints(trace->total_ints);
 	if (!piece[i][j].intersects)
-	{
-		//free(piece[i][j].closest);
 		return (1);
-	}
 	return (0);
 }
 

@@ -27,12 +27,12 @@ unsigned char pixel_gray_get(int x, int y, t_img *img)
 	return (gray);
 }
 
-/* typedef struct s_tx_vals
+typedef struct s_tx_vals
 {
-	int		img_h;
+	/* int		img_h;
 	int		img_w;
 	int		i;
-	int		j;
+	int		j; */
 	double	xmin;
 	double	xmax;
 	double	zmin;
@@ -41,36 +41,49 @@ unsigned char pixel_gray_get(int x, int y, t_img *img)
 	double 	v;
 	double img_iasp;
 
-}	t_tx_vals; */
+}	t_tx_vals;
 
-t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane)
+/* comp_uv(t_point obj_pnt, double xmin, double xmax, double iasp)
+{
+	
+} */
+
+
+t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane, t_comps *comps)
 {
 	t_norm_color	col;
+	t_tx_vals		vals;
+	t_position		dims;
+	t_position		pos;
 
 	(void)trace;
 	//t_img *tx = trace->textures->image;
-	int	img_h = plane->texture->i_height;
-	int	img_w = plane->texture->i_width;
-	double img_iasp = (double)img_h / (double)img_w;
+	dims.j = plane->texture->i_height;
+	dims.i = plane->texture->i_width;
+	vals.img_iasp = (double)dims.j / (double)dims.i;
 
-	double				u;
-	double				v;
-	int					i;
-	int					j;
+	vals.xmin =  -5;
+	vals.xmax =  5;
+	vals.zmin = vals.xmin * vals.img_iasp;
+	vals.zmax = vals.xmax * vals.img_iasp;//working. struct these vals...?
+	vals.u =  (obj_pnt.x - vals.xmin) / (vals.xmax - vals.xmin);
+	vals.v = (obj_pnt.z - vals.zmin) / (vals.zmax - vals.zmin);
+	if (vals.u < 0)
+		vals.u = -vals.u;
+	if (vals.v < 0)
+		vals.v = -vals.v;
+	vals.u = 1 - fabs(fmod(vals.u, 2.0) - 1.0);
+	vals.v = 1 - fabs(fmod(vals.v, 2.0) - 1.0);
+	pos.i = ft_round((dims.i - 1) * vals.u);
+	pos.j = ft_round((dims.j - 1) * vals.v);
+	col = pixel_color_get(pos.i, pos.j, plane->texture->image);
 
-	double xmin =  -5, xmax =  5, zmin = xmin * img_iasp , zmax = xmax * img_iasp;//working. struct these vals...?
-	u =  (obj_pnt.x - xmin) / (xmax - xmin);
-	v = (obj_pnt.z - zmin) / (zmax - zmin);
-	if (u < 0)
-		u = -u;
-	if (v < 0)
-		v = -v;
-	u = 1 - fabs(fmod(u, 2.0) - 1.0);
-	v = 1 - fabs(fmod(v, 2.0) - 1.0);
-	i = ft_round((img_w - 1) * u);
-	j = ft_round((img_h - 1) * v);
-	col = pixel_color_get(i, j, plane->texture->image);
-
+	if (plane->bump)
+	{
+		comps->bump = sp_bump(pos, dims, plane->texture->bump_map);
+		comps->normal = norm_vec(add_vec(comps->normal, comps->bump));//make a sepbump normal that sets to normal if bump is off or not present
+	
+	}
 	//bump map part//using color of text
 	//plane->norm = norm_vec(add_vec(plane->norm, set_pl_norm_pert(i, j, plane->texture->image, col)));
 	return (col);
@@ -90,10 +103,10 @@ t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_
 
 	(void)trace;
 	theta = atan2(obj_pnt.z, obj_pnt.x);
-	phi = acos(obj_pnt.y / sphere->radius);
+	phi = acos(obj_pnt.y);// / sphere->radius);
 	
 
-	pos.i = ft_round(((theta + M_PI) / (2 * M_PI)) * (double)(dims.i - 1));
+	pos.i = ft_round(((theta + M_PI) / (2 * M_PI)) * (double)(dims.i - 1));// could go out of bound on dims
 	pos.j = ft_round((phi / M_PI) * (double)(dims.j - 1));
 
 	if (pos.i < 0)
@@ -105,8 +118,18 @@ t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_
 	col = pixel_color_get(pos.i, pos.j, sphere->texture->image);
 	if (sphere->bump)
 	{
+		t_vec3 w_bump;
 		comps->bump = sp_bump(pos, dims, sphere->texture->bump_map);
-		comps->normal = norm_vec(add_vec(comps->normal, comps->bump));//make a sepbump normal that sets to normal if bump is off or not present
+		t_vec3 tangent = vec(-sin(theta), 0, cos(theta), 0);
+		t_vec3 bitangent = vec(cos(theta) * cos(phi), -sin(phi), sin(theta) *  cos(phi), 0);
+		
+		w_bump = add_vec(scale_vec(comps->bump.x, tangent), scale_vec(comps->bump.y, bitangent));
+		w_bump = add_vec(scale_vec(comps->bump.z, comps->normal), w_bump);
+		
+
+		comps->normal = norm_vec(w_bump);
+		//comps->normal = norm_vec(add_vec(comps->normal, comps->bump));//make a sepbump normal that sets to normal if bump is off or not present
+	
 	}
 	return (col);
 }

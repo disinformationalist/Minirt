@@ -55,8 +55,15 @@ static inline t_norm_color	get_obj_color(t_on *on)
 
 static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 {
+	t_light *lt;
+
 	if (on->type == LIGHT)
-		((t_light *)on->object)->color = new_col;
+	{
+		lt = (t_light *)on->object;
+		lt->color = new_col;
+		if (lt->type == AREA)
+			lt->emitter->color = mult_color(255.0, new_col);
+	}
 	else if (on->type == SPHERE)
 		((t_sphere *)on->object)->color = mult_color(255.0, new_col);
 	else if (on->type == PLANE)
