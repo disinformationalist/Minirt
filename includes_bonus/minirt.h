@@ -12,23 +12,16 @@
 # define ASPECT (16.0 / 9.0)
 //# define ASPECT (4.0 / 3.0)
 
-// holds the current closest object
 
-typedef struct s_track_hits
-{
-	double	t;
-	void	*object;
-	t_type	object_type;
-	int		csg_tag;
-}	t_track_hits;
 
-typedef struct s_intersects
+
+/* typedef struct s_intersects
 {
 	t_track_hits	*hits;
 	int				count;
 	int				size;
 	t_track_hits	*closest;
-}	t_intersects;
+}	t_intersects; */
 
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
 

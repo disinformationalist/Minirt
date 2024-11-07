@@ -105,13 +105,22 @@ typedef struct s_cons
 	t_type			type;
 }	t_cons;
 
-// holds the info for an intersection
+/* // holds the info for an intersection
 
 typedef struct s_track_hits
 {
 	double	t;
 	void	*object;
 	t_type	object_type;
+}	t_track_hits; */
+
+
+typedef struct s_track_hits
+{
+	double	t;
+	void	*object;
+	t_type	object_type;
+	int		csg_tag;
 }	t_track_hits;
 
 typedef struct s_intersects
