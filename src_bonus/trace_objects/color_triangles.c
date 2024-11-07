@@ -57,8 +57,8 @@ t_norm_color color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_dept
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
-	t_norm_color	refl_col;
-	t_norm_color	refr_col;
+	/* t_norm_color	refl_col;
+	t_norm_color	refr_col; */
 
 	tri = (t_tri *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
@@ -75,7 +75,11 @@ t_norm_color color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_dept
 				break;
 		}
 	}
-	refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color4(trace, comps, lt_color));	
+
+/* refl_col = get_reflected(trace, comps, intersects, depths);
 	refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color3(trace, comps, lt_color, refl_col, refr_col));
+	return (get_final_color3(trace, comps, lt_color, refl_col, refr_col)); */
 }

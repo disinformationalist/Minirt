@@ -85,13 +85,13 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_de
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
-	t_norm_color	 ref_col;
-	t_norm_color	refr_col;
+/* 	t_norm_color	 ref_col;
+	t_norm_color	refr_col; */
 
 	plane = (t_plane *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
 	comps = set_plcomps(plane, intersects, r, trace);
-	if (trace->lights)//maybe require light?or place outside of this.
+	if (trace->lights)
 	{
 		curr_lt = trace->lights;
 		while (true)
@@ -103,7 +103,11 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_de
 				break;
 		}
 	}
-	ref_col = get_reflected(trace, comps, intersects, depths);
+	comps.refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color4(trace, comps, lt_color));	
+
+/* ref_col = get_reflected(trace, comps, intersects, depths);
 	refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color3(trace, comps, lt_color, ref_col, refr_col));
+	return (get_final_color3(trace, comps, lt_color, ref_col, refr_col)); */
 }

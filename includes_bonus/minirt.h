@@ -282,8 +282,11 @@ typedef struct t_comps
 	t_vec3			under_pnt;
 	t_vec3			bump;
 	t_norm_color	color;
+	t_norm_color refr_col;
+	t_norm_color refl_col;
 
-	t_norm_color	irrad;
+
+	//t_norm_color	irrad;
 
 }	t_comps;
 
@@ -320,6 +323,9 @@ void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 
 t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);//get rid of soon
 t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
+
+t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
+
 
 void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
 void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);

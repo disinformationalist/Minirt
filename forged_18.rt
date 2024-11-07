@@ -32,7 +32,7 @@ tx			neb1.png
 tx			sun.png
 tx			earth2k.png					  earthbump2k.png
 tx			chaos_1.png
-tx			chaos_2.png
+#tx			chaos_2.png
 #tx			chaos_3.png
 #tx			chaos_4.png
 #tx			chaos_6.png

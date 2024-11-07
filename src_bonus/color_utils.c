@@ -130,3 +130,34 @@ t_norm_color mult_color(double scalar, t_norm_color color)
 	col.b = scalar * color.b;
 	return (col);
 }
+
+
+t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color)
+{
+	t_norm_color	color_out;
+	t_mat			m;
+	double			r;//reflectance
+	double			r2;//1- reflectance
+
+	m = comps.mat;
+	//surface
+	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.g = comps.color.g * (lt_color.g + m.amb * trace->amb->color.g);
+	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
+
+	if (m.ref > 0 && m.transp > 0)//add reflective and refractive
+	{
+ 		r = schlick(comps);
+		r2 = 1.0 - r;
+		color_out.r += r * m.ref * comps.refl_col.r + r2 * m.transp * comps.refr_col.r;
+    	color_out.g += r * m.ref * comps.refl_col.g + r2 * m.transp * comps.refr_col.g;
+    	color_out.b += r * m.ref * comps.refl_col.b + r2 * m.transp * comps.refr_col.b;
+	}
+	else
+	{
+	 	color_out.r += m.ref * comps.refl_col.r + m.transp * comps.refr_col.r;
+    	color_out.g += m.ref * comps.refl_col.g + m.transp * comps.refr_col.g;
+   		color_out.b += m.ref * comps.refl_col.b + m.transp * comps.refr_col.b;
+	}
+	return (color_out);
+}

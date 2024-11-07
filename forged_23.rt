@@ -11,7 +11,7 @@ C           0.000,4.000,-3.000         0.000,0.000,1.000                     70
 
 
 #SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
-SL          1.501,4.501,1.001          0.000,-1.000,0.000         0.750                   255,0,0         15           22
+#SL          1.501,4.501,1.001          0.000,-1.000,0.000         0.750                   255,0,0         15           22
 
 #needs forgability make wid and len doubles in parse...
 #ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells

@@ -139,9 +139,13 @@ void	check_al(char **line, char ***rt_file)
 {
 	char	*bright_ratio;
 	int		len;
+	char 	*wid_str;
+	char 	*len_str;
 
 	len = ft_matrix_len(line);
 	bright_ratio = line[3];
+	wid_str = line[4];
+	len_str = line[5];
 	if (len != 9)
 		free_exit(rt_file, "Error\n Invalid area light parameters\n", \
 	" Area Lt must be in the format <type id> <x,y,z> <x,y,z> <brightness>\n"
@@ -160,10 +164,10 @@ void	check_al(char **line, char ***rt_file)
 	if (check_double(&bright_ratio, 0.0, 1.0))
 		free_exit(rt_file, "Error\n Invalid light brightness\n", \
 	" Light brightness must be between 0.0 and 1.0\n");
-	if (check_int(line[4], 1, 10))
+	if (check_double(&wid_str, 1.0, 10.0))
 		free_exit(rt_file, "Error\n Invalid area light width\n", \
 	" Area light width must be between 1 and 10\n");
-	if (check_int(line[5], 1, 10))
+	if (check_double(&len_str, 1.0, 10.0))
 		free_exit(rt_file, "Error\n Invalid area light length\n", \
 	" Area light length must be between 1 and 10\n");
 	if (check_color(line[6]))

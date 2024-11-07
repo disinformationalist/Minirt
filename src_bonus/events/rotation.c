@@ -20,10 +20,10 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 
 void rot_arealt(t_light *lt, t_matrix_4x4 rot)
 {
-	lt->curr_rottran = mat_mult(rot, lt->curr_rottran);
+	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);//using invrot, all forward transforms for this guy
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
 
-	lt->emitter->curr_rottran = mat_mult(rot, lt->emitter->curr_rottran);//invrot?
+	lt->emitter->curr_rottran = mat_mult(rot, lt->emitter->curr_rottran);
 	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
 	
 	set_arealt(lt);
