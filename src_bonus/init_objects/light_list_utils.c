@@ -8,7 +8,6 @@ void	set_sl_vals(t_light *new, char **line)
 	new->type = SPOT;
 	new->center = get_coordinates(line[1], 1.0);
 	new->dir = neg(get_coordinates(line[2], 0.0));
-	
 	new->brightness = get_double(&bright_ratio);
 	if (line[4])
 	{
@@ -31,18 +30,19 @@ void	set_sl_vals(t_light *new, char **line)
 void	set_lt_vals(t_light *new, char **line)
 {
 	char	*bright_ratio;
-	
+
 	bright_ratio = line[2];
 	new->type = POINT;
 	new->center = get_coordinates(line[1], 1.0);
 	new->brightness = get_double(&bright_ratio);
+	new->brightness = 1.0;
 	if (line[3])
 		new->color = get_color(line[3], 255.0);
 	else 
 		new->color = color(1.0, 1.0, 1.0);
 }
 
-t_light *create_light(char **line)
+t_light *create_light(t_trace *trace, char **line)
 {
 	t_light *new;
 
@@ -52,18 +52,23 @@ t_light *create_light(char **line)
 	if (!ft_strcmp(line[0], "L"))
 		set_lt_vals(new, line);
 	else if (!ft_strcmp(line[0], "SL"))
-		set_sl_vals(new, line);//for spotlight type
+		set_sl_vals(new, line);
+	else if (set_al_vals(trace, new, line))
+	{
+		free(new);
+		return (NULL);
+	}
 	new->next = new;
 	new->prev = new;
 	return (new);
 }
 
-bool	append_light(t_light **start, char **line)
+bool	append_light(t_trace *trace, t_light **start, char **line)
 {
 	t_light *new;
 	t_light *last;
 
-	new = create_light(line);
+	new = create_light(trace, line);
 	if (!new)
 		return (true);
 	if (*start == NULL)

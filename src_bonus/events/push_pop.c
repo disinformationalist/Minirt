@@ -7,7 +7,7 @@ static inline void push_new2(t_trace *trace, t_on *on)
 		if (insert_lecopy_after(trace, &trace->curr_le))
 			close_win(trace);	
 	}
-	else if (on->type == LIGHT)////---------------
+	else if (on->type == LIGHT)
 	{
 		if (insert_ltcopy_after(trace, &trace->curr_lt))
 			close_win(trace);	

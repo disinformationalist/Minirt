@@ -76,11 +76,11 @@ t_vec3 sp_bump(t_position pos, t_position dims, t_img *img)//should use the unpe
 	double			dfdx;
 	double			dfdy;
 	double			norm_factor;
-	double			bump = 1;
+	double			bump = 0.99;//when this is 1 or more something goes neg, keep lower 4 now
 	
-	curr = pixel_gray_get(pos.i, pos.j, img); //current pix val
-	dfdx = (double)(pixel_gray_get((pos.i + 1) % dims.i, pos.j, img) - curr) / 255.0;
-	dfdy = (double)(pixel_gray_get(pos.i, (pos.j + 1) % dims.j, img) - curr) / 255.0;
+	curr = pixel_gray_get(pos.i, pos.j, img); //current pix val, for most this is 0.
+	dfdx = ((double)(pixel_gray_get((pos.i + 1) % dims.i, pos.j, img) - curr)) / 255.0;
+	dfdy = ((double)(pixel_gray_get(pos.i, (pos.j + 1) % dims.j, img) - curr)) / 255.0;
 	norm_factor = 1.0 / (sqrt(dfdx * dfdx + dfdy * dfdy + 1));
 	perturb.x = -dfdx * norm_factor * bump;
 	perturb.y = -dfdy * norm_factor * bump;

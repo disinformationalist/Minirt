@@ -25,8 +25,8 @@ char	*build_pl_line(t_plane *plane)
 	transform = inverse(plane->transform);
 	p = mat_vec_mult(transform, vec(0, 0, 0, 1));
 	n = norm_vec(mat_vec_mult(transform, vec(0, 1, 0, 0)));
-	spaces = 16 - count_chars(p.x) - count_chars(p.y) - count_chars(p.z);
-	spaces2 = 38 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
+	spaces = 13 - count_chars(p.x) - count_chars(p.y) - count_chars(p.z);
+	spaces2 = 37 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
 	snprintf(line, sizeof(line), "pl          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s", p.x, p.y, p.z, spaces, "", n.x, n.y, n.z, spaces2, "");
 	
 	add_pl_color(plane, line);
@@ -43,7 +43,7 @@ void write_planes(t_plane *planes, int fd)
 	
 	if (planes == NULL)
 		return ;
-	ft_putstr_fd("#Planes:    Pnt_x | Pnt_y | Pnt_z         Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B\n", fd);
+	ft_putstr_fd("#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B\n", fd);
 	curr_pl = planes;
 	while (true)
 	{

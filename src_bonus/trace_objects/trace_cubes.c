@@ -36,13 +36,14 @@ static inline bool check_axis(double origin, double dir, double *min, double *ma
 
 //using object space
 
-static inline void	ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects)
+void	ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects)
 {
 	t_vec3	mins;
 	t_vec3	maxs;
 	double	t_min;
 	double	t_max;
 
+//printf("%d\n", cube->emitter);
 	ray = transform(ray, cube->transform);
 	check_axis(ray.origin.x, ray.dir.x, &mins.x, &maxs.x);
 	check_axis(ray.origin.y, ray.dir.y, &mins.y, &maxs.y);
@@ -52,8 +53,11 @@ static inline void	ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *int
 	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
 	if (t_min > t_max)
 		return ;
+//printf("%d\n", cube->emitter);
 	intersect(intersects, cube, t_min, CUBE);
 	intersect(intersects, cube, t_max, CUBE);
+//not getting here...
+
 }
 //failed opti here..
 /* static inline bool check_axis(double origin, double dir, double *min, double *max)
@@ -121,5 +125,25 @@ void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray)
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
 			break;
+	}
+}
+
+void	check_arealts(t_light *lights, t_intersects *intersects, t_ray ray)
+{	
+	t_light	*curr_lt;
+
+	if (lights == NULL)
+		return ;
+	curr_lt = lights;
+	while (true)
+	{
+		if (curr_lt->type == AREA)
+		{
+			ray_cube_intersect(curr_lt->emitter, ray, intersects);
+		
+		}
+	curr_lt = curr_lt->next;
+	if (curr_lt == lights)
+		break;
 	}
 }

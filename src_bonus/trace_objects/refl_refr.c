@@ -8,6 +8,8 @@ static inline t_vec3	reflect(t_vec3 in, t_vec3 normal)
 	return (subtract_vec(in, scale_vec(2 * cos_a, normal)));
 }
 
+//consider a threshold set in comps for the depths, maybe light intensity based.
+
 t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths)
 {
 	t_norm_color ref_col;
@@ -17,6 +19,8 @@ t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersec
 		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
 		depths.refl--;
 		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), intersects, depths);
+	/* 	if (ref_col.r < 20 && ref_col.g < 20 && ref_col.b < 20)
+			depths.refl = 0; */
 	}
 	else
 		ref_col = color(0, 0, 0);
@@ -27,8 +31,8 @@ static inline bool	refract(double n_ratio, t_vec3 eyev, t_vec3 normal, t_vec3 *r
 {
 	double sin2_t;
 	double cos_i;
-	double cos_t;
 
+	double cos_t;
 	cos_i = dot_product(eyev, normal);
 	sin2_t = n_ratio * n_ratio * ( 1 - cos_i * cos_i);
 	if (sin2_t > 1.0)
@@ -52,13 +56,15 @@ t_norm_color get_refracted(t_trace *trace, t_comps comps, t_intersects *intersec
 			return (color(0, 0, 0));
 		depths.refr--;
 		refr_col = check_intersects(trace, ray(refractv, comps.under_pnt), intersects, depths);
+		/* if (refr_col.r < 20 && refr_col.g < 20 && refr_col.b < 20)
+			depths.refr = 0; */
 	}
 	else
 		refr_col = color(0, 0, 0);
 	return (refr_col);
 }
 
-double schlick(t_comps comps)
+double schlick(t_comps comps)//reuse cos2 here.. norm hassle
 {
 	double n;
 	double cos;

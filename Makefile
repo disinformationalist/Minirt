@@ -104,8 +104,11 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/cube_list_utils.c \
 ./src_bonus/init_objects/push_pop_cu.c \
 ./src_bonus/init_objects/light_list_utils.c \
-./src_bonus/init_objects/push_pop_lt.c \
+./src_bonus/init_objects/init_area_light.c \
+./src_bonus/init_objects/push_lt.c \
+./src_bonus/init_objects/pop_lt.c \
 ./src_bonus/init_objects/tx_list_utils.c \
+./src_bonus/init_objects/triangle_list_utils.c \
 ./src_bonus/init_objects/get_line_vals.c \
 ./src_bonus/init_objects/set_amb_cam_lights.c \
 ./src_bonus/init_objects/init_cam.c \
@@ -114,6 +117,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/trace_planes.c \
 ./src_bonus/trace_objects/trace_spheres.c \
 ./src_bonus/trace_objects/color_spheres.c \
+./src_bonus/trace_objects/trace_triangles.c \
+./src_bonus/trace_objects/color_triangles.c \
 ./src_bonus/trace_objects/trace_lenses.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
 ./src_bonus/trace_objects/color_cylinders.c \
@@ -143,8 +148,11 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/forge/write_spheres.c \
 ./src_bonus/forge/write_planes.c \
 ./src_bonus/forge/write_cylinders.c \
+./src_bonus/forge/write_cubes.c \
+./src_bonus/forge/write_textures.c \
 ./src_bonus/forge/write_lights.c \
 ./src_bonus/forge/write_splights.c \
+./src_bonus/forge/write_arealights.c \
 ./src_bonus/forge/write_lenses.c \
 ./src_bonus/forge/get_rt_name.c \
 ./src_bonus/png/export_png.c \
@@ -158,6 +166,18 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_wheel.c \
 ./src_bonus/texture_utils.c \
 ./src_bonus/build_textures.c \
+./src_bonus/bvh/groups.c \
+./src_bonus/bvh/boxes.c \
+./src_bonus/bvh/box_ops.c \
+./src_bonus/photon_map/build_map.c \
+./src_bonus/photon_map/emit_light.c \
+./src_bonus/photon_map/photon_utils.c \
+./src_bonus/photon_map/set_comps.c \
+./src_bonus/photon_map/kd_tree.c \
+./src_bonus/photon_map/search_tree.c \
+./src_bonus/photon_map/caustics.c \
+
+
 
 
 

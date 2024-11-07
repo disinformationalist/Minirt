@@ -18,6 +18,7 @@ char	*build_cy_line(t_cylinder *cyl)
 	static char 	line[200];
 	t_point			cen;
 	t_vec3			n;
+	
 	double			d;
 	double			h;
 	int 			spaces;
@@ -32,15 +33,13 @@ char	*build_cy_line(t_cylinder *cyl)
 	d = (2.0 / cyl->curr_scale.m[2][2]);
 	h = (1.0 / cyl->curr_scale.m[1][1]) * cyl->height;
 	
-	spaces = 16 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
-	spaces2 = 16 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
+	spaces = 13 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
+	spaces2 = 13 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
 	spaces3 = 7 - count_chars(d);
-	spaces4 = 7 - count_chars(h);
+	spaces4 = 9 - count_chars(h);
 
 	snprintf(line, sizeof(line), "cy          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s%.3f%*s", cen.x, cen.y, cen.z, spaces, "", n.x, n.y, n.z, spaces2, "", d, spaces3, "", h, spaces4, "");
-	
 	add_cy_color(cyl, line);
-
 	return (line);
 }
 
@@ -53,7 +52,7 @@ void	write_cylinders(t_cylinder *cylinders, int fd)
 	
 	if (cylinders == NULL)
 		return ;
-	ft_putstr_fd("#Cylinders: Cen_x | Cen_y | Cen_z         Nrm_x | Nrm_y | Nrm_z         Diameter   Height     R | G | B\n", fd);
+	ft_putstr_fd("#Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B\n", fd);
 	curr_cy = cylinders;
 	while (true)
 	{

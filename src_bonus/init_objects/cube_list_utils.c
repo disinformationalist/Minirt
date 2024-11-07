@@ -19,6 +19,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->shadow = true;
 	new->bump = false;
 	new->texture = NULL; //if not assigned
+	new->emitter = false;
 }
 
 t_cube *create_cube(char **line)

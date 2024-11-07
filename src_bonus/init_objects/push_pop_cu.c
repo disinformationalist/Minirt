@@ -5,7 +5,7 @@
 static inline void	update_cube_ids(t_cube *cube)
 {
 	t_cube	*start;
-	int			id;
+	int		id;
 
 	start = cube;
 	id = 1;
@@ -43,7 +43,8 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->bump = false;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL; //if not assigned
+	new->texture = NULL;
+	new->emitter = false;
 }
 
 //copy a cube and place it immediately after the current cube in the list

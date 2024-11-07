@@ -12,18 +12,28 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	intersects->closest->object = NULL;
 	intersects->closest->object_type = -1;
 	intersects->count = 0;
+
+
+	//group and subgroups test passed.
+	//check_group(trace->group, intersects, ray);
+
+	
 	check_spheres(trace->spheres, intersects, ray);
-	//check_lenses(trace->lenses, intersects, closest, ray);
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
 	check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->spheres->next, (t_helper_shape *)trace->spheres->next->next, intersects);
+	check_triangles(trace->triangles, intersects, ray);
 	check_planes(trace->planes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	
+	//check_csg(trace->spheres, trace->cylinders, intersects);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
 	if (i < intersects->count)
 		*(intersects->closest) = intersects->hits[i];
 }
 
+	//check_lenses(trace->lenses, intersects, closest, ray);
 unsigned int	clamped_col(t_norm_color col)
 {
 	t_color clamped;
@@ -64,6 +74,8 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects,
 		color_out = color_cylinder(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
+	else if (closest->t != INFINITY && closest->object_type == TRI)
+		color_out = color_tri(trace, r, intersects, depths);
 	else
 		return (color(0, 0, 0));
 	return (color_out);

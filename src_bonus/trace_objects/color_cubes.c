@@ -49,6 +49,10 @@ static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray 
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	//comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
+	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
+
+
 	return (comps);
 }
 
@@ -58,11 +62,12 @@ t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
-	t_norm_color	refl_col;
-	t_norm_color	refr_col;
-	//make ref_cols struct;
+	/* t_norm_color	refl_col;
+	t_norm_color	refr_col; */
 
 	cube = (t_cube *)intersects->closest->object;
+	if (cube->emitter)
+		return (cube->color);
 	lt_color = color(0, 0, 0);
 	comps = set_cucomps(cube, intersects, r, trace);
 	if (trace->lights)
@@ -77,7 +82,10 @@ t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 				break;
 		}
 	}
-	refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color4(trace, comps, lt_color));
+	/* refl_col = get_reflected(trace, comps, intersects, depths);
 	refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color3(trace, comps, lt_color, refl_col, refr_col));
+	return (get_final_color3(trace, comps, lt_color, refl_col, refr_col)); */
 }

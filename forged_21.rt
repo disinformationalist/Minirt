@@ -1,0 +1,29 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.150                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.000,4.000,-3.000         0.000,0.259,0.966                     70
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          1.501,4.501,1.001          0.000,-1.000,0.000         0.750                   255,0,0         15           22
+
+
+#ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells
+AL          0.001,4.990,1.001          0.259,0.966,0.000          1.000      2  2  255,255,255     2         2
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          0.500,-1.000,1.000         0.000,1.000,0.000                                  55,75,200
+
+
+#Cubes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      W_(x)   H_(y)   D_(z)   R | G | B
+cu          0.000,0.000,0.000          0.000,-1.000,0.000         12.000  12.000  12.000  100,200,55
+
+
+#Textures:  Image                      Bump Map
+tx          earth2k.png                earthbump2k.png
+tx          chaos_1.png
+
+

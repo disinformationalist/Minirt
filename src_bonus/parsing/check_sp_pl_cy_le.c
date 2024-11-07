@@ -11,9 +11,9 @@ void	check_sp(char **line, char ***rt_file)
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid sphere coordinates\n", \
 	"sphere coordinates must be in the format x,y,z\n");
-	if (check_double(&diam_str, 0.0001, 9999.0))
+	if (check_double(&diam_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid sphere diameter\n", \
-	"Sphere diameter must be between 0.0001 and 9999.0\n");
+	"Sphere diameter must be between 0.001 and 999.0\n");
 	if (check_color(line[3]))
 		free_exit(rt_file, "Error\n Invalid sphere color value\n", \
 	"Sphere color channel values must be between 0 and 255" \
@@ -44,9 +44,9 @@ void	check_pl(char **line, char ***rt_file)
 
 void	check_cy2(char **line, char ***rt_file, char *height_str)
 {
-	if (check_double(&height_str, 0.0001, 9999.0))
+	if (check_double(&height_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder height\n", \
-	"Cylinder height must be between 0.0001 and 9999\n");
+	"Cylinder height must be between 0.001 and 999\n");
 	if (check_color(line[5]))
 		free_exit(rt_file, "Error\n Invalid cylinder color value\n", \
 	"Cylinder color channel values between 0 and 255 in the format r,g,b\n");
@@ -74,9 +74,9 @@ void	check_cy(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid cylinder orientation vector\n", \
 	"Cylinder orientation vector must be normalized," \
 	" with magnitude of one\n");
-	if (check_double(&diam_str, 0.0001, 9999.0))
+	if (check_double(&diam_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \
-	"Cylinder diameter must be between 0.0001 and 9999\n");
+	"Cylinder diameter must be between 0.001 and 999\n");
 	check_cy2(line, rt_file, height_str);
 }
 
@@ -93,10 +93,10 @@ void	check_le(char **line, char ***rt_file)
 	if (check_coordinates(line[1]) || check_coordinates(line[4]))
 		free_exit(rt_file, "Error\n Invalid lens sphere coordinates\n", \
 	"Lens sphere coordinates must be in the format x,y,z\n");
-	if (check_double(&diam_str_1, 0.0001, 9999.0)
-		|| check_double(&diam_str_2, 0.0001, 9999.0))
+	if (check_double(&diam_str_1, 0.001, 999.0)
+		|| check_double(&diam_str_2, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid lens sphere diameter\n", \
-	"Lens sphere diameter must be between 0.0001 and 9999.0\n");
+	"Lens sphere diameter must be between 0.001 and 999.0\n");
 	if (check_spheres_intersect(line[1], line[2], line[4], line[5]))
 		free_exit(rt_file, "Error\n Invalid lens parameters\n", \
 	"Lens spheres must intersect\n");
@@ -108,12 +108,12 @@ void	check_le(char **line, char ***rt_file)
 
 void	check_cu2(char **line, char ***rt_file, char *height_str, char *depth_str)
 {
-	if (check_double(&height_str, 0.0001, 9999.0))
+	if (check_double(&height_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cube height\n", \
-	"Cube height must be between 0.0001 and 9999\n");
-	if (check_double(&depth_str, 0.0001, 9999.0))
+	"Cube height must be between 0.001 and 999\n");
+	if (check_double(&depth_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cube depth\n", \
-	"Cube depth must be between 0.0001 and 9999\n");
+	"Cube depth must be between 0.001 and 999\n");
 	if (check_color(line[6]))
 		free_exit(rt_file, "Error\n Invalid cube color value\n", \
 	"Cube color channel values between 0 and 255 in the format r,g,b\n");
@@ -142,9 +142,9 @@ void	check_cu(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid cube orientation vector\n", \
 	"Cube orientation vector must be normalized," \
 	" with magnitude of one\n");
-	if (check_double(&width_str, 0.0001, 9999.0))
+	if (check_double(&width_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cube width\n", \
-	"Cube width must be between 0.0001 and 9999\n");
+	"Cube width must be between 0.001 and 999\n");
 	check_cu2(line, rt_file, height_str, depth_str);
 }
 
@@ -162,16 +162,43 @@ int	is_valid_tx(char *filename)
 	return (1);
 }
 
-void	check_tx(char **line, char ***rt_file)
-{
+void	check_tx(char **line, char ***rt_file)//maybe append textures/ to names before checks to store in subdir, check permission to read?fix this...maybe for rt file as well
+{												//see if no read permission can chmod inside of program...
 	int		len;
 
 	len = ft_matrix_len(line);
 	if (len != 2 && len != 3)
-		free_exit(rt_file, "Error\n Invalid texture parameters\n texture ", \
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
 	"must be in the format <type id> <image.png>\n");
 	if (!is_valid_tx(line[1]))
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
+	"must be in the format <type id> <image.png> <image.png>(optional)\n");
+	if (access(line[1], F_OK) || access(line[1], R_OK))//see if can change read permission...
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
+	"image must exist in working directory and have read permission\n");
+	if (line[2] && !is_valid_tx(line[2]))
 		free_exit(rt_file, "Error\n Invalid texture parameters\n texture ", \
-	"must be in the format <type id> <image.png>\n");
-	//add bump map check if applicable
+	"must be in the format <type id> <image.png> <image.png>(optional)\n");
+	if (line[2] && (access(line[2], F_OK) || access(line[2], R_OK)))
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
+	"image must exist in working directory and have read permission\n");
+}
+
+void	check_tri(char **line, char ***rt_file)
+{
+	if (check_param_num(line, 5))
+		free_exit(rt_file, "Error\n Invalid triangle parameters\n Triangle ", \
+	"must be in the format <type id> <x,y,z> <x,y,z> <x,y,z>\n");
+	if (check_coordinates(line[1]))
+		free_exit(rt_file, "Error\n Invalid triangle point\n", \
+	"Triangle point must be in the format x,y,z\n");
+	if (check_coordinates(line[2]))
+		free_exit(rt_file, "Error\n Invalid triangle point\n", \
+	"Triangle point must be in the format x,y,z\n");
+	if (check_coordinates(line[3]))
+		free_exit(rt_file, "Error\n Invalid triangle point\n", \
+	"Triangle point must be in the format x,y,z\n");
+	if (check_color(line[4]))
+		free_exit(rt_file, "Error\n Invalid cube color value\n", \
+	"Cube color channel values between 0 and 255 in the format r,g,b\n");
 }

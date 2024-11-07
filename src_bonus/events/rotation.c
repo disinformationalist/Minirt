@@ -16,6 +16,24 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 	reinit_viewing(trace);
 }
 
+//rotates an area light
+
+void rot_arealt(t_light *lt, t_matrix_4x4 rot)
+{
+	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);//using invrot, all forward transforms for this guy
+	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
+
+	lt->emitter->curr_rottran = mat_mult(rot, lt->emitter->curr_rottran);
+	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
+	
+	set_arealt(lt);
+
+
+/* 	print_vec(lt->center);
+	print_vec(lt->corner);
+	print_vec(lt->dir); */
+}
+
 //continued below ft
 
 static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
@@ -53,6 +71,8 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 	{
 		if (trace->curr_lt->type == SPOT)
 			trace->curr_lt->dir = mat_vec_mult(rot, trace->curr_lt->dir);
+		else if (trace->curr_lt->type == AREA)
+			rot_arealt(trace->curr_lt, rot);
 	}
 	else if (on->type == CAM)
 		rotate_cam(trace, rot);

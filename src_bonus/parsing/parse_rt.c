@@ -14,6 +14,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->light_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "SL"))
 			counts->light_count++;
+		else if (!ft_strcmp(*(rt_file[*k]), "AL"))
+			counts->light_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "sp"))
 			counts->sphere_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "pl"))
@@ -24,6 +26,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->lens_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "cu"))
 			counts->cube_count++;
+		else if (!ft_strcmp(*(rt_file[*k]), "tri"))
+			counts->tri_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "tx"))
 			counts->tx_count++;
 		else
@@ -55,12 +59,14 @@ void	check_ids(char ***rt_file)
 			check_le(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cu"))
 			check_cu(rt_file[k], rt_file);
+		if (!ft_strcmp(*(rt_file[k]), "tri"))
+			check_tri(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "tx"))
 			check_tx(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "SL"))
 			check_sl(rt_file[k], rt_file);
-		/* if (!ft_strcmp(*(rt_file[k]), "SQL")) make an sqr light here...
-			check_sl(rt_file[k], rt_file); */
+		if (!ft_strcmp(*(rt_file[k]), "AL"))
+			check_al(rt_file[k], rt_file);
 	}
 }
 
@@ -78,7 +84,7 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			status = set_cam(&trace->cam, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
-			status = append_light(&trace->lights, rt_file[k]);
+			status = append_light(trace, &trace->lights, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "sp"))
 			status = append_sp(&trace->spheres, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "pl"))
@@ -89,10 +95,14 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_le(&trace->lenses, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cu"))
 			status = append_cu(&trace->cubes, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "tri"))
+			status = append_tri(&trace->triangles, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "tx"))
 			status = append_tx(&trace->textures, rt_file[k]);
-		else if (!ft_strcmp(*(rt_file[k]), "SL"))//using sep identifier for sl, appending the same way, same for sql?
-			status = append_light(&trace->lights, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "SL"))
+			status = append_light(trace, &trace->lights, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "AL"))
+			status = append_light(trace, &trace->lights, rt_file[k]);
 		if (status)
 			break ;
 	}
@@ -109,6 +119,7 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	total_intersects += 4 * counts.cyl_count;
 	total_intersects += counts.plane_count;
 	total_intersects += 2 * counts.cube_count;
+	total_intersects += counts.tri_count;
 	trace->total_ints = total_intersects;
 }
 
@@ -132,7 +143,7 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 	init_obs(trace);
 	if (build_lists(trace, rt_file))
 	{
-		free_all_objects(trace);//add txs
+		free_all_objects(trace);
 		free_3d_array_i(rt_file, ft_3darray_len(rt_file));
 		ft_putstr_color_fd(2, "Error\n a build_lists malloc failed\n", RED);
 		exit (EXIT_FAILURE);

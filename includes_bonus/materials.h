@@ -1,15 +1,12 @@
 #ifndef MATERIALS_H
 # define MATERIALS_H
 
-// gives vals for material TOFINISH
-
 typedef struct s_mat
 {
 	double	amb;
 	double	diff;
 	double	spec;
 	double	shine;
-
 	double	ref;
 	double	transp;
 	double	refract;
@@ -27,5 +24,8 @@ typedef enum e_material
 	CHROME,
 	AIR
 }	t_material;
+
+int	roulette_interaction(t_mat mat);
+
 
 # endif

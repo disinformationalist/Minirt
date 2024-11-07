@@ -1,8 +1,18 @@
 #include "minirt.h"
-
-/* if (trace->curr_lt->type == SPOT)
-		trace->curr_lt->;//no i dont have angles stored only cos(angle) must use cos(arccos() +- 1) */
 		
+void	scale_arealt(t_light *lt, t_vec3 v)
+{
+	lt->curr_scale = mat_mult(scaling(v.x, 1.0, v.z), lt->curr_scale);
+	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
+
+	lt->emitter->curr_scale = mat_mult(inv_scaling(v.x, 1.0, v.z), lt->emitter->curr_scale);
+	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
+	
+	lt->emitter->color = mult_color(1.0 / lt->emitter->bright, lt->emitter->color);
+	lt->emitter->color = mult_color(lt->brightness, lt->emitter->color);
+	lt->emitter->bright = lt->brightness;
+	set_arealt(lt);
+}
 
 static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
@@ -20,19 +30,16 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, \
 			trace->curr_cu->curr_rottran);
 	}
-	else if (on->type == LIGHT)//maybe this can scale the spotlight radii?//maybe sep handle for light?
+	else if (on->type == LIGHT)
 	{
-		trace->curr_lt->brightness *= vec1.y;//can check vec1.x == 0, etc for spot light resize
+		trace->curr_lt->brightness *= vec1.y;
 		if (trace->curr_lt->brightness > 1.0)
 			trace->curr_lt->brightness = 1.0;
 		if (trace->curr_lt->brightness < 0.05)
 			trace->curr_lt->brightness = 0.05;
+		if (trace->curr_lt->type == AREA)
+			scale_arealt(trace->curr_lt, vec1);
 	}
-	/* else if (on->type == CAM && trace->layer)// no use case yet?! fov?
-	{
-		trace->cam->fov += 5;//must have which keypress for this and special light handling..
-		reinit_viewing(trace);
-	} */
 	else
 		return ;
 }

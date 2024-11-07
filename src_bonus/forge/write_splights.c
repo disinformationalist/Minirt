@@ -1,6 +1,5 @@
 #include "minirt.h"
 
-
 void	add_splt_color(t_light *light, char *line)
 {
 	int r;
@@ -24,7 +23,7 @@ void	add_lt_cones(t_light *light, char *line)
 
 	in_angle = ft_round(acos(light->inner_cone) / DEG_TO_RAD);
 	out_angle = ft_round(acos(light->outer_cone) / DEG_TO_RAD);
-	spaces5 = 10 - count_chars(in_angle);
+	spaces5 = 13 - count_chars(in_angle);
 
 	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), "%d%*s%d\n", in_angle, spaces5, "", out_angle);
 }
@@ -54,9 +53,9 @@ char	*build_splt_line(t_light *light)
 	n = neg(light->dir);
 	check_tolerance(&n);
 	bright = light->brightness;
-	spaces = 16 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
-	spaces2 = 16 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
-	spaces3 = 18 - count_chars(bright); 
+	spaces = 13 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
+	spaces2 = 13 - count_chars(n.x) - count_chars(n.y) - count_chars(n.z);
+	spaces3 = 20 - count_chars(bright); 
 	snprintf(line, sizeof(line), "SL          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s", cen.x, cen.y, cen.z, spaces, "", n.x, n.y, n.z, spaces2, "", bright, spaces3, "");
 	add_splt_color(light, line);
 	add_lt_cones(light, line);
@@ -92,7 +91,7 @@ void	write_splights(t_light *lights, int fd)
 	
 	if (lights == NULL || !count_splights(lights))
 		return ;
-	ft_putstr_fd("#SpLights:  Cen_x | Cen_y | Cen_z     	  Ori_x | Ori_y | Ori_z  		Intensity			  R | G | B       INNERCONE	OUTERCONE\n", fd);
+	ft_putstr_fd("#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE\n", fd);
 	curr_lt = lights;
 	while (true)
 	{

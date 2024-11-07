@@ -28,8 +28,6 @@ void info_init(t_trace *trace)
 	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
 	
-	printf("width: %d\n", trace->width);
-	printf("height: %d\n", trace->height);
 	trace->color_i = 0;
 	trace->num_colors = 384;
 	trace->curr_sp = trace->spheres;
@@ -42,8 +40,21 @@ void info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
-	trace->depths.refl = 5;
-	trace->depths.refr = 5;
+	trace->depths.refl = 6;//play with adaptive more...
+	trace->depths.refr = 6;
+
+
+	/* trace->global_map = NULL;
+	trace->gl_tree = NULL;
+	trace->caustic_map = NULL;
+	trace->c_tree = NULL; */
+	
+	trace->photnum = 100000;
+	trace->rad = .8;
+	trace->rad2 = trace->rad * trace->rad;
+	trace->area = M_PI * trace->rad2;
+	//trace->spheres->mat = get_mat(GLASS);
+	//trace->spheres->next->mat = get_mat(CHROME);
 
 	init_viewing(trace);
 }
@@ -75,40 +86,10 @@ void init_transforms(t_trace *trace)
 	set_le_transforms(trace);
 	set_cu_transforms(trace);
 }
-//---------testing sq
 
 double	randf(void)
 {
 	return ((double)rand() / (double)(RAND_MAX + 1.0));
-}
-
-void	init_sqlight(t_trace *trace, t_sqlight *light)
-{
-	int i;
-
-//	light->center = vec(-7, 4.5, -9, 1);//center
-	light->center = vec(0, 5, 0, 1);//center
-	light->brightness = 1.0;
-	light->color = color(1, 1, 1);
-	light->v1 = vec(2, 0, 0, 0);//size of light in each dir
-	light->v2 = vec(0, 0, 2, 0);
-	light->corner = subtract_vec(light->center, div_vec(2, add_vec(light->v1, light->v2)));
-	light->usteps = 8;
-	light->vsteps = 8;
-	light->uvec = div_vec(light->usteps, light->v1);
-	light->vvec = div_vec(light->vsteps, light->v2);
-	light->samples = light->usteps * light->vsteps;
-	//malloced array of size of samples of randfs
-	light->jitter = (double *)malloc((light->samples + 3) * sizeof(double));
-	if (!light->jitter)
-	{
-		free(trace->sqlt);
-		clear_all(trace);
-	//protect
-	}
-	i = -1;
-	while (++i < 3 + light->samples)
-		light->jitter[i] = randf();
 }
 
 void trace_init(t_trace *trace)
@@ -132,17 +113,81 @@ void trace_init(t_trace *trace)
 		clear_all(trace);
 	trace->w_colors = set_color_wheel(trace->num_colors, 1.0, 0.5, 202);//num colors, sat, lightness, base hue
 	if (!trace->w_colors)
-		clear_all(trace);//check need in push_object_function safeties...
+		clear_all(trace);//check need in push_object_function safeties... this frees in clear all
 	events_init(trace);
 	init_transforms(trace);
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
 
-	//testing the sqlt light here...
-	trace->sqlt = (t_sqlight *)malloc(sizeof(t_sqlight));
-	if (!trace->sqlt)
+	//testing...
+	//set the map(s) will have to move into rerender except when only moving cam
+	/* trace->global_map = build_map(trace, trace->photnum);
+	if (!trace->global_map)
 		clear_all(trace);
-		
-	//pro
-	init_sqlight(trace, trace->sqlt);
-}
+	trace->gl_tree = build_tree(trace->global_map->photons, 0, trace->photnum, 0);
+	if (!trace->gl_tree)
+	{
+		free(trace->global_map->photons);
+		free(trace->global_map);
+		free_tree(trace->gl_tree);
+	}
+	if (!trace->gl_tree)
+	{
+		free_mapping(trace);
+		clear_all(trace);
+	} */
+
+
+//PHOTON MAP TESTING..
+	/* trace->caustic_map = build_caustic_map(trace, trace->photnum);
+	if (!trace->caustic_map)
+		clear_all(trace);
+	trace->c_tree = build_tree(trace->caustic_map->photons, 0, trace->photnum, 0);
+	if (!trace->c_tree)
+	{
+		free(trace->caustic_map->photons);
+		free(trace->caustic_map);
+		free_tree(trace->c_tree);
+	}
+	if (!trace->c_tree)
+	{
+		free_mapping(trace);
+		clear_all(trace);
+	}
+	printf("maps done\n"); */
+
+
+//group and subgroup test. WORKING no leaks.//lookout when pushing and poping objs at runtime though
+	/* 	trace->group = group();//pro this and add_childs, clear all frees group as well automat
+		if (add_child(trace->group, trace->spheres, SPHERE, trace->spheres->transform))
+			clear_all(trace);
+		add_child(trace->group, trace->spheres->next, SPHERE, trace->spheres->next->transform);
+		add_child(trace->group, trace->spheres->next->next, SPHERE, trace->spheres->next->next->transform);
+
+		t_group *group2 = group();//free_group cannot free this until it is added.. if failur befor then, explicit free.
+		if (!group2)
+			clear_all(trace);
+		if (add_child(group2, trace->cylinders, CYLINDER, trace->cylinders->transform))
+		{
+			free_group(group2);//beautiful works.groups!
+			clear_all(trace);
+		}
+		add_child(group2, trace->cylinders->next, CYLINDER, trace->cylinders->next->transform);
+		add_child(group2, trace->cylinders->next->next, CYLINDER, trace->cylinders->next->next->transform);
+		add_child(trace->group, group2, GROUP, group2->transform); */
+
+} 
+
+
+/* todo
+- group transform;
+- add a set group transforms, adapt the group transforms at run same as the others. group willneed rotran etc....
+-normals on children of group
+
+
+*/
+
+
+
+/* check_group(group2, intersects, ray);
+free_group(group2); */

@@ -59,6 +59,7 @@ typedef enum e_type
 	PLANE,
 	CYLINDER,
 	CUBE,
+	TRI,
 	LIGHT,
 	CSG,
 	GROUP,
@@ -94,7 +95,6 @@ typedef struct s_on
 {
 	void	*object;
 	t_type	type;
-	int		tx_id;
 	void	*prev;
 	void	*next;
 }	t_on;
@@ -104,6 +104,23 @@ typedef struct s_cons
 	void			*obj;
 	t_type			type;
 }	t_cons;
+
+// holds the info for an intersection
+
+typedef struct s_track_hits
+{
+	double	t;
+	void	*object;
+	t_type	object_type;
+}	t_track_hits;
+
+typedef struct s_intersects
+{
+	t_track_hits	*hits;
+	int				count;
+	int				size;
+	t_track_hits	*closest;
+}	t_intersects;
 
 /***SINGLE OBJECTS***/
 
@@ -125,6 +142,12 @@ typedef struct s_cam
 
 /***GROUPS AND BVH***/
 
+typedef struct s_box
+{
+	t_point min;
+	t_point max;
+}	t_box;
+
 //using ll for this
 
 typedef	struct s_shape
@@ -144,6 +167,16 @@ typedef struct s_group
 	t_type			type;
 	t_matrix_4x4	transform;
 }	t_group;
+
+// for möller-trumbore triangle intersect ft
+
+typedef struct s_moller
+{
+	double u;
+	double v;
+	double f;
+	double det;
+}	t_moller;
 
 // util for making a color wheel
 
@@ -173,6 +206,7 @@ typedef struct s_obj_counts
 	int				cyl_count;
 	int				cube_count;
 	int				tx_count;
+	int				tri_count;
 }	t_obj_counts;
 
 
@@ -182,6 +216,27 @@ t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightnes
 t_ray			transform(t_ray r, t_matrix_4x4 m);
 void			ft_swap(double *a, double *b);
 unsigned char	pixel_gray_get(int x, int y, t_img *img);
+double			randf(void);
+
+
+/***GROUPS***/
+
+t_group			*group(void);
+void			free_group(t_group *group);
+int				add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform);
+void			check_group(t_group *group, t_intersects *intersects, t_ray ray);
+
+/***BVH***/
+
+t_box			*box(t_point min, t_point max);
+t_box			*empty_box(void);
+void			add_pnt(t_box *box, t_point to_add);
+t_box			*bounds_of(t_type type);
+void			add_to(t_box *b1, t_box b2);
+bool			contains_pnt(t_box box, t_point point);
+bool			contains_box(t_box b1, t_box b2);
+t_box			*transform_box(t_box *box, t_matrix_4x4 transf);
+t_box			*bops(t_shape *shape);
 
 
 

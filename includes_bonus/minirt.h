@@ -7,8 +7,10 @@
 # include <sys/time.h>//testing speed
 # include "extras.h"
 # include "materials.h"
+# include  "photon.h"
 
 # define ASPECT (16.0 / 9.0)
+//# define ASPECT (4.0 / 3.0)
 
 // holds the current closest object
 
@@ -137,6 +139,8 @@ typedef struct s_cube
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
+	bool			emitter;
+	double			bright;
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
@@ -150,68 +154,92 @@ typedef struct s_helper_shape
 	t_shape				*primitive;
 }	t_helper_shape;
 
+typedef struct s_tri//in progress...
+{
+	int				id;
+	bool			shadow;
+	t_point			p1;
+	t_point			p2;
+	t_point			p3;
+	t_vec3			edge1;
+	t_vec3			edge2;
+	t_vec3			norm;
+	t_norm_color	color;
+	t_mat			mat;
+	struct s_tri	*prev;
+	struct s_tri	*next;
+}	t_tri;
+
 typedef struct s_light
 {
 	t_vec3				center;
 	double				brightness;
 	t_norm_color		color;
-//stuff for bring sp lights in
 	t_ltype				type;
 	int					id;
+
 	t_vec3				dir;
+
+	int					photons;
+//stuff for sp lights
 	double				inner_cone;
 	double				outer_cone;
 	double				inv_conediff;
+
+//stuff for area
+	t_point				corner;
+	t_vec3				v1;
+	t_vec3				v2;
+	t_vec3				uvec;
+	t_vec3				vvec;
+	int					usteps;
+	int					vsteps;
+	int					samples;
+	t_matrix_4x4		transform;
+	t_matrix_4x4		curr_scale;
+	t_matrix_4x4		curr_rottran;
+	t_cube				*emitter;
+	double				area;
 	struct s_light		*prev;
 	struct s_light		*next;
 }	t_light;
 
-//---------sqlight test
-typedef struct s_sqlight
-{
-	t_point	center;
-	t_point	corner;
-	double brightness;
-	t_vec3	v1;
-	t_vec3	v2;
-	t_vec3	uvec;
-	t_vec3	vvec;
-	int		usteps;
-	int		vsteps;
-	int		samples;
-	t_norm_color	color;
-	double	*jitter;
-} t_sqlight;
-//-----------------------
 /***MAIN STRUCT***/
 
 typedef struct s_trace
 {
-	t_sqlight		*sqlt;
+	/* t_photon_map	*global_map;
+	t_kdnode		*gl_tree;
+	t_photon_map	*caustic_map;
+	t_kdnode		*c_tree; */
 	
-	t_depths		depths;
+	int				photnum;
+	float			rad;
+	float			rad2;
+	float			area;
+//--------------
 	int				total_ints;
-	
+	t_depths		depths;
 	t_img			img;
-//---------------
-
-	t_tx			*textures;
-//---------
+	
 	t_vec3			perturb;
 
-	t_amb			*amb;
-	t_cam			*cam;
 
+	t_group			*group;
 	t_track_hits	*closest;
 	t_on			*on;
 	
+	t_amb			*amb;
+	t_cam			*cam;
 	//linked list objects
 	t_sphere		*spheres;
 	t_lens			*lenses;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
-
 	t_cube			*cubes;
+	t_tx			*textures;
+
+	t_tri			*triangles;
 
 	t_light			*lights;
 
@@ -220,9 +248,7 @@ typedef struct s_trace
 	t_lens			*curr_le;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
-
 	t_cube			*curr_cu;
-
 	t_light			*curr_lt;
 
 	//mlx
@@ -258,9 +284,7 @@ typedef struct s_trace
 
 }	t_trace;
 
-//struct for each thread containing its limits
-
-typedef struct s_piece //for threads
+typedef struct s_piece
 {
 	int				x_s;
 	int				x_e;
@@ -274,35 +298,52 @@ typedef struct t_comps
 {
 	double			t;
 	double			sqlt_int;
-	//void	*object;
-	//t_type	object_type;
 	t_vec3			point;
 	t_vec3			eyev;
 	t_vec3			normal;
 	t_vec3 			light_dir;
 	t_ray			ray;
 	t_vec3			reflectv;
-
 	t_mat			mat;
 	double			cos_a;
 	bool			inside;
 	double  		spot_int;
-
 	double			n1;
 	double			n2;
-
 	t_vec3			over_pnt;
 	t_vec3			under_pnt;
 	t_vec3			bump;
 	t_norm_color	color;
+	t_norm_color refr_col;
+	t_norm_color refl_col;
+
+
+	//t_norm_color	irrad;
 
 }	t_comps;
 
+/***PHOTON***/
+t_photon_map	*build_map(t_trace *trace, int photons);
+void			change_mat(t_trace *trace, t_on *on, const t_mat mat);
+//void			roulette_interaction(t_mat mat, bool *is_diff, bool *is_spec, bool *is_trans);
+void			emit_area(t_trace * trace, t_photon_map *map, t_light light, double total);
+void			emit_point(t_trace *trace, t_photon_map *map, double total, t_light *light);
+t_norm_color	irradiance(t_photon_map *list, float rad);
+t_norm_color	irradiance_at(t_trace *trace, t_point pnt, t_kdnode *tree);
+void			allocate_photons(t_light *lights, int tot_phot);
 
+
+void			free_mapping(t_trace *trace);
+
+t_photon_map	*build_caustic_map(t_trace *trace, int photons);
+int				trace_caustic_photon(t_trace *trace, t_photon photon, t_photon_map *caustic_map);
+void 			emit_area_c(t_trace * trace, t_photon_map *map, t_light light, double total);
+void			emit_point_c(t_trace *trace, t_photon_map *map, double total, t_light *light);
+
+//--------put these where they go later
 t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
 
-//t_vec3			reflect(t_vec3 in, t_vec3 normal);
 double			schlick(t_comps comps);
 
 
@@ -312,10 +353,16 @@ t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersec
 void			intersect(t_intersects *intersects, void *object, double t, t_type type);
 void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 
-t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);
+t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);//get rid of soon
 t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
 
+t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
 
+
+void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
+void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
+void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
+void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
 
 /***PARSING***/
@@ -345,9 +392,13 @@ void			check_sp(char **line, char ***rt_file);
 void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
-void	check_sl(char **line, char ***rt_file);
-void	check_cu(char **line, char ***rt_file);
-void	check_tx(char **line, char ***rt_file);
+void			check_cu(char **line, char ***rt_file);
+
+void			check_sl(char **line, char ***rt_file);
+void			check_al(char **line, char ***rt_file);
+
+void			check_tx(char **line, char ***rt_file);
+void			check_tri(char **line, char ***rt_file);
 
 
 
@@ -386,10 +437,12 @@ bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 bool			append_cu(t_cube **start, char **line);
 
-bool	append_tx(t_tx **start, char **line);
+bool			append_tri(t_tri **start, char **line);
 
+bool			append_tx(t_tx **start, char **line);
+bool			append_light(t_trace *trace, t_light **start, char **line);
+void			update_light_ids(t_light *light);
 
-bool			append_light(t_light **start, char **line);
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
@@ -421,12 +474,10 @@ void			thread_error(t_trace *trace, int i);
 int				set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
 void			free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
 
-
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
-
 void			set_cu_transforms(t_trace *trace);
 
 
@@ -458,8 +509,9 @@ void			check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
 t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
-//pl shadow
+//obj shadow
 bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
+bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
 
 
 
@@ -468,21 +520,21 @@ void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ra
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
-//shadow
-bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
-
+//triangle utils
+void			check_triangles(t_tri *spheres, t_intersects *intersects, t_ray ray);
+t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
 //light utils
 void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
 
-
-
+void			set_arealt(t_light *lt);
+void			check_arealts(t_light *lights, t_intersects *intersects, t_ray ray);
+int				set_al_vals(t_trace *trace, t_light *new, char **line);
 
 //shadows
 bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
 bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
-//bool			obscured_b(t_trace *trace, t_ray s_ray, t_point lt_pos, t_point int_pnt);
 
 
 //view
@@ -525,7 +577,9 @@ unsigned int	clamped_col(t_norm_color col);
 //texture utils
 
 //t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
-t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane);
+//t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane);
+t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane, t_comps *comps);
+
 //t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
 t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_comps *comps);
 
@@ -533,9 +587,7 @@ t_norm_color	pixel_color_get(int x, int y, t_img *img);
 double 			get_lumin(t_norm_color color);
 int				import_textures(void *mlx_con, t_tx *textures);
 //t_vec3 sp_bump(int i, int j, t_img *img);
-t_vec3 sp_bump(t_position pos, t_position dims, t_img *img);
-
-
+t_vec3			sp_bump(t_position pos, t_position dims, t_img *img);
 
 
 
@@ -567,8 +619,10 @@ void			push_new_object(t_trace *trace, t_on *on);
 void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);
-
 int				mouse_handler(int button, int x, int y, t_trace *trace);
+void			forge_or_export(int keycode, t_trace *trace);
+
+char			*get_nxt_name_rt(char *name);
 
 
 //traverse lists
@@ -586,7 +640,7 @@ void			free_cy_list(t_cylinder **start);
 void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 
-/***EXTRAS ***/
+/***EXTRAS***/
 
 //forge rt file, builds rt file from current scene.
 void			forge_rt(const char *path, t_trace *trace);
@@ -597,12 +651,16 @@ void			write_cylinders(t_cylinder *cylinders, int fd);
 void			write_lenses(t_lens *lenses, int fd);
 void			write_lights(t_light *lights, int fd);
 void			write_splights(t_light *lights, int fd);
+void			write_arealights(t_light *lights, int fd);
+
+void			write_cubes(t_cube *cubes, int fd);
+void			write_textures(t_tx *textures, int fd);
+
 
 
 int				count_chars(double n);
-char			*get_nxt_name_rt(char *name);
-void			forge_or_export(int keycode, t_trace *trace);
-int				supersample_handle(int keycode, t_trace *trace);
+void			check_tolerance(t_vec3 *vec);
+
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);

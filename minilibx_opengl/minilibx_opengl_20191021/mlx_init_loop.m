@@ -183,7 +183,7 @@ int mlx_loop_hook(mlx_ptr_t *mlx_ptr, void (*fct)(void *), void *param)
 
   if (fct)
     {
-      timer = CFRunLoopTimerCreate(kCFAllocatorDefault, 0.0, 0.0001, 0, 0, &do_loop_hook2, &tcontext);
+      timer = CFRunLoopTimerCreate(kCFAllocatorDefault, 0.0, 0.001, 0, 0, &do_loop_hook2, &tcontext);
       mlx_ptr->loop_timer = timer;
       CFRunLoopAddTimer(CFRunLoopGetMain(), timer, kCFRunLoopCommonModes);
     }
