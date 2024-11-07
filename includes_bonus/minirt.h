@@ -17,6 +17,7 @@ typedef struct s_track_hits
 	double	t;
 	void	*object;
 	t_type	object_type;
+	int		csg_tag;
 }	t_track_hits;
 
 typedef struct s_intersects
@@ -38,6 +39,7 @@ typedef enum e_csg_op
 
 typedef struct s_csg
 {
+	t_type		type;
 	void		*left;
 	void		*right;
 	t_csg_op	op;
@@ -45,6 +47,7 @@ typedef struct s_csg
 
 typedef struct s_sphere
 {
+	t_type			type;
 	int				id;
 	bool			shadow;
 	bool			bump;
@@ -62,6 +65,7 @@ typedef struct s_sphere
 
 typedef struct s_lens
 {
+	t_type				type;
 	int				id;
 	t_sphere	sphere_1;
 	t_sphere	sphere_2;
@@ -79,6 +83,7 @@ typedef struct s_lens
 
 typedef struct s_plane 
 {
+	t_type				type;
 	int				id;
 	bool			shadow;
 	bool			bump;
@@ -96,6 +101,7 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
+	t_type				type;
 	int					id;
 	bool				shadow;
 	bool				bump;
@@ -116,6 +122,7 @@ typedef struct s_cylinder
 
 typedef struct s_cube
 {
+	t_type			type;
 	int				id;
 	bool			shadow;
 	bool			bump;
@@ -133,6 +140,15 @@ typedef struct s_cube
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
+
+typedef struct s_helper_shape
+{
+	t_type				type;
+	void				*left;
+	void				*right;
+	t_csg_op			op;
+	t_shape				*primitive;
+}	t_helper_shape;
 
 typedef struct s_light
 {
@@ -599,6 +615,7 @@ long			get_time(void);
 void			print_times(long start, long end, char *msg);
 
 /*** CSG ***/
-void			check_csg(void *shapes1, void *shapes2, t_intersects *intersects);
+void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape *shapes3, t_intersects *intersects);
+t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right, t_csg_op op);
 
 #endif

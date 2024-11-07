@@ -21,7 +21,6 @@
 
 # define DEG_TO_RAD  (M_PI / 180.0)
 
-
 typedef struct s_norm_color
 {
 	double r;
@@ -61,6 +60,7 @@ typedef enum e_type
 	CYLINDER,
 	CUBE,
 	LIGHT,
+	CSG,
 	GROUP,
 	CAM
 } 	t_type;
@@ -129,9 +129,9 @@ typedef struct s_cam
 
 typedef	struct s_shape
 {
+	t_type			type;
 	void			*shape;
 	void			*parent;
-	t_type			type;
 	t_matrix_4x4	transform;
 	struct s_shape	*next;
 	struct s_shape	*prev;

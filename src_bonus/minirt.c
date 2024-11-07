@@ -16,7 +16,7 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	//check_lenses(trace->lenses, intersects, closest, ray);
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	check_csg(trace->spheres, trace->cylinders, intersects);
+	check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->spheres->next, (t_helper_shape *)trace->spheres->next->next, intersects);
 	check_planes(trace->planes, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
