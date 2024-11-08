@@ -5,6 +5,7 @@ void	check_sp(char **line, char ***rt_file)
 	char	*diam_str;
 
 	diam_str = line[2];
+	check_str_len(line, rt_file, 4);
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid sphere parameters\n", \
 	"Sphere must be in the format <type id> <x,y,z> <diameter> <r,g,b>\n");
@@ -22,6 +23,7 @@ void	check_sp(char **line, char ***rt_file)
 
 void	check_pl(char **line, char ***rt_file)
 {
+	check_str_len(line, rt_file, 4);
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid plane parameters\n", \
 	"Plane must be in the format <type id> <x,y,z> <x,y,z> <r,g,b>\n");
@@ -59,6 +61,7 @@ void	check_cy(char **line, char ***rt_file)
 
 	diam_str = line[3];
 	height_str = line[4];
+	check_str_len(line, rt_file, 7);
 	if (check_param_num(line, 6))
 		free_exit(rt_file, "Error\n Invalid cylinder parameters\n", \
 	"Cylinder must be in the format <type id> <x,y,z> <x,y,z>" \
@@ -87,6 +90,7 @@ void	check_le(char **line, char ***rt_file)
 
 	diam_str_1 = line[2];
 	diam_str_2 = line[5];
+	check_str_len(line, rt_file, 7);
 	if (check_param_num(line, 7))
 		free_exit(rt_file, "Error\n Invalid lens parameters\n", \
 	"Required lens spheres format: <type id> <x,y,z> <diameter> <r,g,b>\n");
@@ -128,6 +132,7 @@ void	check_cu(char **line, char ***rt_file)
 	width_str = line[3];
 	height_str = line[4];
 	depth_str = line[5];
+	check_str_len(line, rt_file, 7);
 	if (check_param_num(line, 7))
 		free_exit(rt_file, "Error\n Invalid Cube parameters\n Cube ", \
 	"must be in the format <type id> <x,y,z> <x,y,z> <w> <h> <d> <r,g,b>\n");

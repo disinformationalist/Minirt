@@ -11,6 +11,23 @@ void	free_exit(char ***rt_file, char *msg1, char *msg2)
 	exit(EXIT_FAILURE);
 }
 
+// num is the number of parameters expected in the line,
+// same as the one passed to check_param_num()
+void	check_str_len(char **line, char ***rt_file, int num)
+{		
+		if ((line[1] && ft_strlen(line[1]) > 30)
+			|| (line[2] && ft_strlen(line[2]) > 30))
+			free_exit(rt_file, "Error\n Parameter string too long\n", "");
+		if (num >= 4 && (line[3] && ft_strlen(line[3]) > 30))
+			free_exit(rt_file, "Error\n Parameter string too long\n", "");
+		if (num >= 5 && (line[4] && ft_strlen(line[4]) > 30))
+			free_exit(rt_file, "Error\n Parameter string too long\n", "");
+		if (num >= 6 && (line[5] && ft_strlen(line[5]) > 30))
+			free_exit(rt_file, "Error\n Parameter string too long\n", "");
+		if (num >= 7 && (line[6] && ft_strlen(line[6]) > 30))
+			free_exit(rt_file, "Error\n Parameter string too long\n", "");
+}
+
 static inline int	check_rgb_color(char **s)
 {
 	int		i;
