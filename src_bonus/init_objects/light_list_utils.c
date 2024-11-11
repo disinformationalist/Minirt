@@ -35,7 +35,6 @@ void	set_lt_vals(t_light *new, char **line)
 	new->type = POINT;
 	new->center = get_coordinates(line[1], 1.0);
 	new->brightness = get_double(&bright_ratio);
-	new->brightness = 1.0;
 	if (line[3])
 		new->color = get_color(line[3], 255.0);
 	else 

@@ -25,8 +25,6 @@ static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
 	inv_2a = 0.5 / abc.x;
 	*t1 = (-abc.y - sq_discrim) * inv_2a;
 	*t2 = (-abc.y + sq_discrim) * inv_2a;
-	//if (*t1 > *t2)//from buck, just sorting i think
-	//	ft_swap(t1, t2);
 	return (true);
 } 
 
@@ -95,7 +93,7 @@ void	ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *inter
 	double 	t4;
 	double	half_h;
 
-	half_h = cylinder->height / 2.0;// store this as cyl height  at parse?
+	half_h = cylinder->half_h;// store this as cyl height  at parse?
 	ray = transform(ray, cylinder->transform);
 	compute_abc(&abc, ray);
 	if (abc.x != 0)

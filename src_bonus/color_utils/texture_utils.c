@@ -89,6 +89,8 @@ t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane, t
 	return (col);
 }
 
+//try other way used in the checker here...
+
 t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_comps *comps)
 {
 	t_norm_color	col;
@@ -106,7 +108,7 @@ t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_
 	phi = acos(obj_pnt.y);// / sphere->radius);
 	
 
-	pos.i = ft_round(((theta + M_PI) / (2 * M_PI)) * (double)(dims.i - 1));// could go out of bound on dims
+	pos.i = ft_round(((theta + M_PI) / (M_PI)) * (double)(dims.i - 1));// could go out of bound on dims *2 on div mpi
 	pos.j = ft_round((phi / M_PI) * (double)(dims.j - 1));
 
 	if (pos.i < 0)

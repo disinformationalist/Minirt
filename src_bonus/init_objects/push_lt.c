@@ -24,7 +24,7 @@ static inline void	make_default_lt(t_light **start, t_light *new)
 {
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->color = color(1, 1, 1);
-	new->brightness = .8;
+	new->brightness = 0.75;
 	*start = new;
 	new->id = 1;
 	new->type = POINT;

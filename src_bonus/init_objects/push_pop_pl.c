@@ -39,6 +39,8 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->option = 0;
+	new->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL;
@@ -57,6 +59,7 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 	if (!*current)
 	{
 		make_default_pl(&trace->planes, new);
+		new->texture = trace->textures;
 		trace->on->object = trace->planes;
 		trace->on->type = PLANE;
 		trace->total_ints += 1;

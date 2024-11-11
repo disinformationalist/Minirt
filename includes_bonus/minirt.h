@@ -6,13 +6,10 @@
 # include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
-# include "materials.h"
 # include  "photon.h"
 
 # define ASPECT (16.0 / 9.0)
 //# define ASPECT (4.0 / 3.0)
-
-
 
 
 /* typedef struct s_intersects
@@ -40,6 +37,7 @@ typedef struct s_csg
 	t_csg_op	op;
 }	t_csg;
 
+
 typedef struct s_sphere
 {
 	t_type			type;
@@ -54,6 +52,8 @@ typedef struct s_sphere
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
+	t_pattern		pattern;
+	int				option;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -90,6 +90,8 @@ typedef struct s_plane
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
+	t_pattern		pattern;
+	int				option;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -111,6 +113,7 @@ typedef struct s_cylinder
 	t_matrix_4x4		curr_scale;
 	t_matrix_4x4		curr_rottran;
 	t_tx				*texture;
+	int					option;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -132,6 +135,7 @@ typedef struct s_cube
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
+	int				option;
 	bool			emitter;
 	double			bright;
 	struct s_cube	*prev;
@@ -147,7 +151,7 @@ typedef struct s_helper_shape
 	t_shape				*primitive;
 }	t_helper_shape;
 
-typedef struct s_tri//in progress...
+typedef struct s_tri//in progress...may not need soon
 {
 	int				id;
 	bool			shadow;
@@ -211,6 +215,8 @@ typedef struct s_trace
 	float			rad2;
 	float			area;
 //--------------
+	t_mesh			*mesh;
+//---------------
 	int				total_ints;
 	t_depths		depths;
 	t_img			img;
@@ -251,6 +257,7 @@ typedef struct s_trace
 	//other and color
 	bool			layer;
 	t_norm_color	*w_colors;
+	t_norm_color	*m_colors;
 	int				color_i;
 	int 			num_colors;
 
@@ -315,6 +322,11 @@ typedef struct t_comps
 
 }	t_comps;
 
+
+t_norm_color uv_pattern_at(t_pattern check, t_vec2 uv);
+t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
+
+
 /***PHOTON***/
 t_photon_map	*build_map(t_trace *trace, int photons);
 void			change_mat(t_trace *trace, t_on *on, const t_mat mat);
@@ -326,7 +338,7 @@ t_norm_color	irradiance_at(t_trace *trace, t_point pnt, t_kdnode *tree);
 void			allocate_photons(t_light *lights, int tot_phot);
 
 
-void			free_mapping(t_trace *trace);
+//void			free_mapping(t_trace *trace);
 
 t_photon_map	*build_caustic_map(t_trace *trace, int photons);
 int				trace_caustic_photon(t_trace *trace, t_photon photon, t_photon_map *caustic_map);
@@ -346,8 +358,7 @@ t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersec
 void			intersect(t_intersects *intersects, void *object, double t, t_type type);
 void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 
-t_norm_color 	get_final_color2(t_trace *trace, t_comps comps, t_norm_color light_color, t_norm_color ref_col);//get rid of soon
-t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
+//t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
 
 t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
 
@@ -356,6 +367,11 @@ void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersect
 void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
 void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
+
+//mesh
+t_norm_color	color_triangle(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			check_mesh(t_mesh *mesh, t_intersects *intersects, t_ray ray);
+void			free_mesh(t_mesh *mesh);
 
 
 /***PARSING***/
@@ -514,7 +530,7 @@ t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
 //triangle utils
-void			check_triangles(t_tri *spheres, t_intersects *intersects, t_ray ray);
+void			check_triangles(t_tri *tris, t_intersects *intersects, t_ray ray);
 t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
@@ -557,7 +573,10 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 /***COLOR UTILS***/
 
 t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
-t_norm_color	get_final_color1(t_trace *trace, t_norm_color color, t_norm_color light_color, double mat_amb);
+
+t_norm_color	*set_metal_colors(void);
+void			rotate_colors(t_trace *trace, int button, t_norm_color *curr_col);
+
 
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
@@ -624,6 +643,7 @@ void			next_list_ob(t_trace *trace, t_on *on);
 void			prev_list_ob(t_trace *trace, t_on *on);
 
 /***CLEAN_UP***/
+void			clear_few(t_trace *trace);
 void			clear_some(t_trace *trace);
 void			clear_all(t_trace *trace);
 void			error_exit(char *msg);

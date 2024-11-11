@@ -20,6 +20,14 @@ void	my_pixel_put(int x, int y, t_img *img, unsigned int color)
 	*(unsigned int *)(img->pixels_ptr + offset) = color;
 }
 
+void	clear_few(t_trace *trace)
+{
+	free_all_objects(trace);
+	free(trace->threads);
+	perror("Mlx init() failure\n");
+	exit(EXIT_FAILURE);
+}
+
 void	clear_some(t_trace *trace)
 {
 	free_all_objects(trace);
@@ -36,6 +44,8 @@ void	clear_all(t_trace *trace)
 		free(trace->on);
 	if (trace->w_colors)
 		free(trace->w_colors);
+	if (trace->m_colors)
+		free(trace->m_colors);
 	if (trace->img.img_ptr)
 		mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
 	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);

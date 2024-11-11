@@ -181,6 +181,8 @@ void	free_all_objects(t_trace *trace)
 	if (trace->group)
 		free_group(trace->group);
 	//free_mapping(trace);//
+	if (trace->mesh)
+		free_mesh(trace->mesh);
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);

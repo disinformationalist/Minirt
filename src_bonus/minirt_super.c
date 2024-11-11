@@ -14,7 +14,10 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_intersects *inter
 	check_planes(trace->planes, intersects, ray);
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	check_triangles(trace->triangles, intersects, ray);
+	//check_triangles(trace->triangles, intersects, ray);
+
+	check_mesh(trace->mesh, intersects, ray);
+
 	check_arealts(trace->lights, intersects, ray);
 
 	while (i < intersects->count && intersects->hits[i].t <= 0)
@@ -45,7 +48,8 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_interse
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == TRI)
-		color_out = color_tri(trace, r, intersects, depths);
+		color_out = color_triangle(trace, r, intersects, depths);
+		//color_out = color_tri(trace, r, intersects, depths);
 	else
 		return (color(0, 0, 0));
 	return (color_out);

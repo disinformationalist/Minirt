@@ -27,7 +27,6 @@ void info_init(t_trace *trace)
 {
 	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
-	
 	trace->color_i = 0;
 	trace->num_colors = 384;
 	trace->curr_sp = trace->spheres;
@@ -37,22 +36,23 @@ void info_init(t_trace *trace)
 	trace->curr_lt = trace->lights;
 	trace->curr_cu = trace->cubes;
 	trace->w_colors = NULL;
+	trace->m_colors = NULL;
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
 	trace->depths.refl = 6;//play with adaptive more...
 	trace->depths.refr = 6;
 
-
-	/* trace->global_map = NULL;
+/* 	trace->global_map = NULL;
 	trace->gl_tree = NULL;
 	trace->caustic_map = NULL;
-	trace->c_tree = NULL; */
+	trace->c_tree = NULL;
 	
 	trace->photnum = 100000;
 	trace->rad = .8;
 	trace->rad2 = trace->rad * trace->rad;
-	trace->area = M_PI * trace->rad2;
+	trace->area = M_PI * trace->rad2; */
+
 	//trace->spheres->mat = get_mat(GLASS);
 	//trace->spheres->next->mat = get_mat(CHROME);
 
@@ -97,12 +97,7 @@ void trace_init(t_trace *trace)
 	info_init(trace);
 	trace->mlx_connect = mlx_init();
 	if (trace->mlx_connect == NULL)
-	{
-		free_all_objects(trace);
-		free(trace->threads);
-		perror("Mlx init() failure\n");
-		exit(EXIT_FAILURE);
-	}
+		clear_few(trace);
 	trace->mlx_win = mlx_new_window(trace->mlx_connect, trace->width, trace->height, "***MegaRT***");
 	if (trace->mlx_win == NULL)
 		clear_some(trace);
@@ -111,13 +106,22 @@ void trace_init(t_trace *trace)
 	trace->on = (t_on *)malloc(sizeof(t_on));
 	if (!trace->on)
 		clear_all(trace);
-	trace->w_colors = set_color_wheel(trace->num_colors, 1.0, 0.5, 202);//num colors, sat, lightness, base hue
+	trace->w_colors = set_color_wheel(trace->num_colors, 1.0, 0.5, 202);
 	if (!trace->w_colors)
-		clear_all(trace);//check need in push_object_function safeties... this frees in clear all
+		clear_all(trace);
+	trace->m_colors = set_metal_colors();
+	if (!trace->m_colors)
+		clear_all(trace);
 	events_init(trace);
 	init_transforms(trace);
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
+
+	//test
+	//trace->mesh = parse_obj("simple_dia.obj");
+	//trace->mesh = parse_obj("dodecahedron.obj");
+	//trace->mesh = parse_obj("simple_diamond.obj");
+
 
 	//testing...
 	//set the map(s) will have to move into rerender except when only moving cam

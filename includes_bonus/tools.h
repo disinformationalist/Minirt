@@ -15,6 +15,7 @@
 # include "limits.h"
 # include <stdint.h>//uint8_t
 # include "matrix_ops.h"
+# include "materials.h"
 
 # include <pthread.h>
 # include <png.h>
@@ -63,8 +64,33 @@ typedef enum e_type
 	LIGHT,
 	CSG,
 	GROUP,
-	CAM
+	CAM,
+	MESH
 } 	t_type;
+
+
+typedef struct s_triangle
+{
+	int 	v0;
+	int		v1;
+	int 	v2;
+	t_vec3	edge1;
+	t_vec3	edge2;
+	t_vec3	norm;
+} t_triangle;
+
+typedef struct s_mesh
+{
+	t_vec3			*verts;
+	t_triangle		*triangles;
+	int				num_verts;
+	int 			num_tris;
+	t_mat			mat;
+	//t_position	center;
+	//t_matrix_4x4	transform;
+	t_norm_color	color;
+	t_type			MESH;
+}	t_mesh;
 
 typedef enum e_ltype
 {
@@ -202,6 +228,38 @@ typedef struct s_wheel
 	int		hue;
 }	t_wheel;
 
+//pattern
+
+typedef struct s_pattern
+{
+	t_norm_color color1;
+	t_norm_color color2;
+	
+	//cube test
+	t_norm_color	main;
+	t_norm_color	ul;
+	t_norm_color	ur;
+	t_norm_color	bl;
+	t_norm_color	br;
+
+
+	float	width;
+	float	height;
+
+}	t_pattern;
+
+//faces for cube mapping
+
+typedef enum e_face
+{
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN,
+	FRONT,
+	BACK
+}	t_face;
+
 //parse util
 
 typedef struct s_obj_counts
@@ -218,6 +276,9 @@ typedef struct s_obj_counts
 	int				tri_count;
 }	t_obj_counts;
 
+//mesh
+t_mesh			*parse_obj(char *filename);
+
 
 //some util functions
 
@@ -227,6 +288,13 @@ void			ft_swap(double *a, double *b);
 unsigned char	pixel_gray_get(int x, int y, t_img *img);
 double			randf(void);
 
+//pattern(checker... others later maybe)
+//used for mapping checkers
+
+t_norm_color	pattern_at(t_pattern pat, t_vec2 uv);
+t_pattern		uv_checker(double width, double height, t_norm_color color1, t_norm_color color2);
+t_vec2 			sphere_map(t_point obj_pnt);
+t_vec2 			planar_map(t_point obj_pnt);
 
 /***GROUPS***/
 

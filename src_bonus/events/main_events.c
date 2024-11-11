@@ -63,6 +63,7 @@ int	close_win(t_trace *trace)
 	free_all_objects(trace);
 	free(trace->on);
 	free(trace->w_colors);
+	free(trace->m_colors);
 	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
 	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);
 	mlx_destroy_display(trace->mlx_connect);

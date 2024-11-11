@@ -18,6 +18,8 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 	new->bump = false;
+	new->option = 0;
+
 	new->texture = NULL; //if not assigned
 	new->emitter = false;
 }

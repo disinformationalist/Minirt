@@ -22,7 +22,9 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
 	//check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->spheres->next, (t_helper_shape *)trace->spheres->next->next, intersects);
-	check_triangles(trace->triangles, intersects, ray);
+	//check_triangles(trace->triangles, intersects, ray);
+	check_mesh(trace->mesh, intersects, ray);
+
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	
@@ -75,7 +77,8 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects,
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == TRI)
-		color_out = color_tri(trace, r, intersects, depths);
+		color_out = color_triangle(trace, r, intersects, depths);
+		//color_out = color_tri(trace, r, intersects, depths);
 	else
 		return (color(0, 0, 0));
 	return (color_out);

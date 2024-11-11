@@ -14,6 +14,10 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->curr_scale = inv_scaling(curr_sp->radius, curr_sp->radius, curr_sp->radius);
 			curr_sp->curr_rottran = translation(-curr_sp->center.x, -curr_sp->center.y, -curr_sp->center.z);
 			curr_sp->transform = (mat_mult(curr_sp->curr_scale, curr_sp->curr_rottran));
+
+			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
+			curr_sp->texture = trace->textures;
+
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break;
@@ -38,6 +42,13 @@ void	set_pl_transforms(t_trace *trace)
 			curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);			
 			curr_pl->transform = curr_pl->curr_rottran;			
 			curr_pl->norm = norm_vec(mat_vec_mult(transpose(curr_pl->transform), vec(0, 1, 0, 0)));
+
+			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
+
+//			curr_pl->pattern = uv_align_check(color(255, 255, 255), color(255, 0, 0), color(255, 255, 0), color(0, 255, 0), color(0, 255, 255));
+
+			curr_pl->texture = trace->textures;
+
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
 				break;
@@ -58,7 +69,7 @@ void	set_cy_transforms(t_trace *trace)
 		{
 			inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);
 			inv_rot = rot_to(curr_cy->norm,  vec(0, 1, 0, 0));
-			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);//changed 1.0 to half_h test and with forge
+			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);//changed 1.0 to half_h test 
 			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
 			curr_cy = curr_cy->next;
@@ -85,6 +96,7 @@ void	set_cu_transforms(t_trace *trace)
 			inv_rot = rot_to(curr_cu->norm,  vec(0, 1, 0, 0));
 			curr_cu->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cu->transform = (mat_mult(curr_cu->curr_scale, curr_cu->curr_rottran));
+			
 			curr_cu = curr_cu->next;
 			if (curr_cu == trace->cubes)
 				break;

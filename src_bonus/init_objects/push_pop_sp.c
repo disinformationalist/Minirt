@@ -41,6 +41,8 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->bump = false;
 	new->next = new;
 	new->prev = new;
+	new->option = 0;
+	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
 	new->texture = NULL; //if not assigned
 }
 
@@ -57,6 +59,7 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 	if (!*current)
 	{
 		make_default_sp(&trace->spheres, new);
+		new->texture = trace->textures;
 		trace->on->object = trace->spheres;
 		trace->on->type = SPHERE;
 		trace->total_ints += 2;

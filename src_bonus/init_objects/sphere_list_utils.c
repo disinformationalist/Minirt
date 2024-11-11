@@ -11,6 +11,8 @@ void	set_sp_vals(t_sphere *new, char **line)
 	new->mat = get_mat(DEFAULT);//handle getting from line in parse of rt, file, along with check for valid material option
 	new->shadow = true;
 	new->bump = false;
+	new->option = 0;
+
 	new->texture = NULL; //if not assigned
 
 }

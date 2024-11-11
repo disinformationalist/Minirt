@@ -133,13 +133,21 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/testing/print_all_objects.c \
 ./src_bonus/testing/print_utils.c \
 ./src_bonus/free_all_objects.c \
-./src_bonus/color_utils.c \
+./src_bonus/color_utils/build_textures.c \
+./src_bonus/color_utils/color_utils.c \
+./src_bonus/color_utils/color_utils2.c \
+./src_bonus/color_utils/color_wheel.c \
+./src_bonus/color_utils/color_disrupt.c \
+./src_bonus/color_utils/texture_utils.c \
+./src_bonus/color_utils/materials.c \
+./src_bonus/color_utils/mapping.c \
 ./src_bonus/events/main_events.c \
 ./src_bonus/events/traverse_lists.c \
 ./src_bonus/events/switch_list.c \
 ./src_bonus/events/push_pop.c \
 ./src_bonus/events/translation.c \
 ./src_bonus/events/rotation.c \
+./src_bonus/events/rotate_colors.c \
 ./src_bonus/events/scaling.c \
 ./src_bonus/events/supersample.c \
 ./src_bonus/events/extra_events.c \
@@ -161,11 +169,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/png/import_png_utils.c \
 ./src_bonus/png/get_png_name.c \
 ./src_bonus/threader.c \
-./src_bonus/color_disrupt.c \
-./src_bonus/materials.c \
-./src_bonus/color_wheel.c \
-./src_bonus/texture_utils.c \
-./src_bonus/build_textures.c \
 ./src_bonus/bvh/groups.c \
 ./src_bonus/bvh/boxes.c \
 ./src_bonus/bvh/box_ops.c \
@@ -176,6 +179,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/photon_map/kd_tree.c \
 ./src_bonus/photon_map/search_tree.c \
 ./src_bonus/photon_map/caustics.c \
+./src_bonus/parsing/parse_obj.c \
+
 
 
 

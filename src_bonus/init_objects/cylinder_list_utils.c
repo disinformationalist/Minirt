@@ -16,6 +16,8 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 	new->bump = false;
+	new->option = 0;
+
 	new->texture = NULL; //if not assigned
 }
 

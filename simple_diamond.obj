@@ -1,0 +1,76 @@
+#Brilliant Cut Diamond - Approximate OBJ Model with Triangle Facets Only
+
+#Vertices (approximate proportions)
+#Table (top)
+
+v 0.000 0.500 0.000 
+v -0.100 0.485 0.100 
+v 0.100 0.485 0.100
+v 0.100 0.485 -0.100
+v -0.100 0.485 -0.100
+
+#Crown Facets (upper side facets)
+
+v -0.200 0.400 0.200
+v 0.200 0.400 0.200
+v 0.200 0.400 -0.200
+v -0.200 0.400 -0.200
+
+#Girdle (widest edge)
+
+v -0.300 0.000 0.300
+v 0.300 0.000 0.300
+v 0.300 0.000 -0.300
+v -0.300 0.000 -0.300
+v -0.425 0.000 0.000
+v 0.425 0.000 0.000
+v 0.000 0.000 0.425
+v 0.000 0.000 -0.425
+
+#Pavilion (lower side facets)
+
+v -0.200 -0.400 0.200
+v 0.200 -0.400 0.200
+v 0.200 -0.400 -0.200
+v -0.200 -0.400 -0.200
+
+#Culet (bottom point)
+
+v 0.000 -0.500 0.000
+
+#Faces (Triangles only)
+
+#Table to Crown
+
+f 1 2 3
+f 1 3 4
+f 1 4 5
+f 1 5 2
+
+#Crown to Girdle (Upper crown facets)
+
+f 2 6 14
+f 3 7 15
+f 4 8 16
+f 5 9 17
+
+#Crown triangles
+
+f 2 3 6
+f 3 4 7
+f 4 5 8
+f 5 2 9
+
+#Girdle to Pavilion (Lower girdle facets)
+
+f 14 6 22
+f 15 7 23
+f 16 8 24
+f 17 9 25
+
+#Pavilion triangles to Culet
+
+f 22 23 30
+f 23 24 30
+f 24 25 30
+f 25 22 30

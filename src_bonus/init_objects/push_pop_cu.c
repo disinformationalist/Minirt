@@ -41,6 +41,7 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->option = 0;
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL;

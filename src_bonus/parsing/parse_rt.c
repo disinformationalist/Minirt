@@ -113,13 +113,15 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 {
 	int	total_intersects;
 
-	total_intersects = 0;
+	total_intersects = 1;
 	total_intersects += 2 * counts.sphere_count;
 	total_intersects += 4 * counts.lens_count; 
 	total_intersects += 4 * counts.cyl_count;
 	total_intersects += counts.plane_count;
 	total_intersects += 2 * counts.cube_count;
 	total_intersects += counts.tri_count;
+	//total_intersects += 3 * counts.mesh_count;
+
 	trace->total_ints = total_intersects;
 }
 

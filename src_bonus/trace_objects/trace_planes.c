@@ -27,55 +27,45 @@ void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 	}
 }
 
-//finish this for setting colors/patterns/txs/bump
+//for setting colors/patterns/txs/bump  1 = col, 2 = text, 3 = pattern
 
-/* void set_pl_color(t_trace *trace, t_comps *comps, t_plane plane)
+t_norm_color set_pl_color(t_trace *trace, t_comps comps, t_plane plane, t_point obj_pnt)
 {
-	if (plane.use_tx)//boolean maybe not bool but int 1 = col, 2 = text 3 = pattern
-		comps->color = texture_plane_at();//pass in comps and text.
-	if (plane.)
+	t_norm_color out;
 
-} */
-
+	if (plane.option == 0)
+		out = plane.color;
+	if (plane.option == 1)
+		out = texture_plane_at(trace, obj_pnt, &plane, &comps);
+	if (plane.option == 2)
+		out = pattern_at(plane.pattern,  planar_map(obj_pnt));
+		//out = uv_pattern_at(plane.pattern,  planar_map(obj_pnt));
+		
+	return (out);
+}
 
 t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *trace)
 {
 	t_comps	comps;
 	t_point obj_pnt;
 	
-	(void)trace;
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = plane->norm;
 	obj_pnt = mat_vec_mult(plane->transform, comps.point);
-	
-
+	comps.normal = plane->norm;	
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;
 	set_indicies(intersects, &comps.n1, &comps.n2);//if transp
 	if (dot_product(comps.normal, comps.eyev) < 0)
-	{
-		comps.inside = true;
 		comps.normal = neg(comps.normal);
-	}
-	else
-		comps.inside = false;
+	comps.color = set_pl_color(trace, comps, *plane, obj_pnt);
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
-
-	if (plane->texture)
-		comps.color = texture_plane_at(trace, obj_pnt, plane, &comps);//if texturing
-	else 
-		comps.color = checker_at(comps.point, plane->transform);
-		//comps.color = plane->color;
-	//make a set color function to choose between color, pattern texture, bump
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
-
 	//testing
 //	comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
 	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
 
-	
 	return (comps);
 }
 
