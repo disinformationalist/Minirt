@@ -16,22 +16,30 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 	reinit_viewing(trace);
 }
 
-//rotates an area light
+//rotates an area light, the light, not its emitter take forward transforms
 
 void rot_arealt(t_light *lt, t_matrix_4x4 rot)
 {
-	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);//using invrot, all forward transforms for this guy
+	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
-
 	lt->emitter->curr_rottran = mat_mult(rot, lt->emitter->curr_rottran);
 	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
-	
 	set_arealt(lt);
+}
 
-
-/* 	print_vec(lt->center);
-	print_vec(lt->corner);
-	print_vec(lt->dir); */
+static inline void	rotate_object3(t_trace *trace, t_on *on, t_matrix_4x4 rot)
+{
+	if (on->type == LIGHT)
+	{
+		if (trace->curr_lt->type == SPOT)
+			trace->curr_lt->dir = mat_vec_mult(rot, trace->curr_lt->dir);
+		else if (trace->curr_lt->type == AREA)
+			rot_arealt(trace->curr_lt, rot);
+	}
+	else if (on->type == CAM)
+		rotate_cam(trace, rot);
+	else
+		return ;
 }
 
 //continued below ft
@@ -67,17 +75,8 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 		trace->curr_le->sphere_2.transform = \
 			mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran); */
 	}
-	else if (on->type == LIGHT)
-	{
-		if (trace->curr_lt->type == SPOT)
-			trace->curr_lt->dir = mat_vec_mult(rot, trace->curr_lt->dir);
-		else if (trace->curr_lt->type == AREA)
-			rot_arealt(trace->curr_lt, rot);
-	}
-	else if (on->type == CAM)
-		rotate_cam(trace, rot);
 	else
-		return ;
+		rotate_object3(trace, on, rot);
 }
 
 // rotates current "on" object

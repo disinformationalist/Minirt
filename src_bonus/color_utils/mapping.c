@@ -138,3 +138,25 @@ t_vec2	cu_uv_down(t_point pnt)
 	uv.y = fmod((pnt.z + 1), 2.0) / 2.0;
 	return (uv);
 }
+//test with checkers soon
+
+t_vec2 cube_map(t_point obj_pnt)
+{
+	t_face	face;
+	t_vec2	uv;
+
+	face = face_of_pnt(obj_pnt);
+	if (face == FRONT)
+		uv = cu_uv_front(obj_pnt);
+	if (face == LEFT)
+		uv = cu_uv_left(obj_pnt);
+	if (face == RIGHT)
+		uv = cu_uv_right(obj_pnt);
+	if (face == UP)
+		uv = cu_uv_up(obj_pnt);
+	if (face == DOWN)
+		uv = cu_uv_down(obj_pnt);
+	else
+		uv = cu_uv_back(obj_pnt);
+	return (uv);
+}

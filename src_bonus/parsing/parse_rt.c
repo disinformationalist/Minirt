@@ -120,6 +120,7 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	total_intersects += counts.plane_count;
 	total_intersects += 2 * counts.cube_count;
 	total_intersects += counts.tri_count;
+
 	//total_intersects += 3 * counts.mesh_count;
 
 	trace->total_ints = total_intersects;

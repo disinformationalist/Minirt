@@ -211,12 +211,14 @@ int	key_press_2(int keycode, t_trace *trace)
 
 int	key_press(int keycode, t_trace *trace)
 {
-	printf("key: %d\n", keycode);
+	//printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == XK_Tab)
 		trace->layer = !trace->layer;
-	else if (keycode == XK_1 || keycode == XK_2 || keycode == XK_3 || keycode == XK_4 || keycode == XK_9 || keycode == XK_0 || keycode == XK_5)
+	else if (keycode == XK_1 || keycode == XK_2 || keycode == XK_3 || \
+		keycode == XK_4 || keycode == XK_9 || keycode == XK_0 || \
+		keycode == XK_5)
 		switch_list(keycode, trace, trace->on);
 	else if (keycode == PAD_PLUS && trace->layer)
 		adjust_super(keycode, trace);

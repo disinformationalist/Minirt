@@ -323,7 +323,7 @@ typedef struct t_comps
 }	t_comps;
 
 
-t_norm_color uv_pattern_at(t_pattern check, t_vec2 uv);
+t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
 
@@ -367,6 +367,11 @@ void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersect
 void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
 void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
+
+bool			insert_ltcopy_after2(t_trace *trace);
+bool			insert_ltcopy_after3(t_trace *trace);
+
+
 
 //mesh
 t_norm_color	color_triangle(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);

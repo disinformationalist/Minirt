@@ -64,27 +64,28 @@ t_norm_color get_refracted(t_trace *trace, t_comps comps, t_intersects *intersec
 	return (refr_col);
 }
 
-double schlick(t_comps comps)//reuse cos2 here.. norm hassle
+double schlick(t_comps comps)
 {
 	double n;
 	double cos;
 	double sin2_t;
-	double cos_t;
+	double cos2;
 	double res;
 
 	cos = dot_product(comps.eyev, comps.normal);
+
 	if (comps.n1 > comps.n2)
 	{
 		n = comps.n1 / comps.n2;
 		sin2_t = n * n * (1.0 - cos * cos);
 		if (sin2_t > 1.0)
 			return (1.0);
-		cos_t = sqrt(1.0 - sin2_t);
-		cos = cos_t;
+		cos = sqrt(1.0 - sin2_t);
 	}
 	res = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
 	res *= res;
 	cos =  1 - cos;
-	res = res + (1 - res) * cos * cos * cos * cos * cos;
+	cos2 = cos * cos;
+	res = res + (1 - res) * cos2 * cos2 * cos;
 	return (res);
 }

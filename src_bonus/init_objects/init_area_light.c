@@ -10,6 +10,8 @@ void	set_arealt_transform(t_light *lt, double width, double length)
 	lt->curr_rottran = mat_mult(rot, trans);
 	lt->curr_scale = scaling(width / 2, 1.0, length / 2);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
+	lt->samples = lt->usteps * lt->vsteps;//moved these two for norm
+	lt->type = AREA;
 }
 
 void	set_arealt(t_light *lt)
@@ -44,7 +46,7 @@ t_cube *set_lt_cube(t_light *new, double wid, double len)
 	cube->center = new->center;
 	cube->norm = new->dir;
 	cube->h_width = wid / 2.0;
-	cube->h_height = 0.1;
+	cube->h_height = 0.05;
 	cube->h_depth = len / 2.0;
 	cube->color = mult_color(new->brightness * 255.0, new->color);
 	cube->bright = new->brightness;
@@ -70,7 +72,6 @@ int	set_al_vals(t_trace *trace, t_light *new, char **line)
 	wid = get_double(&wid_str);
 	len = get_double(&len_str);
 	bright_ratio = line[3];
-	new->type = AREA;
 	new->area = wid * len;
 	new->dir = get_coordinates(line[2], 1.0);
 	new->brightness = get_double(&bright_ratio);
@@ -80,7 +81,6 @@ int	set_al_vals(t_trace *trace, t_light *new, char **line)
 	new->vsteps = ft_atoi(line[8]);
 	set_arealt_transform(new, wid, len);
 	set_arealt(new);
-	new->samples = new->usteps * new->vsteps;
 	new->emitter = set_lt_cube(new, wid, len);
 	if (!new->emitter)
 		return (1);

@@ -2,9 +2,9 @@
 
 static inline double get_diff(t_norm_color c1, t_norm_color c2)
 {
-	double diff_sqr;
-	double diff_sqg;
-	double diff_sqb;
+	double	diff_sqr;
+	double	diff_sqg;
+	double	diff_sqb;
 
 	diff_sqr = (c1.r - c2.r) * (c1.r - c2.r);
 	diff_sqg = (c1.g - c2.g) * (c1.g - c2.g);
@@ -54,7 +54,7 @@ static inline t_norm_color	get_obj_color(t_on *on)
 
 static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 {
-	t_light *lt;
+	t_light	*lt;
 
 	if (on->type == LIGHT)
 	{

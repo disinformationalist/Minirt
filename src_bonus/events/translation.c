@@ -38,8 +38,7 @@ static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 	}
 	else if (on->type == CUBE)
 	{
-		/* if (trace->curr_cu->emitter)
-			return ; */
+	
 		trace->curr_cu->curr_rottran = mat_mult(trace->curr_cu->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
 	}
