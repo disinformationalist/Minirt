@@ -100,6 +100,20 @@ int transfigure(int keycode, t_trace *trace)
 	return (0);
 }
 
+void	frost_on(t_trace *trace, t_on on)
+{
+	if (on.type == PLANE)
+		trace->curr_pl->w_frost = !trace->curr_pl->w_frost;
+	else if (on.type == SPHERE)
+		trace->curr_sp->w_frost = !trace->curr_sp->w_frost;
+	else if (on.type == CYLINDER)
+		trace->curr_cy->w_frost = !trace->curr_cy->w_frost;
+	else if (on.type == CUBE)
+		trace->curr_cu->w_frost = !trace->curr_cu->w_frost;
+	else
+		return ;
+}
+
 int key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)
@@ -114,6 +128,8 @@ int key_press_3(int keycode, t_trace *trace)
 		rotate_object(trace, trace->on, rot_z(M_PI / 12));
 	else if (keycode == E)
 		rotate_object(trace, trace->on, rot_z(-M_PI / 12));
+	else if (keycode == PAD_0)
+		frost_on(trace, *(trace->on));
 	else
 		transfigure(keycode, trace);
 	return (0);

@@ -52,6 +52,8 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_cy->curr_rottran);
 		trace->curr_cy->transform = \
 			mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
+		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
+		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
 	}
 	else if (on->type == CUBE)
 	{
@@ -59,6 +61,8 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_cu->curr_rottran);
 		trace->curr_cu->transform = \
 			mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
+		trace->curr_cu->t_transform = transpose(trace->curr_cu->transform);
+		trace->curr_cu->i_transform = inverse(trace->curr_cu->transform);
 	}
 	else if (on->type == LENS)
 	{
@@ -94,6 +98,8 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_sp->curr_rottran);
 		trace->curr_sp->transform = \
 			mat_mult(trace->curr_sp->curr_scale, trace->curr_sp->curr_rottran);
+		trace->curr_sp->t_transform = transpose(trace->curr_sp->transform);
+		trace->curr_sp->i_transform = inverse(trace->curr_sp->transform);
 	}
 	else if (on->type == PLANE)
 	{	
@@ -101,8 +107,10 @@ void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_pl->curr_rottran);
 		trace->curr_pl->transform = \
 			mat_mult(trace->curr_pl->curr_scale, trace->curr_pl->curr_rottran);
+		trace->curr_pl->t_transform = transpose(trace->curr_pl->transform);
+		trace->curr_pl->i_transform = inverse(trace->curr_pl->transform);
 		trace->curr_pl->norm = \
-			norm_vec(mat_vec_mult(transpose(trace->curr_pl->transform), up));
+			norm_vec(mat_vec_mult(trace->curr_pl->t_transform, up));
 	}
 	else
 		rotate_object2(trace, on, rot);

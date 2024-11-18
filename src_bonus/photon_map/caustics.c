@@ -240,27 +240,3 @@ t_photon_map	*build_caustic_map(t_trace *trace, int photons)
 	}
 	return (photon_map);
 }
-			//photon = scale_power(comps.mat.diffref, photon);
-
-//else if (comps.interact == 3)
-		//{
-			//if (bounces == 0)
-			//printf("zero\n");
-			//refract
-		//	else
-		//	{
-				/* 	if (bounces == 2)
-				print_vec(pho.dir);
-					if (bounces == 2 && intersects->closest->object_type == SPHERE)
-					{
-						printf("%f\n", comps.n1);
-						printf("%f\n", comps.n2);
-					}
-					int i = -1;
-					printf("count: %d\n", intersects->count);
-					while(++i < intersects->count)
-						printf("inter %d at %f\n", i + 1, intersects->hits[i].t);
-					printf("\n");  */
-				
-			
-			//}

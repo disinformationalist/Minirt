@@ -19,8 +19,8 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->shadow = true;
 	new->bump = false;
 	new->option = 0;
-
-	new->texture = NULL; //if not assigned
+	new->w_frost = false;
+	new->texture = NULL;
 	new->emitter = false;
 }
 

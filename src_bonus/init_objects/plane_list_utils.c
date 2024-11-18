@@ -8,10 +8,10 @@ void	set_pl_vals(t_plane *new, char **line)
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 	new->bump = false;
-//	new->texture = NULL;
-//	new->texture = NULL;
-
+	new->texture = NULL;
 	new->option = 0;
+	new->w_frost = false;
+	new->sine = false;
 }
 
 t_plane	*create_plane(char **line)

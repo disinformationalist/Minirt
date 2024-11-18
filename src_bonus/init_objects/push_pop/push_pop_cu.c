@@ -36,11 +36,14 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
+	new->t_transform = transform;
+	new->i_transform = transform;
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->w_frost = false;
 	new->option = 0;
 	new->next = new;
 	new->prev = new;

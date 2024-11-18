@@ -49,11 +49,14 @@ typedef struct s_sphere
 	t_norm_color 	color;
 	t_mat			mat;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	t_transform;
+	t_matrix_4x4	i_transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
+	bool			w_frost;
 	struct s_sphere	*next;
 	struct s_sphere *prev;
 }	t_sphere;
@@ -78,7 +81,7 @@ typedef struct s_lens
 
 typedef struct s_plane 
 {
-	t_type				type;
+	t_type			type;
 	int				id;
 	bool			shadow;
 	bool			bump;
@@ -87,11 +90,15 @@ typedef struct s_plane
 	t_norm_color	color;
 	t_mat			mat;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	t_transform;
+	t_matrix_4x4	i_transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
+	bool			sine;
+	bool			w_frost;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -110,10 +117,13 @@ typedef struct s_cylinder
 	t_norm_color		color;
 	t_mat				mat;
 	t_matrix_4x4		transform;
+	t_matrix_4x4		t_transform;
+	t_matrix_4x4		i_transform;
 	t_matrix_4x4		curr_scale;
 	t_matrix_4x4		curr_rottran;
 	t_tx				*texture;
 	int					option;
+	bool				w_frost;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
 }	t_cylinder;
@@ -132,11 +142,14 @@ typedef struct s_cube
 	t_norm_color	color;
 	t_mat			mat;
 	t_matrix_4x4	transform;
+	t_matrix_4x4	t_transform;
+	t_matrix_4x4	i_transform;
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
 	int				option;
 	bool			emitter;
+	bool			w_frost;
 	double			bright;
 	struct s_cube	*prev;
 	struct s_cube	*next;
@@ -301,6 +314,7 @@ typedef struct t_comps
 	t_vec3			point;
 	t_vec3			eyev;
 	t_vec3			normal;
+	t_vec3			norm2;
 	t_vec3 			light_dir;
 	t_ray			ray;
 	t_vec3			reflectv;
@@ -313,18 +327,22 @@ typedef struct t_comps
 	t_vec3			over_pnt;
 	t_vec3			under_pnt;
 	t_vec3			bump;
+	//t_vec3			bumpv;
+	t_position			pos;
+	t_position			dims;
 	t_norm_color	color;
-	t_norm_color refr_col;
-	t_norm_color refl_col;
-
-
-	//t_norm_color	irrad;
-
+	t_norm_color	refr_col;
+	t_norm_color	refl_col;
 }	t_comps;
 
 
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
+
+
+//text
+void		bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
+void		bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 
 
 /***PHOTON***/
@@ -346,27 +364,22 @@ void 			emit_area_c(t_trace * trace, t_photon_map *map, t_light light, double to
 void			emit_point_c(t_trace *trace, t_photon_map *map, double total, t_light *light);
 
 //--------put these where they go later
-t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
 
+
+
+
+// reflect, refract
 double			schlick(t_comps comps);
-
-
+void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
 t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
 
 void			intersect(t_intersects *intersects, void *object, double t, t_type type);
-void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 
-//t_norm_color	get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col);
 
 t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
 
 
-void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
-void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
-void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
-void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
 
 bool			insert_ltcopy_after2(t_trace *trace);
 bool			insert_ltcopy_after3(t_trace *trace);
@@ -413,8 +426,6 @@ void			check_al(char **line, char ***rt_file);
 
 void			check_tx(char **line, char ***rt_file);
 void			check_tri(char **line, char ***rt_file);
-
-
 
 
 //check line utils
@@ -500,8 +511,12 @@ void			set_cu_transforms(t_trace *trace);
 int				new_img_init(void *mlx_con, t_img *img, int width, int height);
 void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 
-//sphere utils
+//intersect
+t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
 
+//sphere utils
+void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
 void			check_spheres(t_sphere *spheres, t_intersects *intersects, t_ray ray);
 t_norm_color	color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
@@ -516,19 +531,19 @@ bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
+void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
 //cube utils
 void			check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
+void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 
 //obj shadow
 bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
 bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
-
-
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray);
@@ -542,7 +557,6 @@ t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_dept
 
 //light utils
 void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
-
 void			set_arealt(t_light *lt);
 void			check_arealts(t_light *lights, t_intersects *intersects, t_ray ray);
 int				set_al_vals(t_trace *trace, t_light *new, char **line);
@@ -591,22 +605,14 @@ t_norm_color 	color(double r, double g, double b);
 
 unsigned int	clamped_col(t_norm_color col);
 
-
 //texture utils
 
-//t_norm_color texture_plane_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
-//t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane);
-t_norm_color texture_plane_at(t_trace *trace, t_point obj_pnt, t_plane *plane, t_comps *comps);
-
-//t_norm_color texture_sp_at(t_trace *trace, t_point point, t_matrix_4x4 transform, t_vec3 *norm);
-t_norm_color texture_sp_at(t_trace *trace, t_point obj_pnt, t_sphere *sphere, t_comps *comps);
-
+t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps);
+t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
-double 			get_lumin(t_norm_color color);
 int				import_textures(void *mlx_con, t_tx *textures);
-//t_vec3 sp_bump(int i, int j, t_img *img);
-t_vec3			sp_bump(t_position pos, t_position dims, t_img *img);
-
+t_vec3			frost(t_vec3 norm);
+void			sine_ring_norm(t_point obj_pnt, t_comps *comps, t_plane plane);
 
 
 //materials
@@ -674,8 +680,6 @@ void			write_arealights(t_light *lights, int fd);
 
 void			write_cubes(t_cube *cubes, int fd);
 void			write_textures(t_tx *textures, int fd);
-
-
 
 int				count_chars(double n);
 void			check_tolerance(t_vec3 *vec);

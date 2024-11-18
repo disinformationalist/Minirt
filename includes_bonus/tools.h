@@ -68,7 +68,6 @@ typedef enum e_type
 	MESH
 } 	t_type;
 
-
 typedef struct s_triangle
 {
 	int 	v0;
@@ -248,6 +247,14 @@ typedef struct s_pattern
 
 }	t_pattern;
 
+typedef struct s_map
+{
+	double	u;
+	double	v;
+	double	phi;
+	double	theta;
+}	t_map;
+
 //faces for cube mapping
 
 typedef enum e_face
@@ -285,16 +292,14 @@ t_mesh			*parse_obj(char *filename);
 t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
 t_ray			transform(t_ray r, t_matrix_4x4 m);
 void			ft_swap(double *a, double *b);
-unsigned char	pixel_gray_get(int x, int y, t_img *img);
 double			randf(void);
 
-//pattern(checker... others later maybe)
-//used for mapping checkers
+//used for map
 
-t_norm_color	pattern_at(t_pattern pat, t_vec2 uv);
+t_norm_color	pattern_at(t_pattern pat, t_map map);
 t_pattern		uv_checker(double width, double height, t_norm_color color1, t_norm_color color2);
-t_vec2 			sphere_map(t_point obj_pnt);
-t_vec2 			planar_map(t_point obj_pnt);
+t_map 			planar_map(t_point obj_pnt);
+t_map			sphere_map(t_point obj_pnt, double radius);
 
 /***GROUPS***/
 

@@ -33,6 +33,8 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->color.g = 200;
 	new->color.b = 100;
 	identity(&transform);
+	new->t_transform = transform;
+	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
@@ -41,10 +43,11 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->w_frost = false;
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL; //if not assigned
+	new->texture = NULL;
 }
 
 //copy a cylinder and place it immediately after the current cylinder in the list

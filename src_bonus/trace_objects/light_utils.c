@@ -183,8 +183,6 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 	}
 	else//point
 	{
-
-				//comps->cos_a = fmax(0.0, dot_product(comps->normal, comps->light_dir));
 		comps->cos_a = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, curr_lt->center, *comps))
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));

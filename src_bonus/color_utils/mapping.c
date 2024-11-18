@@ -2,33 +2,28 @@
 
 //maps the obj pnt to spherical, returns uv
 
-t_vec2 sphere_map(t_point obj_pnt)
+t_map sphere_map(t_point obj_pnt, double radius)
 {
-	t_vec2			uv;
-	double			theta;
-	double			phi;
-	double			radius;
+	t_map	map;
 	
 	obj_pnt.w = 0;
-	radius = magnitude(obj_pnt);//pass rad?
-	theta = atan2(obj_pnt.x, obj_pnt.z);
-	phi = acos(obj_pnt.y / radius);
-	uv.x = 1 - (theta / (2 * M_PI) + 0.5);
-	uv.y = 1 - phi / M_PI;
-	return (uv);
+	map.theta = atan2(obj_pnt.x, obj_pnt.z);
+	map.phi = acos(obj_pnt.y / radius);
+	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
+	map.v = 1 - map.phi / M_PI;
+	return (map);
 }
 
 //mapping point to plane
 
-t_vec2 planar_map(t_point obj_pnt)
+t_map planar_map(t_point obj_pnt)
 {
-	t_vec2	uv;
+	t_map	map;
 
-	uv.x = fmod(obj_pnt.x, 1);
-	uv.y = fmod(obj_pnt.z, 1);
-	return (uv);
+	map.u = fmod(obj_pnt.x, 1);
+	map.v = fmod(obj_pnt.z, 1);
+	return (map);
 }
-
 
 //cubetest //add params to t_pattern
 t_pattern uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br)

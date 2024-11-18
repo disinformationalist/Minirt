@@ -27,13 +27,13 @@ t_vec3f	vecf(float x, float y, float z)//, float w)
 }
 
 //rand double between -1 and 1
-
+/* 
 double	randf2(void)
 {
 	double hrmax = ((double)RAND_MAX / 2.0);//precompute this!!
 	return (((double)rand() / hrmax) - 1.0);//check if double on rand needed
 }
-
+ */
 //puts a photon into map, adjusts count
 
 void	add_photon(t_photon_map *map, t_photon photon)

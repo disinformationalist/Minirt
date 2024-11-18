@@ -20,6 +20,8 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 			vec1.z), trace->curr_cu->curr_scale);
 		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, \
 			trace->curr_cu->curr_rottran);
+		trace->curr_cu->t_transform = transpose(trace->curr_cu->transform);
+		trace->curr_cu->i_transform = inverse(trace->curr_cu->transform);
 	}
 	else if (on->type == LIGHT)
 	{
@@ -50,6 +52,8 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 			vec1.z), trace->curr_cy->curr_scale);
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
 			trace->curr_cy->curr_rottran);
+		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
+		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
 	}
 	else if (on->type == PLANE)
 	{
@@ -57,6 +61,8 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 			vec1.z), trace->curr_pl->curr_scale);
 		trace->curr_pl->transform = mat_mult(trace->curr_pl->curr_scale, \
 			trace->curr_pl->curr_rottran);
+		trace->curr_pl->t_transform = transpose(trace->curr_pl->transform);
+		trace->curr_pl->i_transform = inverse(trace->curr_pl->transform);
 	}
 	else
 		scale_object3(trace, on, vec1);
@@ -88,6 +94,8 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
 			vec1.y, vec1.z), trace->curr_sp->curr_scale);
 		trace->curr_sp->transform = mat_mult(trace->curr_sp->curr_scale, \
 			trace->curr_sp->curr_rottran);
+		trace->curr_sp->t_transform = transpose(trace->curr_sp->transform);
+		trace->curr_sp->i_transform = inverse(trace->curr_sp->transform);
 	}
 	else
 		scale_object2(trace, on, vec1);

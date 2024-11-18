@@ -1,14 +1,5 @@
 #include "minirt.h"
 
-
-int	ft_round(double num)
-{
-	return((int)floor(num + 0.5));
-}
-
-//playing with color reassign, do in keyhooks
-//may need rework closer to book method, these are proof of concepts..
-
 //places alternating stripes on object
 
 t_norm_color stripe_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)
@@ -41,22 +32,6 @@ t_norm_color ring_at(t_point point, t_matrix_4x4 transform)//, t_norm_color colo
 	return (col);
 }
 
-//checkerboard
-
-t_norm_color checker_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)
-{
-	t_norm_color	col;
-	t_point			obj_pnt;
-
-	obj_pnt = mat_vec_mult(transform, point);
-	
-//	if (((int)floor(obj_pnt.x) + (int)floor(obj_pnt.y) + (int)floor(obj_pnt.z)) % 2 == 0)
-	if ((ft_round(obj_pnt.x) + ft_round(obj_pnt.y) + ft_round(obj_pnt.z)) % 2 == 0)
-		col = color(40.0, 40.0, 40.0);
-	else
-		col = color(255.0, 255.0, 255.0);
-	return (col);
-}
 
 //not really working this way... must rework.. map
 
@@ -109,13 +84,13 @@ t_norm_color uv_checker_at(t_pattern pat, double u, double v)
 //this one really returns the color at the point in obj space. 
 //takes the pattern, and the uv returned by the map function used.
 
-t_norm_color pattern_at(t_pattern pat, t_vec2 uv)//t_pattern map in place of pat
+t_norm_color pattern_at(t_pattern pat, t_map map)//t_pattern map in place of pat
 {
 	/* t_vec2 uv;
 	t_point obj_pnt; */
 
 	//obj_pnt = mat_vec_mult(transform, pnt);
 	//uv = sphere_map(obj_pnt);
-	return (uv_checker_at(pat, uv.x, uv.y));
+	return (uv_checker_at(pat, map.u, map.v));
 }
 

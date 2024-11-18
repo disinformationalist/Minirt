@@ -31,6 +31,8 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->color.g = 50;
 	new->color.b = 200;
 	identity(&transform);
+	new->t_transform = transform;
+	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
@@ -42,8 +44,9 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->next = new;
 	new->prev = new;
 	new->option = 0;
+	new->w_frost = false;
 	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
-	new->texture = NULL; //if not assigned
+	new->texture = NULL;
 }
 
 //copy a sphere and place it immediately after the current sphere in the list
