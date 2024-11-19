@@ -61,10 +61,15 @@ void	switch_list(int keycode, t_trace *trace, t_on *on)
 		on->object = trace->curr_cy;
 		on->type = CYLINDER;
 	}
-	else if (keycode == N_4)
+	/* else if (keycode == N_4)
 	{
 		on->object = trace->curr_le;
 		on->type = LENS;
+	} */
+	else if (keycode == N_4)
+	{
+		on->object = trace->curr_hy;
+		on->type = HYPERBOLOID;
 	}
 	else
 		switch_list2(keycode, trace, on);

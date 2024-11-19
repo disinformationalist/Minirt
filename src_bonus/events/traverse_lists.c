@@ -2,8 +2,15 @@
 
 static inline void	next_list_ob3(t_trace *trace, t_on *on)
  {
-	t_cube *curr_cu;
+	t_cube 			*curr_cu;
+	t_hyperboloid	*curr_hy;
 
+	if (on->type == HYPERBOLOID)
+	{
+		curr_hy = (t_hyperboloid *)on->object;
+		trace->curr_hy = curr_hy->next;
+		on->object = trace->curr_hy;
+	}
 	if (on->type == CUBE)
 	{
 		curr_cu = (t_cube *)on->object;
@@ -70,9 +77,16 @@ void	next_list_ob(t_trace *trace, t_on *on)
 
 static inline void	prev_list_ob3(t_trace *trace, t_on *on)
 {
-	t_cube *curr_cu;
+	t_cube			*curr_cu;
+	t_hyperboloid	*curr_hy;
 
-	if (on->type == CUBE)
+	if (on->type == HYPERBOLOID)
+	{
+		curr_hy = (t_hyperboloid *)on->object;
+		trace->curr_hy = curr_hy->prev;
+		on->object = trace->curr_hy;
+	}
+	else if (on->type == CUBE)
 	{
 		curr_cu = (t_cube *)on->object;
 		trace->curr_cu = curr_cu->prev;

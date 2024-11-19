@@ -45,6 +45,8 @@ static inline t_norm_color	get_obj_color(t_on *on)
 		return (mult_color(1 / 255.0, ((t_plane *)on->object)->color));
 	else if (on->type == CYLINDER)
 		return (mult_color(1 / 255.0, ((t_cylinder *)on->object)->color));
+	else if (on->type == HYPERBOLOID)
+		return (mult_color(1 / 255.0, ((t_hyperboloid *)on->object)->color));
 	else if (on->type == CUBE)
 		return (mult_color(1 / 255.0, ((t_cube *)on->object)->color));
 	/* else if (on->type == LENS)
@@ -70,6 +72,8 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 		((t_plane *)on->object)->color = mult_color(255.0, new_col);
 	else if (on->type == CYLINDER)
 		((t_cylinder *)on->object)->color = mult_color(255.0, new_col);
+	else if (on->type == HYPERBOLOID)
+		((t_hyperboloid *)on->object)->color = mult_color(255.0, new_col);
 	else if (on->type == CUBE)
 		((t_cube *)on->object)->color = mult_color(255.0, new_col);
 	/* else if (on->type == LENS)
@@ -86,6 +90,8 @@ void	set_new_tx(t_on *on, t_tx *new)
 		((t_sphere *)on->object)->texture = new;
 	/*else if (on->type == CYLINDER)
 		((t_cylinder *)on->object)->texture = new;
+	else if (on->type == HYPERBOLOID)
+		((t_hyperboloid *)on->object)->texture = new;
 	else if (on->type == CUBE)
 		((t_cube *)on->object)->texture = new;*/
 	else
@@ -106,6 +112,8 @@ void	set_next_tx(int button, t_tx *textures, t_on *on)//if not set, sets to firs
 		curr_tx = ((t_sphere *)on->object)->texture;
 	/* else if (on->type == CYLINDER)
 		curr_tx = ((t_cylinder *)on->object)->texture;
+	else if (on->type == HYPERBOLOID)
+		curr_tx = ((t_hyperboloid *)on->object)->texture;
 	else if (on->type == CUBE)
 		curr_tx = ((t_cube *)on->object)->texture; */
 	else

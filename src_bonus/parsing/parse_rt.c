@@ -22,6 +22,8 @@ void	count_ids(t_obj_counts *counts, char ***rt_file, int *k)
 			counts->plane_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "cy"))
 			counts->cyl_count++;
+		else if (!ft_strcmp(*(rt_file[*k]), "hy"))
+			counts->hyp_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "le"))
 			counts->lens_count++;
 		else if (!ft_strcmp(*(rt_file[*k]), "cu"))
@@ -55,6 +57,8 @@ void	check_ids(char ***rt_file)
 			check_pl(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cy"))
 			check_cy(rt_file[k], rt_file);
+		if (!ft_strcmp(*(rt_file[k]), "hy"))
+			check_hy(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "le"))
 			check_le(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "cu"))
@@ -91,6 +95,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = append_pl(&trace->planes, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cy"))
 			status = append_cy(&trace->cylinders, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "hy"))
+			status = append_hy(&trace->hyperboloids, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "le"))
 			status = append_le(&trace->lenses, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "cu"))
@@ -117,6 +123,7 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	total_intersects += 2 * counts.sphere_count;
 	total_intersects += 4 * counts.lens_count; 
 	total_intersects += 4 * counts.cyl_count;
+	total_intersects += 4 * counts.hyp_count;
 	total_intersects += counts.plane_count;
 	total_intersects += 2 * counts.cube_count;
 	total_intersects += counts.tri_count;

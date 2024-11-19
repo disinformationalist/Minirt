@@ -68,6 +68,29 @@ void	set_cy_transforms(t_trace *trace)
 	}
 }
 
+void	set_hy_transforms(t_trace *trace)
+{
+	t_hyperboloid		*curr_hy;
+	t_matrix_4x4	inv_trans;
+	t_matrix_4x4	inv_rot;
+
+	if (trace->hyperboloids)
+	{
+		curr_hy = trace->hyperboloids;
+		while (true)
+		{
+			inv_trans = translation(-curr_hy->center.x, -curr_hy->center.y, -curr_hy->center.z);
+			inv_rot = rot_to(curr_hy->norm,  vec(0, 1, 0, 0));
+			curr_hy->curr_scale = inv_scaling(curr_hy->rad1, curr_hy->half_h, curr_hy->rad2);//check what to do with radiuses
+			curr_hy->curr_rottran = mat_mult(inv_rot, inv_trans);
+			curr_hy->transform = mat_mult(curr_hy->curr_scale, curr_hy->curr_rottran);
+			curr_hy = curr_hy->next;
+			if (curr_hy == trace->hyperboloids)
+				break;
+		}
+	}
+}
+
 void	set_cu_transforms(t_trace *trace)
 {
 	t_cube			*curr_cu;

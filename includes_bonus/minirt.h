@@ -115,6 +115,28 @@ typedef struct s_cylinder
 	struct s_cylinder	*next;
 }	t_cylinder;
 
+typedef struct s_hyperboloid
+{
+	t_type					type;
+	int						id;
+	bool					shadow;
+	bool					bump;
+	t_point					center;
+	t_vec3					norm;
+	double					rad1;
+	double					rad2;
+	double					height;
+	double					half_h;
+	t_norm_color			color;
+	t_mat					mat;
+	t_matrix_4x4			transform;
+	t_matrix_4x4			curr_scale;
+	t_matrix_4x4			curr_rottran;
+	t_tx					*texture;
+	struct s_hyperboloid	*prev;
+	struct s_hyperboloid	*next;
+}	t_hyperboloid;
+
 typedef struct s_cube
 {
 	t_type			type;
@@ -229,6 +251,7 @@ typedef struct s_trace
 	t_lens			*lenses;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
+	t_hyperboloid	*hyperboloids;
 	t_cube			*cubes;
 	t_tx			*textures;
 
@@ -241,6 +264,7 @@ typedef struct s_trace
 	t_lens			*curr_le;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
+	t_hyperboloid	*curr_hy;
 	t_cube			*curr_cu;
 	t_light			*curr_lt;
 
@@ -356,7 +380,7 @@ void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersect
 void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
 void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
-
+void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_intersects *intersects);
 
 /***PARSING***/
 
@@ -385,6 +409,7 @@ void			check_sp(char **line, char ***rt_file);
 void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
+void			check_hy(char **line, char ***rt_file);
 void			check_cu(char **line, char ***rt_file);
 
 void			check_sl(char **line, char ***rt_file);
@@ -429,6 +454,7 @@ bool			append_sp(t_sphere **start, char **line);
 bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
+bool			append_hy(t_hyperboloid **start, char **line);
 bool			append_cu(t_cube **start, char **line);
 
 bool			append_tri(t_tri **start, char **line);
@@ -443,6 +469,7 @@ bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
 bool			insert_lecopy_after(t_trace *trace, t_lens **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
 bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
+bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 
@@ -450,6 +477,7 @@ bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 void			pop_sp(t_trace *trace, t_sphere **current);
 void			pop_le(t_trace *trace, t_lens **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
+void			pop_hy(t_trace *trace, t_hyperboloid **current);
 void			pop_pl(t_trace *trace, t_plane **current);
 void			pop_lt(t_trace *trace, t_light **current);
 void			pop_cu(t_trace *trace, t_cube **current);
@@ -471,6 +499,7 @@ void			free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, in
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
+void			set_hy_transforms(t_trace *trace);
 void			set_le_transforms(t_trace *trace);
 void			set_cu_transforms(t_trace *trace);
 
@@ -506,6 +535,7 @@ t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 //obj shadow
 bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
 bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
+bool			ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, t_ray ray, double dist);
 
 
 
@@ -513,6 +543,12 @@ bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
 void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray);
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
+
+//hyperboloid utils
+void			check_hyperboloids(t_hyperboloid *hyperboloids, t_intersects *intersects, t_ray ray);
+void			compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid);
+t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
+void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_intersects *intersects);
 
 //triangle utils
 void			check_triangles(t_tri *spheres, t_intersects *intersects, t_ray ray);
@@ -631,6 +667,7 @@ void			error_exit(char *msg);
 void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
+void			free_hy_list(t_cylinder **start);
 void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 
@@ -642,6 +679,7 @@ char			*build_sp_line(t_sphere *sphere);
 void			write_spheres(t_sphere *spheres, int fd);
 void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
+void			write_hyperboloids(t_hyperboloid *hyperboloids, int fd);
 void			write_lenses(t_lens *lenses, int fd);
 void			write_lights(t_light *lights, int fd);
 void			write_splights(t_light *lights, int fd);
@@ -660,6 +698,7 @@ void			check_tolerance(t_vec3 *vec);
 void			print_all_objects(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
+void			print_hyperboloids(t_hyperboloid *hyperboloid);
 void			print_planes(t_plane *plane);
 void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
