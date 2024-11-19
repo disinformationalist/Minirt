@@ -305,6 +305,7 @@ typedef struct s_piece
 	int				y_e;
 	t_trace			*trace;
 	t_intersects	*intersects;
+	unsigned int	seed;
 }	t_piece;
 
 typedef struct t_comps

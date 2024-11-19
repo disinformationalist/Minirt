@@ -50,9 +50,9 @@ static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_
 	}
 	else
 		comps.inside = false;
-	comps.color = set_sp_color(&comps, *sphere, obj_pnt);
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.color = set_sp_color(&comps, *sphere, obj_pnt);
 	if (sphere->w_frost)
 		comps.normal = frost(comps.normal);
 	return (comps);
