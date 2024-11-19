@@ -26,20 +26,19 @@ int	is_rt_file_valid(char *filename)
 
 int	main(int ac, char **av)
 {
+	char		*file;
 	char		***rt_file;
 	t_trace		trace;
 
 	if (ac != 2)
-	{
-		free_exit(NULL, "Error\n: Usage: ./minirt [scene.rt]\n", NULL);
-		return (1);
-	}
+		return (free_exit(NULL, "Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);
 	if (!is_rt_file_valid(av[1]))
-	{
-		free_exit(NULL, "Error\n Invalid [scene.rt] file\n", NULL);
-		return (1);
-	}
-	rt_file = split_file(av[1]);
+		return (free_exit(NULL, "Error\n Invalid rt file\n", NULL), 1);
+	file = ft_strjoin("rt_files/", av[1]);
+	if (!file)
+		return (free_exit(NULL, "Error\n ft_strjoin malloc failed", NULL), 1);
+	rt_file = split_file(file);
+	free(file);
 	if (!rt_file)
 		return (1);
 	parse_rt(&trace, rt_file);

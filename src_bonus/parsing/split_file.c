@@ -61,6 +61,8 @@ char	***fill_3darray(char ***split_file, char *file, int num_lines)
 	return (split_file);
 }
 
+//split file into malloced 3d array
+
 char	***split_file(char *file)
 {
 	int		fd;

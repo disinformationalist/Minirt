@@ -1,0 +1,21 @@
+#Ambient:   Intensity 																       	  R | G | B
+A           0.001                                                                             255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z   	  Ori_x | Ori_y | Ori_z  	  			   FOV
+C           0.000,0.000,-6.000            0.000,0.000,1.000                        70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z    								    Intensity             R | G | B
+L           1.000,1.500,-4.500                                          0.750                 255,255,255
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z         								Diameter      		  R | G | B
+sp          -1.000,0.500,-1.000                                         2.000                 200,50,200
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z         Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          0.000,-1.000,0.000            0.000,1.000,0.000                                   200,0,0
+pl          2.000,-0.500,5.000            -0.000,-0.000,1.000                                 200,0,0
+
+

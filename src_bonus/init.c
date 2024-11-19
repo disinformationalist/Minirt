@@ -40,7 +40,7 @@ void info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
-	trace->depths.refl = 6;//play with adaptive more...
+	trace->depths.refl = 6;
 	trace->depths.refr = 6;
 
 /* 	trace->global_map = NULL;

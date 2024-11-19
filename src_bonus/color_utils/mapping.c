@@ -6,9 +6,11 @@ t_map sphere_map(t_point obj_pnt, double radius)
 {
 	t_map	map;
 	
+	(void)radius;
 	obj_pnt.w = 0;
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
-	map.phi = acos(obj_pnt.y / radius);
+	map.phi = acos(obj_pnt.y);	
+	//map.phi = acos(obj_pnt.y / radius);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
 	map.v = 1 - map.phi / M_PI;
 	return (map);

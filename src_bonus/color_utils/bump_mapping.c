@@ -50,7 +50,7 @@ void	bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 {
 	t_vec3	bumpv;
 	
-	bumpv = bump(comps->pos, comps->dims, sphere.texture->bump_map, 40);
+	bumpv = bump(comps->pos, comps->dims, sphere.texture->bump_map, 30);
 		bumpv.y = 1 - bumpv.y;
 	if (comps->inside)
 		bumpv = neg(bumpv);

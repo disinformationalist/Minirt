@@ -16,17 +16,8 @@ t_norm_color	pixel_color_get(int x, int y, t_img *img)
 	return (pixel_color);
 }
 
-double clamp(double val, double bot, double top)
-{
-	if (val < bot)
-		val = bot;
-	if (val > top)
-		val = top;
-	return (val);
-}
-
 /* the -5, 5 in this should be based on scene size(bounding box) in the future.
-planes are using this to repeat and mirror texture imfinitely. */
+planes are using this to repeat and mirror texture infinitely. */
 
 static inline t_vec2	set_plane_uv(t_point obj_pnt, double img_iasp)
 {
@@ -68,7 +59,6 @@ t_norm_color texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
 	comps->dims = dims;
 	comps->pos = pos;
 	return (col);
-	//return (plane->color);//and comment col = plane->col? or do outside for checks too?
 }
 
 t_norm_color texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)

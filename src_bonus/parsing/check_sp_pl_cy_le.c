@@ -167,26 +167,26 @@ int	is_valid_tx(char *filename)
 	return (1);
 }
 
-void	check_tx(char **line, char ***rt_file)//maybe append textures/ to names before checks to store in subdir, check permission to read?fix this...maybe for rt file as well
-{												//see if no read permission can chmod inside of program...
+void	check_tx(char **line, char ***rt_file)
+{
 	int		len;
 
 	len = ft_matrix_len(line);
 	if (len != 2 && len != 3)
-		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
-	"must be in the format <type id> <image.png>\n");
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture " \
+	"must be in the format <type id> <image.png>\n", RED);
 	if (!is_valid_tx(line[1]))
+		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture " \
+	"must be in the format <type id> <image.png> <image.png>(optional)\n", RED);
+	/* if (access(line[1], F_OK) || access(line[1], R_OK))
 		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
-	"must be in the format <type id> <image.png> <image.png>(optional)\n");
-	if (access(line[1], F_OK) || access(line[1], R_OK))//see if can change read permission...
-		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
-	"image must exist in working directory and have read permission\n");
+	"image must exist in working directory and have read permission\n"); */
 	if (line[2] && !is_valid_tx(line[2]))
-		free_exit(rt_file, "Error\n Invalid texture parameters\n texture ", \
-	"must be in the format <type id> <image.png> <image.png>(optional)\n");
-	if (line[2] && (access(line[2], F_OK) || access(line[2], R_OK)))
+		free_exit(rt_file, "Error\n Invalid texture parameters\n texture " \
+	"must be in the format <type id> <image.png> <image.png>(optional)\n", RED);
+	/* if (line[2] && (access(line[2], F_OK) || access(line[2], R_OK)))
 		free_exit(rt_file, "Error\n Invalid texture parameters\n Texture ", \
-	"image must exist in working directory and have read permission\n");
+	"image must exist in working directory and have read permission\n"); */
 }
 
 void	check_tri(char **line, char ***rt_file)

@@ -29,6 +29,32 @@ t_norm_color	*set_metal_colors(void)
 	return (m_colors);
 }
 
+double clamp(double val, double bot, double top)
+{
+	if (val < bot)
+		val = bot;
+	if (val > top)
+		val = top;
+	return (val);
+}
+
+/* t_norm_color clamp_col(t_norm_color col)
+{
+	if (col.r > 255.0)
+		col.r = 255.0;
+	if (col.g > 255.0)
+		col.g = 255.0;
+	if (col.b > 255.0)
+		col.b = 255.0;
+	if (col.r < 0)
+		col.r = 0;
+	if (col.g < 0)
+		col.g = 0;
+	if (col.b < 0)
+		col.b = 0;
+	return (col);
+} */
+
 /* combines color components, balances reflect and refract
 current in use, 0 - 255 object color, 0 - 1 light colors */
 
@@ -46,7 +72,7 @@ t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_col
 	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
 	if (m.ref > 0 && m.transp > 0)
 	{
- 		r = schlick(comps);
+		r = schlick(comps);
 		r2 = 1.0 - r;
 		color_out.r += r * m.ref * comps.refl_col.r + r2 * m.transp * comps.refr_col.r;
     	color_out.g += r * m.ref * comps.refl_col.g + r2 * m.transp * comps.refr_col.g;

@@ -45,7 +45,69 @@ t_img *build_lumin_map(void *mlx_con, t_img *img, int width, int height)
 	return (bump_map);
 }
 
-//build texture/ bump map list here, if no bump map provided. create a luminosity based
+//check valid here using subdir name
+
+bool	check_tx_access(t_tx *textures)
+{
+	t_tx	*curr;
+
+	if (textures == NULL)
+		return (0);
+	curr = textures;
+	while (true)
+	{
+		if (access(curr->i_name, F_OK) || access(curr->i_name, R_OK))
+		{
+			ft_putstr_color_fd(2, "Error\n Invalid texture param\n Texture " \
+			"image must exist in textures directory with read permission\n", RED);
+			return (1);
+		}
+		if (curr->m_name && (access(curr->m_name, F_OK) || access(curr->m_name, R_OK)))
+		{
+			ft_putstr_color_fd(2, "Error\n Invalid texture param\n Texture " \
+			"image must exist in textures directory with read permission\n", RED);
+			return (1);
+		}
+		curr = curr->next;
+		if (curr == textures)
+			break;
+	}
+	return (0);
+}
+
+//add directory name to all maps and textures for importing.
+
+bool	append_dir(t_tx *textures)
+{	
+	t_tx	*curr;
+	char	*temp;
+
+	curr = textures;
+	while (true)
+	{
+		temp = curr->i_name;
+		curr->i_name = ft_strjoin("textures/", temp);
+		free(temp);
+		if (!curr->i_name)
+			return (1);
+		if (curr->m_name)
+		{
+			temp = curr->m_name;
+			curr->m_name = ft_strjoin("textures/", temp);
+			free(temp);
+			if (!curr->m_name)
+				return (1);
+		}
+		curr = curr->next;
+		if (curr == textures)
+			break;
+	}
+	if (check_tx_access(textures))
+		return (1);
+	return (0);
+}
+
+//build texture/bump map list here, if no bump map provided, create a luminosity based
 
 int	import_textures(void *mlx_con, t_tx *textures)
 {
@@ -53,6 +115,8 @@ int	import_textures(void *mlx_con, t_tx *textures)
 
 	if (textures == NULL)
 		return (0);
+	if (append_dir(textures))
+		return (1);
 	curr = textures;
 	while (true)
 	{
