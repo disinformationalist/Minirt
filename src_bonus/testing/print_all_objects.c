@@ -26,6 +26,34 @@ void	print_cylinders(t_cylinder *cylinder)
 	}
 }
 
+void	print_hyperboloids(t_hyperboloid *hyperboloid)
+{
+	t_hyperboloid	*curr_hy;
+
+	if (hyperboloid == NULL)
+		return ;
+	curr_hy = hyperboloid;
+	printf("\n----------------------HYPERBOLOIDS-----------------------\n");
+	while (true)
+	{
+		printf("\n----------------hyperboloid id: %d ----------- \n", curr_hy->id);
+		printf("centerx: %f\n", curr_hy->center.x);
+		printf("centery: %f\n", curr_hy->center.y);
+		printf("centerz: %f\n\n", curr_hy->center.z);
+		printf("norm_vecx: %f\n", curr_hy->norm.x);
+		printf("norm_vecy: %f\n", curr_hy->norm.y);
+		printf("norm_vecz: %f\n\n", curr_hy->norm.z);
+		printf("hyperboloid rad1: %f\n", curr_hy->rad1);
+		printf("hyperboloid rad2: %f\n", curr_hy->rad2);
+		printf("hyperboloid height: %f\n", curr_hy->height);
+		printf("hyperboloid color rgb: r: %f, g: %f, b %f\n", curr_hy->color.r,
+			curr_hy->color.g, curr_hy->color.b);
+		curr_hy = curr_hy->next;
+		if (curr_hy == hyperboloid)
+			break ;
+	}
+}
+
 void	print_planes(t_plane *plane)
 {
 	t_plane	*curr_pl;
@@ -137,5 +165,7 @@ void	print_all_objects(t_trace *trace)
 		print_planes(trace->planes);
 	if (trace->cylinders)
 		print_cylinders(trace->cylinders);
+	if (trace->hyperboloids)
+		print_hyperboloids(trace->hyperboloids);
 	printf("\n\n");
 }

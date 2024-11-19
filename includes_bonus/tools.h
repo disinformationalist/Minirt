@@ -59,6 +59,7 @@ typedef enum e_type
 	LENS,
 	PLANE,
 	CYLINDER,
+	HYPERBOLOID,
 	CUBE,
 	TRI,
 	LIGHT,
@@ -271,6 +272,7 @@ typedef struct s_obj_counts
 	int				lens_count;
 	int				plane_count;
 	int				cyl_count;
+	int				hyp_count;
 	int				cube_count;
 	int				tx_count;
 	int				tri_count;

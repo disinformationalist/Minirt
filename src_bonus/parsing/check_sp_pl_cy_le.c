@@ -83,6 +83,50 @@ void	check_cy(char **line, char ***rt_file)
 	check_cy2(line, rt_file, height_str);
 }
 
+void	check_hy2(char **line, char ***rt_file)
+{
+	char	*rad1_str;
+	char	*rad2_str;
+	char	*height_str;	
+
+	rad1_str = line[3];
+	rad2_str = line[4];
+	height_str = line[5];
+	if (check_double(&rad1_str, 0.001, 999.0))
+		free_exit(rt_file, "Error\n Invalid hyperboloid rad1\n", \
+	"Hyperboloid rad1 must be between 0.001 and 999\n");
+	if (check_double(&rad2_str, 0.001, 999.0))
+		free_exit(rt_file, "Error\n Invalid hyperboloid rad2\n", \
+	"Hyperboloid rad2 must be between 0.001 and 999\n");
+	if (check_double(&height_str, 0.001, 999.0))
+		free_exit(rt_file, "Error\n Invalid hyperboloid height\n", \
+	"Hyperboloid height must be between 0.001 and 999\n");
+	if (check_color(line[6]))
+		free_exit(rt_file, "Error\n Invalid hyperboloid color value\n", \
+	"Hyperboloid color channel values between 0 and 255 in the format r,g,b\n");
+}
+
+void	check_hy(char **line, char ***rt_file)
+{
+	check_str_len(line, rt_file, 8);
+	if (check_param_num(line, 7))
+		free_exit(rt_file, "Error\n Invalid hyperboloid parameters\n", \
+	"Hyperboloid must be in the format <type id> <x,y,z> <x,y,z>" \
+	"<rad1> <rad2> <height> <r,g,b>\n");
+	if (check_coordinates(line[1]))
+		free_exit(rt_file, "Error\n Invalid hyperboloid coordinates\n", \
+	"Hyperboloid coordinates must be in the format x,y,z\n");
+	if (check_orientation(line[2]))
+		free_exit(rt_file, "Error\n Invalid hyperboloid orientation\n", \
+	"Hyperboloid orientation must be in the format x,y,z," \
+	"with values between minus one and one\n");
+	if (check_normalization(line[2]))
+		free_exit(rt_file, "Error\n Invalid hyperboloid orientation vector\n", \
+	"Hyperboloid orientation vector must be normalized," \
+	" with magnitude of one\n");
+	check_hy2(line, rt_file);
+}
+
 void	check_le(char **line, char ***rt_file)
 {
 	char	*diam_str_1;

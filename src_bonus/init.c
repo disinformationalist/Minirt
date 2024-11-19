@@ -33,6 +33,7 @@ void info_init(t_trace *trace)
 	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
+	trace->curr_hy = trace->hyperboloids;
 	trace->curr_lt = trace->lights;
 	trace->curr_cu = trace->cubes;
 	trace->w_colors = NULL;
@@ -83,6 +84,7 @@ void init_transforms(t_trace *trace)
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
+	set_hy_transforms(trace);
 	set_le_transforms(trace);
 	set_cu_transforms(trace);
 }

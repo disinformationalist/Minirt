@@ -75,6 +75,11 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_cy->curr_rottran = mat_mult(trace->curr_cy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 	}
+	else if (on->type == HYPERBOLOID)
+	{
+		trace->curr_hy->curr_rottran = mat_mult(trace->curr_hy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
+		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, trace->curr_hy->curr_rottran);
+	}
 	else
 		translate_object2(trace, on, vec1);
 }

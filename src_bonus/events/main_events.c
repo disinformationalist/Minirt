@@ -157,6 +157,8 @@ void	toggle_shadow(t_trace *trace, t_on *on)
 		trace->curr_pl->shadow = !trace->curr_pl->shadow;
 	else if (on->type == CYLINDER)
 		trace->curr_cy->shadow = !trace->curr_cy->shadow;
+	else if (on->type == HYPERBOLOID)
+		trace->curr_hy->shadow = !trace->curr_hy->shadow;
 	else if (on->type == CUBE)
 		trace->curr_cu->shadow = !trace->curr_cu->shadow;
 	else
@@ -173,6 +175,8 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_pl->bump = !trace->curr_pl->bump;
 	/* else if (on->type == CYLINDER)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
+	else if (on->type == HYPERBOLOID)
+		trace->curr_hy->bump = !trace->curr_hy->bump;
 	else if (on->type == CUBE)
 		trace->curr_cu->bump = !trace->curr_cu->bump; */
 	else
