@@ -14,41 +14,22 @@ static inline void add_con(t_cons *cons, int *size, void *obj, t_type type)
 
 static inline void	set_n(double *n, t_cons *con)
 {
-	t_sphere	*sp;
-	t_plane		*pl;
-	t_cylinder	*cy;
-	t_cube		*cu;
-	t_lens		*le;
-
 	if (con->type == SPHERE)
-	{
-		sp = (t_sphere *)con->obj;
-		*n = sp->mat.refract;
-	}
-	if (con->type == PLANE)
-	{
-		pl = (t_plane *)con->obj;
-		*n = pl->mat.refract;
-	}
-	if (con->type == CYLINDER)
-	{
-		cy = (t_cylinder *)con->obj;
-		*n = cy->mat.refract;
-	}
-	if (con->type == CUBE)
-	{
-		cu = (t_cube *)con->obj;
-		*n = cu->mat.refract;
-	}
-	if (con->type == LENS)
-	{
-		le = (t_lens *)con->obj;
-		*n = le->mat.refract;
-	}
+		*n = ((t_sphere *)con->obj)->mat.refract;
+	else if (con->type == PLANE)
+		*n = ((t_plane *)con->obj)->mat.refract;
+	else if (con->type == CYLINDER)
+		*n = ((t_cylinder *)con->obj)->mat.refract;
+	else if (con->type == CUBE)
+		*n = ((t_cube *)con->obj)->mat.refract;
+	else if (con->type == HYPERBOLOID)
+		*n = ((t_hyperboloid *)con->obj)->mat.refract;
+	else
+		return ;
 }
 
 static inline void check_and_set(int size, double *n, t_cons *cons)
-{
+{	
 	if (size == 0)
 		*n = 1.0;
 	else

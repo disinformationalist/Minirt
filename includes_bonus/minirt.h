@@ -143,9 +143,13 @@ typedef struct s_hyperboloid
 	t_norm_color			color;
 	t_mat					mat;
 	t_matrix_4x4			transform;
+	t_matrix_4x4			t_transform;
+	t_matrix_4x4			i_transform;
 	t_matrix_4x4			curr_scale;
 	t_matrix_4x4			curr_rottran;
 	t_tx					*texture;
+	bool					w_frost;
+	int						option;
 	struct s_hyperboloid	*prev;
 	struct s_hyperboloid	*next;
 }	t_hyperboloid;
@@ -665,7 +669,6 @@ t_norm_color	mult_color(double scalar, t_norm_color color);
 //patterns
 t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
 t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
-t_norm_color 	checker_at(t_point point, t_matrix_4x4 transform);//, t_norm_color color1, t_norm_color color2
 t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
@@ -699,7 +702,7 @@ void			error_exit(char *msg);
 void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
-void			free_hy_list(t_cylinder **start);
+void			free_hy_list(t_hyperboloid **start);
 void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 

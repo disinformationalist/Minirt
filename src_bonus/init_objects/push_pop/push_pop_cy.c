@@ -29,9 +29,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->height = 2.0;
 	new->half_h = new->height / 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color.r = 0;
-	new->color.g = 200;
-	new->color.b = 100;
+	new->color = color(0, 200, 100);
 	identity(&transform);
 	new->t_transform = transform;
 	new->i_transform = transform;

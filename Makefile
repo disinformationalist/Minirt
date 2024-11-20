@@ -100,6 +100,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/push_pop/push_pop_cy.c \
 ./src_bonus/init_objects/push_pop/push_pop_le.c \
 ./src_bonus/init_objects/push_pop/push_pop_cu.c \
+./src_bonus/init_objects/push_pop/push_pop_hy.c \
 ./src_bonus/init_objects/push_pop/pop_lt.c \
 ./src_bonus/init_objects/push_pop/push_lt.c \
 ./src_bonus/init_objects/push_pop/push_lt_area_default.c \
@@ -107,7 +108,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/plane_list_utils.c \
 ./src_bonus/init_objects/cylinder_list_utils.c \
 ./src_bonus/init_objects/hyperboloid_list_utils.c \
-./src_bonus/init_objects/push_pop_hy.c \
 ./src_bonus/init_objects/lens_list_utils.c \
 ./src_bonus/init_objects/cube_list_utils.c \
 ./src_bonus/init_objects/light_list_utils.c \

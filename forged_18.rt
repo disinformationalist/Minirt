@@ -14,7 +14,7 @@ L           0.000,1.000,-3.000                                          0.750   
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z         								Diameter      		  R | G | B
-sp          -1.000,0.000,-1.500                                         2.000                 200,50,200
+#sp          -1.000,0.000,-1.500                                         2.000                 200,50,200
 
 
 #Planes:    Pnt_x | Pnt_y | Pnt_z         Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
@@ -22,7 +22,7 @@ pl          0.000,-1.000,0.000            -0.000,1.000,0.000                    
 pl          0.000,1.500,5.500             -0.000,0.000,-1.000                                  200,0,0
 
 #Cubes:     Cen_x | Cen_y | Cen_z         Nrm_x | Nrm_y | Nrm_z         W_(x)  H_(y)   D_z    R | G | B
-cu			0.000,0.000,0.000				0,1,0		   		        1      1       1      30,20,200
+#cu			0.000,0.000,0.000				0,1,0		   		        1      1       1      30,20,200
 
 
 #add check for same tx. maybe be able to assign text to shapes in last column.

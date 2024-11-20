@@ -20,7 +20,6 @@ void	thread_error(t_trace *trace, int i)
 		if (trace->threads[i])
 			pthread_join(trace->threads[i], NULL);
 	}
-	//free(trace->w_colors);
 	clear_all(trace);
 }
 
@@ -28,8 +27,8 @@ t_intersects *create_ints(int total)
 {
 	t_intersects *ints;
 
-	/* if (total == 0)
-		total += 2; */
+	if (total == 0)
+		total += 2;
 	ints = malloc(sizeof(t_intersects));
 	if (!ints)
 		return (NULL);
@@ -66,7 +65,7 @@ int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 	else
 		piece[i][j].y_e = (i + 1) * (trace->height / trace->num_rows);
 	piece[i][j].trace = trace;
-	piece[i][j].seed = (unsigned int)(time(NULL) + j * trace->num_rows + i);
+	//piece[i][j].seed = (unsigned int)(time(NULL) + j * trace->num_rows + i);
 	piece[i][j].intersects = create_ints(trace->total_ints);
 	if (!piece[i][j].intersects)
 		return (1);

@@ -100,6 +100,8 @@ void	set_hy_transforms(t_trace *trace)
 			curr_hy->curr_scale = inv_scaling(curr_hy->rad1, curr_hy->half_h, curr_hy->rad2);//check what to do with radiuses
 			curr_hy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_hy->transform = mat_mult(curr_hy->curr_scale, curr_hy->curr_rottran);
+			curr_hy->i_transform = inverse(curr_hy->transform);
+			curr_hy->t_transform = transpose(curr_hy->transform);
 			curr_hy = curr_hy->next;
 			if (curr_hy == trace->hyperboloids)
 				break;
@@ -112,7 +114,6 @@ void	set_cu_transforms(t_trace *trace)
 	t_cube			*curr_cu;
 	t_matrix_4x4	inv_rot;
 	t_matrix_4x4	inv_trans;
-
 
 	if (trace->cubes)
 	{

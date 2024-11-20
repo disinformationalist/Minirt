@@ -95,6 +95,25 @@ void	free_cu_list(t_cube **start)
 	*start = NULL;
 }
 
+void	free_hy_list(t_hyperboloid **start)
+{
+	t_hyperboloid	*curr;
+	t_hyperboloid	*temp;
+
+	if (*start == NULL)
+		return ;
+	curr = *start;
+	curr = curr->next;
+	while (curr != *start)
+	{
+		temp = curr->next;
+		free(curr);
+		curr = temp;
+	}
+	free(curr);
+	*start = NULL;
+}
+
 void	free_lt_list(t_light **start)
 {
 	t_light		*curr;
@@ -189,6 +208,7 @@ void	free_all_objects(t_trace *trace)
 	free_le_list(&trace->lenses);
 	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
+	free_hy_list(&trace->hyperboloids);
 	free_tri_list(&trace->triangles);
 	free_tx_list(trace->mlx_connect, &trace->textures);
 	if (trace->amb)

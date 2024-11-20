@@ -61,6 +61,8 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(rot, trace->curr_hy->curr_rottran);
 		trace->curr_hy->transform = \
 			mat_mult(trace->curr_hy->curr_scale, trace->curr_hy->curr_rottran);
+		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
+		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
 	}
 	else if (on->type == CUBE)
 	{

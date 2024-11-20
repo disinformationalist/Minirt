@@ -45,9 +45,13 @@ void	change_mat(t_trace *trace, t_on *on, const t_mat mat)
 		trace->curr_le->mat = mat;
 	else if (on->type == CUBE)
 		trace->curr_cu->mat = mat;
+	else if (on->type == HYPERBOLOID)
+		trace->curr_hy->mat = mat;
 	else
 		return ;
 }
+
+//used in photon mapping to select action
 
 int	roulette_interaction(t_mat mat)
 {

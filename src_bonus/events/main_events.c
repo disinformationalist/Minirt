@@ -110,6 +110,8 @@ void	frost_on(t_trace *trace, t_on on)
 		trace->curr_cy->w_frost = !trace->curr_cy->w_frost;
 	else if (on.type == CUBE)
 		trace->curr_cu->w_frost = !trace->curr_cu->w_frost;
+	else if (on.type == HYPERBOLOID)
+		trace->curr_hy->w_frost = !trace->curr_hy->w_frost;
 	else
 		return ;
 }

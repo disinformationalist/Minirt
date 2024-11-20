@@ -17,7 +17,7 @@
 static inline void	update_hyperboloid_ids(t_hyperboloid *hyperboloid)
 {
 	t_hyperboloid	*start;
-	int			id;
+	int				id;
 
 	start = hyperboloid;
 	id = 1;
@@ -42,21 +42,23 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->height = 2.0;
 	new->half_h = new->height / 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color.r = 0;
-	new->color.g = 200;
-	new->color.b = 100;
+	new->color = color(0, 200, 100);
 	identity(&transform);
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
+	new->t_transform = transform;
+	new->i_transform = transform;
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->w_frost = false;
+	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL; //if not assigned
+	new->texture = NULL;
 }
 
 //copy a hyperboloid and place it immediately after the current hyperboloid in the list

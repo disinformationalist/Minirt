@@ -57,7 +57,9 @@ void	increment_option(t_trace *trace, int *option)
 		*option = 0;
 }
 
-void	select_option(t_trace *trace, t_on *on)//only for shapes with textures/patterns
+//only for shapes with textures/patterns/bumps, allows rotating through opts
+
+void	select_option(t_trace *trace, t_on *on)
 {
 	if (on->type == PLANE)
 		increment_option(trace, &trace->curr_pl->option);
@@ -82,6 +84,8 @@ int	get_option(t_on *on)
 	else if (on->type == CYLINDER)
 		option = ((t_cylinder *)on->object)->option;
 	else if (on->type == CUBE)
+		option = ((t_cube *)on->object)->option;
+	else if (on->type == HYPERBOLOID)
 		option = ((t_cube *)on->object)->option;
 	else
 		option = 0;
