@@ -26,19 +26,21 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 
 	new->point = vec(0.0,-1, 0.0, 1.0);
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color.r = 200;
-	new->color.g = 0;
-	new->color.b = 0;
+	new->color = color(200, 0, 0);
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
 	new->curr_rottran = transform;
 	new->transform = transform;
 	identity(&transform);
+	new->t_transform = transform;
+	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->mat = get_mat(DEFAULT);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->w_frost = false;
+	new->sine = false;
 	new->option = 0;
 	new->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
 	new->next = new;

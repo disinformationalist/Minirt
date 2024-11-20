@@ -72,6 +72,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/minirt_super.c \
 ./src_bonus/render.c \
 ./src_bonus/set_transforms.c \
+./src_bonus/utils.c \
 ./src_bonus/clean_up.c \
 ./src_bonus/math_utils/vector_ops.c \
 ./src_bonus/math_utils/vector_ops2.c \
@@ -148,6 +149,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/texture_utils.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
+./src_bonus/color_utils/bump_mapping.c \
+./src_bonus/color_utils/normal_patterns.c \
 ./src_bonus/events/main_events.c \
 ./src_bonus/events/traverse_lists.c \
 ./src_bonus/events/switch_list.c \

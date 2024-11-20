@@ -4,7 +4,7 @@ t_norm_color	*set_metal_colors(void)
 {
 	t_norm_color *m_colors;
 
-	m_colors = (t_norm_color *)malloc(sizeof(t_norm_color) * 19);//must remove one..
+	m_colors = (t_norm_color *)malloc(sizeof(t_norm_color) * 19);
 	if (!m_colors)
 		return (NULL);
 	m_colors[0] = (t_norm_color){1.0, 1.0, 1.0};
@@ -29,24 +29,50 @@ t_norm_color	*set_metal_colors(void)
 	return (m_colors);
 }
 
-//current in use
+double clamp(double val, double bot, double top)
+{
+	if (val < bot)
+		val = bot;
+	if (val > top)
+		val = top;
+	return (val);
+}
+
+/* t_norm_color clamp_col(t_norm_color col)
+{
+	if (col.r > 255.0)
+		col.r = 255.0;
+	if (col.g > 255.0)
+		col.g = 255.0;
+	if (col.b > 255.0)
+		col.b = 255.0;
+	if (col.r < 0)
+		col.r = 0;
+	if (col.g < 0)
+		col.g = 0;
+	if (col.b < 0)
+		col.b = 0;
+	return (col);
+} */
+
+/* combines color components, balances reflect and refract
+current in use, 0 - 255 object color, 0 - 1 light colors */
 
 t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color)
 {
 	t_norm_color	color_out;
 	t_mat			m;
-	double			r;//reflectance
-	double			r2;//1- reflectance
+	double			r;
+	double			r2;
 
 	m = comps.mat;
 	//surface
-	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
+	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);
 	color_out.g = comps.color.g * (lt_color.g + m.amb * trace->amb->color.g);
 	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
-
-	if (m.ref > 0 && m.transp > 0)//add reflective and refractive
+	if (m.ref > 0 && m.transp > 0)
 	{
- 		r = schlick(comps);
+		r = schlick(comps);
 		r2 = 1.0 - r;
 		color_out.r += r * m.ref * comps.refl_col.r + r2 * m.transp * comps.refr_col.r;
     	color_out.g += r * m.ref * comps.refl_col.g + r2 * m.transp * comps.refr_col.g;
@@ -61,7 +87,6 @@ t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_col
 	return (color_out);
 }
 
-
 //currently only used in lens
 t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
 {
@@ -73,43 +98,3 @@ t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_in
 
 	return (color_out);
 }
-
-
-/* t_norm_color get_final_color3(t_trace *trace, t_comps comps, t_norm_color lt_color, t_norm_color ref_col, t_norm_color refr_col)
-{
-	t_norm_color	color_out;
-	t_mat			m;
-	double			r;//reflectance
-	double			r2;//1- reflectance
-
-	m = comps.mat;
-	//surface
-	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);// 0 - 255 object color, 0 - 1 light colors
-	color_out.g = comps.color.g * (lt_color.g + m.amb * trace->amb->color.g);
-	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
-	
-	//printf("%f\n", comps.color.r);
-	//tring out with irradiance
-	//if (comps.irrad > 0)
-	{
-		color_out.r += comps.irrad.r * comps.color.r;// * m.diff; // Scale by diffuse coefficient
-		color_out.g += comps.irrad.g * comps.color.g;// * m.diff;
-    	color_out.b += comps.irrad.b * comps.color.b;// * m.diff;
-	}
-
-	if (m.ref > 0 && m.transp > 0)//add reflective and refractive
-	{
- 		r = schlick(comps);
-		r2 = 1.0 - r;
-		color_out.r += r * m.ref * ref_col.r + r2 * m.transp * refr_col.r;
-    	color_out.g += r * m.ref * ref_col.g + r2 * m.transp * refr_col.g;
-    	color_out.b += r * m.ref * ref_col.b + r2 * m.transp * refr_col.b;
-	}
-	else
-	{
-	 	color_out.r += m.ref * ref_col.r + m.transp * refr_col.r;
-    	color_out.g += m.ref * ref_col.g + m.transp * refr_col.g;
-   		color_out.b += m.ref * ref_col.b + m.transp * refr_col.b;
-	}
-	return (color_out);
-} */

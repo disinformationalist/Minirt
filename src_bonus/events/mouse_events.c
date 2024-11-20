@@ -109,6 +109,9 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)
 		else if (option == 1)
 			set_next_tx(button, trace->textures, trace->on);
 	}
+	if (button == 3)
+		if (trace->on->type == PLANE)
+			trace->curr_pl->sine = !trace->curr_pl->sine;
 	render(trace);
 	return (0);
 }

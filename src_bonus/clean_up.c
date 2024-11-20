@@ -52,7 +52,7 @@ void	clear_all(t_trace *trace)
 	mlx_destroy_display(trace->mlx_connect);
 	free(trace->mlx_connect);
 	free(trace->threads);
-	perror("Malloc or Thread error\n");
+	//ft_putstr_fd("Clear all called\n");
 	exit(EXIT_FAILURE);
 }
 

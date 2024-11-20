@@ -4,6 +4,8 @@ uint8_t clamp_color(double color)
 {
 	if (color >= 255)
 		return (255);
+	if (color < 0)
+		return (0);
 	else
 		return ((uint8_t)(color));
 }

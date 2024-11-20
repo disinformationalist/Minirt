@@ -56,10 +56,17 @@ t_intersects *create_ints(int total)
 int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
 	piece[i][j].x_s = j * (trace->width / trace->num_cols);
-	piece[i][j].x_e = (j + 1) * (trace->width / trace->num_cols);
+	if (j == trace->num_cols - 1)
+		piece[i][j].x_e = trace->width;
+	else
+		piece[i][j].x_e = (j + 1) * (trace->width / trace->num_cols);
 	piece[i][j].y_s = i * (trace->height / trace->num_rows);
-	piece[i][j].y_e = (i + 1) * (trace->height / trace->num_rows);
+	if (i == trace->num_rows - 1)
+		piece[i][j].y_e = trace->height;
+	else
+		piece[i][j].y_e = (i + 1) * (trace->height / trace->num_rows);
 	piece[i][j].trace = trace;
+	piece[i][j].seed = (unsigned int)(time(NULL) + j * trace->num_rows + i);
 	piece[i][j].intersects = create_ints(trace->total_ints);
 	if (!piece[i][j].intersects)
 		return (1);

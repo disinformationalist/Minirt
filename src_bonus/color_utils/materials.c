@@ -1,6 +1,7 @@
 #include "minirt.h"
 	
 //properties: {amb, diff, spec, shine, reflect, transp, refract}
+ //mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.2, 0.8, 1.52};
 
 t_mat	get_mat(t_material material)//diffuse_ref?  absorb?
 {
@@ -12,13 +13,13 @@ t_mat	get_mat(t_material material)//diffuse_ref?  absorb?
     else if (material == MATTE)
         mat = (t_mat){0.2, 0.7, 0.1, 5.0, 0.05, 0.0, 1.0}; // Mostly diffuse, very low specular
     else if (material == GLASS)
-        mat = (t_mat){0.1, 0.2, 0.9, 200.0, 0.2, 1.0, 1.52}; // Low diffuse/spec, mostly transparent
+        mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.3, 0.8, 1.52}; // Low diffuse/spec, mostly transparent
     else if (material == MIRROR)
         mat = (t_mat){0.0, 0.0, 1.0, 1000.0, 1.0, 0.0, 1.0}; // Pure reflection
     else if (material == DIAMOND)
         mat = (t_mat){0.0, 0.1, 1.0, 300.0, 0.5, 0.9, 2.417}; // High refraction, partial reflection
     else if (material == WATER)
-        mat = (t_mat){0.0, 0.3, 0.7, 50.0, 0.5, 0.9, 1.33}; // Mostly transparent with slight reflection
+        mat = (t_mat){0.1, 0.1, 0.5, 40.0, 0.2, 0.8, 1.33}; // Mostly transparent with slight reflection
     else if (material == CHROME)
         mat = (t_mat){.25, 0.4, 0.9, 250.0, 1.0, 0.0, 0.95}; // High specular, reflective
     else if (material == AIR)

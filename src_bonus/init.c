@@ -41,7 +41,7 @@ void info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 4.0;
-	trace->depths.refl = 6;//play with adaptive more...
+	trace->depths.refl = 6;
 	trace->depths.refr = 6;
 
 /* 	trace->global_map = NULL;
@@ -60,23 +60,15 @@ void info_init(t_trace *trace)
 	init_viewing(trace);
 }
 
-//not using any of the commented out events yet, may not need them.
-
 static void events_init(t_trace *trace)
 {
 	trace->on->object = trace->spheres;
 	trace->on->type = SPHERE;
 	
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
-	//mlx_hook(trace->mlx_win, KeyRelease, KeyReleaseMask, key_release, trace);
-//	mlx_hook(trace->mlx_win, ButtonPress, ButtonPressMask, mouse_press, trace);
-	//mlx_hook(trace->mlx_win, ButtonRelease, ButtonReleaseMask, mouse_release, trace);
-	//mlx_hook(trace->mlx_win, MotionNotify, PointerMotionMask, mouse_move, trace);
 	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
 	mlx_hook(trace->mlx_win, ButtonPress, \
 	ButtonPressMask, mouse_handler, trace);
-	/* mlx_loop_hook(trace->mlx_connect, render, trace);
-	mlx_loop(trace->mlx_connect); */
 }
 
 void init_transforms(t_trace *trace)
@@ -87,11 +79,6 @@ void init_transforms(t_trace *trace)
 	set_hy_transforms(trace);
 	set_le_transforms(trace);
 	set_cu_transforms(trace);
-}
-
-double	randf(void)
-{
-	return ((double)rand() / (double)(RAND_MAX + 1.0));
 }
 
 void trace_init(t_trace *trace)

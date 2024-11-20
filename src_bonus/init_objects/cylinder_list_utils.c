@@ -17,8 +17,8 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->shadow = true;
 	new->bump = false;
 	new->option = 0;
-
-	new->texture = NULL; //if not assigned
+	new->w_frost = false;
+	new->texture = NULL;
 }
 
 t_cylinder *create_cylinder(char **line)

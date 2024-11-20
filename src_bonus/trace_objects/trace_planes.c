@@ -29,22 +29,28 @@ void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 
 //for setting colors/patterns/txs/bump  1 = col, 2 = text, 3 = pattern
 
-t_norm_color set_pl_color(t_trace *trace, t_comps comps, t_plane plane, t_point obj_pnt)
+t_norm_color set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 {
 	t_norm_color out;
 
 	if (plane.option == 0)
 		out = plane.color;
 	if (plane.option == 1)
-		out = texture_plane_at(trace, obj_pnt, &plane, &comps);
+	{
+		out = texture_plane_at(obj_pnt, plane, comps);
+		if (plane.bump && !plane.sine)
+			bump_pl(obj_pnt, plane, comps);
+			//can make option for color to be normal color
+	}
 	if (plane.option == 2)
 		out = pattern_at(plane.pattern,  planar_map(obj_pnt));
 		//out = uv_pattern_at(plane.pattern,  planar_map(obj_pnt));
-		
+	if (plane.sine)
+		sine_ring_norm(obj_pnt, comps, plane);
 	return (out);
 }
 
-t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *trace)
+t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
 	t_point obj_pnt;
@@ -56,16 +62,20 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r, t_trace *
 	comps.normal = plane->norm;	
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;
-	set_indicies(intersects, &comps.n1, &comps.n2);//if transp
+	if (comps.mat.transp)
+		set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
+	{
 		comps.normal = neg(comps.normal);
-	comps.color = set_pl_color(trace, comps, *plane, obj_pnt);
-	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+		comps.inside = true;
+	}
+	else
+		comps.inside = false;
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
-	//testing
-//	comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
-	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
-
+	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.color = set_pl_color(&comps, *plane, obj_pnt);
+	if (plane->w_frost)
+		comps.normal = frost(comps.normal);
 	return (comps);
 }
 
@@ -75,12 +85,10 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_de
 	t_comps			comps;
 	t_norm_color	lt_color;
 	t_light			*curr_lt;
-/* 	t_norm_color	 ref_col;
-	t_norm_color	refr_col; */
 
 	plane = (t_plane *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
-	comps = set_plcomps(plane, intersects, r, trace);
+	comps = set_plcomps(plane, intersects, r);
 	if (trace->lights)
 	{
 		curr_lt = trace->lights;
@@ -96,8 +104,4 @@ t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_de
 	comps.refl_col = get_reflected(trace, comps, intersects, depths);
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
 	return (get_final_color4(trace, comps, lt_color));	
-
-/* ref_col = get_reflected(trace, comps, intersects, depths);
-	refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color3(trace, comps, lt_color, ref_col, refr_col)); */
 }

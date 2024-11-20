@@ -14,6 +14,8 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->curr_scale = inv_scaling(curr_sp->radius, curr_sp->radius, curr_sp->radius);
 			curr_sp->curr_rottran = translation(-curr_sp->center.x, -curr_sp->center.y, -curr_sp->center.z);
 			curr_sp->transform = (mat_mult(curr_sp->curr_scale, curr_sp->curr_rottran));
+			curr_sp->t_transform = transpose(curr_sp->transform);
+			curr_sp->i_transform = inverse(curr_sp->transform);
 
 			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
 			curr_sp->texture = trace->textures;
@@ -39,16 +41,17 @@ void	set_pl_transforms(t_trace *trace)
 			inv_trans = translation(-curr_pl->point.x, -curr_pl->point.y, -curr_pl->point.z);
 			inv_rot = rot_to(curr_pl->norm,  vec(0, 1, 0, 0));
 			curr_pl->curr_scale = scaling(1.0, 1.0, 1.0);
-			curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);			
-			curr_pl->transform = curr_pl->curr_rottran;			
-			curr_pl->norm = norm_vec(mat_vec_mult(transpose(curr_pl->transform), vec(0, 1, 0, 0)));
+			curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);
+			curr_pl->transform = (mat_mult(curr_pl->curr_scale, curr_pl->curr_rottran));
+			curr_pl->t_transform = transpose(curr_pl->transform);
+			curr_pl->i_transform = inverse(curr_pl->transform);		
+			curr_pl->norm = norm_vec(mat_vec_mult(curr_pl->t_transform, vec(0, 1, 0, 0)));
 
 			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
 
 //			curr_pl->pattern = uv_align_check(color(255, 255, 255), color(255, 0, 0), color(255, 255, 0), color(0, 255, 0), color(0, 255, 255));
 
 			curr_pl->texture = trace->textures;
-
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
 				break;
@@ -72,6 +75,8 @@ void	set_cy_transforms(t_trace *trace)
 			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);//changed 1.0 to half_h test 
 			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
+			curr_cy->i_transform = inverse(curr_cy->transform);
+			curr_cy->t_transform = transpose(curr_cy->transform);
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break;
@@ -119,7 +124,8 @@ void	set_cu_transforms(t_trace *trace)
 			inv_rot = rot_to(curr_cu->norm,  vec(0, 1, 0, 0));
 			curr_cu->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cu->transform = (mat_mult(curr_cu->curr_scale, curr_cu->curr_rottran));
-			
+			curr_cu->i_transform = inverse(curr_cu->transform);
+			curr_cu->t_transform = transpose(curr_cu->transform);
 			curr_cu = curr_cu->next;
 			if (curr_cu == trace->cubes)
 				break;

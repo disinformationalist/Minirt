@@ -4,46 +4,57 @@ static inline t_vec3	sp_normal_at(t_point obj_pnt, t_matrix_4x4 transform)
 {
 	t_vec3	norm;
 
-	norm = mat_vec_mult(transpose(transform), obj_pnt);
+	norm = mat_vec_mult(transform, obj_pnt);
 	norm.w = 0;
 	return (norm_vec(norm));
 }
 
-t_norm_color set_sp_color(t_trace *trace, t_comps comps, t_sphere sphere, t_point obj_pnt)
+static inline t_norm_color set_sp_color(t_comps *comps, t_sphere sphere, t_point obj_pnt)
 {
-	t_norm_color out;
+	t_norm_color	out;
 
 	if (sphere.option == 0)
 		out = sphere.color;
 	if (sphere.option == 1)
-		out = texture_sp_at(trace, obj_pnt, &sphere, &comps);
+	{
+		out = texture_sp_at(obj_pnt, sphere, comps);
+		if (sphere.bump)
+		{
+			if (sphere.bump)
+			bump_sp(obj_pnt, sphere, comps);
+		}
+	}
 	if (sphere.option == 2)
-		out = pattern_at(sphere.pattern, sphere_map(obj_pnt));
+		out = pattern_at(sphere.pattern, sphere_map(obj_pnt, sphere.radius));
 	return (out);
 }
 
-static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_ray r, t_trace *trace)
+static inline t_comps	set_spcomps(t_sphere *sphere, t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
-	t_point obj_pnt;
+	t_point	obj_pnt;
 	
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	obj_pnt = mat_vec_mult(sphere->transform, comps.point);
-	comps.normal = sp_normal_at(obj_pnt, sphere->transform);
+	comps.normal = sp_normal_at(obj_pnt, sphere->t_transform);
 	comps.eyev = neg(r.dir);
 	comps.mat = sphere->mat;
-	set_indicies(intersects, &comps.n1, &comps.n2);
+	if (comps.mat.transp)
+		set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
+	{
 		comps.normal = neg(comps.normal);
+		comps.inside = true;
+	}
+	else
+		comps.inside = false;
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
-	comps.color = set_sp_color(trace, comps, *sphere, obj_pnt);
-
-	//comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
-	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
-	
+	comps.color = set_sp_color(&comps, *sphere, obj_pnt);
+	if (sphere->w_frost)
+		comps.normal = frost(comps.normal);
 	return (comps);
 }
 
@@ -56,7 +67,7 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_d
 
 	sphere = (t_sphere *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
-	comps = set_spcomps(sphere, intersects, r, trace);
+	comps = set_spcomps(sphere, intersects, r);
 	if (trace->lights)
 	{
 		curr_lt = trace->lights;
@@ -73,6 +84,29 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_d
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
 	return (get_final_color4(trace, comps, lt_color));
 }
+
+/* t_vec3	get_hemidir(t_vec3 lt_dir)
+{
+	double x;
+	double y;
+	double z;
+	t_vec3 dir;
+
+	x = randf2();
+	y = randf2();
+	z = randf2();
+	while ((x * x + y * y + z * z) > 1)
+	{
+		x = randf2();
+		y = randf2();
+		z = randf2();
+	}
+	dir = norm_vec(vec(x, y, z, 0));
+	if (dot_product(dir, lt_dir) < 0)
+		dir = neg(dir);
+
+	return (dir); 
+} */
 
 
 	//return (get_final_color1(trace, comps.color, lt_color, m.amb));

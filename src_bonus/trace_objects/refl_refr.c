@@ -19,8 +19,6 @@ t_norm_color get_reflected(t_trace *trace, t_comps comps, t_intersects *intersec
 		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
 		depths.refl--;
 		ref_col = check_intersects(trace, ray(comps.reflectv, comps.over_pnt), intersects, depths);
-	/* 	if (ref_col.r < 20 && ref_col.g < 20 && ref_col.b < 20)
-			depths.refl = 0; */
 	}
 	else
 		ref_col = color(0, 0, 0);
@@ -56,8 +54,6 @@ t_norm_color get_refracted(t_trace *trace, t_comps comps, t_intersects *intersec
 			return (color(0, 0, 0));
 		depths.refr--;
 		refr_col = check_intersects(trace, ray(refractv, comps.under_pnt), intersects, depths);
-		/* if (refr_col.r < 20 && refr_col.g < 20 && refr_col.b < 20)
-			depths.refr = 0; */
 	}
 	else
 		refr_col = color(0, 0, 0);

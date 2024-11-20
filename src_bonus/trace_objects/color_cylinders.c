@@ -1,11 +1,11 @@
 #include "minirt.h"
 
-static inline t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, double half_h)
+static inline t_vec3 cyl_normal_at(t_point int_pnt, t_cylinder cyl, double half_h)
 {
 	t_vec3	norm;
 	double	dist;
 
-	int_pnt = mat_vec_mult(transform, int_pnt);
+	int_pnt = mat_vec_mult(cyl.transform, int_pnt);
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
 	if (dist < .99999 && int_pnt.y >= half_h - 1e-5)
 		norm = vec(0, 1, 0, 0);
@@ -13,28 +13,30 @@ static inline t_vec3 cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform, doub
 		norm = vec(0, -1, 0, 0);
 	else
 		norm = vec(int_pnt.x, 0, int_pnt.z, 0);
-	norm = mat_vec_mult(transpose(transform), norm);
+	norm = mat_vec_mult(cyl.t_transform, norm);
 	norm.w = 0;
 	return (norm_vec(norm));
 }
 
-static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects, t_ray r, t_trace *trace)
+static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
 	
-	(void)trace;
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = cyl_normal_at(comps.point, cylinder->transform, cylinder->half_h);
+	comps.normal = cyl_normal_at(comps.point, *cylinder, cylinder->half_h);
 	comps.eyev = neg(r.dir);
 	comps.mat = cylinder->mat;
-	set_indicies(intersects, &comps.n1, &comps.n2);//if transp
+	if (comps.mat.transp)
+		set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
 		comps.normal = neg(comps.normal);
 	comps.color = cylinder->color;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	if (cylinder->w_frost)
+		comps.normal = frost(comps.normal);	
 	return (comps);
 }
 
@@ -47,7 +49,7 @@ t_norm_color color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t
 	
 	cylinder = (t_cylinder *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
-	comps = set_cycomps(cylinder, intersects, r, trace);
+	comps = set_cycomps(cylinder, intersects, r);
 	if (trace->lights)
 	{
 		curr_lt = trace->lights;

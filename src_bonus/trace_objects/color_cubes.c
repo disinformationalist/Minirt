@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline t_vec3	cu_normal_at(t_point int_pnt, t_matrix_4x4 transform)
+static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube)
 {
 	t_vec3	norm;
 	double	max;
@@ -8,7 +8,7 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 	double	absy;
 	double	absz;
 
-	int_pnt = mat_vec_mult(transform, int_pnt);
+	int_pnt = mat_vec_mult(cube.transform, int_pnt);
 	absx = fabs(int_pnt.x);
 	absy = fabs(int_pnt.y);
 	absz = fabs(int_pnt.z);
@@ -21,31 +21,30 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_matrix_4x4 transform)
 		norm = vec(0, 0, int_pnt.z, 0);
 	else
 		norm = vec(0, 1, 0, 0);
-	norm = mat_vec_mult(transpose(transform), norm);
+	norm = mat_vec_mult(cube.t_transform, norm);
 	norm.w = 0;
 	return (norm_vec(norm));
 }
 
-static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray r, t_trace *trace)
+static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
 	
-	(void)trace;
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = cu_normal_at(comps.point, cube->transform);
+	comps.normal = cu_normal_at(comps.point, *cube);
 	comps.eyev = neg(r.dir);
 	comps.mat = cube->mat;
-	set_indicies(intersects, &comps.n1, &comps.n2);
+	if (comps.mat.transp)
+		set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
 		comps.normal = neg(comps.normal);
+	if (cube->w_frost)
+		comps.normal = frost(comps.normal);
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = cube->color;
-	//comps.irrad = irradiance_at(trace, comps.point, trace->gl_tree);
-	//comps.irrad = irradiance_at(trace, comps.point, trace->c_tree);
-
 	return (comps);
 }
 
@@ -60,7 +59,7 @@ t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 	if (cube->emitter)
 		return (cube->color);
 	lt_color = color(0, 0, 0);
-	comps = set_cucomps(cube, intersects, r, trace);
+	comps = set_cucomps(cube, intersects, r);
 	if (trace->lights)
 	{
 		curr_lt = trace->lights;
