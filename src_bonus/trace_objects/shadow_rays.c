@@ -54,6 +54,24 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, t_ray ray, double dist)
 	return (false);
 }
 
+static inline bool	check_hy_dist(t_hyperboloid *hyperboloids, t_ray ray, double dist)
+{
+	t_hyperboloid	*curr_hy;
+
+	if (hyperboloids == NULL)
+		return (false);
+	curr_hy = hyperboloids;
+	while (true)
+	{
+		if (curr_hy->shadow && ray_hyperboloid_intersect2(*curr_hy, ray, dist))
+				return (true);
+		curr_hy = curr_hy->next;
+		if (curr_hy == hyperboloids)
+			break;
+	}
+	return (false);
+}
+
 static inline void check_axis2(double origin, double dir, double *min, double *max)
 {
 	double t_min_num;
@@ -147,6 +165,8 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 	if (check_pl_dist(trace->planes, s_ray, light_dist))
 		return (true);
 	if (check_cy_dist(trace->cylinders, s_ray, light_dist))
+		return (true);
+	if (check_hy_dist(trace->hyperboloids, s_ray, light_dist))
 		return (true);
 	if (check_cu_dist(trace->cubes, s_ray, light_dist))
 		return (true);
