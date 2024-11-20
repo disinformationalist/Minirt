@@ -5,6 +5,7 @@ void	check_sp(char **line, char ***rt_file)
 	char	*diam_str;
 
 	diam_str = line[2];
+	check_str_len(line, rt_file, 4);
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid sphere parameters\n", \
 	"Sphere must be in the format <type id> <x,y,z> <diameter> <r,g,b>\n");
@@ -22,6 +23,7 @@ void	check_sp(char **line, char ***rt_file)
 
 void	check_pl(char **line, char ***rt_file)
 {
+	check_str_len(line, rt_file, 4);
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid plane parameters\n", \
 	"Plane must be in the format <type id> <x,y,z> <x,y,z> <r,g,b>\n");
@@ -42,8 +44,11 @@ void	check_pl(char **line, char ***rt_file)
 	"in the format r,g,b\n");
 }
 
-void	check_cy2(char **line, char ***rt_file, char *height_str)
+void	check_cy2(char **line, char ***rt_file, char *diam_str, char *height_str)
 {
+	if (check_double(&diam_str, 0.001, 999.0))
+		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \
+	"Cylinder diameter must be between 0.001 and 999\n");
 	if (check_double(&height_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder height\n", \
 	"Cylinder height must be between 0.001 and 999\n");
@@ -59,6 +64,7 @@ void	check_cy(char **line, char ***rt_file)
 
 	diam_str = line[3];
 	height_str = line[4];
+	check_str_len(line, rt_file, 6);
 	if (check_param_num(line, 6))
 		free_exit(rt_file, "Error\n Invalid cylinder parameters\n", \
 	"Cylinder must be in the format <type id> <x,y,z> <x,y,z>" \
@@ -74,8 +80,5 @@ void	check_cy(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid cylinder orientation vector\n", \
 	"Cylinder orientation vector must be normalized," \
 	" with magnitude of one\n");
-	if (check_double(&diam_str, 0.001, 999.0))
-		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \
-	"Cylinder diameter must be between 0.001 and 999\n");
-	check_cy2(line, rt_file, height_str);
+	check_cy2(line, rt_file, diam_str, height_str);
 }
