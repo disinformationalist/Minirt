@@ -61,24 +61,6 @@ typedef struct s_sphere
 	struct s_sphere *prev;
 }	t_sphere;
 
-typedef struct s_lens
-{
-	t_type				type;
-	int				id;
-	t_sphere	sphere_1;
-	t_sphere	sphere_2;
-	double			d; // inter-center distance
-	t_vec3			center;
-	double			radius;
-	t_vec3			axis;
-	t_mat			mat;
-	t_matrix_4x4	transform;
-	t_matrix_4x4	curr_scale;
-	t_matrix_4x4	curr_rottran;
-	struct s_lens	*next;
-	struct s_lens	*prev;
-}	t_lens;
-
 typedef struct s_plane 
 {
 	t_type			type;
@@ -271,7 +253,6 @@ typedef struct s_trace
 	t_cam			*cam;
 	//linked list objects
 	t_sphere		*spheres;
-	t_lens			*lenses;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
 	t_hyperboloid	*hyperboloids;
@@ -284,7 +265,6 @@ typedef struct s_trace
 
 	//for tracking traversing during events can i move this?
 	t_sphere		*curr_sp;
-	t_lens			*curr_le;
 	t_plane 		*curr_pl;
 	t_cylinder		*curr_cy;
 	t_hyperboloid	*curr_hy;
@@ -488,7 +468,6 @@ bool			set_light(t_light **light, char **line);
 
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
-bool			append_le(t_lens **start, char **line);
 bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 bool			append_hy(t_hyperboloid **start, char **line);
@@ -503,7 +482,6 @@ void			update_light_ids(t_light *light);
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
-bool			insert_lecopy_after(t_trace *trace, t_lens **current);
 bool			insert_plcopy_after(t_trace *trace, t_plane **current);
 bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
@@ -512,7 +490,6 @@ bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
-void			pop_le(t_trace *trace, t_lens **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
 void			pop_hy(t_trace *trace, t_hyperboloid **current);
 void			pop_pl(t_trace *trace, t_plane **current);
@@ -557,11 +534,6 @@ void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersect
 
 //sp shadow
 bool			check_sp_dist(t_sphere *spheres, t_ray ray, double dist);
-
-//lens utils
-void			check_lenses(t_lens *lenses,  t_intersects *intersects, t_track_hits *closest, t_ray ray);
-t_norm_color	color_lens(t_trace *trace, t_ray r, t_track_hits *closest);
-bool			ray_lens_intersect(t_lens lens, t_ray r, double *t);
 
 //plane utils
 void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
@@ -703,7 +675,6 @@ void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
 void			free_hy_list(t_hyperboloid **start);
-void			free_le_list(t_lens **start);
 void			free_all_objects(t_trace *trace);
 
 /***EXTRAS***/
@@ -715,7 +686,6 @@ void			write_spheres(t_sphere *spheres, int fd);
 void			write_planes(t_plane *plane, int fd);
 void			write_cylinders(t_cylinder *cylinders, int fd);
 void			write_hyperboloids(t_hyperboloid *hyperboloids, int fd);
-void			write_lenses(t_lens *lenses, int fd);
 void			write_lights(t_light *lights, int fd);
 void			write_splights(t_light *lights, int fd);
 void			write_arealights(t_light *lights, int fd);

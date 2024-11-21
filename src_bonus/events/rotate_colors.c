@@ -48,8 +48,6 @@ static inline t_norm_color	get_obj_color(t_on *on)
 		return (mult_color(1 / 255.0, ((t_cube *)on->object)->color));
 	else if (on->type == HYPERBOLOID)
 		return (mult_color(1 / 255.0, ((t_hyperboloid *)on->object)->color));
-	/* else if (on->type == LENS)
-		return (mult_color(1 / 255.0, ((t_lens *)on->object)->color)); */
 	else
 		return (color(0, 0, 0));
 }
@@ -75,8 +73,6 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 		((t_cube *)on->object)->color = mult_color(255.0, new_col);
 	else if (on->type == HYPERBOLOID)
 		((t_hyperboloid *)on->object)->color = mult_color(255.0, new_col);
-	/* else if (on->type == LENS)
-		((t_lens *)on->object)->color = mult_color(255.0, new_col); */
 	else
 		return ;
 }

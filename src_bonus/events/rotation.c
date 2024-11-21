@@ -29,7 +29,16 @@ void rot_arealt(t_light *lt, t_matrix_4x4 rot)
 
 static inline void	rotate_object3(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 {
-	if (on->type == LIGHT)
+	if (on->type == CUBE)
+	{
+		trace->curr_cu->curr_rottran = \
+			mat_mult(rot, trace->curr_cu->curr_rottran);
+		trace->curr_cu->transform = \
+			mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
+		trace->curr_cu->t_transform = transpose(trace->curr_cu->transform);
+		trace->curr_cu->i_transform = inverse(trace->curr_cu->transform);
+	}
+	else if (on->type == LIGHT)
 	{
 		if (trace->curr_lt->type == SPOT)
 			trace->curr_lt->dir = mat_vec_mult(rot, trace->curr_lt->dir);
@@ -63,30 +72,6 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 			mat_mult(trace->curr_hy->curr_scale, trace->curr_hy->curr_rottran);
 		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
 		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
-	}
-	else if (on->type == CUBE)
-	{
-		trace->curr_cu->curr_rottran = \
-			mat_mult(rot, trace->curr_cu->curr_rottran);
-		trace->curr_cu->transform = \
-			mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
-		trace->curr_cu->t_transform = transpose(trace->curr_cu->transform);
-		trace->curr_cu->i_transform = inverse(trace->curr_cu->transform);
-	}
-	else if (on->type == LENS)
-	{
-		trace->curr_le->curr_rottran = \
-			mat_mult(rot, trace->curr_le->curr_rottran);
-		trace->curr_le->transform = \
-			mat_mult(trace->curr_le->curr_scale, trace->curr_le->curr_rottran);
-		/* trace->curr_le->sphere_1.curr_rottran = \
-			mat_mult(rot, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_1.transform = \
-			mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_rottran = \
-			mat_mult(rot, trace->curr_le->sphere_2.curr_rottran);
-		trace->curr_le->sphere_2.transform = \
-			mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran); */
 	}
 	else
 		rotate_object3(trace, on, rot);

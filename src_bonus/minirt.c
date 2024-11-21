@@ -35,7 +35,6 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 		*(intersects->closest) = intersects->hits[i];
 }
 
-	//check_lenses(trace->lenses, intersects, closest, ray);
 unsigned int	clamped_col(t_norm_color col)
 {
 	t_color clamped;
@@ -68,8 +67,6 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects,
 	//printf("current closest:%f\n", closest->t);//test
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		color_out = color_sphere(trace, r, intersects, depths);
-	/* else if (closest->t != INFINITY && closest->object_type == LENS)
-		color_out = color_lens(trace, r, closest); */
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
 		color_out = color_plane(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)

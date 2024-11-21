@@ -2,12 +2,7 @@
 
 static inline void push_new2(t_trace *trace, t_on *on)
 {
-	if (on->type == LENS)
-	{
-		if (insert_lecopy_after(trace, &trace->curr_le))
-			close_win(trace);	
-	}
-	else if (on->type == HYPERBOLOID)
+	if (on->type == HYPERBOLOID)
 	{
 		if (insert_hycopy_after(trace, &trace->curr_hy))
 			close_win(trace);	
@@ -57,8 +52,6 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_cy(trace, &trace->curr_cy);
 	else if (on->type == HYPERBOLOID)
 		pop_hy(trace, &trace->curr_hy);
-	/* else if (on->type == LENS)
-		pop_le(trace, &trace->curr_le); */
 	else if (on->type == LIGHT)
 		pop_lt(trace, &trace->curr_lt);
 	else if (on->type == CUBE)

@@ -131,27 +131,6 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	return (false);
 }
 
-/* static inline bool	check_le_dist(t_lens *lenses, double dist, t_ray ray, double t)
-{
-	t_lens	*curr_le;
-
-	if (lenses == NULL)
-		return (false);
-	curr_le = lenses;
-	while (true)
-	{
-		if (ray_lens_intersect(*curr_le, ray, &t))
-		{
-			if (t < dist)
-				return (true);
-		}
-		curr_le = curr_le->next;
-		if (curr_le == lenses)
-			break;
-	}
-	return (false);
-} */
-
 //check for light obstruction. currently used
 bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 {
@@ -173,7 +152,7 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 	return (false);
 }
 
-//function to check if any object blocks light. this is only used by lens now.
+//function to check if any object blocks light. this was only used by lens.
 
 bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
 {

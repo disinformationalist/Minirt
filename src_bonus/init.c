@@ -25,12 +25,11 @@
 
 void info_init(t_trace *trace)
 {
-	trace->width = 108;
+	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
 	trace->color_i = 0;
 	trace->num_colors = 384;
 	trace->curr_sp = trace->spheres;
-	trace->curr_le = trace->lenses;
 	trace->curr_pl = trace->planes;
 	trace->curr_cy = trace->cylinders;
 	trace->curr_hy = trace->hyperboloids;
@@ -77,7 +76,6 @@ void init_transforms(t_trace *trace)
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
 	set_hy_transforms(trace);
-	set_le_transforms(trace);
 	set_cu_transforms(trace);
 }
 

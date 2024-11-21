@@ -39,14 +39,7 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 
 static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
-	if (on->type == LENS)
-	{
-		trace->curr_le->sphere_1.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_1.curr_scale);
-		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, vec1.z), trace->curr_le->sphere_2.curr_scale);
-		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
-	}
-	else if (on->type == CYLINDER)
+	if (on->type == CYLINDER)
 	{
 		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
 			vec1.z), trace->curr_cy->curr_scale);

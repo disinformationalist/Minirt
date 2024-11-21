@@ -9,7 +9,6 @@ void	init_obs(t_trace *trace)
 	trace->planes = NULL;
 	trace->cylinders = NULL;
 	trace->hyperboloids = NULL;
-	trace->lenses = NULL;
 	trace->cubes = NULL;
 	trace->triangles = NULL;
 	trace->textures = NULL;
@@ -26,7 +25,6 @@ void	init_counts(t_obj_counts *counts)
 	counts->plane_count = 0;
 	counts->cyl_count = 0;
 	counts->hyp_count = 0;
-	counts->lens_count = 0;
 	counts->cube_count = 0;
 	counts->tx_count = 0;
 	counts->tri_count = 0;

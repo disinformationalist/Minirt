@@ -29,16 +29,15 @@ void move_arealt(t_light *lt, t_vec3 v)
 
 static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
-	if (on->type == LENS)
+	if (on->type == HYPERBOLOID)
 	{
-		trace->curr_le->sphere_1.curr_rottran = mat_mult(trace->curr_le->sphere_1.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_le->sphere_1.transform = mat_mult(trace->curr_le->sphere_1.curr_scale, trace->curr_le->sphere_1.curr_rottran);
-		trace->curr_le->sphere_2.curr_rottran = mat_mult(trace->curr_le->sphere_2.curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_le->sphere_2.transform = mat_mult(trace->curr_le->sphere_2.curr_scale, trace->curr_le->sphere_2.curr_rottran);
+		trace->curr_hy->curr_rottran = mat_mult(trace->curr_hy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
+		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, trace->curr_hy->curr_rottran);
+		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
+		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
 	}
 	else if (on->type == CUBE)
 	{
-	
 		trace->curr_cu->curr_rottran = mat_mult(trace->curr_cu->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 		trace->curr_cu->transform = mat_mult(trace->curr_cu->curr_scale, trace->curr_cu->curr_rottran);
 		trace->curr_cu->t_transform = transpose(trace->curr_cu->transform);
@@ -82,13 +81,6 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, trace->curr_cy->curr_rottran);
 		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
 		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
-	}
-	else if (on->type == HYPERBOLOID)
-	{
-		trace->curr_hy->curr_rottran = mat_mult(trace->curr_hy->curr_rottran, translation(-vec1.x, -vec1.y, -vec1.z));
-		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, trace->curr_hy->curr_rottran);
-		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
-		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
 	}
 	else
 		translate_object2(trace, on, vec1);

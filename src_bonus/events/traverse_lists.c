@@ -25,7 +25,6 @@ static inline void	next_list_ob3(t_trace *trace, t_on *on)
 static inline void	next_list_ob2(t_trace *trace, t_on *on)
 {
 	t_cylinder		*curr_cy;
-	t_lens			*curr_le;
 	t_light			*curr_lt;
 
 	if (on->type == CYLINDER)
@@ -33,12 +32,6 @@ static inline void	next_list_ob2(t_trace *trace, t_on *on)
 		curr_cy = (t_cylinder *)on->object;
 		trace->curr_cy = curr_cy->next;
 		on->object = trace->curr_cy;
-	}
-	else if (on->type == LENS)
-	{
-		curr_le = (t_lens *)on->object;
-		trace->curr_le = curr_le->next;
-		on->object = trace->curr_le;
 	}
 	else if (on->type == LIGHT)
 	{
@@ -99,7 +92,6 @@ static inline void	prev_list_ob3(t_trace *trace, t_on *on)
 static inline void	prev_list_ob2(t_trace *trace, t_on *on)
 {
 	t_cylinder		*curr_cy;
-	t_lens			*curr_le;
 	t_light			*curr_lt;
 
 	if (on->type == CYLINDER)
@@ -107,12 +99,6 @@ static inline void	prev_list_ob2(t_trace *trace, t_on *on)
 		curr_cy = (t_cylinder *)on->object;
 		trace->curr_cy = curr_cy->prev;
 		on->object = trace->curr_cy;
-	}
-	else if (on->type == LENS)
-	{
-		curr_le = (t_lens *)on->object;
-		trace->curr_le = curr_le->prev;
-		on->object = trace->curr_le;
 	}
 	else if (on->type == LIGHT)
 	{

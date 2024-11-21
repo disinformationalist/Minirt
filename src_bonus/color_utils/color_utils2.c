@@ -87,7 +87,7 @@ t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_col
 	return (color_out);
 }
 
-//currently only used in lens
+//previously only used in lens
 t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
 {
 	t_norm_color color_out;

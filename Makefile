@@ -98,7 +98,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/push_pop/push_pop_sp.c \
 ./src_bonus/init_objects/push_pop/push_pop_pl.c \
 ./src_bonus/init_objects/push_pop/push_pop_cy.c \
-./src_bonus/init_objects/push_pop/push_pop_le.c \
 ./src_bonus/init_objects/push_pop/push_pop_cu.c \
 ./src_bonus/init_objects/push_pop/push_pop_hy.c \
 ./src_bonus/init_objects/push_pop/pop_lt.c \
@@ -108,7 +107,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/plane_list_utils.c \
 ./src_bonus/init_objects/cylinder_list_utils.c \
 ./src_bonus/init_objects/hyperboloid_list_utils.c \
-./src_bonus/init_objects/lens_list_utils.c \
 ./src_bonus/init_objects/cube_list_utils.c \
 ./src_bonus/init_objects/light_list_utils.c \
 ./src_bonus/init_objects/init_area_light.c \
@@ -124,7 +122,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/color_spheres.c \
 ./src_bonus/trace_objects/trace_triangles.c \
 ./src_bonus/trace_objects/color_triangles.c \
-./src_bonus/trace_objects/trace_lenses.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
 ./src_bonus/trace_objects/trace_hyperboloids.c \
 ./src_bonus/trace_objects/color_cylinders.c \
@@ -172,7 +169,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/forge/write_lights.c \
 ./src_bonus/forge/write_splights.c \
 ./src_bonus/forge/write_arealights.c \
-./src_bonus/forge/write_lenses.c \
 ./src_bonus/forge/get_rt_name.c \
 ./src_bonus/png/export_png.c \
 ./src_bonus/png/export_png_utils.c \

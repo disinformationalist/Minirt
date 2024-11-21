@@ -57,25 +57,6 @@ void	free_cy_list(t_cylinder **start)
 	*start = NULL;
 }
 
-void	free_le_list(t_lens **start)
-{
-	t_lens		*curr;
-	t_lens		*temp;
-
-	if (*start == NULL)
-		return ;
-	curr = *start;
-	curr = curr->next;
-	while (curr != *start)
-	{
-		temp = curr->next;
-		free(curr);
-		curr = temp;
-	}
-	free(curr);
-	*start = NULL;
-}
-
 void	free_cu_list(t_cube **start)
 {
 	t_cube	*curr;
@@ -205,7 +186,6 @@ void	free_all_objects(t_trace *trace)
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);
-	free_le_list(&trace->lenses);
 	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
 	free_hy_list(&trace->hyperboloids);
