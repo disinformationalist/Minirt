@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+void	filter_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool *inr);
+
 bool	hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr)
 {
 	if (op == UNION)
@@ -11,61 +13,53 @@ bool	hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr)
 	return (false);
 }
 
-int	get_type(t_helper_shape *shape)
+void	filter_child_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool *inr)
 {
-	if (shape == NULL)
-		return (-1);
-	return (shape->type);
-}
+	bool			inl_left;
+	bool			inl_right;
+	bool			inr_left;
+	bool			inr_right;
 
-bool	is_in_csg_left(t_csg *csg, t_intersects **intersects, int i)
-{
-	if ((*intersects)->hits[i].object == csg->left
-		|| (*intersects)->hits[i].object == ((t_helper_shape *)csg->left)->left
-		|| (*intersects)->hits[i].object == ((t_helper_shape *)csg->left)->right)
-		return (1);
-	return (0);
-}
-
-bool	is_in_csg_right(t_csg *csg, t_intersects **intersects, int i)
-{
-	if ((*intersects)->hits[i].object == csg->right
-		|| (*intersects)->hits[i].object == ((t_helper_shape *)csg->right)->left
-		|| (*intersects)->hits[i].object == ((t_helper_shape *)csg->right)->right)
-		return (1);
-	return (0);
+	inl_left = false;
+	inl_right = false;
+	inr_left = false;
+	inr_right = false;
+	if (get_type((t_helper_shape *)csg->left) == CSG)
+		filter_intersections((t_csg *)csg->left, intersects, &inl_left, &inr_left);
+	if (get_type((t_helper_shape *)csg->right) == CSG)
+		filter_intersections((t_csg *)csg->right, intersects, &inl_right, &inr_right);
+	if (csg->op == UNION)
+	{
+		*inl = inl_left || inr_left || inl_right || inr_right;
+		*inr = inl_left || inr_left ||inl_right || inr_right;
+	}
+	else
+	{
+		*inl = inl_left || inr_left;
+		*inr = inl_right || inr_right;
+	}
 }
 
 void	filter_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool *inr)
 {
 	bool			lhit;
+	bool			is_in_left;
+	bool			is_in_right;
 	int				i;
 	int				j;
 	
+	filter_child_intersections(csg, intersects, inl, inr);
 	i = 0;
 	lhit = false;
-	*inl = false;
-	*inr = false;
-	if (get_type((t_helper_shape *)csg->left) == CSG)
-		filter_intersections((t_csg *)csg->left, intersects, inl, inr);
-	if (get_type((t_helper_shape *)csg->right) == CSG)
-		filter_intersections((t_csg *)csg->right, intersects, inl, inr);
 	while (i < (*intersects)->count)
 	{
-		if (is_in_csg_left(csg, intersects, i))
-		{
-			lhit = true;
-			*inl = !*inl;
-		}
-		if (is_in_csg_right(csg, intersects, i))
-		{
-			lhit = false;
-			*inr = !*inr;
-		}
-		//if (((*intersects)->hits[i].object == csg->left || (*intersects)->hits[i].object == csg->right)
-		//		&& !hit_allowed(csg->op, lhit, *inl, *inr))
-		if ((is_in_csg_left(csg, intersects, i) || is_in_csg_right(csg, intersects, i))
-			&& !hit_allowed(csg->op, lhit, *inl, *inr))
+		is_in_left = is_in_csg_left(csg, intersects, i);
+		is_in_right = is_in_csg_right(csg, intersects, i);
+		if (is_in_left)
+			set_left(&lhit, inl);
+		if (is_in_right)
+			set_right(&lhit, inr);
+		if ((is_in_left || is_in_right) && !hit_allowed(csg->op, lhit, *inl, *inr))
 		{
 			j = i - 1;
 			while (++j < (*intersects)->count - 1)
@@ -97,14 +91,13 @@ void	check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape 
 	t_csg		*secondary_csg;
 	bool			inl;
 	bool			inr;
-	//(void) intersects;
 
 	inl = false;
 	inr = false;
 	if (!shapes1 || !shapes2 || !shapes3)
 		return ;
-	test_csg = make_new_csg(shapes1, shapes2, UNION);
-	secondary_csg = make_new_csg((t_helper_shape *)test_csg, shapes3, UNION);
+	test_csg = make_new_csg(shapes2, shapes3, UNION);
+	secondary_csg = make_new_csg((t_helper_shape *)test_csg, shapes1, UNION);
 	filter_intersections(secondary_csg, &intersects, &inl, &inr);
 	free(test_csg);
 	free(secondary_csg);

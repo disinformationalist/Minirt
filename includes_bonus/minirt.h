@@ -712,4 +712,11 @@ void			print_times(long start, long end, char *msg);
 void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape *shapes3, t_intersects *intersects);
 t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right, t_csg_op op);
 
+/*** CSG utils ***/
+int				get_type(t_helper_shape *shape);
+bool			is_in_csg_left(t_csg *csg, t_intersects **intersects, int i);
+bool			is_in_csg_right(t_csg *csg, t_intersects **intersects, int i);
+void			set_left(bool *lhit, bool *inl);
+void			set_right(bool *lhit, bool *inr);
+
 #endif

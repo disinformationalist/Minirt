@@ -117,13 +117,14 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/init_cam.c \
 ./src_bonus/parsing/parse_rt_utils.c \
 ./src_bonus/trace_objects/CSG.c \
+./src_bonus/trace_objects/CSG_utils.c \
 ./src_bonus/trace_objects/trace_planes.c \
 ./src_bonus/trace_objects/trace_spheres.c \
 ./src_bonus/trace_objects/color_spheres.c \
 ./src_bonus/trace_objects/trace_triangles.c \
 ./src_bonus/trace_objects/color_triangles.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
-./src_bonus/trace_objects/trace_hyperboloids.c \
+./src_bonus/trace_objects/trace_capped_hyperboloids.c \
 ./src_bonus/trace_objects/color_cylinders.c \
 ./src_bonus/trace_objects/color_hyperboloids.c \
 ./src_bonus/trace_objects/trace_cubes.c \
