@@ -36,7 +36,7 @@ void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
 		- (ray.origin.y * ray.dir.y) / half_h_sq);
 	abc->z = (ray.origin.x * ray.origin.x) / rad1_sq
 		+ (ray.origin.z * ray.origin.z) / rad2_sq
-		- (ray.origin.y * ray.origin.y) / half_h_sq - 1;
+		- (ray.origin.y * ray.origin.y) / half_h_sq - 0.01;
 }
 
 bool	check_cap_hy(t_ray ray, double t, t_hyperboloid *hyperboloid, double y)
@@ -49,7 +49,7 @@ bool	check_cap_hy(t_ray ray, double t, t_hyperboloid *hyperboloid, double y)
 
 	rad1 = hyperboloid->rad1;
 	rad2 = hyperboloid->rad2;
-	cap_rad_sq = (y * y) / (hyperboloid->half_h * hyperboloid->half_h) + 1;
+	cap_rad_sq = (y * y) / (hyperboloid->half_h * hyperboloid->half_h) + 0.01;
 	x = ray.origin.x + t * ray.dir.x;
 	z = ray.origin.z + t * ray.dir.z;
 	if (((x * x) / (rad1 *rad1) + (z * z) / (rad2 *rad2)) <= cap_rad_sq)
