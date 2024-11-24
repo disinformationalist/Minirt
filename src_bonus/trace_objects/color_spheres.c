@@ -13,19 +13,16 @@ static inline t_norm_color set_sp_color(t_comps *comps, t_sphere sphere, t_point
 {
 	t_norm_color	out;
 
-	if (sphere.option == 0)
-		out = sphere.color;
 	if (sphere.option == 1)
 	{
 		out = texture_sp_at(obj_pnt, sphere, comps);
 		if (sphere.bump)
-		{
-			if (sphere.bump)
 			bump_sp(obj_pnt, sphere, comps);
-		}
 	}
-	if (sphere.option == 2)
-		out = pattern_at(sphere.pattern, sphere_map(obj_pnt, sphere.radius));
+	else if (sphere.option == 2)
+		out = pattern_at(sphere.pattern, sphere_map(obj_pnt));
+	else
+		out = sphere.color;
 	return (out);
 }
 
@@ -84,34 +81,3 @@ t_norm_color color_sphere(t_trace *trace, t_ray r, t_intersects *intersects, t_d
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
 	return (get_final_color4(trace, comps, lt_color));
 }
-
-/* t_vec3	get_hemidir(t_vec3 lt_dir)
-{
-	double x;
-	double y;
-	double z;
-	t_vec3 dir;
-
-	x = randf2();
-	y = randf2();
-	z = randf2();
-	while ((x * x + y * y + z * z) > 1)
-	{
-		x = randf2();
-		y = randf2();
-		z = randf2();
-	}
-	dir = norm_vec(vec(x, y, z, 0));
-	if (dot_product(dir, lt_dir) < 0)
-		dir = neg(dir);
-
-	return (dir); 
-} */
-
-
-	//return (get_final_color1(trace, comps.color, lt_color, m.amb));
-	//color1 = sphere->color;
-	//sphere->color = stripe(int_pnt);//trying color function
-	//sphere->color = stripe_at(int_pnt, sphere->transform);//trying color function
-	//color1 = checker_at(int_pnt, sphere->transform);
-	//color1 = gradient_at(int_pnt, sphere->transform, color(0, 255, 0), color(0, 0, 255));

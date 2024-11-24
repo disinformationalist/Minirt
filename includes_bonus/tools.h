@@ -241,11 +241,8 @@ typedef struct s_pattern
 	t_norm_color	ur;
 	t_norm_color	bl;
 	t_norm_color	br;
-
-
 	float	width;
 	float	height;
-
 }	t_pattern;
 
 typedef struct s_map
@@ -254,6 +251,7 @@ typedef struct s_map
 	double	v;
 	double	phi;
 	double	theta;
+	double	dist2;
 }	t_map;
 
 //faces for cube mapping
@@ -301,7 +299,9 @@ double			randf(void);
 t_norm_color	pattern_at(t_pattern pat, t_map map);
 t_pattern		uv_checker(double width, double height, t_norm_color color1, t_norm_color color2);
 t_map 			planar_map(t_point obj_pnt);
-t_map			sphere_map(t_point obj_pnt, double radius);
+t_map			sphere_map(t_point obj_pnt);
+t_map 			cylinder_map(t_point obj_pnt);
+
 
 /***GROUPS***/
 

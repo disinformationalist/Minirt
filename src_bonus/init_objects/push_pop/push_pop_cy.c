@@ -45,7 +45,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL;
+	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
 }
 
 //copy a cylinder and place it immediately after the current cylinder in the list
@@ -61,6 +61,7 @@ bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 	if (!*current)
 	{
 		make_default_cy(&trace->cylinders, new);
+		new->texture = trace->textures;
 		trace->on->object = trace->cylinders;
 		trace->on->type = CYLINDER;
 		trace->total_ints += 4;

@@ -46,7 +46,6 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->option = 0;
 	new->w_frost = false;
 	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
-	new->texture = NULL;
 }
 
 //copy a sphere and place it immediately after the current sphere in the list

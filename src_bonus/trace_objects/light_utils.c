@@ -97,7 +97,7 @@ static inline double get_spot_int(t_vec3 light_dir, t_light *splight)
 		return (0);
 }
 
-//diffuse plus specular
+//diffuse plus specular, phong model
 
 static inline double	get_light_int(t_comps comps, t_mat mat)
 {

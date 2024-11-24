@@ -27,14 +27,12 @@ void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 	}
 }
 
-//for setting colors/patterns/txs/bump  1 = col, 2 = text, 3 = pattern
+//for setting colors/patterns/txs/bump  0 = col, 1 = text, 2 = pattern
 
 t_norm_color set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 {
 	t_norm_color out;
 
-	if (plane.option == 0)
-		out = plane.color;
 	if (plane.option == 1)
 	{
 		out = texture_plane_at(obj_pnt, plane, comps);
@@ -42,8 +40,10 @@ t_norm_color set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 			bump_pl(obj_pnt, plane, comps);
 			//can make option for color to be normal color
 	}
-	if (plane.option == 2)
+	else if (plane.option == 2)
 		out = pattern_at(plane.pattern,  planar_map(obj_pnt));
+	else
+		out = plane.color;
 		//out = uv_pattern_at(plane.pattern,  planar_map(obj_pnt));
 	if (plane.sine)
 		sine_ring_norm(obj_pnt, comps, plane);

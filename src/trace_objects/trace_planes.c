@@ -3,7 +3,7 @@
 bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
 {
 	ray = transform(ray, plane.transform);
-	if (fabs(ray.dir.y) < 1e-5)
+	if (fabs(ray.dir.y) < 1e-6)
 		return (false);
 	*t = -ray.origin.y / ray.dir.y;
 	if (*t > 0)

@@ -50,7 +50,6 @@ void	set_pl_transforms(t_trace *trace)
 			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
 
 //			curr_pl->pattern = uv_align_check(color(255, 255, 255), color(255, 0, 0), color(255, 255, 0), color(0, 255, 0), color(0, 255, 255));
-
 			curr_pl->texture = trace->textures;
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
@@ -72,11 +71,17 @@ void	set_cy_transforms(t_trace *trace)
 		{
 			inv_trans = translation(-curr_cy->center.x, -curr_cy->center.y, -curr_cy->center.z);
 			inv_rot = rot_to(curr_cy->norm,  vec(0, 1, 0, 0));
-			curr_cy->curr_scale = inv_scaling(curr_cy->radius, 1.0, curr_cy->radius);//changed 1.0 to half_h test 
+			curr_cy->curr_scale = inv_scaling(curr_cy->radius, curr_cy->half_h, curr_cy->radius);
 			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
-			curr_cy->i_transform = inverse(curr_cy->transform);
 			curr_cy->t_transform = transpose(curr_cy->transform);
+			curr_cy->i_transform = inverse(curr_cy->transform);
+			//finish getting proportion right here...
+			curr_cy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), color(255, 255, 255));
+			//curr_cy->pattern = uv_checker(16 , 4, color(40, 40, 40), color(255, 255, 255));
+
+			curr_cy->texture = trace->textures;
+
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break;
@@ -86,7 +91,7 @@ void	set_cy_transforms(t_trace *trace)
 
 void	set_hy_transforms(t_trace *trace)
 {
-	t_hyperboloid		*curr_hy;
+	t_hyperboloid	*curr_hy;
 	t_matrix_4x4	inv_trans;
 	t_matrix_4x4	inv_rot;
 

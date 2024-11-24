@@ -45,7 +45,6 @@ static inline bool	check_trunk_solutions2_hy(t_vec3 abc, t_ray ray, double dist,
 	return (false);
 }
 
-
 bool	ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, t_ray ray, double dist)
 {
 	t_vec3	abc;

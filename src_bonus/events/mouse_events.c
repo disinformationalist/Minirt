@@ -8,12 +8,12 @@ void	set_new_tx(t_on *on, t_tx *new)
 		((t_plane *)on->object)->texture = new;
 	else if (on->type == SPHERE)
 		((t_sphere *)on->object)->texture = new;
-	/*else if (on->type == CYLINDER)
+	else if (on->type == CYLINDER)
 		((t_cylinder *)on->object)->texture = new;
-	else if (on->type == HYPERBOLOID)
+	/* else if (on->type == HYPERBOLOID)
 		((t_hyperboloid *)on->object)->texture = new;
 	else if (on->type == CUBE)
-		((t_cube *)on->object)->texture = new;*/
+		((t_cube *)on->object)->texture = new; */
 	else
 		return ;
 }
@@ -32,9 +32,9 @@ void	set_next_tx(int button, t_tx *textures, t_on *on)
 		curr_tx = ((t_plane *)on->object)->texture;
 	else if (on->type == SPHERE)
 		curr_tx = ((t_sphere *)on->object)->texture;
-	/* else if (on->type == CYLINDER)
+	else if (on->type == CYLINDER)
 		curr_tx = ((t_cylinder *)on->object)->texture;
-	else if (on->type == HYPERBOLOID)
+	/* else if (on->type == HYPERBOLOID)
 		curr_tx = ((t_hyperboloid *)on->object)->texture;
 	else if (on->type == CUBE)
 		curr_tx = ((t_cube *)on->object)->texture; */
@@ -65,9 +65,9 @@ void	select_option(t_trace *trace, t_on *on)
 		increment_option(trace, &trace->curr_pl->option);
  	else if (on->type == SPHERE)
 		increment_option(trace, &trace->curr_sp->option);
-	/* else if (on->type == CYLINDER)
-		increment_option(&trace->curr_cy->option);
-	else if (on->type == CUBE)
+	else if (on->type == CYLINDER)
+		increment_option(trace, &trace->curr_cy->option);
+	/* else if (on->type == CUBE)
 		increment_option(&trace->curr_cu->option);  */
 	else
 		return ;

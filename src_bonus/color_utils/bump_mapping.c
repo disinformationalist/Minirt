@@ -10,7 +10,7 @@ static inline unsigned char pixel_gray_get(int x, int y, t_img *img)
 	return (gray);
 }
 
-static inline t_vec3 bump(t_position pos, t_position dims, t_img *img, double strength)//remove dims?
+static inline t_vec3 bump(t_position pos, t_img *img, double strength)
 {
 	t_vec3 			perturb;
 	unsigned char	curr;
@@ -18,16 +18,13 @@ static inline t_vec3 bump(t_position pos, t_position dims, t_img *img, double st
 	double			dfdy;
 	double			norm_factor;
 	
-	(void)dims;
 	curr = pixel_gray_get(pos.i, pos.j, img);
 	dfdx = strength * ((double)(pixel_gray_get((pos.i + 1), pos.j, img) - curr)) / 255.0;
 	dfdy = strength * ((double)(pixel_gray_get(pos.i, (pos.j + 1), img) - curr)) / 255.0;
-	/* dfdx = 20 * ((double)(pixel_gray_get((pos.i + 1) % dims.i, pos.j, img) - curr)) / 255.0;
-	dfdy = 20 * ((double)(pixel_gray_get(pos.i, (pos.j + 1) % dims.j, img) - curr)) / 255.0; */
 	norm_factor = 1.0 / (sqrt(dfdx * dfdx + dfdy * dfdy + 1.0));
 	perturb.x = -dfdx * norm_factor;
 	perturb.z = -dfdy * norm_factor;
-	perturb.y = norm_factor; 
+	perturb.y = 1 - norm_factor; 
 	perturb.w = 0;
 	return (perturb);
 }
@@ -35,30 +32,62 @@ static inline t_vec3 bump(t_position pos, t_position dims, t_img *img, double st
 void	bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps)
 {
 	t_vec3	bumpv;
+	t_point	bumpp;
 
-	bumpv = bump(comps->pos, comps->dims, plane.texture->bump_map, 40);
+	bumpv = bump(comps->pos, plane.texture->bump_map, 30);
+	bumpp = bumpv;
 	if (comps->inside)
+	{
 		bumpv = neg(bumpv);
+		bumpp = neg(bumpp);
+		bumpv.y -= 1;
+	}
+	else
+		bumpv.y += 1;
 	comps->normal = mat_vec_mult(plane.t_transform, bumpv);
 	comps->normal.w = 0;
 	comps->normal = norm_vec(comps->normal);
-	bumpv = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpv);
-	comps->point = mat_vec_mult(plane.i_transform, bumpv);
+	bumpp = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpp);
+	comps->point = mat_vec_mult(plane.i_transform, bumpp);
+}
+
+static inline t_matrix_4x4	set_sptbn(t_point obj_pnt)
+{
+	t_matrix_4x4	tbn;
+ 	t_vec3			tan;
+    t_vec3			bitan;
+
+	obj_pnt = norm_vec(obj_pnt);
+	tan = norm_vec(vec(-obj_pnt.z, 0, obj_pnt.x, 0));
+	bitan = norm_vec(cross_prod(obj_pnt, tan));
+	tuple_to_col(&tbn, tan, 0);
+	tuple_to_col(&tbn, bitan, 1);
+	tuple_to_col(&tbn, obj_pnt, 2);
+	tuple_to_col(&tbn, vec(0, 0, 0, 1), 3);
+	return (tbn);
 }
 
 void	bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 {
-	t_vec3	bumpv;
-	
-	bumpv = bump(comps->pos, comps->dims, sphere.texture->bump_map, 30);
-		bumpv.y = 1 - bumpv.y;
+	t_matrix_4x4	tbn;
+	t_vec3			bumpv;
+	t_point			bumpp;
+
+	bumpv = bump(comps->pos, sphere.texture->bump_map, 30);
+	obj_pnt.w = 0;
+	tbn = set_sptbn(obj_pnt);
+	bumpv = mat_vec_mult(tbn, bumpv);
+	bumpp = bumpv;
+	bumpv = norm_vec(add_vec(obj_pnt, bumpv));
+	if (comps->inside)
+		bumpp = subtract_vec(obj_pnt, bumpp);
+	else
+		bumpp = bumpv;
 	if (comps->inside)
 		bumpv = neg(bumpv);
-	bumpv = add_vec(obj_pnt, bumpv);
-	bumpv.w = 0;
 	comps->normal = mat_vec_mult(sphere.t_transform, bumpv);
 	comps->normal.w = 0;
 	comps->normal = norm_vec(comps->normal);
-	bumpv.w = 1;
-	comps->point = mat_vec_mult(sphere.i_transform, bumpv);
+	bumpp.w = 1;
+	comps->point = mat_vec_mult(sphere.i_transform, bumpp);
 }
