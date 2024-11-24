@@ -70,3 +70,10 @@ double	min_3(t_matrix_3x3 mat, int row, int column)
 	return (det_2(new));
 }
 
+void	tuple_to_col(t_matrix_4x4 *matrix, t_vec3 tuple, int col)
+{
+	matrix->m[0][col] = tuple.x;
+	matrix->m[1][col] = tuple.y;
+	matrix->m[2][col] = tuple.z;
+	matrix->m[3][col] = tuple.w;
+}

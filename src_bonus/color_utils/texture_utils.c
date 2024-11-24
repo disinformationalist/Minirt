@@ -61,6 +61,26 @@ t_norm_color texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
 	return (col);
 }
 
+t_norm_color texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps)
+{
+	t_norm_color	col;
+	t_position		pos;
+	t_position		dims;
+	t_map			map;
+	
+	dims.i = cyl.texture->i_width;
+	dims.j = cyl.texture->i_height;
+	map = cylinder_map(obj_pnt);
+	map.v = 1 - map.v;
+	pos.i = ft_round(map.u * (double)(dims.j * 2 - 1));
+	pos.j = ft_round(map.v / 2 * (double)(dims.j - 1));
+	col = pixel_color_get(pos.i, pos.j, cyl.texture->image);
+	comps->dims = dims;
+	comps->pos = pos;
+	comps->map = map;
+	return (col);
+}
+
 t_norm_color texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 {
 	t_norm_color	col;
@@ -70,20 +90,13 @@ t_norm_color texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 	
 	dims.i = sphere.texture->i_width;
 	dims.j = sphere.texture->i_height;
-	map = sphere_map(obj_pnt, sphere.radius);
+	map = sphere_map(obj_pnt);
 	map.v = 1 - map.v;
 	pos.i = ft_round(map.u * (double)(dims.j * 2 - 1));
 	pos.j = ft_round(map.v * (double)(dims.j - 1));
 	col = pixel_color_get(pos.i, pos.j, sphere.texture->image);
 	comps->dims = dims;
 	comps->pos = pos;
+	comps->map = map;
 	return (col);
 }
-
-//if normal mapping. LEAVE NOTE FOR POST TURN IN USE
-//t_vec3 norm = norm_vec(obj_pnt);		
-/* t_vec3 tan = vec(-obj_pnt.z, 0, obj_pnt.x, 0);
-t_vec3 bitan = norm_vec(cross_prod(obj_pnt, tan));
-t_vec3 pert = add_vec(scale_vec(bumpv.x, tan), scale_vec(bumpv.y, bitan));
-pert = add_vec(pert, scale_vec(bumpv.z, obj_pnt));
-bumpv = add_vec(obj_pnt, pert); */

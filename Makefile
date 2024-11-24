@@ -148,6 +148,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
 ./src_bonus/color_utils/bump_mapping.c \
+./src_bonus/color_utils/cyl_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \
 ./src_bonus/events/main_events.c \
 ./src_bonus/events/traverse_lists.c \

@@ -102,6 +102,8 @@ int transfigure(int keycode, t_trace *trace)
 
 void	frost_on(t_trace *trace, t_on on)
 {
+	if (on.object == NULL)
+		return ;
 	if (on.type == PLANE)
 		trace->curr_pl->w_frost = !trace->curr_pl->w_frost;
 	else if (on.type == SPHERE)
@@ -191,9 +193,9 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_sp->bump = !trace->curr_sp->bump;
 	else if (on->type == PLANE)
 		trace->curr_pl->bump = !trace->curr_pl->bump;
-	/* else if (on->type == CYLINDER)
+	else if (on->type == CYLINDER)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
-	else if (on->type == HYPERBOLOID)
+	/* else if (on->type == HYPERBOLOID)
 		trace->curr_hy->bump = !trace->curr_hy->bump;
 	else if (on->type == CUBE)
 		trace->curr_cu->bump = !trace->curr_cu->bump; */

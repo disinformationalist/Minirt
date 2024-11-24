@@ -22,7 +22,7 @@ bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
 
 	*t3 = INFINITY;
 	*t4 = INFINITY;
-	if (fabs(ray.dir.y) < 1e-5)
+	if (fabs(ray.dir.y) < 1e-6)
 		return (false);
 	t = (-half_h - ray.origin.y) / ray.dir.y;
 	hit1 = check_cap(ray, t);
@@ -37,14 +37,14 @@ bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
 	return (false);
 }
 
-bool	within_height(t_ray ray, double min, double max, double t)
+bool	within_height(t_ray ray, double t)
 {
 	double	y;
 
-	if (t < 1e-5)
+	if (t < 1e-6)
 		return (false);
 	y = ray.origin.y + t * ray.dir.y;
-	if (y > min && y < max)
+	if (y > -1 && y < 1)
 		return (true);
 	return (false);
 }
@@ -67,19 +67,18 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 
 	ray = transform(ray, cylinder.transform);
 	compute_abc(&abc, ray);
-	if (abc.x != 0)
+	if (abc.x == 0)
+		return false;
+	if (check_trunk_solutions(abc, &t1, &t2))
 	{
-		if (check_trunk_solutions(abc, &t1, &t2))
-		{
-			if (within_height(ray, -cylinder.half_h, cylinder.half_h, t1)
-				&& t1 < *t)
-				*t = t1;
-			if (within_height(ray, -cylinder.half_h, cylinder.half_h, t2)
-				&& t2 < *t)
-				*t = t2;
-		}
+		if (within_height(ray, t1)
+			&& t1 < *t)
+			*t = t1;
+		if (within_height(ray, t2)
+			&& t2 < *t)
+			*t = t2;
 	}
-	if (intersect_caps(ray, cylinder.half_h, &t3, &t4))
+	if (intersect_caps(ray, 1, &t3, &t4))
 		set_t_to_smaller_value(t, &t3, &t4);
 	if (*t < INFINITY)
 		return (true);

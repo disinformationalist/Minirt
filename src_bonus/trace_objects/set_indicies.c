@@ -62,6 +62,7 @@ static inline int search_cons(int *size, t_track_hits *current, t_cons *cons)
 	return (found);
 }
 
+//set indicies of refraction at a point
 
 void	set_indicies(t_intersects *intersects, double *n1, double *n2)
 {

@@ -65,7 +65,7 @@ void	set_cy_transforms(t_trace *trace)
 					-curr_cy->center.z);
 			inv_rot = rot_to(curr_cy->norm, vec(0, 1, 0, 0));
 			curr_cy->curr_scale = inv_scaling(curr_cy->radius,
-					1.0, curr_cy->radius);
+					curr_cy->half_h, curr_cy->radius);
 			curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cy->transform = mat_mult(curr_cy->curr_scale,
 					curr_cy->curr_rottran);

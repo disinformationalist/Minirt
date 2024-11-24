@@ -105,6 +105,7 @@ typedef struct s_cylinder
 	t_matrix_4x4		curr_rottran;
 	t_tx				*texture;
 	int					option;
+	t_pattern			pattern;
 	bool				w_frost;
 	struct s_cylinder	*prev;
 	struct s_cylinder	*next;
@@ -337,6 +338,9 @@ typedef struct t_comps
 	t_vec3			under_pnt;
 	t_vec3			bump;
 	//t_vec3			bumpv;
+	t_map			map;
+	bool			is_top;
+	bool			is_bot;
 	t_position			pos;
 	t_position			dims;
 	t_norm_color	color;
@@ -349,9 +353,11 @@ t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
 
-//text
+//bump
 void		bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
 void		bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
+void		bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
+
 
 
 /***PHOTON***/
@@ -622,6 +628,7 @@ unsigned int	clamped_col(t_norm_color col);
 
 t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps);
 t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
+t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
 int				import_textures(void *mlx_con, t_tx *textures);
 t_vec3			frost(t_vec3 norm);

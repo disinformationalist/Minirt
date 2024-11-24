@@ -30,7 +30,6 @@ typedef struct s_png_io
 
 //texures
 
-
 typedef struct s_tx
 {
 	int				id;
@@ -46,8 +45,6 @@ typedef struct s_tx
 	struct	s_tx	*prev;
 	struct	s_tx	*next;
 }	t_tx;
-
-
 
 /***PNG IMPORT/EXPORT***/
 

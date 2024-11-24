@@ -62,6 +62,7 @@ t_vec3			column_to_vec(t_matrix_3x3 *matrix, int column);
 void			vec_to_row(t_matrix_3x3 *matrix, t_vec3 vec, int row);
 void			vec_to_column(t_matrix_3x3 *matrix, t_vec3 vec, int column);
 void			tuple_to_row(t_matrix_4x4 *matrix, t_vec3 tuple, int row);
+void			tuple_to_col(t_matrix_4x4 *matrix, t_vec3 tuple, int col);
 
 //print utils
 void			print_matrix_4(t_matrix_4x4 *matrix);
