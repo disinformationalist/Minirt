@@ -6,7 +6,6 @@
 # include "keyboard.h"
 # include <sys/time.h>//testing speed
 # include "extras.h"
-# include  "photon.h"
 
 # define ASPECT (16.0 / 9.0)
 //# define ASPECT (4.0 / 3.0)
@@ -226,27 +225,14 @@ typedef struct s_light
 /***MAIN STRUCT***/
 
 typedef struct s_trace
-{
-	/* t_photon_map	*global_map;
-	t_kdnode		*gl_tree;
-	t_photon_map	*caustic_map;
-	t_kdnode		*c_tree; */
-	
-	int				photnum;
-	float			rad;
-	float			rad2;
-	float			area;
-//--------------
+{	
 	t_mesh			*mesh;
-//---------------
+	t_group			*group;
+
 	int				total_ints;
 	t_depths		depths;
 	t_img			img;
 	
-	t_vec3			perturb;
-
-
-	t_group			*group;
 	t_track_hits	*closest;
 	t_on			*on;
 	
@@ -337,7 +323,6 @@ typedef struct t_comps
 	t_vec3			over_pnt;
 	t_vec3			under_pnt;
 	t_vec3			bump;
-	//t_vec3			bumpv;
 	t_map			map;
 	bool			is_top;
 	bool			is_bot;
@@ -351,54 +336,6 @@ typedef struct t_comps
 
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
-
-
-//bump
-void		bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
-void		bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
-void		bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
-
-
-
-/***PHOTON***/
-t_photon_map	*build_map(t_trace *trace, int photons);
-void			change_mat(t_trace *trace, t_on *on, const t_mat mat);
-//void			roulette_interaction(t_mat mat, bool *is_diff, bool *is_spec, bool *is_trans);
-void			emit_area(t_trace * trace, t_photon_map *map, t_light light, double total);
-void			emit_point(t_trace *trace, t_photon_map *map, double total, t_light *light);
-t_norm_color	irradiance(t_photon_map *list, float rad);
-t_norm_color	irradiance_at(t_trace *trace, t_point pnt, t_kdnode *tree);
-void			allocate_photons(t_light *lights, int tot_phot);
-
-
-//void			free_mapping(t_trace *trace);
-
-t_photon_map	*build_caustic_map(t_trace *trace, int photons);
-int				trace_caustic_photon(t_trace *trace, t_photon photon, t_photon_map *caustic_map);
-void 			emit_area_c(t_trace * trace, t_photon_map *map, t_light light, double total);
-void			emit_point_c(t_trace *trace, t_photon_map *map, double total, t_light *light);
-
-//--------put these where they go later
-
-
-
-
-// reflect, refract
-double			schlick(t_comps comps);
-void			set_indicies(t_intersects *intersects, double *n1, double *n2);
-t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
-t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
-
-void			intersect(t_intersects *intersects, void *object, double t, t_type type);
-
-
-t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
-
-
-
-bool			insert_ltcopy_after2(t_trace *trace);
-bool			insert_ltcopy_after3(t_trace *trace);
-
 
 
 //mesh
@@ -431,7 +368,6 @@ void			check_amb(char **line, char ***rt_file);
 void			check_cam(char **line, char ***rt_file);
 void			check_light(char **line, char ***rt_file);
 void			check_sp(char **line, char ***rt_file);
-void			check_le(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 void			check_hy(char **line, char ***rt_file);
@@ -478,13 +414,11 @@ bool			append_pl(t_plane **start, char **line);
 bool			append_cy(t_cylinder **start, char **line);
 bool			append_hy(t_hyperboloid **start, char **line);
 bool			append_cu(t_cube **start, char **line);
-
-bool			append_tri(t_tri **start, char **line);
-
 bool			append_tx(t_tx **start, char **line);
 bool			append_light(t_trace *trace, t_light **start, char **line);
 void			update_light_ids(t_light *light);
 
+bool			append_tri(t_tri **start, char **line);
 
 //copy and push new list obs, if empty make default
 bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
@@ -493,7 +427,8 @@ bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 bool			insert_cucopy_after(t_trace *trace, t_cube **current);
-
+bool			insert_ltcopy_after2(t_trace *trace);
+bool			insert_ltcopy_after3(t_trace *trace);
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
@@ -516,13 +451,12 @@ void			thread_error(t_trace *trace, int i);
 int				set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
 void			free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j);
 
+//init transforms
 void			set_sp_transforms(t_trace *trace);
 void			set_pl_transforms(t_trace *trace);
 void			set_cy_transforms(t_trace *trace);
 void			set_hy_transforms(t_trace *trace);
-void			set_le_transforms(t_trace *trace);
 void			set_cu_transforms(t_trace *trace);
-
 
 //mlx utils
 int				new_img_init(void *mlx_con, t_img *img, int width, int height);
@@ -531,6 +465,7 @@ void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
 //intersect
 t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			find_closest(t_trace *trace, t_ray ray, t_intersects *intersects);
+void			intersect(t_intersects *intersects, void *object, double t, t_type type);
 
 //sphere utils
 void			ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects);
@@ -546,12 +481,10 @@ void			check_planes(t_plane *planes, t_intersects *intersects, t_ray ray);
 void			ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects);
 t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
-
 //cube utils
 void			check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray);
 void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-
 
 //obj shadow
 bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
@@ -573,21 +506,23 @@ void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_inters
 void			check_triangles(t_tri *tris, t_intersects *intersects, t_ray ray);
 t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
-
 //light utils
 void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
 void			set_arealt(t_light *lt);
 void			check_arealts(t_light *lights, t_intersects *intersects, t_ray ray);
 int				set_al_vals(t_trace *trace, t_light *new, char **line);
 
-//shadows
-bool			obscured(t_trace *trace, t_point int_pnt, t_vec3 light_dir, t_vec3 normal);
-bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
+// reflect, refract
+double			schlick(t_comps comps);
+void			set_indicies(t_intersects *intersects, double *n1, double *n2);
+t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
+t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
 
+//shadows
+bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
 
 //view
 void			reinit_viewing(t_trace *trace);
-
 
 /***MATH UTILS***/
 uint8_t			round_c(double d);
@@ -604,25 +539,19 @@ t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3 			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
-
 t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
 t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 /***COLOR UTILS***/
 
-t_norm_color	get_final_color(t_trace *trace, t_norm_color color, double light_int);
-
 t_norm_color	*set_metal_colors(void);
-void			rotate_colors(t_trace *trace, int button, t_norm_color *curr_col);
-
-
+t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
+unsigned int	clamped_col(t_norm_color col);
 int				ft_round(double num);
 t_norm_color 	color(double r, double g, double b);
-
-unsigned int	clamped_col(t_norm_color col);
 
 //texture utils
 
@@ -631,14 +560,17 @@ t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
 int				import_textures(void *mlx_con, t_tx *textures);
-t_vec3			frost(t_vec3 norm);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, t_plane plane);
+t_vec3			frost(t_vec3 norm);
 
+//bump
+void			bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
+void			bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
+void			bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
 
 //materials
 void			change_mat(t_trace *trace,t_on *on, const t_mat mat);
 t_mat			get_mat(t_material material);
-
 
 //supersampling utils
 unsigned int	avg_samples(t_norm_color sum, double n);
@@ -647,13 +579,13 @@ t_norm_color	mult_color(double scalar, t_norm_color color);
 
 //patterns
 t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
-t_norm_color	stripe_at(t_point point, t_matrix_4x4 transform);
-t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, t_norm_color col1, t_norm_color col2);
+t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, \
+	t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
-
+void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
@@ -664,9 +596,7 @@ int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);
 int				mouse_handler(int button, int x, int y, t_trace *trace);
 void			forge_or_export(int keycode, t_trace *trace);
-
 char			*get_nxt_name_rt(char *name);
-
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);
@@ -702,7 +632,6 @@ void			write_textures(t_tx *textures, int fd);
 
 int				count_chars(double n);
 void			check_tolerance(t_vec3 *vec);
-
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);

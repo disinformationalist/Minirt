@@ -14,12 +14,10 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_intersects *inter
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	//check_triangles(trace->triangles, intersects, ray);
-
-	check_mesh(trace->mesh, intersects, ray);
-
 	check_arealts(trace->lights, intersects, ray);
-
+	
+	//check_triangles(trace->triangles, intersects, ray);
+	check_mesh(trace->mesh, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
 	if (i < intersects->count)
@@ -30,13 +28,12 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_intersects *inter
 static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	color_out;
+	t_track_hits	*closest;
 
 	if (depths.refl <= 0 && depths.refr <= 0)
 		return (color(0, 0, 0));
-	
 	find_closest_s(trace, r, intersects);
-	t_track_hits	*closest = intersects->closest;//temp
-
+	closest = intersects->closest;
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		color_out = color_sphere(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)

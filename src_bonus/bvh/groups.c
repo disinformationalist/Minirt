@@ -1,24 +1,4 @@
 #include "minirt.h"
-//the group contains ll of shapes... a shape that contains all other shapes...
-//doubly linked circular group structure. cells? for shorthand
-
-
-/* typedef	struct s_shape
-{
-	void			*shape;
-	t_type			type;
-	t_matrix_4x4	transform;
-	struct s_shape	*next;
-	struct s_shape	*prev;
-	void			*parent;
-}	t_shape;
-
-typedef struct s_group 
-{
-	t_shape			*shapes;
-	t_type			type;
-	t_matrix_4x4	transform;//group transform
-}	t_group; */
 
 //create and return a new group instance
 
@@ -36,6 +16,7 @@ t_group *group(void)
 }
 
 //take any object primitive, place in shape container and add to group(first argument)
+//when adjusting group transform it must reapply to all
 
 int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 {
@@ -48,7 +29,7 @@ int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 	new->shape = obj;
 	new->type = type;
 	new->parent = group;
-	new->transform = mat_mult(group->transform, transform);//when adjusting grouptran it must reapply to all
+	new->transform = mat_mult(group->transform, transform);
 	if (group->shapes == NULL)
 	{
 		new->next = new;
@@ -64,16 +45,17 @@ int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 	return (0);
 }
 
-//if i group a shape should i remove it from other list?... would have to free group objs themselves here then.. 
-//could group each list as a subgroup to the group structure... then the group free frees all...
-
-
-//recursively free the groups' shapes and the groups themselves.
+/* recursively free the groups' shapes and the groups themselves,
+only for shape containers, not objects actual
+if (curr->type == GROUP)
+			free_group((t_group *)curr->shape);
+		else
+			free(curr->shape); */
 
 void free_group(t_group *group)
 {
-	t_shape *curr;
-	t_shape *temp;
+	t_shape	*curr;
+	t_shape	*temp;
 
 	if (!group->shapes)
 		return free(group);
@@ -83,9 +65,7 @@ void free_group(t_group *group)
 	{
 		temp = curr->next;
 		if (curr->type == GROUP)
-			free_group((t_group *)curr->shape);//currently only frees shape containers not shape actual. below comment for actuals
-		/* else
-			free(curr->shape); */
+			free_group((t_group *)curr->shape);
 		free(curr);
 		curr = temp;
 	}
@@ -128,5 +108,3 @@ void	check_group(t_group *group, t_intersects *intersects, t_ray ray)
 			break;
 	}
 }
-
-//IMPLEMENT FIND CHILD NORMAL WITHIN THE GROUP.

@@ -70,9 +70,6 @@ void			print_matrix_3(t_matrix_3x3 *matrix);
 void			print_matrix_2(t_matrix_2x2 *matrix);
 void			print_vec(t_vec3 vec);
 
-
-
-
 /* stuff in unused matices folder */
 //add/remove stack in rt_matrix_transf.c
 void			init_matrix_3(double matrix[3][3]);

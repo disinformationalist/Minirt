@@ -1,14 +1,5 @@
 #include "minirt.h"
 
-/* void ft_swap(double *a, double *b)
-{
-	double temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-} */
-//UNTESTED
 static inline void check_axis_box(double origin, double dir, double *min, double *max, t_vec2 cmm)
 {
 	double t_min_num;
@@ -30,6 +21,8 @@ static inline void check_axis_box(double origin, double dir, double *min, double
 		ft_swap(min, max);
 }
 
+//might need: ray = transform(ray, ctransform);
+
 bool	ray_box_intersect(t_box *box, t_matrix_4x4 ctransform, t_ray ray)
 {
 	t_vec3	mins;
@@ -38,7 +31,7 @@ bool	ray_box_intersect(t_box *box, t_matrix_4x4 ctransform, t_ray ray)
 	double	t_min;
 	double	t_max;
 
-	//ray = transform(ray, ctransform);
+	(void)ctransform;
 	cmm.x = box->min.x;
 	cmm.y = box->max.x;
 	check_axis_box(ray.origin.x, ray.dir.x, &mins.x, &maxs.x, cmm);
@@ -52,7 +45,8 @@ bool	ray_box_intersect(t_box *box, t_matrix_4x4 ctransform, t_ray ray)
 	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
 	return (t_min <= t_max  && t_max >= 0);
 }
-/* 
+
+/* cube intersect check 
 static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 {
 	t_cube	*curr_cu;

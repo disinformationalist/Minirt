@@ -79,13 +79,13 @@ static inline void	set_obj_color(t_on *on, t_norm_color new_col)
 
 //rotate color of lights and objects
 
-void	rotate_colors(t_trace *trace, int button, t_norm_color *curr_col)
+void	rotate_colors(t_trace *trace, int button, t_norm_color *curr)
 {
 	if (!trace->layer)
 	{
-		*curr_col = get_obj_color(trace->on);
-		if (get_diff(*curr_col, trace->w_colors[trace->color_i]) > .5)
-			trace->color_i = match_index(trace->num_colors, trace->w_colors, *curr_col);	
+		*curr = get_obj_color(trace->on);
+		if (get_diff(*curr, trace->w_colors[trace->color_i]) > .5)
+			trace->color_i = match_index(trace->num_colors, trace->w_colors, *curr);	
 		if (button == 5)
 			trace->color_i = (trace->color_i + 5) % trace->num_colors;
 		else if (button == 4)
@@ -94,9 +94,9 @@ void	rotate_colors(t_trace *trace, int button, t_norm_color *curr_col)
 	}
 	else
 	{
-		*curr_col = get_obj_color(trace->on);
-		if (get_diff(*curr_col, trace->m_colors[trace->color_i % 19]) > .5)
-			trace->color_i = match_index(19, trace->m_colors, *curr_col);
+		*curr = get_obj_color(trace->on);
+		if (get_diff(*curr, trace->m_colors[trace->color_i % 19]) > .5)
+			trace->color_i = match_index(19, trace->m_colors, *curr);
 		if (button == 5)
 			trace->color_i = (trace->color_i + 1) % 19;
 		else if (button == 4)

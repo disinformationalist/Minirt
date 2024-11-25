@@ -12,6 +12,21 @@ static inline void	scale_arealt(t_light *lt, t_vec3 v)
 	set_arealt(lt);
 }
 
+static inline void scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
+{
+	if (on->type == CYLINDER)
+	{
+		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
+			vec1.z), trace->curr_cy->curr_scale);
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
+			trace->curr_cy->curr_rottran);
+		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
+		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
+	}
+	else
+		return ;
+}
+
 static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == CUBE)
@@ -34,20 +49,11 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 			scale_arealt(trace->curr_lt, vec1);
 	}
 	else
-		return ;
+		scale_object3(trace, on, vec1);
 }
 
 static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
-	if (on->type == CYLINDER)
-	{
-		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
-			vec1.z), trace->curr_cy->curr_scale);
-		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
-			trace->curr_cy->curr_rottran);
-		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
-		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
-	}
 	if (on->type == HYPERBOLOID)
 	{
 		trace->curr_hy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
@@ -71,12 +77,13 @@ static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 }
 
 //scales current object in xyz based on the vec1 passed in
+//for light add, make counts of sl, al and use if == 0
 
 void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->object == NULL && on->type != LIGHT)
-		return ;															//maybe keep sl al counts in trace..adjust to insert properly into list..
-	else if (trace->lights == NULL && on->type == LIGHT)//needs to work when on spots exist or no areas exist... right now only works when list is totally empty..
+		return ;
+	else if (trace->lights == NULL && on->type == LIGHT)
 	{
 		if (vec1.x + vec1.y + vec1.z > 3)
 		{
@@ -84,10 +91,8 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
 				close_win(trace);
 		}
 		else if (vec1.x + vec1.y + vec1.z > 2.6)
-		{
 			if (insert_ltcopy_after3(trace))
 				close_win(trace);
-		}
 		return ;
 	}
 	if (on->type == SPHERE)

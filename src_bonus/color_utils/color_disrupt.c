@@ -1,24 +1,8 @@
 #include "minirt.h"
 
-//places alternating stripes on object
-
-t_norm_color stripe_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)
-{
-	t_norm_color	col;
-	t_point			obj_pnt;
-
-	obj_pnt = mat_vec_mult(transform, point);
-	
-	if ((int)floor(obj_pnt.x * 2) % 2 == 0)
-		col = color(40, 40, 40);
-	else
-		col = color(255, 255, 255);
-	return (col);
-}
-
 //rings
 
-t_norm_color ring_at(t_point point, t_matrix_4x4 transform)//, t_norm_color color1, t_norm_color color2)
+t_norm_color ring_at(t_point point, t_matrix_4x4 transform)
 {
 	t_norm_color	col;
 	t_point			obj_pnt;
@@ -31,7 +15,6 @@ t_norm_color ring_at(t_point point, t_matrix_4x4 transform)//, t_norm_color colo
 		col = color(255, 255, 255);
 	return (col);
 }
-
 
 //not really working this way... must rework.. map
 
@@ -48,9 +31,6 @@ t_norm_color gradient_at(t_point point, t_matrix_4x4 transform, t_norm_color col
 	
 	return (col);
 }
-//must assign to a sep tnormcolor to pass into function.
-
-//------------mapping stuff-----------
 
 //sets pat colors and dims
 
@@ -84,13 +64,8 @@ t_norm_color uv_checker_at(t_pattern pat, double u, double v)
 //this one really returns the color at the point in obj space. 
 //takes the pattern, and the uv returned by the map function used.
 
-t_norm_color pattern_at(t_pattern pat, t_map map)//t_pattern map in place of pat
+t_norm_color pattern_at(t_pattern pat, t_map map)
 {
-	/* t_vec2 uv;
-	t_point obj_pnt; */
-
-	//obj_pnt = mat_vec_mult(transform, pnt);
-	//uv = sphere_map(obj_pnt);
 	return (uv_checker_at(pat, map.u, map.v));
 }
 

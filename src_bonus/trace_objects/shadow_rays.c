@@ -131,7 +131,8 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	return (false);
 }
 
-//check for light obstruction. currently used
+//check for light obstruction
+
 bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 {
 	double	light_dist;
@@ -152,21 +153,3 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 	return (false);
 }
 
-//function to check if any object blocks light. this was only used by lens.
-
-bool	obscured(t_trace *trace, t_point pnt, t_vec3 light_dir, t_vec3 normal)
-{
-	t_ray	s_ray;
-	double	light_dist;
-
-	s_ray.dir = light_dir;
-	s_ray.origin = add_vec(pnt, scale_vec(1e-6, normal));	
-	light_dist = magnitude(subtract_vec(trace->lights->center, pnt));// use in previous to get light dir test times.
-	if (check_sp_dist(trace->spheres, s_ray, light_dist))
-		return (true);
-	if (check_pl_dist(trace->planes, s_ray, light_dist))
-		return (true);
-	if (check_cy_dist(trace->cylinders, s_ray, light_dist))
-		return (true);
-	return (false);
-}

@@ -86,15 +86,3 @@ t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_col
 	}
 	return (color_out);
 }
-
-//previously only used in lens
-t_norm_color get_final_color(t_trace *trace, t_norm_color color, double light_int)
-{
-	t_norm_color color_out;
-
-	color_out.r = color.r * (light_int + trace->amb->color.r);
-	color_out.g = color.g * (light_int + trace->amb->color.g);
-	color_out.b = color.b * (light_int + trace->amb->color.b);
-
-	return (color_out);
-}

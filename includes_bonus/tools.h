@@ -284,13 +284,13 @@ typedef struct s_obj_counts
 //mesh
 t_mesh			*parse_obj(char *filename);
 
-
 //some util functions
 
 t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
 t_ray			transform(t_ray r, t_matrix_4x4 m);
 void			ft_swap(double *a, double *b);
 double			randf(void);
+double			randf2(void);
 
 //used for map
 
@@ -300,6 +300,14 @@ t_map 			planar_map(t_point obj_pnt);
 t_map			sphere_map(t_point obj_pnt);
 t_map 			cylinder_map(t_point obj_pnt);
 
+//cube map
+t_vec2			cube_map(t_point obj_pnt);
+t_vec2			cu_uv_up(t_point pnt);
+t_vec2			cu_uv_left(t_point pnt);
+t_vec2			cu_uv_right(t_point pnt);
+t_vec2			cu_uv_back(t_point pnt);
+t_vec2			cu_uv_front(t_point pnt);
+t_vec2			cu_uv_down(t_point pnt);
 
 /***GROUPS***/
 
@@ -319,7 +327,5 @@ bool			contains_pnt(t_box box, t_point point);
 bool			contains_box(t_box b1, t_box b2);
 t_box			*transform_box(t_box *box, t_matrix_4x4 transf);
 t_box			*bops(t_shape *shape);
-
-
 
 #endif

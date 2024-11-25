@@ -149,6 +149,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/mapping.c \
 ./src_bonus/color_utils/bump_mapping.c \
 ./src_bonus/color_utils/cyl_bump.c \
+./src_bonus/color_utils/pl_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \
 ./src_bonus/events/main_events.c \
 ./src_bonus/events/traverse_lists.c \
@@ -181,21 +182,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/bvh/groups.c \
 ./src_bonus/bvh/boxes.c \
 ./src_bonus/bvh/box_ops.c \
-./src_bonus/photon_map/build_map.c \
-./src_bonus/photon_map/emit_light.c \
-./src_bonus/photon_map/photon_utils.c \
-./src_bonus/photon_map/set_comps.c \
-./src_bonus/photon_map/kd_tree.c \
-./src_bonus/photon_map/search_tree.c \
-./src_bonus/photon_map/caustics.c \
+./src_bonus/bvh/box_ops2.c \
 ./src_bonus/parsing/parse_obj.c \
-
-
-
-
-
-
-
 
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result

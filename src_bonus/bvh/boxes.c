@@ -54,19 +54,6 @@ t_box	*bounds_of(t_type type)
 		new = box(vec(-INFINITY, 0, -INFINITY, 0), vec(INFINITY, 0, INFINITY, 0));
 	if (type == CYLINDER)//going to try to bound with half_h at 1..
 		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
-	/* if (type == CONE)//?
-		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0)); */
-	/* if (type == TRI)//easy way not opti, still gotta make these
-	{
-		t_tri *tri;
-		tri = (t_tri *)shape;
-		new = empty_box();
-		if (!new)
-			return (NULL);
-		add_pnt(new, tri->p1);// add each vert, must change fun to accept shape *
-		add_pnt(new, tri->p2);
-		add_pnt(new, tri->p3);
-	} */
 	else
 		return (NULL);
 	if (!new)
