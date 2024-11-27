@@ -49,7 +49,7 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 			scale_arealt(trace->curr_lt, vec1);
 	}
 	else
-		scale_object3(trace, on, vec1);
+		scale_object4(trace, on, vec1);
 }
 
 static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
