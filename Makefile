@@ -118,6 +118,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/parsing/parse_rt_utils.c \
 ./src_bonus/trace_objects/CSG.c \
 ./src_bonus/trace_objects/CSG_utils.c \
+./src_bonus/trace_objects/CSG_pool.c \
 ./src_bonus/trace_objects/trace_planes.c \
 ./src_bonus/trace_objects/trace_spheres.c \
 ./src_bonus/trace_objects/color_spheres.c \
