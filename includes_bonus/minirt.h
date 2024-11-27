@@ -28,6 +28,17 @@ typedef enum e_csg_op
 	DIFFERENCE,
 }	t_csg_op;
 
+typedef struct s_helper_shape
+{
+	t_type					type;
+	void					*left;
+	void					*right;
+	t_csg_op				op;
+	t_shape					*primitive;
+	struct s_helper_shape	*next;
+	struct s_helper_shape	*prev;
+}	t_helper_shape;
+
 typedef struct s_csg
 {
 	t_type		type;
@@ -36,6 +47,13 @@ typedef struct s_csg
 	t_csg_op	op;
 }	t_csg;
 
+/* typedef struct s_csg_pool
+{
+	t_type			type;
+	t_helper_shape	**shapes;
+	int				shape_count;
+	t_csg_op		op;
+}	t_csg_pool; */
 
 typedef struct s_sphere
 {
@@ -162,15 +180,6 @@ typedef struct s_cube
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
-
-typedef struct s_helper_shape
-{
-	t_type				type;
-	void				*left;
-	void				*right;
-	t_csg_op			op;
-	t_shape				*primitive;
-}	t_helper_shape;
 
 typedef struct s_tri//in progress...may not need soon
 {
@@ -647,6 +656,8 @@ void			print_times(long start, long end, char *msg);
 /*** CSG ***/
 void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape *shapes3, t_intersects *intersects);
 t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right, t_csg_op op);
+bool			hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr);
+void			filter_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool *inr);
 
 /*** CSG utils ***/
 int				get_type(t_helper_shape *shape);
@@ -654,5 +665,11 @@ bool			is_in_csg_left(t_csg *csg, t_intersects **intersects, int i);
 bool			is_in_csg_right(t_csg *csg, t_intersects **intersects, int i);
 void			set_left(bool *lhit, bool *inl);
 void			set_right(bool *lhit, bool *inr);
+
+/*** CSG pool ***/
+void			check_csg_sphere_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
+void			check_csg_cyl_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
+void			check_csg_hyp_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
+void			check_csg_cube_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
 
 #endif

@@ -5,6 +5,7 @@ void	filter_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool
 bool	hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr)
 {
 	if (op == UNION)
+		//return ((lhit && !inr) || (!lhit && !inl));
 		return ((lhit && !inr) || (!lhit && !inl));
 	else if (op == INTERSECTION)
 		return ((lhit && inr) || (!lhit && inl));
@@ -96,8 +97,8 @@ void	check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape 
 	inr = false;
 	if (!shapes1 || !shapes2 || !shapes3)
 		return ;
-	test_csg = make_new_csg(shapes2, shapes3, UNION);
-	secondary_csg = make_new_csg((t_helper_shape *)test_csg, shapes1, UNION);
+	test_csg = make_new_csg(shapes1, shapes2, UNION);
+	secondary_csg = make_new_csg((t_helper_shape *)test_csg, shapes3, UNION);
 	filter_intersections(secondary_csg, &intersects, &inl, &inr);
 	free(test_csg);
 	free(secondary_csg);
