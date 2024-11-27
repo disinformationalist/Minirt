@@ -30,8 +30,9 @@ void	add_sp_color(t_sphere *sphere, char *line, int spaces2)
 	r = sphere->color.r;
 	g = sphere->color.g;
 	b = sphere->color.b;
-
-	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), "%*s%d,%d,%d\n", spaces2, "", r, g, b);
+	snprintf(line + ft_strlen(line), \
+		200 - ft_strlen(line), "%*s%d,%d,%d\n", \
+		spaces2, "", r, g, b);
 }
 
 char	*build_sp_line(t_sphere *sphere)
@@ -44,12 +45,12 @@ char	*build_sp_line(t_sphere *sphere)
 	
 	cen = mat_vec_mult(inverse(sphere->transform), vec(0, 0, 0, 1));
 	d = (2.0 / sphere->curr_scale.m[2][2]);
-	spaces = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
+	spaces = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
 	spaces2 = 20 - count_chars(d);
-	snprintf(line, sizeof(line), "sp          %.3f,%.3f,%.3f%*s%.3f", cen.x, cen.y, cen.z, spaces, "",d);
-	
+	snprintf(line, sizeof(line), \
+		"sp          %.3f,%.3f,%.3f%*s%.3f", \
+		cen.x, cen.y, cen.z, spaces, "",d);
 	add_sp_color(sphere, line, spaces2);
-
 	return (line);
 }
 
@@ -62,7 +63,8 @@ void	write_spheres(t_sphere *spheres, int fd)
 	
 	if (spheres == NULL)
 		return ;
-	ft_putstr_fd("#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B\n", fd);
+	ft_putstr_fd("#Spheres:   Cen_x | Cen_y | Cen_z              "
+		"                   Diameter      		  R | G | B\n", fd);
 	curr_sp = spheres;
 	while (true)
 	{

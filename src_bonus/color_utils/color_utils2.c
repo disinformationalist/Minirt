@@ -38,23 +38,6 @@ double clamp(double val, double bot, double top)
 	return (val);
 }
 
-/* t_norm_color clamp_col(t_norm_color col)
-{
-	if (col.r > 255.0)
-		col.r = 255.0;
-	if (col.g > 255.0)
-		col.g = 255.0;
-	if (col.b > 255.0)
-		col.b = 255.0;
-	if (col.r < 0)
-		col.r = 0;
-	if (col.g < 0)
-		col.g = 0;
-	if (col.b < 0)
-		col.b = 0;
-	return (col);
-} */
-
 /* combines color components, balances reflect and refract
 current in use, 0 - 255 object color, 0 - 1 light colors */
 

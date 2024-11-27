@@ -1,88 +1,17 @@
 #include "minirt.h"
 
-/* 		   soft
-		   spot
-		  light 
-		 / 	|  \
-		/  / \  \
-	   /  /   \  \
-	  /  /     \  \
-	 /  /	    \  \
-			^	  ^
-			|	  |
-	inner cone    outer cone
-(full intensity)  (attenuating toward outer edge)	 */	
-
-//----------------testing these
-/* double brdf_schlick(t_comps comps)
-{
-	double	cos;
-	double	res;
-	double	cos2;
-
-	cos = fmax(dot_product(comps.eyev, comps.normal), 0.0);
-	res = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
-	res *= res;
-	cos =  1 - cos;
-	cos2 = cos * cos;
-	res = res + (1 - res) * cos2 * cos2 * cos;
-	return (res);
-}
-
-
-double	comp_distr(double ndh, double rough, bool is_beck)
-{
-	double rough2;
-	double ndh2;
-	double ndh4;
-
-	rough2 = rough * rough;
-	ndh2 = ndh * ndh;
-	ndh4 = ndh2 * ndh2;
-
-	if (is_beck)
-		return (exp((ndh2 - 1.0) / (rough2 * ndh2)) / (4.0 * M_PI * rough2 * ndh4));
-	else
-		return (rough2 / (M_PI * (ndh4 * (rough2 - 1.0) + 1.0) * (ndh4 * (rough2 - 1.0) + 1.0)));
-}
-
-double	get_light_brdf(t_comps comps, t_mat mat)
-{
-	t_vec3	h_vec;
-	double	ndl;
-	double	ndh;
-	double	vdh;
-	double	ndv;
-
-	double	diff;
-	double	spec;
-	double	fren;
-	double	geo;
-	double	distr;
-
-	h_vec = norm_vec(add_vec(comps.light_dir, comps.eyev));
-	ndl = fmax(dot_product(comps.normal, comps.light_dir), 0.001);
-	ndv = fmax(dot_product(comps.normal, comps.eyev), 0.001);
-	ndh =  fmax(dot_product(comps.normal, h_vec), 0.001);
-	vdh = fmax(dot_product(comps.eyev, h_vec), 0.001);
-
-	diff = mat.diff * ndl / M_PI;
-
-
-	fren = brdf_schlick(comps);//add to comps to reuse. 
-
-	//double geo = (ndl * ndv) / (ndl * vdh + ndv * nh + 1e-5);
-	geo = fmin(1.0, fmin((2.0 * ndl * ndv) / (vdh + 1e-5), (2.0 * ndv * ndl) / ndh));
-	
-	distr = comp_distr(ndh, mat.rough, true);//make optional
-	
-	//spec = (fren * geo * distr) / (4.0 * ndl * ndv);
-	spec = (fren * geo * distr) / (4.0 * ndl * ndv);
-	spec = fmin(spec, .5);//----
-	return (diff + spec);
-} */
-//--------------------------------
-
+/* 	       soft
+           spot
+          light 
+         / 	|  \
+        /  / \  \
+       /  /   \  \
+      /  /     \  \
+     /  /	    \  \
+            ^     ^
+            |     |
+    inner cone  outer cone
+(full intensity)  (attenuating toward outer edge)*/	
 
 //get the spotlight strength
 static inline double get_spot_int(t_vec3 light_dir, t_light *splight)
@@ -148,8 +77,6 @@ static inline double intensity_at(t_trace *trace, t_light light, t_comps *comps)
 			{
 				comps->cos_a = fmax(0.0, dot_product(comps->normal, comps->light_dir));
 				comps->sqlt_int += get_light_int(*comps, comps->mat);
-				//comps->sqlt_int += get_light_brdf(*comps, comps->mat);
-
 				tot_int += 1.0;
 			}
 		}
@@ -172,8 +99,6 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 			comps->cos_a = dot_product(comps->normal, comps->light_dir);
 			if (!obscured_b(trace, curr_lt->center, *comps))
 				*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_int(*comps, comps->mat), curr_lt->color));
-				//*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_brdf(*comps, comps->mat), curr_lt->color));
-				
 		}
 	}
 	else if (curr_lt->type == AREA)
@@ -181,13 +106,11 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 		sqlt_inten = intensity_at(trace, *curr_lt, comps);
 		*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color));
 	}
-	else//point
+	else
 	{
 		comps->cos_a = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, curr_lt->center, *comps))
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));
-			//*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_brdf(*comps, comps->mat), curr_lt->color));
-	
 	}
 }
 

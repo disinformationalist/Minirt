@@ -9,26 +9,26 @@ void	add_lt_color(t_light *light, char *line)
 	r = ft_round(light->color.r * 255.0);
 	g = ft_round(light->color.g * 255.0);
 	b = ft_round(light->color.b * 255.0);
-
-	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), "%d,%d,%d\n", r, g, b);
+	snprintf(line + ft_strlen(line), 200 - ft_strlen(line), \
+		"%d,%d,%d\n", r, g, b);
 }
 
 char	*build_lt_line(t_light *light)
 {
-	static char 	line[200];
-	t_point	cen;
-	double	bright;
-	int 	spaces;
-	int		spaces2;
+	static char		line[200];
+	t_point			cen;
+	double			bright;
+	int 			sp;
+	int				sp2;
 	
 	cen = light->center;
 	bright = light->brightness;
-	spaces = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
-	spaces2 = 20 - count_chars(bright); 
-	snprintf(line, sizeof(line), "L           %.3f,%.3f,%.3f%*s%.3f%*s", cen.x, cen.y, cen.z, spaces, "", bright, spaces2, "");
+	sp = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
+	sp2 = 20 - count_chars(bright); 
+	snprintf(line, sizeof(line), "L           %.3f,%.3f,%.3f%*s%.3f%*s", \
+		cen.x, cen.y, cen.z, sp, "", bright, sp2, "");
 	add_lt_color(light, line);
 
-	
 	return (line);
 }
 
@@ -61,7 +61,8 @@ void	write_lights(t_light *lights, int fd)
 	
 	if (lights == NULL || !count_lights(lights))
 		return ;
-	ft_putstr_fd("#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B\n", fd);
+	ft_putstr_fd("#Lights:    Cen_x | Cen_y | Cen_z 					"\
+		"			  Intensity               R | G | B\n", fd);
 	curr_lt = lights;
 	while (true)
 	{

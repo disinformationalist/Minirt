@@ -337,12 +337,10 @@ typedef struct t_comps
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
-
 //mesh
 t_norm_color	color_triangle(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			check_mesh(t_mesh *mesh, t_intersects *intersects, t_ray ray);
 void			free_mesh(t_mesh *mesh);
-void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_intersects *intersects);
 
 /***PARSING***/
 
@@ -379,7 +377,6 @@ void			check_al(char **line, char ***rt_file);
 void			check_tx(char **line, char ***rt_file);
 void			check_tri(char **line, char ***rt_file);
 
-
 //check line utils
 void			check_str_len(char **line, char ***rt_file, int num);
 int				check_param_num(char **line, int num);
@@ -406,7 +403,6 @@ double			get_double(char **str);
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
 bool			set_light(t_light **light, char **line);
-
 
 //***add list obs***
 bool			append_sp(t_sphere **start, char **line);
