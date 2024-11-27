@@ -2,18 +2,19 @@
 
 /* 	       soft
            spot
-          light 
+          light
          / 	|  \
         /  / \  \
        /  /   \  \
       /  /     \  \
-     /  /	    \  \
+     /  /       \  \
             ^     ^
             |     |
     inner cone  outer cone
 (full intensity)  (attenuating toward outer edge)*/	
 
 //get the spotlight strength
+
 static inline double get_spot_int(t_vec3 light_dir, t_light *splight)
 {
 	double	cos_theta;
@@ -34,7 +35,8 @@ static inline double	get_light_int(t_comps comps, t_mat mat)
 	double	spec;
 	double	light_int;
 
-	ref = subtract_vec(scale_vec(2 * comps.cos_a, comps.normal), comps.light_dir);
+	ref = subtract_vec(scale_vec(2 * comps.cos_a, comps.normal), \
+		comps.light_dir);
 	spec = pow(fmax(dot_product(ref, comps.eyev), 0), mat.shine);
 	light_int = mat.diff * fmax(comps.cos_a, 0.0) + mat.spec * spec;
 	return (light_int);
@@ -56,7 +58,7 @@ static inline t_vec3	pnt_on_light(t_light light, double u, double v)
 
 //delivers light intensity of light from an area light
 
-static inline double intensity_at(t_trace *trace, t_light light, t_comps *comps)
+static inline double inten_at(t_trace *trace, t_light lt, t_comps *comps)
 {
 	double	tot_int;
 	int		i;
@@ -66,12 +68,12 @@ static inline double intensity_at(t_trace *trace, t_light light, t_comps *comps)
 	tot_int = 0.0;
 	comps->sqlt_int = 0.0;
 	j = -1;
-	while (++j < light.vsteps)
+	while (++j < lt.vsteps)
 	{
 		i = -1;
-		while(++i < light.usteps)
+		while(++i < lt.usteps)
 		{
-			lt_pos = pnt_on_light(light, i, j);
+			lt_pos = pnt_on_light(lt, i, j);
 			comps->light_dir = norm_vec(subtract_vec(lt_pos, comps->point));
 			if (!obscured_b(trace, lt_pos, *comps))
 			{
@@ -81,16 +83,14 @@ static inline double intensity_at(t_trace *trace, t_light light, t_comps *comps)
 			}
 		}
 	}
-	comps->sqlt_int /= light.samples;
-	return (tot_int / light.samples);
+	comps->sqlt_int /= lt.samples;
+	return (tot_int / lt.samples);
 }
 
 //handle all non ambient light contribution for each source
 
 void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt)
 {
-	double sqlt_inten;
-	
 	if (curr_lt->type == SPOT)
 	{
 		comps->spot_int = get_spot_int(comps->light_dir, curr_lt);
@@ -98,19 +98,20 @@ void	handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_ligh
 		{
 			comps->cos_a = dot_product(comps->normal, comps->light_dir);
 			if (!obscured_b(trace, curr_lt->center, *comps))
-				*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * comps->spot_int * get_light_int(*comps, comps->mat), curr_lt->color));
+				*lt_color = sum_rgbs(*lt_color, \
+				mult_color(curr_lt->brightness * comps->spot_int \
+				* get_light_int(*comps, comps->mat), curr_lt->color));
 		}
 	}
 	else if (curr_lt->type == AREA)
-	{
-		sqlt_inten = intensity_at(trace, *curr_lt, comps);
-		*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * sqlt_inten * comps->sqlt_int, curr_lt->color));
-	}
+		*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness \
+		* inten_at(trace, *curr_lt, comps) * comps->sqlt_int, curr_lt->color));
 	else
 	{
 		comps->cos_a = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, curr_lt->center, *comps))
-			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness * get_light_int(*comps, comps->mat), curr_lt->color));
+			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness \
+			* get_light_int(*comps, comps->mat), curr_lt->color));
 	}
 }
 

@@ -51,7 +51,8 @@ static void events_init(t_trace *trace)
 	trace->on->type = SPHERE;
 	
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
-	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
+	mlx_hook(trace->mlx_win, DestroyNotify, \
+		StructureNotifyMask, close_win, trace);
 	mlx_hook(trace->mlx_win, ButtonPress, \
 	ButtonPressMask, mouse_handler, trace);
 }

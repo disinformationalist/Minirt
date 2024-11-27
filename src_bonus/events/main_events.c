@@ -6,7 +6,7 @@
 1 = sp list;
 2 = pl list;
 3 = cy list;
-4 = 4th object... todo (prisms?)
+4 = hy list;
 
 5 = cu list;
 
@@ -49,14 +49,7 @@ U,O => z dirs
 
 mouse wheel shifts color of on object or light.// layer2 textures
 
-NUM PAD 1 - 9 => change material of current object
---------------IN PROGRESS--------------------
-
-
------------------TODO--------------------
-
-//Color disruption
-*/
+NUM PAD 1 - 9 => change material of current object */
 
 int	close_win(t_trace *trace)
 {	
@@ -139,8 +132,6 @@ int key_press_3(int keycode, t_trace *trace)
 	return (0);
 }
 
-//arrows can use XK_LEFT, XK_RIGHT, XK_UP, XK_DOWN if needed for smthing
-
 //second layer of key press 2 controls, scale
 
 int	key_press_2layer(int keycode, t_trace *trace)
@@ -195,10 +186,6 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_pl->bump = !trace->curr_pl->bump;
 	else if (on->type == CYLINDER)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
-	/* else if (on->type == HYPERBOLOID)
-		trace->curr_hy->bump = !trace->curr_hy->bump;
-	else if (on->type == CUBE)
-		trace->curr_cu->bump = !trace->curr_cu->bump; */
 	else
 		return ;
 }
@@ -235,7 +222,6 @@ int	key_press_2(int keycode, t_trace *trace)
 
 int	key_press(int keycode, t_trace *trace)
 {
-	//printf("key: %d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == XK_Tab)
@@ -252,7 +238,7 @@ int	key_press(int keycode, t_trace *trace)
 		next_list_ob(trace, trace->on);
 	else if (keycode == PAD_MINUS)
 		prev_list_ob(trace, trace->on);
-	else if ((keycode == F1) | (keycode == F3))//add material to forge
+	else if ((keycode == F1) | (keycode == F3))
 		forge_or_export(keycode, trace);
 	else if (trace->layer)
 		key_press_2layer(keycode, trace);

@@ -1,5 +1,11 @@
 #include "minirt.h"
 
+/* 
+	triangle for future use.
+	else if (closest->t != INFINITY && closest->object_type == TRI)
+	color_out = color_triangle(trace, r, intersects, depths);
+	//color_out = color_tri(trace, r, intersects, depths); */
+
 /* builds intersect list, find and set closest object hit by ray
 list is automagically sorted, get smallest up through count that is > 0;
 stuff for later: group and subgroups test passed.
@@ -34,18 +40,18 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 
 unsigned int	clamped_col(t_norm_color col)
 {
-	t_color clamped;
+	t_color	clamped;
 	
 	clamped.r = clamp_color(col.r);
 	clamped.g = clamp_color(col.g);
 	clamped.b = clamp_color(col.b);
-
 	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
 }
 
 //checking for the closest intersection and computing color
 
-t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+t_norm_color	check_intersects(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	color_out;
 	t_track_hits	*closest;
@@ -64,15 +70,13 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, t_intersects *intersects,
 		color_out = color_hyperboloid(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
-	else if (closest->t != INFINITY && closest->object_type == TRI)
-		color_out = color_triangle(trace, r, intersects, depths);
-		//color_out = color_tri(trace, r, intersects, depths);
 	else
 		return (color(0, 0, 0));
 	return (color_out);
 }
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_intersects *intersects)
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
+	t_intersects *intersects)
 {
 	t_ray			r;
 	unsigned int	color;
@@ -84,12 +88,14 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_intersects *
 	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
+		current_pixel = add_vec(current_pixel, scale_vec(pos.j, \
+			trace->pix_delta_down));
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{
 			r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
-			color = clamped_col(check_intersects(trace, r, intersects, trace->depths));
+			color = clamped_col(check_intersects(trace, r, intersects, \
+				trace->depths));
 			my_pixel_put(pos.i, pos.j, &trace->img, color);
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}

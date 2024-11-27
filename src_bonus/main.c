@@ -24,6 +24,24 @@ int	is_rt_file_valid(char *filename)
 	return (1);
 }
 
+bool	run_trace(t_trace *trace)
+{
+	trace->num_cols = 1;
+	trace->num_rows = get_num_cores();
+	trace->threads = (pthread_t *)malloc(trace->num_rows \
+		* trace->num_cols * sizeof(pthread_t));
+	if (!trace->threads)
+	{
+		free_all_objects(trace);
+		printf("Error\n Thread Malloc failed\n");
+		return (1);
+	}
+	trace_init(trace);
+	render(trace);
+	mlx_loop(trace->mlx_connect);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	char		*file;
@@ -31,7 +49,8 @@ int	main(int ac, char **av)
 	t_trace		trace;
 	
 	if (ac != 2)
-		return (free_exit(NULL, "Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);
+		return (free_exit(NULL, \
+		"Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);
 	if (!is_rt_file_valid(av[1]))
 		return (free_exit(NULL, "Error\n Invalid rt file\n", NULL), 1);
 	file = ft_strjoin("rt_files/", av[1]);
@@ -41,25 +60,13 @@ int	main(int ac, char **av)
 	free(file);
 	if (!rt_file)
 		return (1);
-	parse_rt(&trace, rt_file);//PARSING
-	free_3d_array_i(rt_file, ft_3darray_len(rt_file));//free parsing tool 3d split rt_file
-//	free_all_objects(&trace);
-   // return (0);
-//----------------------------- multithread stuff here
-	trace.num_cols = 1;
-	trace.num_rows = get_num_cores();
-	//trace.num_rows = 1;
-	trace.threads = (pthread_t *)malloc(trace.num_rows * trace.num_cols * sizeof(pthread_t));
-	if (!trace.threads)
-	{
-		free_all_objects(&trace);
-		printf("Error: Thread Malloc failed\n");
-		return (EXIT_FAILURE);
-	}
-	trace_init(&trace);
-	render(&trace);
-	mlx_loop(trace.mlx_connect);
+	parse_rt(&trace, rt_file);
+	free_3d_array_i(rt_file, ft_3darray_len(rt_file));
+	if (run_trace(&trace))
+		return (1);
 	return (0);
 }
 	//print_3d_array(rt_file);
+//	free_all_objects(&trace);
+   // return (0);
 
