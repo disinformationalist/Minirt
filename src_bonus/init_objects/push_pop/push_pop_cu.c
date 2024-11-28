@@ -29,9 +29,7 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->h_height = 1.0;
 	new->h_depth = 1.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color.r = 0;
-	new->color.g = 0;
-	new->color.b = 200;
+	new->color = color(0, 0, 200);
 	identity(&transform);
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
@@ -80,11 +78,11 @@ bool	insert_cucopy_after(t_trace *trace, t_cube **current)
 	return (false);
 }
 
-static inline void set_empty_cubes(t_trace *trace)
+static inline void	set_empty_cubes(t_trace *trace)
 {
 	trace->cubes = NULL;
 	trace->curr_cu = NULL;
-	trace->on->object = trace->curr_cu;	
+	trace->on->object = trace->curr_cu;
 }
 
 //remove cube from list

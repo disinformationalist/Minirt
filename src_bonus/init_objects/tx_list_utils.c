@@ -1,4 +1,5 @@
 #include "minirt.h"
+
 void	null_init(t_tx *new)
 {
 	new->i_name = NULL;
@@ -7,9 +8,9 @@ void	null_init(t_tx *new)
 	new->bump_map = NULL;
 }
 
-t_tx *create_tx(char **line)
+t_tx	*create_tx(char **line)
 {
-	t_tx *new;
+	t_tx	*new;
 
 	new = (t_tx *)malloc(sizeof(t_tx));
 	if (!new)
@@ -35,8 +36,8 @@ t_tx *create_tx(char **line)
 
 bool	append_tx(t_tx **start, char **line)
 {
-	t_tx *new;
-	t_tx *last;
+	t_tx	*new;
+	t_tx	*last;
 
 	new = create_tx(line);
 	if (!new)

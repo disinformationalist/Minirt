@@ -1,5 +1,5 @@
 #include "minirt.h"
-		
+
 static inline void	scale_arealt(t_light *lt, t_vec3 v)
 {
 	lt->curr_scale = mat_mult(scaling(v.x, 1.0, v.z), lt->curr_scale);
@@ -15,7 +15,7 @@ static inline void	scale_arealt(t_light *lt, t_vec3 v)
 	set_arealt(lt);
 }
 
-static inline void scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == CYLINDER)
 	{
@@ -30,7 +30,7 @@ static inline void scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
 		return ;
 }
 
-static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == CUBE)
 	{
@@ -55,7 +55,7 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 		scale_object4(trace, on, vec1);
 }
 
-static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == HYPERBOLOID)
 	{

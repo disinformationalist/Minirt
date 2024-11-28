@@ -1,11 +1,10 @@
-
 #include "minirt.h"
 
 void	set_hy_vals(t_hyperboloid *new, char **line)
 {
-	char *rad1_str;
-	char *rad2_str;
-	char *height_str;	
+	char	*rad1_str;
+	char	*rad2_str;
+	char	*height_str;	
 
 	rad1_str = line[3];
 	rad2_str = line[4];
@@ -25,9 +24,9 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	new->texture = NULL;
 }
 
-t_hyperboloid *create_hyperboloid(char **line)
+t_hyperboloid	*create_hyperboloid(char **line)
 {
-	t_hyperboloid *new;
+	t_hyperboloid	*new;
 
 	new = (t_hyperboloid *)malloc(sizeof(t_hyperboloid));
 	if (!new)
@@ -40,8 +39,8 @@ t_hyperboloid *create_hyperboloid(char **line)
 
 bool	append_hy(t_hyperboloid **start, char **line)
 {
-	t_hyperboloid *new;
-	t_hyperboloid *last;
+	t_hyperboloid	*new;
+	t_hyperboloid	*last;
 
 	new = create_hyperboloid(line);
 	if (!new)

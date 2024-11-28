@@ -2,12 +2,12 @@
 
 char	*build_tx_line(t_tx *tx)
 {
-	static char 	line[200];
-	int 			spaces;
+	static char		line[200];
+	int				spaces;
 	size_t			dir_len;
 
 	dir_len = ft_strlen("textures/");
-	spaces = 36 - ft_strlen(tx->i_name);	
+	spaces = 36 - ft_strlen(tx->i_name);
 	if (tx->m_name)
 		snprintf(line, sizeof(line), "tx          %s%*s%s\n", \
 		tx->i_name + dir_len, spaces, "", tx->m_name + dir_len);
@@ -34,7 +34,7 @@ void	write_textures(t_tx *textures, int fd)
 		write(fd, line, ft_strlen(line));
 		curr_tx = curr_tx->next;
 		if (curr_tx == textures)
-			break;
+			break ;
 	}
 	write(fd, "\n\n", 2);
 }

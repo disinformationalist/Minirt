@@ -7,7 +7,6 @@
 2 = pl list;
 3 = cy list;
 4 = hy list;
-
 5 = cu list;
 
 9 = lt list;
@@ -24,21 +23,19 @@ F1	 F3								  NUM PAD
 |(rot)					(move)	|	|		  | pad - supersample level -1
 |			  SPACE		,	.	|	|		  | pad + supersample level +1
 +-------------------------------+	+---------+
-
 SPACE => supersample mode
 
-, => pop current object from current list // second layer scale down all axes, for reduce bright
-
-. => push new object to current list // second layer scale up all axes, for light increase bright
+, => pop current object from current list // second layer scale down all \
+	axes, for reduce bright
+. => push new object to current list // second layer scale up all axes, \
+	for light increase bright
 
 //TRANSLATION(first layer) //SCALE(second layer)  
-
 J,L => x dirs
 I,K => y dirs
 U,O => z dirs
 
 //ROTATION
-
 J,L => x dirs
 I,K => y dirs
 U,O => z dirs
@@ -46,29 +43,13 @@ U,O => z dirs
 //shadow toggle strg(right) key
 
 //COLOR SHIFT
-
-mouse wheel shifts color of on object or light.// layer2 textures
+mouse wheel shifts color of on object or light.
 
 NUM PAD 1 - 9 => change material of current object */
 
-int	close_win(t_trace *trace)
-{	
-	free_all_objects(trace);
-	free(trace->on);
-	free(trace->w_colors);
-	free(trace->m_colors);
-	mlx_destroy_image(trace->mlx_connect, trace->img.img_ptr);
-	mlx_destroy_window(trace->mlx_connect, trace->mlx_win);
-	mlx_destroy_display(trace->mlx_connect);
-	free(trace->mlx_connect);
-	free(trace->threads);
-	exit(EXIT_SUCCESS);
-	return (0);
-}
-
 //change material of current object
 
-int transfigure(int keycode, t_trace *trace)
+int	transfigure(int keycode, t_trace *trace)
 {
 	if (keycode == PAD_1)
 		change_mat(trace, trace->on, get_mat(DEFAULT));
@@ -93,25 +74,7 @@ int transfigure(int keycode, t_trace *trace)
 	return (0);
 }
 
-void	frost_on(t_trace *trace, t_on on)
-{
-	if (on.object == NULL)
-		return ;
-	if (on.type == PLANE)
-		trace->curr_pl->w_frost = !trace->curr_pl->w_frost;
-	else if (on.type == SPHERE)
-		trace->curr_sp->w_frost = !trace->curr_sp->w_frost;
-	else if (on.type == CYLINDER)
-		trace->curr_cy->w_frost = !trace->curr_cy->w_frost;
-	else if (on.type == CUBE)
-		trace->curr_cu->w_frost = !trace->curr_cu->w_frost;
-	else if (on.type == HYPERBOLOID)
-		trace->curr_hy->w_frost = !trace->curr_hy->w_frost;
-	else
-		return ;
-}
-
-int key_press_3(int keycode, t_trace *trace)
+int	key_press_3(int keycode, t_trace *trace)
 {
 	if (keycode == A)
 		rotate_object(trace, trace->on, rot_x(-M_PI / 12));
@@ -158,38 +121,6 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	return (0);
 }
 
-void	toggle_shadow(t_trace *trace, t_on *on)
-{
-	if (on->object == NULL)
-		return ;
-	if (on->type == SPHERE)
-		trace->curr_sp->shadow = !trace->curr_sp->shadow;
-	else if (on->type == PLANE)
-		trace->curr_pl->shadow = !trace->curr_pl->shadow;
-	else if (on->type == CYLINDER)
-		trace->curr_cy->shadow = !trace->curr_cy->shadow;
-	else if (on->type == HYPERBOLOID)
-		trace->curr_hy->shadow = !trace->curr_hy->shadow;
-	else if (on->type == CUBE)
-		trace->curr_cu->shadow = !trace->curr_cu->shadow;
-	else
-		return ;
-}
-
-void	toggle_bump(t_trace *trace, t_on *on)
-{
-	if (on->object == NULL)
-		return ;
-	if (on->type == SPHERE)
-		trace->curr_sp->bump = !trace->curr_sp->bump;
-	else if (on->type == PLANE)
-		trace->curr_pl->bump = !trace->curr_pl->bump;
-	else if (on->type == CYLINDER)
-		trace->curr_cy->bump = !trace->curr_cy->bump;
-	else
-		return ;
-}
-
 //translation, push, and pop functions
 
 int	key_press_2(int keycode, t_trace *trace)
@@ -219,6 +150,8 @@ int	key_press_2(int keycode, t_trace *trace)
 	render(trace);
 	return (0);
 }
+
+//top function for keypress events
 
 int	key_press(int keycode, t_trace *trace)
 {

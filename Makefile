@@ -152,7 +152,10 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/pl_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \
 ./src_bonus/events/main_events.c \
-./src_bonus/events/traverse_lists.c \
+./src_bonus/events/toggle_events.c \
+./src_bonus/events/set_tx.c \
+./src_bonus/events/prev_list_ob.c \
+./src_bonus/events/next_list_ob.c \
 ./src_bonus/events/switch_list.c \
 ./src_bonus/events/push_pop.c \
 ./src_bonus/events/translation.c \

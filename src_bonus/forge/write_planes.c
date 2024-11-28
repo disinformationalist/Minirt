@@ -2,24 +2,23 @@
 
 void	add_pl_color(t_plane *plane, char *line)
 {
-	int r;
-	int g;
-	int b;
+	int	r;
+	int	g;
+	int	b;
 
 	r = plane->color.r;
 	g = plane->color.g;
 	b = plane->color.b;
-
 	snprintf(line + ft_strlen(line), \
 		200 - ft_strlen(line), "%d,%d,%d\n", r, g, b);
 }
 
 char	*build_pl_line(t_plane *plane)
 {
-	static char 	line[200];
+	static char		line[200];
 	t_point			p;
 	t_vec3			n;
-	int 			spaces;
+	int				spaces;
 	t_matrix_4x4	transform;
 
 	transform = inverse(plane->transform);
@@ -34,13 +33,13 @@ char	*build_pl_line(t_plane *plane)
 	return (line);
 }
 
-//go through planes list adding each sphere to the file.
+//go through planes list adding each plane to the file.
 
-void write_planes(t_plane *planes, int fd)
+void	write_planes(t_plane *planes, int fd)
 {
 	t_plane		*curr_pl;
 	char		*line;
-	
+
 	if (planes == NULL)
 		return ;
 	ft_putstr_fd("#Planes:    Pnt_x | Pnt_y | Pnt_z      "
@@ -53,7 +52,7 @@ void write_planes(t_plane *planes, int fd)
 		write(fd, line, ft_strlen(line));
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
-			break;
+			break ;
 	}
 	write(fd, "\n\n", 2);
 }

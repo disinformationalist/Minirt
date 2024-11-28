@@ -2,13 +2,13 @@
 
 void	set_sp_vals(t_sphere *new, char **line)
 {
-	char *diam_str;
+	char	*diam_str;
 
 	diam_str = line[2];
 	new->center = get_coordinates(line[1], 1.0);
 	new->radius = get_double(&diam_str) / 2.0;
-	new->color = get_color(line[3], 1.0);	
-	new->mat = get_mat(DEFAULT);//handle getting from line in parse of rt, file, along with check for valid material option
+	new->color = get_color(line[3], 1.0);
+	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 	new->bump = false;
 	new->option = 0;
@@ -16,9 +16,9 @@ void	set_sp_vals(t_sphere *new, char **line)
 	new->texture = NULL;
 }
 
-t_sphere *create_sphere(char **line)
+t_sphere	*create_sphere(char **line)
 {
-	t_sphere *new;
+	t_sphere	*new;
 
 	new = (t_sphere *)malloc(sizeof(t_sphere));
 	if (!new)
@@ -31,8 +31,8 @@ t_sphere *create_sphere(char **line)
 
 bool	append_sp(t_sphere **start, char **line)
 {
-	t_sphere *new;
-	t_sphere *last;
+	t_sphere	*new;
+	t_sphere	*last;
 
 	new = create_sphere(line);
 	if (!new)

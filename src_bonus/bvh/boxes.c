@@ -47,12 +47,13 @@ void	add_pnt(t_box *box, t_point to_add)
 t_box	*bounds_of(t_type type)
 {
 	t_box	*new;
-	
+
 	if (type == SPHERE || type == CUBE)
 		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
 	if (type == PLANE)
-		new = box(vec(-INFINITY, 0, -INFINITY, 0), vec(INFINITY, 0, INFINITY, 0));
-	if (type == CYLINDER)//going to try to bound with half_h at 1..
+		new = box(vec(-INFINITY, 0, -INFINITY, 0), \
+		vec(INFINITY, 0, INFINITY, 0));
+	if (type == CYLINDER)
 		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
 	else
 		return (NULL);

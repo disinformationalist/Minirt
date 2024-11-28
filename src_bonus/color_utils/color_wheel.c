@@ -54,12 +54,13 @@ NOTE: saturation should be set between 0 and 1 (it is like brightness)
 lightness also between 0 and 1 (start at .5 for no lightness effect)
 setting the base_hue at 0 starts with first color as red. */
 
-t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue)
+t_norm_color	*set_color_wheel(int num_colors, double saturation, \
+	double lightness, int base_hue)
 {
 	int				i;
 	t_norm_color	*colors;
-	t_wheel 		co;
-	
+	t_wheel			co;
+
 	colors = (t_norm_color *)malloc(num_colors * sizeof(t_norm_color));
 	if (!colors)
 		return (NULL);

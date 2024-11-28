@@ -5,18 +5,20 @@ static inline void	set_lt_cube_transform2(t_cube *cube)
 	t_matrix_4x4	inv_rot;
 	t_matrix_4x4	inv_trans;
 
-	inv_rot = rot_to(cube->norm,  vec(0, 1, 0, 0));
+	inv_rot = rot_to(cube->norm, vec(0, 1, 0, 0));
 	inv_trans = translation(-cube->center.x, -cube->center.y, -cube->center.z);
 	cube->curr_rottran = mat_mult(inv_rot, inv_trans);
-	cube->curr_scale = inv_scaling(cube->h_width, cube->h_height, cube->h_depth);
-	cube->transform = (mat_mult(cube->curr_scale, cube->curr_rottran));	
+	cube->curr_scale = \
+		inv_scaling(cube->h_width, cube->h_height, cube->h_depth);
+	cube->transform = (mat_mult(cube->curr_scale, cube->curr_rottran));
 }
 
-static inline void	set_arealt_transform2(t_light *lt, double width, double length)
+static inline void	set_arealt_transform2(t_light *lt, double width, \
+	double length)
 {
 	t_matrix_4x4	rot;
 	t_matrix_4x4	trans;
-	
+
 	trans = translation(lt->center.x, lt->center.y, lt->center.z);
 	rot = rot_to(vec(0, 1, 0, 0), lt->dir);
 	lt->curr_rottran = mat_mult(rot, trans);
@@ -48,10 +50,10 @@ static inline t_cube	*set_lt_cube2(t_light *new, double wid, double len)
 }
 
 static inline bool	make_default_arealt(t_light **start, t_light *new)
-{	
-	new->area =  4;
+{
+	new->area = 4;
 	new->dir = vec(0, -1, 0, 0);
-	new->brightness =  0.75;
+	new->brightness = 0.75;
 	new->center = vec(0, 1, 0, 1);
 	new->color = color(1.0, 1.0, 1.0);
 	new->usteps = 4;

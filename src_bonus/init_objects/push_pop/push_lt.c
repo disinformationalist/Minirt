@@ -34,14 +34,13 @@ static inline void	make_default_lt(t_light **start, t_light *new)
 
 int	copy_arealt_cube(t_light *to_copy, t_light *new)
 {
-	t_cube *cube;
+	t_cube	*cube;
 
 	cube = (t_cube *)malloc(sizeof(t_cube));
 	if (!cube)
 		return (1);
 	new->emitter = cube;
 	*(new->emitter) = *(to_copy->emitter);
-	
 	return (0);
 }
 

@@ -2,9 +2,10 @@
 
 //cubetest //add params to t_pattern
 
-t_pattern uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br)
+/* t_pattern uv_align_check(t_norm_color main, t_norm_color ul, \
+	t_norm_color ur, t_norm_color bl, t_norm_color br)
 {
-	t_pattern pat;
+	t_pattern	pat;
 
 	pat.main = main;
 	pat.ul = ul;
@@ -12,7 +13,7 @@ t_pattern uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_
 	pat.bl = bl;
 	pat.br = br;
 	return (pat);
-}
+} */
 
 //bot face, rest in map_cube2.c
 
@@ -27,9 +28,9 @@ t_vec2	cu_uv_down(t_point pnt)
 
 //get correct cube face for a given point
 
-t_face face_of_pnt(t_point pnt)
+t_face	face_of_pnt(t_point pnt)
 {
-	double coord;
+	double	coord;
 
 	coord = fmax(fmax(fabs(pnt.x), fabs(pnt.y)), fabs(pnt.z));
 	if (coord == pnt.x)
@@ -47,7 +48,7 @@ t_face face_of_pnt(t_point pnt)
 
 //test with checkers soon
 
-t_vec2 cube_map(t_point obj_pnt)
+t_vec2	cube_map(t_point obj_pnt)
 {
 	t_face	face;
 	t_vec2	uv;

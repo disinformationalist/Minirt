@@ -5,7 +5,7 @@ TRANSFORM NEEDS TO BE THE REGULAR, NOT THE INVERSE AS IS CURRENTLY SET,
 add these to prims in set transforms
 ret null on fail */
 
-t_box *bops(t_shape *shape)
+t_box	*bops(t_shape *shape)
 {
 	return (transform_box(bounds_of(shape->type), shape->transform));
 }

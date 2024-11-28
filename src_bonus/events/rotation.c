@@ -19,7 +19,7 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 
 //rotates an area light, the light, not its emitter, lt uses forward transforms
 
-void rot_arealt(t_light *lt, t_matrix_4x4 rot)
+void	rot_arealt(t_light *lt, t_matrix_4x4 rot)
 {
 	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
@@ -85,13 +85,13 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 
 void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 {
-	t_vec3 up;
+	t_vec3	up;
 
 	up = vec(0, 1, 0, 0);
 	if (on->object == NULL)
 		return ;
 	else if (on->type == PLANE)
-	{	
+	{
 		trace->curr_pl->curr_rottran = \
 			mat_mult(rot, trace->curr_pl->curr_rottran);
 		trace->curr_pl->transform = \

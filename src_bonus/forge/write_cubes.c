@@ -2,9 +2,9 @@
 
 void	add_cu_color(t_cube *cyl, char *line)
 {
-	int r;
-	int g;
-	int b;
+	int	r;
+	int	g;
+	int	b;
 
 	r = cyl->color.r;
 	g = cyl->color.g;
@@ -15,7 +15,7 @@ void	add_cu_color(t_cube *cyl, char *line)
 
 char	*build_cu_line(t_cube *cu)
 {
-	static char 	line[200];
+	static char		line[200];
 	t_point			cen;
 	t_vec3			n;
 	double			w;
@@ -28,12 +28,12 @@ char	*build_cu_line(t_cube *cu)
 	w = (2.0 / cu->curr_scale.m[0][0]);
 	h = (2.0 / cu->curr_scale.m[1][1]);
 	snprintf(line, sizeof(line), \
-		"cu          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s%.3f%*s%.3f%*s",\
-		 cen.x, cen.y, cen.z, 13 - count_chars(cen.x) - count_chars(cen.y) \
-		 - count_chars(cen.z), "", n.x, n.y, n.z, 13 - count_chars(n.x) \
-		 - count_chars(n.y) - count_chars(n.z), "", w, 4 - count_chars(w), \
-		 "", h, 4 - count_chars(h), "", (2.0 / cu->curr_scale.m[2][2]), \
-		 4 - count_chars((2.0 / cu->curr_scale.m[2][2])), "");
+		"cu          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s%.3f%*s%.3f%*s", \
+		cen.x, cen.y, cen.z, 13 - count_chars(cen.x) - count_chars(cen.y) \
+		- count_chars(cen.z), "", n.x, n.y, n.z, 13 - count_chars(n.x) \
+		- count_chars(n.y) - count_chars(n.z), "", w, 4 - count_chars(w), \
+		"", h, 4 - count_chars(h), "", (2.0 / cu->curr_scale.m[2][2]), \
+		4 - count_chars((2.0 / cu->curr_scale.m[2][2])), "");
 	add_cu_color(cu, line);
 	return (line);
 }
@@ -57,7 +57,7 @@ void	write_cubes(t_cube *cubes, int fd)
 		write(fd, line, ft_strlen(line));
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
-			break;
+			break ;
 	}
 	write(fd, "\n\n", 2);
 }

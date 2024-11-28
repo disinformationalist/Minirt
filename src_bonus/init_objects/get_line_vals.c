@@ -2,9 +2,9 @@
 
 double	get_double(char **doub_str)
 {
-	int i;
-	double ret;
-	char str[50];
+	int		i;
+	double	ret;
+	char	str[50];
 
 	i = -1;
 	if (**doub_str == '-')
@@ -22,10 +22,10 @@ double	get_double(char **doub_str)
 	return (ret);
 }
 
-double get_rgb(char **s, double val)
+double	get_rgb(char **s, double val)
 {
-	int 	i;
-	char 	str[3];
+	int		i;
+	char	str[3];
 	int		chan_color;
 	double	norm_color;
 
@@ -37,7 +37,7 @@ double get_rgb(char **s, double val)
 	}
 	str[++i] = '\0';
 	chan_color = ft_atoi(str);
-	norm_color = (double)chan_color / val;//val is 255.0 or 1.0 
+	norm_color = (double)chan_color / val;
 	return (norm_color);
 }
 
@@ -46,7 +46,7 @@ double get_rgb(char **s, double val)
 
 t_norm_color	get_color(char *color_str, double val)
 {
-	t_norm_color color;
+	t_norm_color	color;
 
 	color.r = get_rgb(&color_str, val);
 	color_str++;
@@ -58,7 +58,7 @@ t_norm_color	get_color(char *color_str, double val)
 
 t_vec3	get_coordinates(char *coord_str, double w)
 {
-	t_vec3 coord;
+	t_vec3	coord;
 
 	coord.x = get_double(&coord_str);
 	coord_str++;

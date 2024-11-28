@@ -2,7 +2,7 @@
 
 t_norm_color	*set_metal_colors(void)
 {
-	t_norm_color *m_colors;
+	t_norm_color	*m_colors;
 
 	m_colors = (t_norm_color *)malloc(sizeof(t_norm_color) * 19);
 	if (!m_colors)
@@ -25,11 +25,11 @@ t_norm_color	*set_metal_colors(void)
 	m_colors[15] = (t_norm_color){0.898, 0.894, 0.886};
 	m_colors[16] = (t_norm_color){0.737, 0.56, 0.56};
 	m_colors[17] = (t_norm_color){1.0, 0.98, 0.94};
-	m_colors[18] = (t_norm_color){0.1, 0.1, 0.1};    
+	m_colors[18] = (t_norm_color){0.1, 0.1, 0.1};
 	return (m_colors);
 }
 
-double clamp(double val, double bot, double top)
+double	clamp(double val, double bot, double top)
 {
 	if (val < bot)
 		val = bot;
@@ -41,7 +41,8 @@ double clamp(double val, double bot, double top)
 /* combines color components, balances reflect and refract
 current in use, 0 - 255 object color, 0 - 1 light colors */
 
-t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color)
+t_norm_color	get_final_color4(t_trace *trace, t_comps comps, \
+	t_norm_color lt_color)
 {
 	t_norm_color	color_out;
 	t_mat			m;
@@ -49,23 +50,22 @@ t_norm_color get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_col
 	double			r2;
 
 	m = comps.mat;
-	//surface
 	color_out.r = comps.color.r * (lt_color.r + m.amb * trace->amb->color.r);
 	color_out.g = comps.color.g * (lt_color.g + m.amb * trace->amb->color.g);
 	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
 	if (m.ref > 0 && m.transp > 0)
 	{
-		r = schlick(comps);
-		r2 = 1.0 - r;
-		color_out.r += r * m.ref * comps.refl_col.r + r2 * m.transp * comps.refr_col.r;
-    	color_out.g += r * m.ref * comps.refl_col.g + r2 * m.transp * comps.refr_col.g;
-    	color_out.b += r * m.ref * comps.refl_col.b + r2 * m.transp * comps.refr_col.b;
+		r = schlick(comps) * m.ref;
+		r2 = (1.0 - r) * m.transp;
+		color_out.r += r * comps.refl_col.r + r2 * comps.refr_col.r;
+		color_out.g += r * comps.refl_col.g + r2 * comps.refr_col.g;
+		color_out.b += r * comps.refl_col.b + r2 * comps.refr_col.b;
 	}
 	else
 	{
-	 	color_out.r += m.ref * comps.refl_col.r + m.transp * comps.refr_col.r;
-    	color_out.g += m.ref * comps.refl_col.g + m.transp * comps.refr_col.g;
-   		color_out.b += m.ref * comps.refl_col.b + m.transp * comps.refr_col.b;
+		color_out.r += m.ref * comps.refl_col.r + m.transp * comps.refr_col.r;
+		color_out.g += m.ref * comps.refl_col.g + m.transp * comps.refr_col.g;
+		color_out.b += m.ref * comps.refl_col.b + m.transp * comps.refr_col.b;
 	}
 	return (color_out);
 }

@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline double get_diff(t_norm_color c1, t_norm_color c2)
+static inline double	get_diff(t_norm_color c1, t_norm_color c2)
 {
 	double	diff_sqr;
 	double	diff_sqg;
@@ -12,7 +12,8 @@ static inline double get_diff(t_norm_color c1, t_norm_color c2)
 	return (sqrt(diff_sqr + diff_sqg + diff_sqb));
 }
 
-static inline int	match_index(int num_colors, t_norm_color *colors, t_norm_color color)
+static inline int	match_index(int num_colors, t_norm_color *colors, \
+	t_norm_color color)
 {
 	int		i;
 	int		best_match;
@@ -29,7 +30,7 @@ static inline int	match_index(int num_colors, t_norm_color *colors, t_norm_color
 		{
 			best_match = i;
 			least_diff = avg_diff;
-		}   
+		}
 	}
 	return (best_match);
 }
@@ -85,11 +86,13 @@ void	rotate_colors(t_trace *trace, int button, t_norm_color *curr)
 	{
 		*curr = get_obj_color(trace->on);
 		if (get_diff(*curr, trace->w_colors[trace->color_i]) > .5)
-			trace->color_i = match_index(trace->num_colors, trace->w_colors, *curr);	
+			trace->color_i = match_index(trace->num_colors, \
+			trace->w_colors, *curr);
 		if (button == 5)
 			trace->color_i = (trace->color_i + 5) % trace->num_colors;
 		else if (button == 4)
-			trace->color_i = (trace->color_i - 5 + trace->num_colors) % trace->num_colors;
+			trace->color_i = (trace->color_i - 5 + trace->num_colors) \
+			% trace->num_colors;
 		set_obj_color(trace->on, trace->w_colors[trace->color_i]);
 	}
 	else

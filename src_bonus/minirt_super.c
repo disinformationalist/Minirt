@@ -1,6 +1,9 @@
 #include "minirt.h"
 
-static inline void	find_closest_s(t_trace *trace, t_ray ray, t_intersects *intersects)
+//super sample version in separate for optimization
+
+static inline void	find_closest_s(t_trace *trace, t_ray ray, \
+	t_intersects *intersects)
 {
 	int i;
 
@@ -15,17 +18,14 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, t_intersects *inter
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
-	
-	//check_triangles(trace->triangles, intersects, ray);
-	check_mesh(trace->mesh, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
 	if (i < intersects->count)
 	*(intersects->closest) = intersects->hits[i];
 }
 
-
-static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	color_out;
 	t_track_hits	*closest;
@@ -44,16 +44,15 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, t_interse
 		color_out = color_hyperboloid(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
-	else if (closest->t != INFINITY && closest->object_type == TRI)
-		color_out = color_triangle(trace, r, intersects, depths);
-		//color_out = color_tri(trace, r, intersects, depths);
 	else
 		return (color(0, 0, 0));
 	return (color_out);
 }
 
+//sampling each pixel multiple times, summing results
 
-static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_intersects *intersects, t_vec3 currpix)
+static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_vec3 currpix)
 {
 	int				k;
 	int				l;
@@ -79,7 +78,8 @@ static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, t_intersects *
 	return (sum);
 }
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_intersects *intersects)
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
+	t_intersects *intersects)
 {
 	t_ray			r;
 	t_point			current_pixel;
@@ -93,7 +93,8 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, t_intersects *
 	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel, scale_vec(pos.j, trace->pix_delta_down));
+		current_pixel = add_vec(current_pixel, \
+			scale_vec(pos.j, trace->pix_delta_down));
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{

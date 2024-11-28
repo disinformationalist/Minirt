@@ -17,7 +17,7 @@ void	write_amb(t_amb *amb, int fd)
 	int		r;
 	int		g;
 	int		b;
-	char 	line[200];
+	char	line[200];
 	double	ratio;
 
 	if (amb == NULL)
@@ -40,17 +40,17 @@ as well and set in rt_file */
 
 void	write_cam(t_cam *cam, int fd)
 {
-	char 	line[200];
+	char	line[200];
 	t_point	cen;
 	t_vec3	ori;
-	int 	sp;
+	int		sp;
 	int		sp2;
 
 	cen = cam->center;
 	ori = cam->orient;
 	ft_putstr_fd("#Camera:    Cen_x | Cen_y | Cen_z      "\
 		"Ori_x | Ori_y | Ori_z                 FOV\n", fd);
-	sp = 13 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z); 
+	sp = 13 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
 	sp2 = 24 - count_chars(ori.x) - count_chars(ori.y) - count_chars(ori.z);
 	snprintf(line, sizeof(line), \
 		"C           %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%d", \
@@ -77,8 +77,9 @@ void	forge_rt(const char *path, t_trace *trace)
 	write_spheres(trace->spheres, fd);
 	write_planes(trace->planes, fd);
 	write_cylinders(trace->cylinders, fd);
-	//write_hyperboloids(trace->hyperboloids, fd);
 	write_cubes(trace->cubes, fd);
 	write_textures(trace->textures, fd);
 	close(fd);
 }
+	
+	//write_hyperboloids(trace->hyperboloids, fd);

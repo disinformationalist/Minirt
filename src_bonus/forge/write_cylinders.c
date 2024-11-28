@@ -2,9 +2,9 @@
 
 void	add_cy_color(t_cylinder *cyl, char *line)
 {
-	int r;
-	int g;
-	int b;
+	int	r;
+	int	g;
+	int	b;
 
 	r = cyl->color.r;
 	g = cyl->color.g;
@@ -15,7 +15,7 @@ void	add_cy_color(t_cylinder *cyl, char *line)
 
 char	*build_cy_line(t_cylinder *cyl)
 {
-	static char 	line[200];
+	static char		line[200];
 	t_point			cen;
 	t_vec3			n;
 	double			d;
@@ -41,7 +41,7 @@ void	write_cylinders(t_cylinder *cylinders, int fd)
 {
 	t_cylinder		*curr_cy;
 	char			*line;
-	
+
 	if (cylinders == NULL)
 		return ;
 	ft_putstr_fd("#Cylinders: Cen_x | Cen_y | Cen_z      "
@@ -54,7 +54,7 @@ void	write_cylinders(t_cylinder *cylinders, int fd)
 		write(fd, line, ft_strlen(line));
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
-			break;
+			break ;
 	}
 	write(fd, "\n\n", 2);
 }

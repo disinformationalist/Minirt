@@ -15,10 +15,10 @@ void	forge_or_export(int keycode, t_trace *trace)
 		clear_all(trace);
 	if (keycode == F1)
 	{
-		forge_rt(name, trace);// bones only, uses snprintf
+		forge_rt(name, trace);
 		ft_putstr_color_fd(1, "RT FILE READY\n", BOLD_BRIGHT_BLUE);
 	}
-	else if (keycode == F3)//bones, uses png functions
+	else if (keycode == F3)
 	{
 		if (export_png(name, &trace->img, trace->width, trace->height) == -1)
 		{

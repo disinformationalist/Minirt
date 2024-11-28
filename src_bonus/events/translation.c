@@ -8,19 +8,21 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 	t_vec3	move;
 
 	right = cross_prod(trace->cam->true_up, trace->cam->orient);
-	move = scale_vec(vec1.x , right);
-	move = add_vec(move, scale_vec(vec1.y , trace->cam->true_up));
-	move = add_vec(move, scale_vec(vec1.z , trace->cam->orient));
+	move = scale_vec(vec1.x, right);
+	move = add_vec(move, scale_vec(vec1.y, trace->cam->true_up));
+	move = add_vec(move, scale_vec(vec1.z, trace->cam->orient));
 	trace->cam->center = add_vec(trace->cam->center, move);
 	reinit_viewing(trace);
 }
 
-void move_arealt(t_light *lt, t_vec3 v)
+void	move_arealt(t_light *lt, t_vec3 v)
 {
 	lt->curr_rottran = mat_mult(lt->curr_rottran, translation(v.x, v.y, v.z));
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
-	lt->emitter->curr_rottran = mat_mult(lt->emitter->curr_rottran, translation(-v.x, -v.y, -v.z));
-	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
+	lt->emitter->curr_rottran = mat_mult(lt->emitter->curr_rottran, \
+		translation(-v.x, -v.y, -v.z));
+	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, \
+		lt->emitter->curr_rottran);
 	set_arealt(lt);
 }
 
@@ -47,7 +49,6 @@ static inline void	translate_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 		return ;
 }
 
-
 // just a continuation of the function below it
 
 static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
@@ -71,7 +72,7 @@ static inline void	translate_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
 	}
 	else
-		translate_object3(trace, on, vec1);	
+		translate_object3(trace, on, vec1);
 }
 
 //moves current "on" object in x,y,z

@@ -24,6 +24,19 @@ int	is_rt_file_valid(char *filename)
 	return (1);
 }
 
+int	get_num_cores(void)
+{
+	int	num_cores;
+
+	num_cores = sysconf(_SC_NPROCESSORS_ONLN);
+	if (num_cores < 1)
+	{
+		perror("sysconf error\n");
+		return (1);
+	}
+	return (num_cores);
+}
+
 bool	run_trace(t_trace *trace)
 {
 	trace->num_cols = 1;
@@ -66,7 +79,3 @@ int	main(int ac, char **av)
 		return (1);
 	return (0);
 }
-	//print_3d_array(rt_file);
-//	free_all_objects(&trace);
-   // return (0);
-

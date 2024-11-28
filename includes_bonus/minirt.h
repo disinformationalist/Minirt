@@ -172,7 +172,7 @@ typedef struct s_helper_shape
 	t_shape				*primitive;
 }	t_helper_shape;
 
-typedef struct s_tri//in progress...may not need soon
+typedef struct s_tri
 {
 	int				id;
 	bool			shadow;
@@ -188,6 +188,8 @@ typedef struct s_tri//in progress...may not need soon
 	struct s_tri	*next;
 }	t_tri;
 
+//same struct for spot, area, and point lights
+
 typedef struct s_light
 {
 	t_vec3				center;
@@ -195,16 +197,11 @@ typedef struct s_light
 	t_norm_color		color;
 	t_ltype				type;
 	int					id;
-
 	t_vec3				dir;
-
 	int					photons;
-//stuff for sp lights
 	double				inner_cone;
 	double				outer_cone;
 	double				inv_conediff;
-
-//stuff for area
 	t_point				corner;
 	t_vec3				v1;
 	t_vec3				v2;
@@ -269,6 +266,8 @@ typedef struct s_trace
 	int				color_i;
 	int 			num_colors;
 
+	int				sl_count;
+	int				al_count;
 	//dimension and view
 	int				height;
 	int				width;
@@ -300,7 +299,6 @@ typedef struct s_piece
 	int				y_e;
 	t_trace			*trace;
 	t_intersects	*intersects;
-	unsigned int	seed;
 }	t_piece;
 
 typedef struct t_comps
@@ -370,10 +368,8 @@ void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 void			check_hy(char **line, char ***rt_file);
 void			check_cu(char **line, char ***rt_file);
-
 void			check_sl(char **line, char ***rt_file);
 void			check_al(char **line, char ***rt_file);
-
 void			check_tx(char **line, char ***rt_file);
 void			check_tri(char **line, char ***rt_file);
 
@@ -412,8 +408,6 @@ bool			append_hy(t_hyperboloid **start, char **line);
 bool			append_cu(t_cube **start, char **line);
 bool			append_tx(t_tx **start, char **line);
 bool			append_light(t_trace *trace, t_light **start, char **line);
-void			update_light_ids(t_light *light);
-
 bool			append_tri(t_tri **start, char **line);
 
 //copy and push new list obs, if empty make default
@@ -425,6 +419,7 @@ bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 bool			insert_ltcopy_after2(t_trace *trace);
 bool			insert_ltcopy_after3(t_trace *trace);
+
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
 void			pop_cy(t_trace *trace, t_cylinder **current);
@@ -503,10 +498,11 @@ void			check_triangles(t_tri *tris, t_intersects *intersects, t_ray ray);
 t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 //light utils
-void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);
+void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);//move
 void			set_arealt(t_light *lt);
 void			check_arealts(t_light *lights, t_intersects *intersects, t_ray ray);
 int				set_al_vals(t_trace *trace, t_light *new, char **line);
+void			update_light_ids(t_light *light);
 
 // reflect, refract
 double			schlick(t_comps comps);
@@ -581,6 +577,9 @@ t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, \
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);
 int				close_win(t_trace *trace);
+void			frost_on(t_trace *trace, t_on on);
+void			toggle_shadow(t_trace *trace, t_on *on);
+void			toggle_bump(t_trace *trace, t_on *on);
 void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
@@ -591,6 +590,7 @@ void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);
 int				mouse_handler(int button, int x, int y, t_trace *trace);
+void			set_next_tx(int button, t_tx *textures, t_on *on);
 void			forge_or_export(int keycode, t_trace *trace);
 char			*get_nxt_name_rt(char *name);
 
@@ -622,10 +622,8 @@ void			write_hyperboloids(t_hyperboloid *hyperboloids, int fd);
 void			write_lights(t_light *lights, int fd);
 void			write_splights(t_light *lights, int fd);
 void			write_arealights(t_light *lights, int fd);
-
 void			write_cubes(t_cube *cubes, int fd);
 void			write_textures(t_tx *textures, int fd);
-
 int				count_chars(double n);
 void			check_tolerance(t_vec3 *vec);
 

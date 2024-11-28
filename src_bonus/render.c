@@ -1,6 +1,7 @@
 #include "minirt.h"
 
-static inline void free_all(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
+static inline void free_all(t_trace *trace, \
+	t_piece piece[][trace->num_cols], int i, int j)
 {
 	free_closests(trace, piece, i, j);
 	clear_all(trace);

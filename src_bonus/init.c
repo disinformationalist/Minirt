@@ -1,23 +1,23 @@
 #include "minirt.h"
 /*-------------VIEWPORT DIAGRAM-----------Best I could manage in ascii chars :(
-			 |\
- 			 | \				Using LEFT Handed Coordinates(for everything)
- 			 |  \ 
- 			 |   \								Y+ (up screen)
- 			 |	  \==> viewport width			|
-			/|\    \							|	
- 		   / | \	\	+-----------------+		| 
- 		  /	 |	\	 \	| SCENE GOES HERE |		\--------Z+ (into screen)
-		 /	 |	 \	  \	+-----------------+	     \
+             |\
+             | \				Using LEFT Handed Coordinates(for everything)
+             |  \ 
+             |   \								Y+ (up screen)
+             |	  \==> viewport width			|
+            /|\    \							|	
+           / | \	\	+-----------------+		| 
+          /	 |	\	 \	| SCENE GOES HERE |		\--------Z+ (into screen)
+         /	 |	 \	  \	+-----------------+	     \
 (cam){o}----------\	  |		   				 	  \
-  		  |   \	   \  |							   \
-   		  |    \	\ | 							X+ (rightward along screen)
-    	  | 	\	 \|
-      focal_len	 \	  |==> viewport height
+          |   \	   \  |							   \
+          |    \	\ | 							X+ (rightward along screen)
+          | 	\	 \|
+    focal_len	 \	  |==> viewport height
  (dash from cam)  \	  |
-	   			   \  |
-					\ |
-					 \|
+                   \  |
+                    \ |
+                     \|
 
  view_width = 2 * focal_len * tan(horizontal_FOV / 2)// moved focal len adj.
  ----------------------------------------------------------------------------*/
@@ -49,7 +49,6 @@ static void events_init(t_trace *trace)
 {
 	trace->on->object = trace->spheres;
 	trace->on->type = SPHERE;
-	
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
 	mlx_hook(trace->mlx_win, DestroyNotify, \
 		StructureNotifyMask, close_win, trace);

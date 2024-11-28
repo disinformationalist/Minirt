@@ -27,17 +27,17 @@ static char	*ft_strjoin_rt(char const *s1, char const *s2)
 	return (result);
 }
 
-char *get_nxt_name_rt(char *name)
+char	*get_nxt_name_rt(char *name)
 {
 	static int	i = 0;
 	char		*next_name;
 	char		*num;
-	
+
 	i++;
 	num = ft_itoa(i);
 	if (!num)
 		return (NULL);
-	next_name = ft_strjoin_rt((const char*)name, (const char*)num);
+	next_name = ft_strjoin_rt((const char *)name, (const char *)num);
 	free(num);
 	if (!next_name)
 		return (NULL);
@@ -48,7 +48,7 @@ char *get_nxt_name_rt(char *name)
 		num = ft_itoa(i);
 		if (!num)
 			return (NULL);
-		next_name = ft_strjoin_rt((const char*)name, (const char*)num);
+		next_name = ft_strjoin_rt((const char *)name, (const char *)num);
 		free(num);
 	}
 	if (!next_name)

@@ -2,13 +2,13 @@
 
 //maps the obj pnt to spherical, returns uv
 
-t_map sphere_map(t_point obj_pnt)
+t_map	sphere_map(t_point obj_pnt)
 {
 	t_map	map;
-	
+
 	obj_pnt.w = 0;
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
-	map.phi = acos(obj_pnt.y);	
+	map.phi = acos(obj_pnt.y);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
 	map.v = 1 - map.phi / M_PI;
 	return (map);
@@ -16,7 +16,7 @@ t_map sphere_map(t_point obj_pnt)
 
 //mapping point to plane
 
-t_map planar_map(t_point obj_pnt)
+t_map	planar_map(t_point obj_pnt)
 {
 	t_map	map;
 
@@ -27,10 +27,10 @@ t_map planar_map(t_point obj_pnt)
 
 //cylinder map
 
-t_map cylinder_map(t_point obj_pnt)
+t_map	cylinder_map(t_point obj_pnt)
 {
 	t_map	map;
-	
+
 	map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
@@ -41,7 +41,7 @@ t_map cylinder_map(t_point obj_pnt)
 	return (map);
 }
 
-t_norm_color uv_pattern_at(t_pattern check, t_vec2 uv)
+t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv)
 {
 	if (uv.y > .8)
 	{

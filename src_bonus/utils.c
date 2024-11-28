@@ -1,11 +1,12 @@
 #include "minirt.h"
 
 //random between -1 and 1
+//precomp hrmax?
 
 double	randf2(void)
 {
-	double hrmax = ((double)RAND_MAX / 2.0);//precompute this!! and use bitshift
-	return (((double)rand() / hrmax) - 1.0);//check if double on rand needed
+	double hrmax = ((double)RAND_MAX / 2.0);
+	return (((double)rand() / hrmax) - 1.0);
 }
 
 int	ft_round(double num)

@@ -4,13 +4,13 @@ void	set_arealt_transform(t_light *lt, double width, double length)
 {
 	t_matrix_4x4	rot;
 	t_matrix_4x4	trans;
-	
+
 	trans = translation(lt->center.x, lt->center.y, lt->center.z);
 	rot = rot_to(vec(0, 1, 0, 0), lt->dir);
 	lt->curr_rottran = mat_mult(rot, trans);
 	lt->curr_scale = scaling(width / 2, 1.0, length / 2);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
-	lt->samples = lt->usteps * lt->vsteps;//moved these two for norm
+	lt->samples = lt->usteps * lt->vsteps;
 	lt->type = AREA;
 }
 
@@ -29,14 +29,15 @@ void	set_lt_cube_transform(t_cube *cube)
 	t_matrix_4x4	inv_rot;
 	t_matrix_4x4	inv_trans;
 
-	inv_rot = rot_to(cube->norm,  vec(0, 1, 0, 0));
+	inv_rot = rot_to(cube->norm, vec(0, 1, 0, 0));
 	inv_trans = translation(-cube->center.x, -cube->center.y, -cube->center.z);
 	cube->curr_rottran = mat_mult(inv_rot, inv_trans);
-	cube->curr_scale = inv_scaling(cube->h_width, cube->h_height, cube->h_depth);
-	cube->transform = (mat_mult(cube->curr_scale, cube->curr_rottran));	
+	cube->curr_scale = \
+		inv_scaling(cube->h_width, cube->h_height, cube->h_depth);
+	cube->transform = (mat_mult(cube->curr_scale, cube->curr_rottran));
 }
 
-t_cube *set_lt_cube(t_light *new, double wid, double len)
+t_cube	*set_lt_cube(t_light *new, double wid, double len)
 {
 	t_cube	*cube;
 

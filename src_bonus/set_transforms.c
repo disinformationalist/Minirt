@@ -16,10 +16,8 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->transform = (mat_mult(curr_sp->curr_scale, curr_sp->curr_rottran));
 			curr_sp->t_transform = transpose(curr_sp->transform);
 			curr_sp->i_transform = inverse(curr_sp->transform);
-
 			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
 			curr_sp->texture = trace->textures;
-
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break;
@@ -46,10 +44,7 @@ void	set_pl_transforms(t_trace *trace)
 			curr_pl->t_transform = transpose(curr_pl->transform);
 			curr_pl->i_transform = inverse(curr_pl->transform);		
 			curr_pl->norm = norm_vec(mat_vec_mult(curr_pl->t_transform, vec(0, 1, 0, 0)));
-
 			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
-
-//			curr_pl->pattern = uv_align_check(color(255, 255, 255), color(255, 0, 0), color(255, 255, 0), color(0, 255, 0), color(0, 255, 255));
 			curr_pl->texture = trace->textures;
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
@@ -79,9 +74,7 @@ void	set_cy_transforms(t_trace *trace)
 			//finish getting proportion right here...
 			curr_cy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), color(255, 255, 255));
 			//curr_cy->pattern = uv_checker(16 , 4, color(40, 40, 40), color(255, 255, 255));
-
 			curr_cy->texture = trace->textures;
-
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break;
