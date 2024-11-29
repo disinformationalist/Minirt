@@ -22,9 +22,9 @@ t_vec3	div_vec(double scalar, t_vec3 vec)
 	return (res);
 }
 
-t_vec3 neg(t_vec3 vec)
+t_vec3	neg(t_vec3 vec)
 {
-	t_vec3 neg;
+	t_vec3	neg;
 
 	neg.x = -vec.x;
 	neg.y = -vec.y;

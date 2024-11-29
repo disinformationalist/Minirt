@@ -2,9 +2,9 @@
 
 void	set_cu_vals(t_cube *new, char **line)
 {
-	char *width_str;
-	char *height_str;	
-	char *depth_str;	
+	char	*width_str;
+	char	*height_str;	
+	char	*depth_str;	
 
 	width_str = line[3];
 	height_str = line[4];
@@ -24,9 +24,9 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->emitter = false;
 }
 
-t_cube *create_cube(char **line)
+t_cube	*create_cube(char **line)
 {
-	t_cube *new;
+	t_cube	*new;
 
 	new = (t_cube *)malloc(sizeof(t_cube));
 	if (!new)
@@ -39,8 +39,8 @@ t_cube *create_cube(char **line)
 
 bool	append_cu(t_cube **start, char **line)
 {
-	t_cube *new;
-	t_cube *last;
+	t_cube	*new;
+	t_cube	*last;
 
 	new = create_cube(line);
 	if (!new)

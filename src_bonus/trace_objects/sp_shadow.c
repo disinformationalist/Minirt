@@ -1,10 +1,10 @@
 #include "minirt.h"
 
-static inline bool check_solutions2(double a, double b, double c, double dist)
+static inline bool	check_solutions2(double a, double b, double c, double dist)
 {
 	double	discrim;
 	double	inv_2a;
-	double 	sq_discrim;
+	double	sq_discrim;
 	double	sol;
 
 	discrim = b * b - 4 * a * c;
@@ -21,7 +21,8 @@ static inline bool check_solutions2(double a, double b, double c, double dist)
 	return (false);
 }
 
-static inline bool	ray_sphere_intersect2(t_sphere sphere, t_ray ray, double dist)
+static inline bool	ray_sphere_intersect2(t_sphere sphere, \
+t_ray ray, double dist)
 {
 	double	a;
 	double	b;
@@ -51,7 +52,7 @@ bool	check_sp_dist(t_sphere *spheres, t_ray ray, double dist)
 			return (true);
 		curr_sp = curr_sp->next;
 		if (curr_sp == spheres)
-			break;
+			break ;
 	}
 	return (false);
 }

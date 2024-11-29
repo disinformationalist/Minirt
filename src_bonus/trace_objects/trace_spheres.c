@@ -1,11 +1,11 @@
 #include "minirt.h"
 
-static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)
+static inline bool	check_solutions(t_vec3 abc, double *t1, double *t2)
 {
 	double	discrim;
 	double	inv_2a;
-	double 	sq_discrim;
-	
+	double	sq_discrim;
+
 	discrim = abc.y * abc.y - 4 * abc.x * abc.z;
 	if (discrim < 1e-5)
 		return (false);
@@ -18,7 +18,8 @@ static inline bool check_solutions(t_vec3 abc, double *t1, double *t2)
 
 //using object space
 
-void	ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects)
+void	ray_sphere_intersect(t_sphere *sphere, t_ray ray, \
+t_intersects *intersects)
 {
 	double	t1;
 	double	t2;
@@ -41,7 +42,7 @@ void	ray_sphere_intersect(t_sphere *sphere, t_ray ray, t_intersects *intersects)
 
 void	intersect(t_intersects *intersects, void *object, double t, t_type type)
 {
-	int i;
+	int	i;
 
 	i = intersects->count - 1;
 	while (i >= 0 && intersects->hits[i].t > t)
@@ -68,6 +69,6 @@ void	check_spheres(t_sphere *spheres, t_intersects *intersects, t_ray ray)
 		ray_sphere_intersect(curr_sp, ray, intersects);
 		curr_sp = curr_sp->next;
 		if (curr_sp == spheres)
-			break;
+			break ;
 	}
 }

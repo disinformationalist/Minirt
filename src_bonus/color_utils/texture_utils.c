@@ -6,7 +6,7 @@ t_norm_color	pixel_color_get(int x, int y, t_img *img)
 {
 	unsigned int	pixcolor;
 	t_norm_color	pixel_color;
-	int 			offset;
+	int				offset;
 
 	offset = y * img->line_len + (x * (img->bpp / 8));
 	pixcolor = *(unsigned int *)(img->pixels_ptr + offset);
@@ -27,11 +27,11 @@ static inline t_vec2	set_plane_uv(t_point obj_pnt, double img_iasp)
 	double	zmax;
 	t_vec2	uv;
 
-	xmin =  -5;
-	xmax =  5;
+	xmin = -5;
+	xmax = 5;
 	zmin = xmin * img_iasp;
 	zmax = xmax * img_iasp;
-	uv.x =  (obj_pnt.x - xmin) / (xmax - xmin);
+	uv.x = (obj_pnt.x - xmin) / (xmax - xmin);
 	uv.y = (obj_pnt.z - zmin) / (zmax - zmin);
 	if (uv.x < 0)
 		uv.x = -uv.x;
@@ -42,7 +42,7 @@ static inline t_vec2	set_plane_uv(t_point obj_pnt, double img_iasp)
 	return (uv);
 }
 
-t_norm_color texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
+t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
 {
 	t_norm_color	col;
 	t_vec2			uv;
@@ -61,13 +61,13 @@ t_norm_color texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
 	return (col);
 }
 
-t_norm_color texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps)
+t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps)
 {
 	t_norm_color	col;
 	t_position		pos;
 	t_position		dims;
 	t_map			map;
-	
+
 	dims.i = cyl.texture->i_width;
 	dims.j = cyl.texture->i_height;
 	map = cylinder_map(obj_pnt);
@@ -81,13 +81,13 @@ t_norm_color texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps)
 	return (col);
 }
 
-t_norm_color texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)
+t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 {
 	t_norm_color	col;
 	t_position		pos;
 	t_position		dims;
 	t_map			map;
-	
+
 	dims.i = sphere.texture->i_width;
 	dims.j = sphere.texture->i_height;
 	map = sphere_map(obj_pnt);

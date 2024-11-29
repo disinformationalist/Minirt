@@ -4,7 +4,7 @@
 
 bool	veccmp(t_vec3 v1, t_vec3 v2)
 {
-	double eps;
+	double	eps;
 
 	eps = 1e-6;
 	if (fabs(v1.x - v2.x) > eps)
@@ -18,9 +18,9 @@ bool	veccmp(t_vec3 v1, t_vec3 v2)
 
 //uses rodrigues rotation formula to get inverse rotation
 
-t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
+t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin)
 {
-	t_matrix_4x4 	res;
+	t_matrix_4x4	res;
 	double			t;
 
 	t = 1 - cos;
@@ -34,7 +34,7 @@ t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
 	res.m[1][3] = 0;
 	res.m[2][0] = t * ax.x * ax.z - sin * ax.y;
 	res.m[2][1] = t * ax.y * ax.z + sin * ax.x;
-	res.m[2][2] = t * ax.z * ax.z  + cos;
+	res.m[2][2] = t * ax.z * ax.z + cos;
 	res.m[2][3] = 0;
 	res.m[3][0] = 0;
 	res.m[3][1] = 0;
@@ -43,9 +43,9 @@ t_matrix_4x4 get_rotation(t_vec3 ax, double cos, double sin)
 	return (res);
 }
 
-// takes a vec "from" to rotate to "to" returns the matrix to rotate from into to
+// takes a vec "from" rotates to "to" returns the matrix to rotate from into to
 
-t_matrix_4x4 rot_to(t_vec3 from, t_vec3 to)
+t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to)
 {
 	t_matrix_4x4	res;
 	t_vec3			axis;

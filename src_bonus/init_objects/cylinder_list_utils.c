@@ -2,8 +2,8 @@
 
 void	set_cy_vals(t_cylinder *new, char **line)
 {
-	char *diam_str;
-	char *height_str;	
+	char	*diam_str;
+	char	*height_str;	
 
 	diam_str = line[3];
 	height_str = line[4];
@@ -21,9 +21,9 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->texture = NULL;
 }
 
-t_cylinder *create_cylinder(char **line)
+t_cylinder	*create_cylinder(char **line)
 {
-	t_cylinder *new;
+	t_cylinder	*new;
 
 	new = (t_cylinder *)malloc(sizeof(t_cylinder));
 	if (!new)
@@ -36,8 +36,8 @@ t_cylinder *create_cylinder(char **line)
 
 bool	append_cy(t_cylinder **start, char **line)
 {
-	t_cylinder *new;
-	t_cylinder *last;
+	t_cylinder	*new;
+	t_cylinder	*last;
 
 	new = create_cylinder(line);
 	if (!new)

@@ -1,18 +1,21 @@
 #include "minirt.h"
-		
+
 static inline void	scale_arealt(t_light *lt, t_vec3 v)
 {
 	lt->curr_scale = mat_mult(scaling(v.x, 1.0, v.z), lt->curr_scale);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
-	lt->emitter->curr_scale = mat_mult(inv_scaling(v.x, 1.0, v.z), lt->emitter->curr_scale);
-	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, lt->emitter->curr_rottran);
-	lt->emitter->color = mult_color(1.0 / lt->emitter->bright, lt->emitter->color);
+	lt->emitter->curr_scale = mat_mult(inv_scaling(v.x, 1.0, v.z), \
+		lt->emitter->curr_scale);
+	lt->emitter->transform = mat_mult(lt->emitter->curr_scale, \
+		lt->emitter->curr_rottran);
+	lt->emitter->color = mult_color(1.0 / lt->emitter->bright, \
+		lt->emitter->color);
 	lt->emitter->color = mult_color(lt->brightness, lt->emitter->color);
 	lt->emitter->bright = lt->brightness;
 	set_arealt(lt);
 }
 
-static inline void scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == CYLINDER)
 	{
@@ -27,7 +30,7 @@ static inline void scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
 		return ;
 }
 
-static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == CUBE)
 	{
@@ -52,7 +55,7 @@ static inline void scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 		scale_object4(trace, on, vec1);
 }
 
-static inline void scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
+static inline void	scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
 	if (on->type == HYPERBOLOID)
 	{

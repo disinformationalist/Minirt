@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 //update the id numbers of all hyperboloids in the list
@@ -50,7 +49,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->texture = NULL;
 }
 
-//copy a hyperboloid and place it immediately after the current hyperboloid in the list
+//copy a hype and place it immediately after the current hype in the list
 
 bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
 {
@@ -79,11 +78,11 @@ bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
 	return (false);
 }
 
-static inline void set_empty_hyperboloids(t_trace *trace)
+static inline void	set_empty_hyperboloids(t_trace *trace)
 {
 	trace->hyperboloids = NULL;
 	trace->curr_hy = NULL;
-	trace->on->object = trace->curr_hy;	
+	trace->on->object = trace->curr_hy;
 }
 
 //remove hyperboloid from list

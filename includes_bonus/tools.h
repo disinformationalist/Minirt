@@ -78,6 +78,8 @@ typedef struct s_triangle
 	t_vec3	norm;
 } t_triangle;
 
+//mesh not currently used
+
 typedef struct s_mesh
 {
 	t_vec3			*verts;
@@ -85,8 +87,6 @@ typedef struct s_mesh
 	int				num_verts;
 	int 			num_tris;
 	t_mat			mat;
-	//t_position	center;
-	//t_matrix_4x4	transform;
 	t_norm_color	color;
 	t_type			MESH;
 }	t_mesh;
@@ -281,8 +281,6 @@ typedef struct s_obj_counts
 	int				tri_count;
 }	t_obj_counts;
 
-//mesh
-t_mesh			*parse_obj(char *filename);
 
 //some util functions
 

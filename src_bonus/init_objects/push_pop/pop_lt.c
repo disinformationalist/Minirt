@@ -1,13 +1,14 @@
 #include "minirt.h"
 
-static inline void set_empty_lights(t_trace *trace)
+static inline void	set_empty_lights(t_trace *trace)
 {
 	trace->lights = NULL;
 	trace->curr_lt = NULL;
 	trace->on->object = trace->curr_lt;
 }
 
-void	adj_pntrs_destroy(t_trace *trace, t_light *to_destroy, t_light *prev_lt, t_light *next_lt)
+void	adj_pntrs_destroy(t_trace *trace, t_light *to_destroy, \
+	t_light *prev_lt, t_light *next_lt)
 {
 	prev_lt = to_destroy->prev;
 	next_lt = to_destroy->next;

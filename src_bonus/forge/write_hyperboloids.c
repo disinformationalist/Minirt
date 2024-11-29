@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 void	add_hy_color(t_hyperboloid *hyp, char *line)
@@ -48,7 +47,7 @@ char	*build_hy_line(t_hyperboloid *hyp)
 
 void	write_hyperboloids(t_hyperboloid *hyperboloids, int fd)
 {
-	t_hyperboloid		*curr_hy;
+	t_hyperboloid	*curr_hy;
 	char			*line;
 	
 	if (hyperboloids == NULL)

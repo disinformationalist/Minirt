@@ -1,6 +1,6 @@
-# include "minirt.h"
+#include "minirt.h"
 
-int		error_1(t_png_io *png_img, const char *msg)
+int	error_1(t_png_io *png_img, const char *msg)
 {
 	perror(msg);
 	fclose(png_img->fp);
@@ -33,7 +33,7 @@ void	clean_memory(t_png_io *png_img, int j, bool export)
 	if (export)
 		png_destroy_write_struct(&png_img->png_ptr, &png_img->info);
 	else
-    	png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
+		png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
 	fclose(png_img->fp);
 	free(png_img);
 }

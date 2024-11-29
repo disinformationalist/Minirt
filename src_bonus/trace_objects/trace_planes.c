@@ -23,28 +23,26 @@ void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 		ray_plane_intersect(curr_pl, ray, intersects);
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
-			break;
+			break ;
 	}
 }
 
 //for setting colors/patterns/txs/bump  0 = col, 1 = text, 2 = pattern
 
-t_norm_color set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
+t_norm_color	set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 {
-	t_norm_color out;
+	t_norm_color	out;
 
 	if (plane.option == 1)
 	{
 		out = texture_plane_at(obj_pnt, plane, comps);
 		if (plane.bump && !plane.sine)
 			bump_pl(obj_pnt, plane, comps);
-			//can make option for color to be normal color
 	}
 	else if (plane.option == 2)
-		out = pattern_at(plane.pattern,  planar_map(obj_pnt));
+		out = pattern_at(plane.pattern, planar_map(obj_pnt));
 	else
 		out = plane.color;
-		//out = uv_pattern_at(plane.pattern,  planar_map(obj_pnt));
 	if (plane.sine)
 		sine_ring_norm(obj_pnt, comps, plane);
 	return (out);
@@ -53,13 +51,13 @@ t_norm_color set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
-	t_point obj_pnt;
-	
+	t_point	obj_pnt;
+
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	obj_pnt = mat_vec_mult(plane->transform, comps.point);
-	comps.normal = plane->norm;	
+	comps.normal = plane->norm;
 	comps.eyev = neg(r.dir);
 	comps.mat = plane->mat;
 	if (comps.mat.transp)
@@ -79,29 +77,30 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r)
 	return (comps);
 }
 
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+t_norm_color	color_plane(t_trace *trace, t_ray r, \
+t_intersects *intersects, t_depths depths)
 {
 	t_plane			*plane;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	t_light			*curr_lt;
+	t_light			*lt;
 
 	plane = (t_plane *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
 	comps = set_plcomps(plane, intersects, r);
 	if (trace->lights)
 	{
-		curr_lt = trace->lights;
+		lt = trace->lights;
 		while (true)
 		{
-			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
-			handle_light(trace, &comps, &lt_color, curr_lt);
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
-				break;
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light(trace, &comps, &lt_color, lt);
+			lt = lt->next;
+			if (lt == trace->lights)
+				break ;
 		}
 	}
 	comps.refl_col = get_reflected(trace, comps, intersects, depths);
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color4(trace, comps, lt_color));	
+	return (get_final_color4(trace, comps, lt_color));
 }

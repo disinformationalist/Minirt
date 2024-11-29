@@ -1,6 +1,7 @@
 #include "minirt.h"
 
-static inline t_vec3 cyl_normal_at(t_point int_pnt, t_cylinder cyl, t_comps *comps) 
+static inline t_vec3	cyl_normal_at(t_point int_pnt, \
+t_cylinder cyl, t_comps *comps)
 {
 	t_vec3	norm;
 	double	dist;
@@ -29,7 +30,8 @@ static inline t_vec3 cyl_normal_at(t_point int_pnt, t_cylinder cyl, t_comps *com
 	return (norm_vec(norm));
 }
 
-static inline t_norm_color set_cyl_color(t_comps *comps, t_cylinder cylinder, t_point obj_pnt)
+static inline t_norm_color	set_cyl_color(t_comps *comps, \
+t_cylinder cylinder, t_point obj_pnt)
 {
 	t_norm_color	out;
 
@@ -39,7 +41,7 @@ static inline t_norm_color set_cyl_color(t_comps *comps, t_cylinder cylinder, t_
 		if (cylinder.bump)
 		{
 			if (cylinder.bump)
-			bump_cy(obj_pnt, cylinder, comps);
+				bump_cy(obj_pnt, cylinder, comps);
 		}
 	}
 	else if (cylinder.option == 2)
@@ -49,11 +51,12 @@ static inline t_norm_color set_cyl_color(t_comps *comps, t_cylinder cylinder, t_
 	return (out);
 }
 
-static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects, t_ray r)
+static inline t_comps	set_cycomps(t_cylinder *cylinder, \
+t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
 	t_point	obj_pnt;
-	
+
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
@@ -74,33 +77,34 @@ static inline t_comps	set_cycomps(t_cylinder *cylinder, t_intersects *intersects
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_cyl_color(&comps, *cylinder, obj_pnt);
 	if (cylinder->w_frost)
-		comps.normal = frost(comps.normal);	
+		comps.normal = frost(comps.normal);
 	return (comps);
 }
 
-t_norm_color color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+t_norm_color	color_cylinder(t_trace *trace, t_ray r, \
+t_intersects *intersects, t_depths depths)
 {
 	t_cylinder		*cylinder;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	t_light			*curr_lt;
-	
+	t_light			*lt;
+
 	cylinder = (t_cylinder *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
 	comps = set_cycomps(cylinder, intersects, r);
 	if (trace->lights)
 	{
-		curr_lt = trace->lights;
+		lt = trace->lights;
 		while (true)
 		{
-			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
-			handle_light(trace, &comps, &lt_color, curr_lt);
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
-				break;
-		}	
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light(trace, &comps, &lt_color, lt);
+			lt = lt->next;
+			if (lt == trace->lights)
+				break ;
+		}
 	}
 	comps.refl_col = get_reflected(trace, comps, intersects, depths);
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color4(trace, comps, lt_color));		
+	return (get_final_color4(trace, comps, lt_color));
 }

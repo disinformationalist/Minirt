@@ -1,18 +1,5 @@
 #include "minirt.h"
 
-int	get_num_cores(void)
-{
-	int	num_cores;
-
-	num_cores = sysconf(_SC_NPROCESSORS_ONLN);
-	if (num_cores < 1)
-	{
-		perror("sysconf error\n");
-		return (1);
-	}
-	return (num_cores);
-}
-
 void	thread_error(t_trace *trace, int i)
 {
 	while (--i >= 0)
@@ -23,9 +10,9 @@ void	thread_error(t_trace *trace, int i)
 	clear_all(trace);
 }
 
-t_intersects *create_ints(int total)
+t_intersects	*create_ints(int total)
 {
-	t_intersects *ints;
+	t_intersects	*ints;
 
 	if (total == 0)
 		total += 2;
@@ -65,7 +52,6 @@ int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 	else
 		piece[i][j].y_e = (i + 1) * (trace->height / trace->num_rows);
 	piece[i][j].trace = trace;
-	//piece[i][j].seed = (unsigned int)(time(NULL) + j * trace->num_rows + i);
 	piece[i][j].intersects = create_ints(trace->total_ints);
 	if (!piece[i][j].intersects)
 		return (1);
@@ -86,7 +72,8 @@ void	join_threads(t_trace *trace)
 	}
 }
 
-void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
+void	free_closests(t_trace *trace, \
+t_piece piece[][trace->num_cols], int i, int j)
 {
 	while (--j >= 0)
 	{

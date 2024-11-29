@@ -2,8 +2,8 @@
 
 static inline bool	within_height2(t_ray ray, double t)
 {
-	double y;
-	
+	double	y;
+
 	if (t < 1e-6)
 		return (false);
 	y = ray.origin.y + t * ray.dir.y;
@@ -16,7 +16,7 @@ static inline bool	check_trunk_solutions2(t_vec3 abc, t_ray ray, double dist)
 {
 	double	discrim;
 	double	inv_2a;
-	double 	sq_discrim;
+	double	sq_discrim;
 	double	t;
 
 	discrim = abc.y * abc.y - 4 * abc.x * abc.z;
@@ -26,23 +26,23 @@ static inline bool	check_trunk_solutions2(t_vec3 abc, t_ray ray, double dist)
 	inv_2a = 0.5 / abc.x;
 	t = (-abc.y - sq_discrim) * inv_2a;
 	if (within_height2(ray, t) && t < dist)
-					return (true);
+		return (true);
 	t = (-abc.y + sq_discrim) * inv_2a;
 	if (within_height2(ray, t) && t < dist)
-					return (true);
+		return (true);
 	return (false);
-} 
+}
 
 static inline bool	check_cap2(t_ray ray, double t)
 {
-	double x;
-	double z;
+	double	x;
+	double	z;
 
 	x = ray.origin.x + t * ray.dir.x;
 	z = ray.origin.z + t * ray.dir.z;
 	if ((x * x + z * z) <= 1)
 		return (true);
-	return (false);	
+	return (false);
 }
 
 //later return false if cyl.closed == false

@@ -2,9 +2,9 @@
 
 //create and return a new group instance
 
-t_group *group(void)
+t_group	*group(void)
 {
-	t_group *new;
+	t_group	*new;
 
 	new = (t_group *)malloc(sizeof(t_group));
 	if (!new)
@@ -15,13 +15,14 @@ t_group *group(void)
 	return (new);
 }
 
-//take any object primitive, place in shape container and add to group(first argument)
-//when adjusting group transform it must reapply to all
+/* take any object primitive, place in shape container and 
+add to group(first argument) when adjusting group transform 
+it must reapply to all */
 
 int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
 {
-	t_shape *new;
-	t_shape *last;
+	t_shape	*new;
+	t_shape	*last;
 
 	new = (t_shape *)malloc(sizeof(t_shape));
 	if (!new)
@@ -52,13 +53,13 @@ if (curr->type == GROUP)
 		else
 			free(curr->shape); */
 
-void free_group(t_group *group)
+void	free_group(t_group *group)
 {
 	t_shape	*curr;
 	t_shape	*temp;
 
 	if (!group->shapes)
-		return free(group);
+		return (free(group));
 	curr = group->shapes;
 	group->shapes->prev->next = NULL;
 	while (curr != NULL)
@@ -105,6 +106,6 @@ void	check_group(t_group *group, t_intersects *intersects, t_ray ray)
 		ray_group_intersect(curr, ray, intersects);
 		curr = curr->next;
 		if (curr == group->shapes)
-			break;
+			break ;
 	}
 }

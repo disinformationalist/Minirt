@@ -1,39 +1,5 @@
 #include "minirt.h"
 
-bool	ray_plane_intersect2(t_plane plane, t_ray ray, double dist)
-{
-	double	t;
-
-	ray = transform(ray, plane.transform);
-
-	if (fabs(ray.dir.y) < 1e-6)
-		return (false);
-	t = -ray.origin.y / ray.dir.y;
-	if (t > 0 && t < dist)
-		return (true);
-	return (false);
-}
-
-//check planes for intersection within dist
-
-static inline bool	check_pl_dist(t_plane *planes, t_ray ray, double dist)
-{
-	t_plane	*curr_pl;
-
-	if (planes == NULL)
-		return (false);
-	curr_pl = planes;
-	while (true)
-	{
-		if (curr_pl->shadow && ray_plane_intersect2(*curr_pl, ray, dist))
-				return (true);
-		curr_pl = curr_pl->next;
-		if (curr_pl == planes)
-			break;
-	}
-	return (false);
-}
-
 //check cylinders for intersection within dist
 
 static inline bool	check_cy_dist(t_cylinder *cylinders, t_ray ray, double dist)
@@ -46,36 +12,19 @@ static inline bool	check_cy_dist(t_cylinder *cylinders, t_ray ray, double dist)
 	while (true)
 	{
 		if (curr_cy->shadow && ray_cylinder_intersect2(*curr_cy, ray, dist))
-				return (true);
+			return (true);
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
-			break;
+			break ;
 	}
 	return (false);
 }
 
-static inline bool	check_hy_dist(t_hyperboloid *hyperboloids, t_ray ray, double dist)
+static inline void	check_axis2(double origin, double dir, \
+double *min, double *max)
 {
-	t_hyperboloid	*curr_hy;
-
-	if (hyperboloids == NULL)
-		return (false);
-	curr_hy = hyperboloids;
-	while (true)
-	{
-		if (curr_hy->shadow && ray_hyperboloid_intersect2(*curr_hy, ray, dist))
-				return (true);
-		curr_hy = curr_hy->next;
-		if (curr_hy == hyperboloids)
-			break;
-	}
-	return (false);
-}
-
-static inline void check_axis2(double origin, double dir, double *min, double *max)
-{
-	double t_min_num;
-	double t_max_num;
+	double	t_min_num;
+	double	t_max_num;
 
 	t_min_num = -(1 + origin);
 	t_max_num = (1 - origin);
@@ -93,7 +42,8 @@ static inline void check_axis2(double origin, double dir, double *min, double *m
 		ft_swap(min, max);
 }
 
-static inline bool	ray_cube_intersect2(t_matrix_4x4 ctransform, t_ray ray, double dist)
+static inline bool	ray_cube_intersect2(t_matrix_4x4 ctransform, \
+t_ray ray, double dist)
 {
 	t_vec3	mins;
 	t_vec3	maxs;
@@ -122,11 +72,12 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	curr_cu = cubes;
 	while (true)
 	{
-		if (curr_cu->shadow && ray_cube_intersect2(curr_cu->transform, ray, dist))
-				return (true);
+		if (curr_cu->shadow \
+		&& ray_cube_intersect2(curr_cu->transform, ray, dist))
+			return (true);
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
-			break;
+			break ;
 	}
 	return (false);
 }
@@ -139,7 +90,7 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 	t_ray	s_ray;
 
 	s_ray = ray(comps.light_dir, comps.over_pnt);
-	light_dist = magnitude(subtract_vec(lt_pos, comps.point));//opt this place in comps when getting light dir
+	light_dist = magnitude(subtract_vec(lt_pos, comps.point));
 	if (check_sp_dist(trace->spheres, s_ray, light_dist))
 		return (true);
 	if (check_pl_dist(trace->planes, s_ray, light_dist))
@@ -152,4 +103,3 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 		return (true);
 	return (false);
 }
-

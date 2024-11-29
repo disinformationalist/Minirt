@@ -22,9 +22,9 @@ static inline void	update_plane_ids(t_plane *plane)
 
 static inline void	make_default_pl(t_plane **start, t_plane *new)
 {
-	t_matrix_4x4 transform;
+	t_matrix_4x4	transform;
 
-	new->point = vec(0.0,-1, 0.0, 1.0);
+	new->point = vec(0.0, -1, 0.0, 1.0);
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color = color(200, 0, 0);
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
@@ -78,11 +78,11 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 	return (false);
 }
 
-static inline void set_empty_planes(t_trace *trace)
+static inline void	set_empty_planes(t_trace *trace)
 {
 	trace->planes = NULL;
 	trace->curr_pl = NULL;
-	trace->on->object = trace->curr_pl;	
+	trace->on->object = trace->curr_pl;
 }
 
 //remove plane from list

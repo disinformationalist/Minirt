@@ -20,7 +20,8 @@ void	handle_types(t_png_io *png_img)
         png_set_filler(png_img->png_ptr, 0xFF, PNG_FILLER_AFTER);
 } */
 
-void	set_img_pixels_rgba(t_png_io *png_img, t_img *image, int width, int height)
+void	set_img_pixels_rgba(t_png_io *png_img, \
+	t_img *image, int width, int height)
 {
 	png_bytep		row;
 	png_bytep		px;
@@ -42,7 +43,8 @@ void	set_img_pixels_rgba(t_png_io *png_img, t_img *image, int width, int height)
 	}
 }
 
-void	set_img_pixels_rgb(t_png_io *png_img, t_img *image, int width, int height)
+void	set_img_pixels_rgb(t_png_io *png_img, \
+	t_img *image, int width, int height)
 {
 	png_bytep		row;
 	png_bytep		px;
@@ -64,7 +66,8 @@ void	set_img_pixels_rgb(t_png_io *png_img, t_img *image, int width, int height)
 	}
 }
 
-void	set_img_pixels_gray_alpha(t_png_io *png_img, t_img *image, int width, int height)
+void	set_img_pixels_gray_alpha(t_png_io *png_img, \
+	t_img *image, int width, int height)
 {
 	png_bytep		row;
 	png_bytep		px;
@@ -81,8 +84,9 @@ void	set_img_pixels_gray_alpha(t_png_io *png_img, t_img *image, int width, int h
 		{
 			px = &(row[png_img->x * 2]);
 			gray_val = px[0];
-			alpha =  px[1];
-			color = ((unsigned int)gray_val) << 16 | ((unsigned int)gray_val << 8) \
+			alpha = px[1];
+			color = ((unsigned int)gray_val) << 16 \
+			| ((unsigned int)gray_val << 8) \
 			| (unsigned int)gray_val | ((unsigned int)alpha << 24);
 			*(unsigned int *)(image->pixels_ptr + (4 * width * png_img->y) \
 			+ (4 * png_img->x)) = color;
@@ -90,7 +94,8 @@ void	set_img_pixels_gray_alpha(t_png_io *png_img, t_img *image, int width, int h
 	}
 }
 
-void	set_img_pixels_gray(t_png_io *png_img, t_img *image, int width, int height)
+void	set_img_pixels_gray(t_png_io *png_img, \
+	t_img *image, int width, int height)
 {
 	png_bytep		row;
 	png_bytep		px;
@@ -106,7 +111,8 @@ void	set_img_pixels_gray(t_png_io *png_img, t_img *image, int width, int height)
 		{
 			px = &(row[png_img->x]);
 			gray_val = px[0];
-			color = ((unsigned int)gray_val) << 16 | ((unsigned int)gray_val << 8) \
+			color = ((unsigned int)gray_val) << 16 \
+			| ((unsigned int)gray_val << 8) \
 			| (unsigned int)gray_val | (0xFF << 24);
 			*(unsigned int *)(image->pixels_ptr + (4 * width * png_img->y) \
 			+ (4 * png_img->x)) = color;
@@ -125,25 +131,7 @@ int	init_import_vars(t_png_io *png_img)
 	else if (png_img->color_type == PNG_COLOR_TYPE_GRAY_ALPHA)
 		png_img->pixel_size = 2;
 	else
-		return(1);
+		return (1);
 	png_img->depth = png_get_bit_depth(png_img->png_ptr, png_img->info);
 	return (0);
-}
-
-void	*error_2(t_png_io *png_img, const char *msg)
-{
-	png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
-	fclose(png_img->fp);
-	free(png_img);
-	perror(msg);
-	return (NULL);
-}
-
-int	error_3(t_png_io *png_img, const char *msg)
-{
-	png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
-	fclose(png_img->fp);
-	free(png_img);
-	perror(msg);
-	return (1);
 }

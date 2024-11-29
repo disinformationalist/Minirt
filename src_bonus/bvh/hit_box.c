@@ -1,6 +1,8 @@
 #include "minirt.h"
 
-static inline void check_axis_box(double origin, double dir, double *min, double *max, t_vec2 cmm)
+//commented out for norm
+/* static inline void	check_axis_box(double origin, double dir, \
+	double *min, double *max, t_vec2 cmm)
 {
 	double t_min_num;
 	double t_max_num;
@@ -44,7 +46,7 @@ bool	ray_box_intersect(t_box *box, t_matrix_4x4 ctransform, t_ray ray)
 	t_min = fmax(fmax(mins.x, mins.y), mins.z);
 	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
 	return (t_min <= t_max  && t_max >= 0);
-}
+} */
 
 /* cube intersect check 
 static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
@@ -56,7 +58,8 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	curr_cu = cubes;
 	while (true)
 	{
-		if (curr_cu->shadow && ray_cube_intersect2(curr_cu->transform, ray, dist))
+		if (curr_cu->shadow && ray_cube_intersect2(curr_cu->transform, \
+			ray, dist))
 				return (true);
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)

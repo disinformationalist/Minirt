@@ -89,8 +89,12 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/parsing/split_by_whitespace.c \
 ./src_bonus/parsing/split_file_utils.c \
 ./src_bonus/parsing/parse_rt.c \
+./src_bonus/parsing/handle_ids.c \
 ./src_bonus/parsing/check_amb_cam_light.c \
-./src_bonus/parsing/check_sp_pl_cy_le.c \
+./src_bonus/parsing/check_sl_al.c \
+./src_bonus/parsing/check_cu_hy.c \
+./src_bonus/parsing/check_tx_tri.c \
+./src_bonus/parsing/check_sp_pl_cy.c \
 ./src_bonus/parsing/check_line_utils.c \
 ./src_bonus/parsing/check_line_utils2.c \
 ./src_bonus/parsing/check_line_utils3.c \
@@ -122,9 +126,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/trace_planes.c \
 ./src_bonus/trace_objects/trace_spheres.c \
 ./src_bonus/trace_objects/color_spheres.c \
-./src_bonus/trace_objects/trace_triangles.c \
-./src_bonus/trace_objects/color_triangles.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
+./src_bonus/trace_objects/cyl_caps.c \
 ./src_bonus/trace_objects/trace_capped_hyperboloids.c \
 ./src_bonus/trace_objects/color_cylinders.c \
 ./src_bonus/trace_objects/color_hyperboloids.c \
@@ -136,10 +139,12 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/cyl_shadow.c \
 ./src_bonus/trace_objects/hyp_shadow.c \
 ./src_bonus/trace_objects/sp_shadow.c \
+./src_bonus/trace_objects/pl_shadow.c \
 ./src_bonus/trace_objects/set_indicies.c \
 ./src_bonus/testing/print_all_objects.c \
 ./src_bonus/testing/print_utils.c \
 ./src_bonus/free_all_objects.c \
+./src_bonus/free_all_objects2.c \
 ./src_bonus/color_utils/build_textures.c \
 ./src_bonus/color_utils/color_utils.c \
 ./src_bonus/color_utils/color_utils2.c \
@@ -153,7 +158,10 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/pl_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \
 ./src_bonus/events/main_events.c \
-./src_bonus/events/traverse_lists.c \
+./src_bonus/events/toggle_events.c \
+./src_bonus/events/set_tx.c \
+./src_bonus/events/prev_list_ob.c \
+./src_bonus/events/next_list_ob.c \
 ./src_bonus/events/switch_list.c \
 ./src_bonus/events/push_pop.c \
 ./src_bonus/events/translation.c \
@@ -178,14 +186,13 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/png/export_png_utils.c \
 ./src_bonus/png/import_png.c \
 ./src_bonus/png/import_png_utils.c \
+./src_bonus/png/import_png_utils2.c \
 ./src_bonus/png/get_png_name.c \
 ./src_bonus/threader.c \
 ./src_bonus/bvh/groups.c \
 ./src_bonus/bvh/boxes.c \
 ./src_bonus/bvh/box_ops.c \
 ./src_bonus/bvh/box_ops2.c \
-./src_bonus/parsing/parse_obj.c \
-
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 

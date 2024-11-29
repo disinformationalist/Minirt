@@ -9,16 +9,13 @@ void	set_tri_vals(t_tri *new, char **line)
 	new->edge2 = subtract_vec(new->p3, new->p1);
 	new->norm = norm_vec(cross_prod(new->edge2, new->edge1));
 	new->color = get_color(line[4], 1.0);
-	new->mat = get_mat(DEFAULT);//handle getting from line in parse of rt, file, along with check for valid material option
+	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
-	//new->bump = false;
-	//new->texture = NULL; //if not assigned
-
 }
 
-t_tri *create_tri(char **line)
+t_tri	*create_tri(char **line)
 {
-	t_tri *new;
+	t_tri	*new;
 
 	new = (t_tri *)malloc(sizeof(t_tri));
 	if (!new)
@@ -31,8 +28,8 @@ t_tri *create_tri(char **line)
 
 bool	append_tri(t_tri **start, char **line)
 {
-	t_tri *new;
-	t_tri *last;
+	t_tri	*new;
+	t_tri	*last;
 
 	new = create_tri(line);
 	if (!new)

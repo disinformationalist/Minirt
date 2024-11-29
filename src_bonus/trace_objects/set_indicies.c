@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline void add_con(t_cons *cons, int *size, void *obj, t_type type)
+static inline void	add_con(t_cons *cons, int *size, void *obj, t_type type)
 {
 	if (*size < 200)
 	{
@@ -28,22 +28,22 @@ static inline void	set_n(double *n, t_cons *con)
 		return ;
 }
 
-static inline void check_and_set(int size, double *n, t_cons *cons)
-{	
+static inline void	check_and_set(int size, double *n, t_cons *cons)
+{
 	if (size == 0)
 		*n = 1.0;
 	else
 		set_n(n, &cons[size - 1]);
 }
 
-static inline int search_cons(int *size, t_track_hits *current, t_cons *cons)
+static inline int	search_cons(int *size, t_track_hits *current, t_cons *cons)
 {
-	int found;
-	int k;
-	int j;
+	int	found;
+	int	k;
+	int	j;
 
 	found = 0;
-	j  = -1;
+	j = -1;
 	while (++j < *size)
 	{
 		if (cons[j].obj == current->object)
