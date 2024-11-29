@@ -181,14 +181,14 @@ typedef struct s_cube
 	struct s_cube	*next;
 }	t_cube;
 
-typedef struct s_helper_shape
+/* typedef struct s_helper_shape
 {
 	t_type				type;
 	void				*left;
 	void				*right;
 	t_csg_op			op;
 	t_shape				*primitive;
-}	t_helper_shape;
+}	t_helper_shape; */
 
 typedef struct s_tri
 {
@@ -506,7 +506,7 @@ bool			intersect_caps(t_ray ray, double *t3, double *t4);
 
 //hyperboloid utils
 void			check_hyperboloids(t_hyperboloid *hyperboloids, t_intersects *intersects, t_ray ray);
-void			compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid);
+void			compute_abc_hy(t_vec3 *abc, t_ray ray);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_intersects *intersects);
 

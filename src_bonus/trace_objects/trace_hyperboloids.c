@@ -18,8 +18,8 @@ static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
 
 // Equation: x * x / a * a + z * z / b * b - y * y / c * c = 1
 // will need to parse a hyperboloid center, height, half_h, ray_max and ray_min
-
-void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
+//original
+/* void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
 {
 	double	rad1_sq;
 	double	rad2_sq;
@@ -37,16 +37,36 @@ void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
 	abc->z = (ray.origin.x * ray.origin.x) / rad1_sq
 		+ (ray.origin.z * ray.origin.z) / rad2_sq
 		- (ray.origin.y * ray.origin.y) / half_h_sq - 1;
+} */
+
+void	compute_abc_hy(t_vec3 *abc, t_ray ray)//, t_hyperboloid *hyperboloid)
+{
+	//double	rad1_sq;
+	//double	rad2_sq;
+	//double	half_h_sq;
+	/* 
+	rad1_sq = hyperboloid->rad1 * hyperboloid->rad1;
+	rad2_sq = hyperboloid->rad2 * hyperboloid->rad2;
+	half_h_sq = hyperboloid->half_h * hyperboloid->half_h; */
+	abc->x = (ray.dir.x * ray.dir.x)
+		+ (ray.dir.z * ray.dir.z)
+		- (ray.dir.y * ray.dir.y);
+	abc->y = 2 * ((ray.origin.x * ray.dir.x)
+		+ (ray.origin.z * ray.dir.z)
+		- (ray.origin.y * ray.dir.y));
+	abc->z = (ray.origin.x * ray.origin.x)
+		+ (ray.origin.z * ray.origin.z)
+		- (ray.origin.y * ray.origin.y) - 1;
 }
 
-bool	within_height_hy(t_ray ray, double min, double max, double t)
+bool	within_height_hy(t_ray ray, double t)
 {
 	double y;
 	
 	if (t < 1e-5)
 		return (false);
 	y = ray.origin.y + t * ray.dir.y;
-	if (y > min && y < max)
+	if (y > -1 && y < 1)
 		return (true);
 	return (false);
 }
@@ -56,18 +76,18 @@ void	ray_hyperboloid_intersect(t_hyperboloid *hyperboloids, t_ray ray, t_interse
 	t_vec3	abc;
 	double	t1;
 	double	t2;
-	double	half_h;
+	/* double	half_h;
 
-	half_h = hyperboloids->half_h;
+	half_h = hyperboloids->half_h; */
 	ray = transform(ray, hyperboloids->transform);
-	compute_abc_hy(&abc, ray, hyperboloids);
+	compute_abc_hy(&abc, ray);
 	if (abc.x != 0)
 	{
 		if (check_trunk_solutions(abc, &t1, &t2))
 		{
-			if (within_height_hy(ray, -half_h, half_h, t1))
+			if (within_height_hy(ray, t1))
 				intersect(intersects, hyperboloids, t1, HYPERBOLOID);
-			if (within_height_hy(ray, -half_h, half_h, t2))
+			if (within_height_hy(ray, t2))
 				intersect(intersects, hyperboloids, t2, HYPERBOLOID);
 		}
 	}

@@ -78,8 +78,8 @@ void	free_cu_list(t_cube **start)
 
 void	free_all_objects(t_trace *trace)
 {
-	if (trace->group)
-		free_group(trace->group);
+	/* if (trace->group)
+		free_group(trace->group); */
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);

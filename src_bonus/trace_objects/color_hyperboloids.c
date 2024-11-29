@@ -4,11 +4,20 @@
 static inline t_vec3 hyp_normal_at(t_point int_pnt, t_hyperboloid hyperboloid)
 {
 	t_vec3	norm;
+	double	dist;
 
 	int_pnt = mat_vec_mult(hyperboloid.transform, int_pnt);
-	norm = vec(2 * int_pnt.x / (hyperboloid.rad1 * hyperboloid.rad1),
-			-2 * int_pnt.y / (hyperboloid.half_h * hyperboloid.half_h),
-			2 * int_pnt.z / (hyperboloid.rad2 * hyperboloid.rad2), 0);
+	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
+	if (dist < 2 && int_pnt.y >= 1 - 1e-6)//add plus val, dist < 2 + plus val
+		norm = vec(0, 1, 0, 0);
+	else if (dist < 2 && int_pnt.y <= -1 + 1e-6)//add plus val, dist < 2 + plus val
+		norm = vec(0, -1, 0, 0);
+	else
+	{
+		norm = vec(2 * int_pnt.x,
+			-2 * int_pnt.y,
+			2 * int_pnt.z, 0);
+	}
 	norm = mat_vec_mult(hyperboloid.t_transform, norm);
 	norm.w = 0;
 	return (norm_vec(norm));
