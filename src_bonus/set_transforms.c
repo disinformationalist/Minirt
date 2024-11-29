@@ -11,16 +11,20 @@ void	set_sp_transforms(t_trace *trace)
 		curr_sp = trace->spheres;
 		while (true)
 		{
-			curr_sp->curr_scale = inv_scaling(curr_sp->radius, curr_sp->radius, curr_sp->radius);
-			curr_sp->curr_rottran = translation(-curr_sp->center.x, -curr_sp->center.y, -curr_sp->center.z);
-			curr_sp->transform = (mat_mult(curr_sp->curr_scale, curr_sp->curr_rottran));
+			curr_sp->curr_scale = inv_scaling(curr_sp->radius, \
+			curr_sp->radius, curr_sp->radius);
+			curr_sp->curr_rottran = translation(-curr_sp->center.x, \
+			-curr_sp->center.y, -curr_sp->center.z);
+			curr_sp->transform = (mat_mult(curr_sp->curr_scale, \
+			curr_sp->curr_rottran));
 			curr_sp->t_transform = transpose(curr_sp->transform);
 			curr_sp->i_transform = inverse(curr_sp->transform);
-			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
+			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
+			color(255, 255, 255));
 			curr_sp->texture = trace->textures;
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
-				break;
+				break ;
 		}
 	}
 }
@@ -71,9 +75,7 @@ void	set_cy_transforms(t_trace *trace)
 			curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
 			curr_cy->t_transform = transpose(curr_cy->transform);
 			curr_cy->i_transform = inverse(curr_cy->transform);
-			//finish getting proportion right here...
 			curr_cy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), color(255, 255, 255));
-			//curr_cy->pattern = uv_checker(16 , 4, color(40, 40, 40), color(255, 255, 255));
 			curr_cy->texture = trace->textures;
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
@@ -118,11 +120,14 @@ void	set_cu_transforms(t_trace *trace)
 		curr_cu = trace->cubes;
 		while (true)
 		{
-			curr_cu->curr_scale = inv_scaling(curr_cu->h_width, curr_cu->h_height, curr_cu->h_depth);
-			inv_trans = translation(-curr_cu->center.x, -curr_cu->center.y, -curr_cu->center.z);
+			curr_cu->curr_scale = inv_scaling(curr_cu->h_width, \
+			curr_cu->h_height, curr_cu->h_depth);
+			inv_trans = translation(-curr_cu->center.x, \
+			-curr_cu->center.y, -curr_cu->center.z);
 			inv_rot = rot_to(curr_cu->norm,  vec(0, 1, 0, 0));
 			curr_cu->curr_rottran = mat_mult(inv_rot, inv_trans);
-			curr_cu->transform = (mat_mult(curr_cu->curr_scale, curr_cu->curr_rottran));
+			curr_cu->transform = (mat_mult(curr_cu->curr_scale, \
+			curr_cu->curr_rottran));
 			curr_cu->i_transform = inverse(curr_cu->transform);
 			curr_cu->t_transform = transpose(curr_cu->transform);
 			curr_cu = curr_cu->next;

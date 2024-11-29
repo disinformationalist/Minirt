@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 t_vec3	row_to_vec(t_matrix_3x3 *matrix, int row)

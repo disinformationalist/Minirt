@@ -55,8 +55,8 @@ int	init_png_structs(t_png_io *png_img, const char *filename)
 
 static inline void	write_img(t_png_io *png_img)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	if (png_img->text != NULL)
 	{

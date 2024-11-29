@@ -12,10 +12,10 @@ t_matrix_3x3	submat_4(t_matrix_4x4 matrix, int row, int column)
 {
 	t_matrix_3x3	res;
 	int				i;
-	int 			j;
-	int 			k;
-	int 			l;
-	
+	int				j;
+	int				k;
+	int				l;
+
 	k = 0;
 	i = -1;
 	while (++i < 4)

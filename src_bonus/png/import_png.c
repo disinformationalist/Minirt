@@ -36,7 +36,8 @@ static int	malloc_rowptrs(t_png_io *png_img, int height)
 	while (++png_img->y < height)
 	{
 		png_img->row_pointers[png_img->y] = \
-		png_malloc(png_img->png_ptr, png_get_rowbytes(png_img->png_ptr, png_img->info));
+		png_malloc(png_img->png_ptr, \
+		png_get_rowbytes(png_img->png_ptr, png_img->info));
 		if (!png_img->row_pointers[png_img->y])
 		{
 			free_png_rows(png_img->png_ptr, png_img->row_pointers, png_img->y);

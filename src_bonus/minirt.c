@@ -1,21 +1,8 @@
 #include "minirt.h"
 
-/* 
-	triangle for future use.
-	else if (closest->t != INFINITY && closest->object_type == TRI)
-	color_out = color_triangle(trace, r, intersects, depths);
-	//color_out = color_tri(trace, r, intersects, depths); */
-
-/* builds intersect list, find and set closest object hit by ray
-list is automagically sorted, get smallest up through count that is > 0;
-stuff for later: group and subgroups test passed.
-check_group(trace->group, intersects, ray);
-//check_mesh(trace->mesh, intersects, ray);
-//check_triangles(trace->triangles, intersects, ray);*/
-
 void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	intersects->closest->t = INFINITY;
@@ -30,7 +17,6 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	check_arealts(trace->lights, intersects, ray);
 	//check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, (t_helper_shape *)trace->spheres->next, intersects);
 	//check_csg((t_helper_shape *)trace->spheres->next->next, (t_helper_shape *)trace->hyperboloids->next, (t_helper_shape *)trace->spheres->next->next->next, intersects);
-
 	//check_csg(trace->spheres, trace->cylinders, intersects);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
@@ -41,7 +27,7 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 unsigned int	clamped_col(t_norm_color col)
 {
 	t_color	clamped;
-	
+
 	clamped.r = clamp_color(col.r);
 	clamped.g = clamp_color(col.g);
 	clamped.b = clamp_color(col.b);

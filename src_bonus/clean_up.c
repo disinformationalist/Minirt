@@ -54,9 +54,3 @@ void	clear_all(t_trace *trace)
 	free(trace->threads);
 	exit(EXIT_FAILURE);
 }
-
-void	error_exit(char *msg)
-{
-	ft_putstr_color_fd(2, msg, RED);
-	exit(EXIT_FAILURE);
-}

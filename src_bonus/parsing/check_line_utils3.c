@@ -1,7 +1,6 @@
-
 #include "minirt.h"
 
-int	spheres_intersect(t_vec3 xyz_1, double r_1, t_vec3 xyz_2, double r_2)
+/* int	spheres_intersect(t_vec3 xyz_1, double r_1, t_vec3 xyz_2, double r_2)
 {
 	double	distance;
 	double	rad_sum;
@@ -39,3 +38,4 @@ int	check_spheres_intersect(char *center_str_1, char *diam_str_1,
 		return (1);
 	return (0);
 }
+ */

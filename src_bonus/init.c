@@ -23,7 +23,7 @@
  ----------------------------------------------------------------------------*/
 //use the fov horizontal and aspect ratio to set view width, height;
 
-void info_init(t_trace *trace)
+void	info_init(t_trace *trace)
 {
 	trace->width = 1080;
 	trace->height = (int)((double)trace->width / ASPECT);
@@ -45,7 +45,7 @@ void info_init(t_trace *trace)
 	init_viewing(trace);
 }
 
-static void events_init(t_trace *trace)
+static void	events_init(t_trace *trace)
 {
 	trace->on->object = trace->spheres;
 	trace->on->type = SPHERE;
@@ -56,7 +56,7 @@ static void events_init(t_trace *trace)
 	ButtonPressMask, mouse_handler, trace);
 }
 
-void init_transforms(t_trace *trace)
+void	init_transforms(t_trace *trace)
 {
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
@@ -65,7 +65,7 @@ void init_transforms(t_trace *trace)
 	set_cu_transforms(trace);
 }
 
-void trace_init(t_trace *trace)
+void	trace_init(t_trace *trace)
 {
 	info_init(trace);
 	trace->mlx_connect = mlx_init();
@@ -91,4 +91,4 @@ void trace_init(t_trace *trace)
 	init_transforms(trace);
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
-} 
+}

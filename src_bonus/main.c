@@ -60,7 +60,7 @@ int	main(int ac, char **av)
 	char		*file;
 	char		***rt_file;
 	t_trace		trace;
-	
+
 	if (ac != 2)
 		return (free_exit(NULL, \
 		"Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);

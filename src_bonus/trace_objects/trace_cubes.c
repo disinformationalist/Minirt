@@ -1,15 +1,16 @@
 #include "minirt.h"
 
-void ft_swap(double *a, double *b)
+void	ft_swap(double *a, double *b)
 {
-	double temp;
+	double	temp;
 
 	temp = *a;
 	*a = *b;
 	*b = temp;
 }
 
-static inline bool check_axis(double origin, double dir, double *min, double *max)
+static inline bool	check_axis(double origin, double dir, \
+double *min, double *max)
 {
 	double	t_min_num;
 	double	t_max_num;
@@ -55,59 +56,6 @@ void	ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects)
 	intersect(intersects, cube, t_max, CUBE);
 }
 
-//failed opti here..
-/* static inline bool check_axis(double origin, double dir, double *min, double *max)
-{
-	double	t_min_num;
-	double	t_max_num;
-	double	t_min;
-	double	t_max;
-
-	t_min_num = -(1 + origin);
-	t_max_num = (1 - origin);
-	if (fabs(dir) > 0)
-	{
-		t_min = t_min_num / dir;
-		t_max = t_max_num / dir;
-		if (t_min > t_max)
-			ft_swap(min, max);
-	}
-	else
-	{
-		if (origin < -1 || origin > 1)
-			return (false);
-		else
-		{
-			t_min = -INFINITY;
-			t_max = INFINITY;
-		}
-	}
-	t_min = fmax(*min, t_min);
-	t_max = fmin(*max, t_max);
-	return (*min <= t_max);
-}
-
-//using object space
-
-static inline void	ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects)
-{
-	double	min;
-	double	max;
-
-	min = -INFINITY;
-	max = INFINITY;
-	ray = transform(ray, cube->transform);
-
-	if (check_axis(ray.origin.x, ray.dir.x, &min, &max))
-		return ;
-	if (check_axis(ray.origin.y, ray.dir.y, &min, &max))
-		return ;
-	if (check_axis(ray.origin.z, ray.dir.z, &min, &max))
-		return ;
-	intersect(intersects, cube, min, CUBE);
-	intersect(intersects, cube, max, CUBE);
-} */
-
 void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray)
 {
 	t_cube	*curr_cu;
@@ -120,12 +68,12 @@ void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray)
 		ray_cube_intersect(curr_cu, ray, intersects);
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
-			break;
+			break ;
 	}
 }
 
 void	check_arealts(t_light *lights, t_intersects *intersects, t_ray ray)
-{	
+{
 	t_light	*curr_lt;
 
 	if (lights == NULL)
@@ -135,8 +83,8 @@ void	check_arealts(t_light *lights, t_intersects *intersects, t_ray ray)
 	{
 		if (curr_lt->type == AREA)
 			ray_cube_intersect(curr_lt->emitter, ray, intersects);
-	curr_lt = curr_lt->next;
-	if (curr_lt == lights)
-		break;
+		curr_lt = curr_lt->next;
+		if (curr_lt == lights)
+			break ;
 	}
 }

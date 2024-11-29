@@ -10,9 +10,9 @@ void	thread_error(t_trace *trace, int i)
 	clear_all(trace);
 }
 
-t_intersects *create_ints(int total)
+t_intersects	*create_ints(int total)
 {
-	t_intersects *ints;
+	t_intersects	*ints;
 
 	if (total == 0)
 		total += 2;
@@ -72,7 +72,8 @@ void	join_threads(t_trace *trace)
 	}
 }
 
-void	free_closests(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
+void	free_closests(t_trace *trace, \
+t_piece piece[][trace->num_cols], int i, int j)
 {
 	while (--j >= 0)
 	{

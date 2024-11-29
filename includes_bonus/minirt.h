@@ -2,9 +2,9 @@
 # define MINIRT_H
 
 # include "tools.h"
-//# include "keyboard (42).h"//figure out how to automatically select correct one
+//# include "keyboard (42).h"
 # include "keyboard.h"
-# include <sys/time.h>//testing speed
+# include <sys/time.h>
 # include "extras.h"
 
 # define ASPECT (16.0 / 9.0)
@@ -223,7 +223,6 @@ typedef struct s_light
 
 typedef struct s_trace
 {	
-	t_mesh			*mesh;
 	t_group			*group;
 
 	int				total_ints;
@@ -235,7 +234,6 @@ typedef struct s_trace
 	
 	t_amb			*amb;
 	t_cam			*cam;
-	//linked list objects
 	t_sphere		*spheres;
 	t_plane			*planes;
 	t_cylinder		*cylinders;
@@ -324,8 +322,8 @@ typedef struct t_comps
 	t_map			map;
 	bool			is_top;
 	bool			is_bot;
-	t_position			pos;
-	t_position			dims;
+	t_position		pos;
+	t_position		dims;
 	t_norm_color	color;
 	t_norm_color	refr_col;
 	t_norm_color	refl_col;
@@ -335,16 +333,13 @@ typedef struct t_comps
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
-//mesh
-t_norm_color	color_triangle(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-void			check_mesh(t_mesh *mesh, t_intersects *intersects, t_ray ray);
-void			free_mesh(t_mesh *mesh);
-
 /***PARSING***/
 
 void			parse_rt(t_trace *trace, char ***rt_file);
 char			***split_file(char *file);
 char			**split_by_whitespace(char const *s);
+void			check_ids(char ***rt_file);
+void			count_ids(t_obj_counts *counts, char ***rt_file);
 
 //parse_rt_utils
 void			init_obs(t_trace *trace);
@@ -375,6 +370,7 @@ void			check_tri(char **line, char ***rt_file);
 
 //check line utils
 void			check_str_len(char **line, char ***rt_file, int num);
+int				check_int(char *int_str, int min, int max);
 int				check_param_num(char **line, int num);
 int				check_double(char **ratio_str, double lower_lim, double upper_lim);
 int				check_color(char *color_str);
@@ -478,14 +474,17 @@ void			ray_cube_intersect(t_cube *cube, t_ray ray, t_intersects *intersects);
 t_norm_color	color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 
 //obj shadow
-bool			ray_plane_intersect2(t_plane plane, t_ray ray, double dist);
+bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
+bool			check_pl_dist(t_plane *planes, t_ray ray, double dist);
 bool			ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist);
-bool			ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, t_ray ray, double dist);
+bool			check_hy_dist(t_hyperboloid *hyperboloids, \
+t_ray ray, double dist);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, t_intersects *intersects, t_ray ray);
 t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_cylinder_intersect(t_cylinder *cylinder, t_ray ray, t_intersects *intersects);
+bool			intersect_caps(t_ray ray, double *t3, double *t4);
 
 //hyperboloid utils
 void			check_hyperboloids(t_hyperboloid *hyperboloids, t_intersects *intersects, t_ray ray);
@@ -493,25 +492,18 @@ void			compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, t_ray ray, t_intersects *intersects);
 
-//triangle utils
-void			check_triangles(t_tri *tris, t_intersects *intersects, t_ray ray);
-t_norm_color	color_tri(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths);
-
 //light utils
-void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);//move
 void			set_arealt(t_light *lt);
 void			check_arealts(t_light *lights, t_intersects *intersects, t_ray ray);
 int				set_al_vals(t_trace *trace, t_light *new, char **line);
 void			update_light_ids(t_light *light);
 
 // reflect, refract
+void			handle_light(t_trace *trace, t_comps *comps, t_norm_color *lt_color, t_light *curr_lt);//move
 double			schlick(t_comps comps);
 void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 t_norm_color 	get_reflected(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
 t_norm_color	get_refracted(t_trace *trace, t_comps comps, t_intersects *intersects, t_depths depths);
-
-//shadows
-bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
 
 //view
 void			reinit_viewing(t_trace *trace);
@@ -608,11 +600,13 @@ void			free_sp_list(t_sphere **start);
 void			free_pl_list(t_plane **start);
 void			free_cy_list(t_cylinder **start);
 void			free_hy_list(t_hyperboloid **start);
+void			free_tri_list(t_tri **start);
+void			free_tx_list(void *mlx_con, t_tx **start);
+void			free_lt_list(t_light **start);
 void			free_all_objects(t_trace *trace);
 
-/***EXTRAS***/
+/***FORGE FILE***/
 
-//forge rt file, builds rt file from current scene.
 void			forge_rt(const char *path, t_trace *trace);
 char			*build_sp_line(t_sphere *sphere);
 void			write_spheres(t_sphere *spheres, int fd);

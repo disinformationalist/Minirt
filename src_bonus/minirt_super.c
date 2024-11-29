@@ -5,7 +5,7 @@
 static inline void	find_closest_s(t_trace *trace, t_ray ray, \
 	t_intersects *intersects)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	intersects->closest->t = INFINITY;
@@ -21,7 +21,7 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, \
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
 	if (i < intersects->count)
-	*(intersects->closest) = intersects->hits[i];
+		*(intersects->closest) = intersects->hits[i];
 }
 
 static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
@@ -51,7 +51,7 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
 
 //sampling each pixel multiple times, summing results
 
-static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, \
+static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r, \
 	t_intersects *intersects, t_vec3 currpix)
 {
 	int				k;
@@ -70,7 +70,8 @@ static inline t_norm_color sum_subpixels(t_trace *trace, t_ray r, \
 		while (++k < trace->n)
 		{
 			r.dir = norm_vec(subtract_vec(subpix, r.origin));
-			sum = sum_rgbs(sum, check_intersects_s(trace, r, intersects, trace->depths));
+			sum = sum_rgbs(sum, check_intersects_s(trace, \
+			r, intersects, trace->depths));
 			subpix = add_vec(subpix, trace->move_x);
 		}
 		row_start = add_vec(row_start, trace->move_y);

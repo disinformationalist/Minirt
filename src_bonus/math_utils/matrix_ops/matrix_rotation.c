@@ -38,7 +38,7 @@ t_matrix_4x4	transpose(t_matrix_4x4 matrix)
 t_matrix_4x4	rot_x(double radians)
 {
 	t_matrix_4x4	matrix;
-	
+
 	identity(&matrix);
 	matrix.m[1][1] = cos(radians);
 	matrix.m[2][1] = sin(radians);

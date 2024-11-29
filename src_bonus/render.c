@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline void free_all(t_trace *trace, \
+static inline void	free_all(t_trace *trace, \
 	t_piece piece[][trace->num_cols], int i, int j)
 {
 	free_closests(trace, piece, i, j);
@@ -65,9 +65,9 @@ void	render_scene(t_trace *trace)
 }
 
 void	render(t_trace *trace)
-{	
-	long start;
-	
+{
+	long	start;
+
 	start = get_time();
 	if (trace->supersample)
 	{

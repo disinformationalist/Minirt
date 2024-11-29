@@ -10,10 +10,8 @@ void	init_obs(t_trace *trace)
 	trace->cylinders = NULL;
 	trace->hyperboloids = NULL;
 	trace->cubes = NULL;
-	trace->triangles = NULL;
 	trace->textures = NULL;
 	trace->group = NULL;
-	trace->mesh = NULL;
 }
 
 void	init_counts(t_obj_counts *counts)

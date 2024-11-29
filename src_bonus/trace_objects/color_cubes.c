@@ -26,10 +26,11 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube)
 	return (norm_vec(norm));
 }
 
-static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray r)
+static inline t_comps	set_cucomps(t_cube *cube, \
+t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
-	
+
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
@@ -48,12 +49,13 @@ static inline t_comps	set_cucomps(t_cube *cube, t_intersects *intersects, t_ray 
 	return (comps);
 }
 
-t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+t_norm_color	color_cube(t_trace *trace, t_ray r, \
+t_intersects *intersects, t_depths depths)
 {
 	t_cube			*cube;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	t_light			*curr_lt;
+	t_light			*lt;
 
 	cube = (t_cube *)intersects->closest->object;
 	if (cube->emitter)
@@ -62,14 +64,14 @@ t_norm_color color_cube(t_trace *trace, t_ray r, t_intersects *intersects, t_dep
 	comps = set_cucomps(cube, intersects, r);
 	if (trace->lights)
 	{
-		curr_lt = trace->lights;
+		lt = trace->lights;
 		while (true)
 		{
-			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
-			handle_light(trace, &comps, &lt_color, curr_lt);
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
-				break;
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light(trace, &comps, &lt_color, lt);
+			lt = lt->next;
+			if (lt == trace->lights)
+				break ;
 		}
 	}
 	comps.refl_col = get_reflected(trace, comps, intersects, depths);
