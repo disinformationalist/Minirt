@@ -86,7 +86,7 @@ void	free_all_objects(t_trace *trace)
 	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
 	free_hy_list(&trace->hyperboloids);
-	free_tri_list(&trace->triangles);
+	//free_tri_list(&trace->triangles);
 	free_tx_list(trace->mlx_connect, &trace->textures);
 	if (trace->amb)
 		free(trace->amb);

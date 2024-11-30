@@ -124,7 +124,7 @@ void			check_pl(char **line, char ***rt_file);
 void			check_cy(char **line, char ***rt_file);
 
 //check line utils
-void			check_str_len(char **line, char ***rt_file, int num);
+void			check_str_len(char **line, char ***rt_file);
 int				check_param_num(char **line, int num);
 int				check_double(char **ratio_str, double lower_lim,
 					double upper_lim);

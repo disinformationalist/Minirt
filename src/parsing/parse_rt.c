@@ -34,6 +34,7 @@ void	check_ids(char ***rt_file)
 	k = -1;
 	while (rt_file[++k])
 	{
+		check_str_len(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "A"))
 			check_amb(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "C"))

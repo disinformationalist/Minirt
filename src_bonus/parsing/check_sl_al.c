@@ -91,7 +91,6 @@ void	check_sl(char **line, char ***rt_file)
 	char	*bright_ratio;
 	int		len;
 
-	check_str_len(line, rt_file, 7);
 	len = ft_matrix_len(line);
 	bright_ratio = line[3];
 	if (len != 6 && len != 7)
