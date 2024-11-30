@@ -19,7 +19,11 @@ void	increment_id_count(t_obj_counts *counts, char ***rt_file, int k)
 	else if (!ft_strcmp(*(rt_file[k]), "cu"))
 		counts->cube_count++;
 	else if (!ft_strcmp(*(rt_file[k]), "tx"))
+	{
 		counts->tx_count++;
+		if (rt_file[k][2])
+			counts->tx_count++;
+	}
 	else
 		return (free_3d_array_i(rt_file, ft_3darray_len(rt_file)),
 			error_exit("Error\n Invalid type identifier\n"));
@@ -66,6 +70,7 @@ void	check_ids(char ***rt_file)
 	k = -1;
 	while (rt_file[++k])
 	{
+		check_str_len(rt_file[k], rt_file);
 		if (!ft_strcmp(*(rt_file[k]), "A"))
 			check_amb(rt_file[k], rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "C"))

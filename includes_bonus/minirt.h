@@ -181,14 +181,15 @@ typedef struct s_cube
 	struct s_cube	*next;
 }	t_cube;
 
-typedef struct s_helper_shape
+/* typedef struct s_helper_shape
 {
 	t_type				type;
 	void				*left;
 	void				*right;
 	t_csg_op			op;
 	t_shape				*primitive;
-}	t_helper_shape;
+}	t_helper_shape; */
+
 
 typedef struct s_tri
 {
@@ -387,7 +388,7 @@ void			check_tx(char **line, char ***rt_file);
 void			check_tri(char **line, char ***rt_file);
 
 //check line utils
-void			check_str_len(char **line, char ***rt_file, int num);
+void			check_str_len(char **line, char ***rt_file);
 int				check_int(char *int_str, int min, int max);
 int				check_param_num(char **line, int num);
 int				check_double(char **ratio_str, double lower_lim, double upper_lim);

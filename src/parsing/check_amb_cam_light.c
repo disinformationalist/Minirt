@@ -5,7 +5,6 @@ void	check_amb(char **line, char ***rt_file)
 	char	*ratio_str;	
 
 	ratio_str = line[1];
-	check_str_len(line, rt_file, 3);
 	if (check_param_num(line, 3))
 		free_exit(rt_file, "Error\n Invalid ambient lighting parameters\n", \
 	" Ambient lighting must be in the format <type id> <light_ratio> <rgb>\n");
@@ -20,7 +19,6 @@ void	check_amb(char **line, char ***rt_file)
 
 void	check_cam(char **line, char ***rt_file)
 {
-	check_str_len(line, rt_file, 4);
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid camera parameters\n", \
 	" Camera must be in the format <type id> <x,y,z> <x,y,z> <fov>\n");
@@ -44,7 +42,6 @@ void	check_light(char **line, char ***rt_file)
 {
 	char	*bright_ratio;
 
-	check_str_len(line, rt_file, 3);
 	bright_ratio = line[2];
 	if (ft_matrix_len(line) != 4 && ft_matrix_len(line) != 3)
 		free_exit(rt_file, "Error\n Invalid light parameters\n", \

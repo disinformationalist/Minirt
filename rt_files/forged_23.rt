@@ -19,7 +19,7 @@ AL          0.001,5.99,1.001           0.000,-1.000,0.000         1.000      2  
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
-#sp          0.000,0.000,1.000                                     2.000                   200,30,255
+sp          0.000,0.000,1.000                                     2.000                   200,30,255
 
 
 #Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
