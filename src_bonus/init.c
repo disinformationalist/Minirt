@@ -25,7 +25,7 @@
 
 void	info_init(t_trace *trace)
 {
-	trace->width = 1920;
+	trace->width = 1020;
 	trace->height = (int)((double)trace->width / ASPECT);
 	trace->color_i = 0;
 	trace->num_colors = 384;
@@ -40,8 +40,8 @@ void	info_init(t_trace *trace)
 	trace->supersample = false;
 	trace->layer = false;
 	trace->n = 5.0;
-	trace->depths.refl = 6;
-	trace->depths.refr = 6;
+	trace->depths.refl = 7;
+	trace->depths.refr = 5;
 	init_viewing(trace);
 }
 

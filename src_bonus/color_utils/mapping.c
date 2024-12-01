@@ -41,6 +41,27 @@ t_map	cylinder_map(t_point obj_pnt)
 	return (map);
 }
 
+/* t_map	hyperbolic_map(t_point obj_pnt)
+{
+	t_map	map;
+
+	
+	
+	map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
+	
+	
+	//here
+	map.theta = atan2(obj_pnt.x, obj_pnt.z);
+	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
+
+	//change to hype here
+	if (map.dist2 < 1 && (obj_pnt.y >= 1 - 1e-6 || obj_pnt.y <= -1 + 1e-6))
+		map.v = sqrt(map.dist2);
+	else
+		map.v = fmod(obj_pnt.y, 1.0);
+	return (map);
+} */
+
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv)
 {
 	if (uv.y > .8)

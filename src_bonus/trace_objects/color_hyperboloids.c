@@ -1,36 +1,49 @@
 
 #include "minirt.h"
 
-static inline t_vec3 hyp_normal_at(t_point int_pnt, t_hyperboloid hyperboloid)
+//maybe all 2s mult by 3rd param to adjust waist.
+
+static inline t_vec3 hyp_normal_at(t_point int_pnt, \
+	t_hyperboloid hyperboloid, t_comps *comps)
 {
 	t_vec3	norm;
 	double	dist;
 
-	int_pnt = mat_vec_mult(hyperboloid.transform, int_pnt);
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
-	if (dist < 2 && int_pnt.y >= 1 - 1e-6)//add plus val, dist < 2 + plus val
+	if (dist < 2 && int_pnt.y >= 1 - 1e-6)//times times val, dist < 2 * times val
+	{
 		norm = vec(0, 1, 0, 0);
-	else if (dist < 2 && int_pnt.y <= -1 + 1e-6)//add plus val, dist < 2 + plus val
+		comps->is_top = true;
+		comps->is_bot = false;
+	}
+	else if (dist < 2 && int_pnt.y <= -1 + 1e-6)//times times val, dist < 2 * times val
+	{
 		norm = vec(0, -1, 0, 0);
+		comps->is_top = false;
+		comps->is_bot = true;
+	}
 	else
 	{
-		norm = vec(2 * int_pnt.x,
-			-2 * int_pnt.y,
-			2 * int_pnt.z, 0);
+		norm = vec(2 * int_pnt.x, -2 * int_pnt.y, 2 * int_pnt.z, 0);
+		comps->is_top = false;
+		comps->is_bot = false;
 	}
 	norm = mat_vec_mult(hyperboloid.t_transform, norm);
 	norm.w = 0;
 	return (norm_vec(norm));
 }
 
-static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, t_intersects *intersects, t_ray r)
+static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
+	t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
-	
+	t_point	obj_pnt;
+
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = hyp_normal_at(comps.point, *hyperboloid);
+	obj_pnt = mat_vec_mult(hyperboloid->transform, comps.point);
+	comps.normal = hyp_normal_at(obj_pnt, *hyperboloid, &comps);
 	comps.color = hyperboloid->color;
 	comps.eyev = neg(r.dir);
 	comps.mat = hyperboloid->mat;
@@ -50,25 +63,26 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, t_intersects *inte
 	return (comps);
 }
 
-t_norm_color color_hyperboloid(t_trace *trace, t_ray r, t_intersects *intersects, t_depths depths)
+t_norm_color color_hyperboloid(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_depths depths)
 {
 	t_hyperboloid	*hyperboloid;
 	t_comps			comps;
 	t_norm_color	lt_color;
-	t_light			*curr_lt;
+	t_light			*lt;
 
 	hyperboloid = (t_hyperboloid *)intersects->closest->object;
 	lt_color = color(0, 0, 0);
 	comps = set_hycomps(hyperboloid, intersects, r);
 	if (trace->lights)
 	{
-		curr_lt = trace->lights;
+		lt = trace->lights;
 		while (true)
 		{
-			comps.light_dir = norm_vec(subtract_vec(curr_lt->center, comps.point));
-			handle_light(trace, &comps, &lt_color, curr_lt);
-			curr_lt = curr_lt->next;
-			if (curr_lt == trace->lights)
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light(trace, &comps, &lt_color, lt);
+			lt = lt->next;
+			if (lt == trace->lights)
 				break;
 		}	
 	}

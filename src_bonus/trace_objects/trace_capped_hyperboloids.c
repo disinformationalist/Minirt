@@ -30,7 +30,7 @@ void	compute_abc_hy(t_vec3 *abc, t_ray ray)
 		- (ray.origin.y * ray.dir.y));
 	abc->z = (ray.origin.x * ray.origin.x)
 		+ (ray.origin.z * ray.origin.z)
-		- (ray.origin.y * ray.origin.y) - 1;//add plus val, - 1  + plus val
+		- (ray.origin.y * ray.origin.y) - 1;//times times val, - 1  + times val
 }
 
 bool	check_cap_hy(t_ray ray, double t)
@@ -42,7 +42,7 @@ bool	check_cap_hy(t_ray ray, double t)
 	cap_rad_sq = 2;
 	x = ray.origin.x + t * ray.dir.x;
 	z = ray.origin.z + t * ray.dir.z;
-	if (((x * x) + (z * z)) <= cap_rad_sq)//add plus val, capradsq + plus val
+	if (((x * x) + (z * z)) <= cap_rad_sq)//times times val, capradsq * times val
 		return (true);
 	return (false);	
 }

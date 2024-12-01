@@ -24,7 +24,7 @@ void	check_csg_sphere_list(t_trace *trace, t_csg_op op, t_intersects *intersects
 		if (current == start)
 			break ;
 	}
-	free(temp_csg);
+	//free(temp_csg);
 }
 
 void	check_csg_cyl_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
@@ -51,7 +51,7 @@ void	check_csg_cyl_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
 		if (current == start)
 			break ;
 	}
-	free(temp_csg);
+	//free(temp_csg);
 }
 
 void	check_csg_hyp_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
@@ -78,7 +78,7 @@ void	check_csg_hyp_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
 		if (current == start)
 			break ;
 	}
-	free(temp_csg);
+	//free(temp_csg);
 }
 
 void	check_csg_cube_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
@@ -105,5 +105,5 @@ void	check_csg_cube_list(t_trace *trace, t_csg_op op, t_intersects *intersects)
 		if (current == start)
 			break ;
 	}
-	free(temp_csg);
+	//free(temp_csg);
 }
