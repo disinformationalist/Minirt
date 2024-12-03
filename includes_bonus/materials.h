@@ -27,5 +27,4 @@ typedef enum e_material
 
 int	roulette_interaction(t_mat mat);
 
-
-# endif
+#endif

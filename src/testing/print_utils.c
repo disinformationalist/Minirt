@@ -27,20 +27,3 @@ void	print_3d_array(char ***array)
 		i++;
 	}
 }
-
-long	get_time(void)
-{
-	struct timeval	tv;
-
-	if (gettimeofday(&tv, NULL))
-		exit(EXIT_FAILURE);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
-void	print_times(long start, long end, char *msg)
-{
-	double	duration;
-
-	duration = (double)(end - start) / 1000;
-	printf(msg, duration);
-}

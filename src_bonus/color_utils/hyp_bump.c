@@ -36,9 +36,12 @@ static inline t_vec3	set_hytbn(t_point obj_pnt, t_vec3 bumpv, t_vec3 *bumpp)
 	t_matrix_4x4	tbn;
 	t_vec3			norm;
 
-	norm = vec(obj_pnt.x, 0, obj_pnt.z, 0);
+	//norm = vec(obj_pnt.x, 0, obj_pnt.z, 0);
+	norm = vec(2 * obj_pnt.x, -2 * obj_pnt.y, 2 * obj_pnt.z, 0);
+	//must get correct tan, bitan
 	tan = vec(-norm.z, 0 , norm.x, 0);
 	bitan = vec(0, 1, 0, 0);
+	
 	tuple_to_col(&tbn, tan, 0);
 	tuple_to_col(&tbn, bitan, 1);
 	tuple_to_col(&tbn, norm, 2);

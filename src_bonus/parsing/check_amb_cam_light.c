@@ -65,7 +65,7 @@ void	check_light(char **line, char ***rt_file)
 int	check_int(char *int_str, int min, int max)
 {
 	int		i;
-	char	str[30];	
+	char	str[30];
 	int		num;	
 
 	i = -1;

@@ -12,9 +12,9 @@ void	add_to(t_box *b1, t_box b2)
 
 bool	contains_pnt(t_box box, t_point point)
 {
-	bool in_x;
-	bool in_y;
-	bool in_z;
+	bool	in_x;
+	bool	in_y;
+	bool	in_z;
 
 	in_x = point.x >= box.min.x && point.x <= box.max.x;
 	in_y = point.y >= box.min.y && point.y <= box.max.y;
@@ -33,7 +33,7 @@ bool	contains_box(t_box b1, t_box b2)
 
 t_box	*transform_box(t_box *box, t_matrix_4x4 transf)
 {
-	t_point point;
+	t_point	point;
 	t_box	*new;
 
 	if (!box)

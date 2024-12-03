@@ -28,7 +28,7 @@ typedef struct s_vec3
 	double	w;
 }	t_vec3;
 
-typedef t_vec3 t_point;
+typedef t_vec3	t_point;
 
 //matrix ops
 void			identity(t_matrix_4x4 *matrix);

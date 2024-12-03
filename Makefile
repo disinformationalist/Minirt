@@ -3,18 +3,20 @@ NAME_BONUS := minirt_bonus
 
 SRC_DIR = ./src
 SRC_DIR_BONUS = ./src_bonus
+
 OBJ_DIR = ./obj
 OBJ_DIR_BONUS = ./obj_bonus
+
 INC_DIR = ./includes
 INC_DIR_BONUS = ./includes_bonus
 
 SRCS := ./src/main.c \
-./src/init.c \
-./src/minirt.c \
-./src/minirt_super.c \
-./src/render.c \
-./src/set_transforms.c \
-./src/clean_up.c \
+./src/render/init.c \
+./src/render/minirt.c \
+./src/render/minirt_super.c \
+./src/render/render.c \
+./src/render/set_transforms.c \
+./src/render/clean_up.c \
 ./src/math_utils/vector_ops.c \
 ./src/math_utils/vector_ops2.c \
 ./src/math_utils/vector_ops3.c \
@@ -34,7 +36,6 @@ SRCS := ./src/main.c \
 ./src/parsing/check_sp_pl_cy_le.c \
 ./src/parsing/check_line_utils.c \
 ./src/parsing/check_line_utils2.c \
-./src/parsing/check_line_utils3.c \
 ./src/init_objects/sphere_list_utils.c \
 ./src/init_objects/push_pop_sp.c \
 ./src/init_objects/plane_list_utils.c \
@@ -55,8 +56,8 @@ SRCS := ./src/main.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_all_objects2.c \
 ./src/testing/print_utils.c \
-./src/free_all_objects.c \
-./src/color_utils.c \
+./src/render/free_all_objects.c \
+./src/render/color_utils.c \
 ./src/events/main_events.c \
 ./src/events/traverse_lists.c \
 ./src/events/switch_list.c \
@@ -67,13 +68,17 @@ SRCS := ./src/main.c \
 ./src/events/supersample.c \
 
 SRCS_B := ./src_bonus/main.c \
-./src_bonus/init.c \
-./src_bonus/minirt.c \
-./src_bonus/minirt_super.c \
-./src_bonus/render.c \
-./src_bonus/set_transforms.c \
-./src_bonus/utils.c \
-./src_bonus/clean_up.c \
+./src_bonus/render/init.c \
+./src_bonus/render/minirt.c \
+./src_bonus/render/minirt_super.c \
+./src_bonus/render/render.c \
+./src_bonus/render/set_transforms.c \
+./src_bonus/render/set_transforms2.c \
+./src_bonus/render/threader.c \
+./src_bonus/render/utils.c \
+./src_bonus/render/clean_up.c \
+./src_bonus/render/free_all_objects.c \
+./src_bonus/render/free_all_objects2.c \
 ./src_bonus/math_utils/vector_ops.c \
 ./src_bonus/math_utils/vector_ops2.c \
 ./src_bonus/math_utils/vector_ops3.c \
@@ -89,6 +94,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/parsing/split_by_whitespace.c \
 ./src_bonus/parsing/split_file_utils.c \
 ./src_bonus/parsing/parse_rt.c \
+./src_bonus/parsing/parse_rt_utils.c \
 ./src_bonus/parsing/handle_ids.c \
 ./src_bonus/parsing/check_amb_cam_light.c \
 ./src_bonus/parsing/check_sl_al.c \
@@ -97,7 +103,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/parsing/check_sp_pl_cy.c \
 ./src_bonus/parsing/check_line_utils.c \
 ./src_bonus/parsing/check_line_utils2.c \
-./src_bonus/parsing/check_line_utils3.c \
 ./src_bonus/init_objects/sphere_list_utils.c \
 ./src_bonus/init_objects/push_pop/push_pop_sp.c \
 ./src_bonus/init_objects/push_pop/push_pop_pl.c \
@@ -119,7 +124,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/get_line_vals.c \
 ./src_bonus/init_objects/set_amb_cam_lights.c \
 ./src_bonus/init_objects/init_cam.c \
-./src_bonus/parsing/parse_rt_utils.c \
 ./src_bonus/trace_objects/CSG.c \
 ./src_bonus/trace_objects/CSG_utils.c \
 ./src_bonus/trace_objects/CSG_pool.c \
@@ -142,9 +146,8 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/pl_shadow.c \
 ./src_bonus/trace_objects/set_indicies.c \
 ./src_bonus/testing/print_all_objects.c \
+./src_bonus/testing/print_all_objects2.c \
 ./src_bonus/testing/print_utils.c \
-./src_bonus/free_all_objects.c \
-./src_bonus/free_all_objects2.c \
 ./src_bonus/color_utils/build_textures.c \
 ./src_bonus/color_utils/color_utils.c \
 ./src_bonus/color_utils/color_utils2.c \
@@ -154,6 +157,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
 ./src_bonus/color_utils/bump_mapping.c \
+./src_bonus/color_utils/build_lumin_map.c \
 ./src_bonus/color_utils/cyl_bump.c \
 ./src_bonus/color_utils/pl_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \
@@ -188,7 +192,6 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/png/import_png_utils.c \
 ./src_bonus/png/import_png_utils2.c \
 ./src_bonus/png/get_png_name.c \
-./src_bonus/threader.c \
 ./src_bonus/bvh/groups.c \
 ./src_bonus/bvh/boxes.c \
 ./src_bonus/bvh/box_ops.c \

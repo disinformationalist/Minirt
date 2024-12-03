@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_H
-# define KEYBOARD_H
+#ifndef KEYBOARD42_H
+# define KEYBOARD42_H
 
 /****MOUSE*****/
 # define MOUSE_FORWARD 4
@@ -73,7 +73,7 @@
 # define I 105
 # define O 111
 # define P 112
-# define Ü 91
+//# define Ü 91
 # define A 97
 # define S 115
 # define D 100
@@ -83,8 +83,8 @@
 # define J 106
 # define K 107
 # define L 108
-# define Ö 59
-# define Ä 39
+//# define Ö 59
+//# define Ä 39
 # define Y 121
 # define X 120
 # define C 99

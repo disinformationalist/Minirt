@@ -2,11 +2,9 @@
 # define MINIRT_H
 
 # include "tools.h"
-# include "keyboard (42).h"
-//# include "keyboard.h"
-# include <sys/time.h>//testing speed
+# include "keyboard42.h"
 
-# define ASPECT 1.7778 // (16.0 / 9.0)
+# define ASPECT 1.7778
 
 // holds the current closest object
 
@@ -267,13 +265,10 @@ void			free_all_objects(t_trace *trace);
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
-void			print_all_objects2(t_trace *trace);
 void			print_spheres(t_sphere *sphere);
 void			print_cylinders(t_cylinder *cylinder);
 void			print_planes(t_plane *plane);
 void			print_obj_nums(t_obj_counts *counts);
 void			print_3d_array(char ***array);
-long			get_time(void);
-void			print_times(long start, long end, char *msg);
 
 #endif
