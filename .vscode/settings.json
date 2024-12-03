@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"tools.h": "c"
+		"tools.h": "c",
+		"minirt.h": "c",
+		"cstdlib": "c"
 	}
 }
