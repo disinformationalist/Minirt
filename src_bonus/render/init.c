@@ -39,9 +39,9 @@ void	info_init(t_trace *trace)
 	trace->m_colors = NULL;
 	trace->supersample = false;
 	trace->layer = false;
-	trace->n = 5.0;
+	trace->n = 4.0;
 	trace->depths.refl = 7;
-	trace->depths.refr = 5;
+	trace->depths.refr = 6;
 	init_viewing(trace);
 }
 

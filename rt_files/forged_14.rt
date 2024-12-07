@@ -7,8 +7,8 @@ C           0.000,4.547,-11.488           0.000,-0.259,0.966                    
 
 
 #Lights:    Cen_x | Cen_y | Cen_z    								    Intensity             R | G | B
-L           0.001,4.501,-3.499                                          1.000                 255,255,255
-L           0.001,5.001,-7.999                                          1.000                 255,255,255
+L           0.001,4.501,-3.499                                          0.7500                 255,255,255
+#L           0.001,5.001,-7.999                                          1.000                 255,255,255
 
 
 #SpLights:  Cen_x | Cen_y | Cen_z     	  Ori_x | Ori_y | Ori_z  		Intensity			  R | G | B       INNERCONE	OUTERCONE

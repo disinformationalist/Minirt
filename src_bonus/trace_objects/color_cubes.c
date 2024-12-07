@@ -1,24 +1,41 @@
 #include "minirt.h"
 
-static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube)
+//get correct cube face for a given point
+
+t_face	face_of_pnt(t_point pnt)
+{
+	double	coord;
+	double	abs_x;
+	double	abs_y;
+	double	abs_z;
+
+	abs_x = fabs(pnt.x);
+	abs_y = fabs(pnt.y);
+	abs_z = fabs(pnt.z);
+	coord = fmax(fmax(abs_z, abs_y), abs_x);
+	if (coord == pnt.x)
+		return (RIGHT);
+	if (coord == -pnt.x)
+		return (LEFT);
+	if (coord == pnt.y)
+		return (UP);
+	if (coord == -pnt.y)
+		return (DOWN);
+	if (coord == -pnt.z)
+		return (FRONT);
+	return (BACK);
+}
+
+static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube, t_face face)
 {
 	t_vec3	norm;
-	double	max;
-	double	absx;
-	double	absy;
-	double	absz;
 
-	int_pnt = mat_vec_mult(cube.transform, int_pnt);
-	absx = fabs(int_pnt.x);
-	absy = fabs(int_pnt.y);
-	absz = fabs(int_pnt.z);
-	max = fmax(fmax(absx, absy), absz);
-	if (max == absx)
-		norm = vec(int_pnt.x, 0, 0, 0);
-	else if (max == absy)
+	if (face == UP || face == DOWN)
 		norm = vec(0, int_pnt.y, 0, 0);
-	else if (max == absz)
+	else if (face == FRONT || face == BACK)
 		norm = vec(0, 0, int_pnt.z, 0);
+	else if (face == LEFT || face == RIGHT)
+		norm = vec(int_pnt.x, 0, 0, 0);
 	else
 		norm = vec(0, 1, 0, 0);
 	norm = mat_vec_mult(cube.t_transform, norm);
@@ -26,26 +43,47 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube)
 	return (norm_vec(norm));
 }
 
+t_norm_color	set_cu_color(t_comps *comps, t_cube cube, t_point obj_pnt)
+{
+	t_norm_color	out;
+	/* if (cube.option == 1)
+	{
+		out = texture_cube_at(obj_pnt, cube, comps);
+		if (cube.bump && !cube.sine)
+			bump_cu(obj_pnt, cube, comps);
+	}*/
+	if (cube.option == 2)
+		out = pattern_at(cube.pattern, cube_map(obj_pnt, comps->face));
+	else
+		out = cube.color;
+	if (cube.sine)
+		sine_ring_norm_cu(obj_pnt, comps, cube.t_transform, cube.i_transform);
+	return (out);
+}
+
 static inline t_comps	set_cucomps(t_cube *cube, \
 t_intersects *intersects, t_ray r)
 {
 	t_comps	comps;
+	t_point obj_pnt;
 
 	comps.t = intersects->closest->t;
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
-	comps.normal = cu_normal_at(comps.point, *cube);
+	obj_pnt = mat_vec_mult(cube->transform, comps.point);
+	comps.face = face_of_pnt(obj_pnt);
+	comps.normal = cu_normal_at(obj_pnt, *cube, comps.face);
 	comps.eyev = neg(r.dir);
 	comps.mat = cube->mat;
 	if (comps.mat.transp)
 		set_indicies(intersects, &comps.n1, &comps.n2);
 	if (dot_product(comps.normal, comps.eyev) < 0)
 		comps.normal = neg(comps.normal);
-	if (cube->w_frost)
-		comps.normal = frost(comps.normal);
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
-	comps.color = cube->color;
+	comps.color = set_cu_color(&comps, *cube, obj_pnt);
+	if (cube->w_frost)
+		comps.normal = frost(comps.normal);
 	return (comps);
 }
 

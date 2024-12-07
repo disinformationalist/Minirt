@@ -39,6 +39,7 @@ unsigned int	clamped_col(t_norm_color col)
 }
 
 //checking for the closest intersection and computing color
+//if switch obj colors to norm_col, color_out = mult_color(255.0, color_out);
 
 t_norm_color	check_intersects(t_trace *trace, t_ray r, \
 	t_intersects *intersects, t_depths depths)
@@ -61,7 +62,7 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, \
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else
-		return (color(0, 0, 0));
+		return (color(0, 0, 0));	
 	return (color_out);
 }
 

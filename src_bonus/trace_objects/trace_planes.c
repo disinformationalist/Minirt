@@ -44,7 +44,7 @@ t_norm_color	set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 	else
 		out = plane.color;
 	if (plane.sine)
-		sine_ring_norm(obj_pnt, comps, plane);
+		sine_ring_norm(obj_pnt, comps, plane.t_transform, plane.i_transform);
 	return (out);
 }
 

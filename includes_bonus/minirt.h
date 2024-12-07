@@ -174,8 +174,10 @@ typedef struct s_cube
 	t_matrix_4x4	curr_scale;
 	t_matrix_4x4	curr_rottran;
 	t_tx			*texture;
+	t_pattern		pattern;
 	int				option;
 	bool			emitter;
+	bool			sine;
 	bool			w_frost;
 	double			bright;
 	struct s_cube	*prev;
@@ -323,6 +325,8 @@ typedef struct t_comps
 	t_map			map;
 	bool			is_top;
 	bool			is_bot;
+	t_face			face;
+	t_vec2			dirs;
 	t_position		pos;
 	t_position		dims;
 	t_norm_color	color;
@@ -331,7 +335,7 @@ typedef struct t_comps
 }	t_comps;
 
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
-//t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
+t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
 /***PARSING***/
 
@@ -569,7 +573,10 @@ t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
 int				import_textures(void *mlx_con, t_tx *textures);
-void			sine_ring_norm(t_point obj_pnt, t_comps *comps, t_plane plane);
+void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
+				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
+void			sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
+				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
 t_vec3			frost(t_vec3 norm);
 
 //bump
@@ -591,7 +598,7 @@ t_norm_color	mult_color(double scalar, t_norm_color color);
 //patterns
 t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
 t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, \
-t_norm_color col1, t_norm_color col2);
+				t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
 int				key_press(int keycode, t_trace *trace);

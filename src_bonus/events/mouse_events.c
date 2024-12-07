@@ -1,5 +1,15 @@
 #include "minirt.h"
 
+//radial sine normal perturbation on/off
+
+void 	toggle_sine(t_trace *trace)
+{
+	if (trace->on->type == PLANE)
+		trace->curr_pl->sine = !trace->curr_pl->sine;
+	else if (trace->on->type == CUBE)
+		trace->curr_cu->sine = !trace->curr_cu->sine;
+}
+
 void	increment_option(t_trace *trace, int *option)
 {
 	(*option)++;
@@ -19,6 +29,8 @@ void	select_option(t_trace *trace, t_on *on)
 		increment_option(trace, &trace->curr_sp->option);
 	else if (on->type == CYLINDER)
 		increment_option(trace, &trace->curr_cy->option);
+	else if (on->type == CUBE)
+		increment_option(trace, &trace->curr_cu->option);
 	else
 		return ;
 }
@@ -64,8 +76,7 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)
 			set_next_tx(button, trace->textures, trace->on);
 	}
 	if (button == 3)
-		if (trace->on->type == PLANE)
-			trace->curr_pl->sine = !trace->curr_pl->sine;
+		toggle_sine(trace);
 	render(trace);
 	return (0);
 }

@@ -21,7 +21,7 @@ t_sphere sphere, t_point obj_pnt)
 			bump_sp(obj_pnt, sphere, comps);
 	}
 	else if (sphere.option == 2)
-		out = pattern_at(sphere.pattern, sphere_map(obj_pnt));
+		out = pattern_at(sphere.pattern, sphere_map(obj_pnt, 1));
 	else
 		out = sphere.color;
 	return (out);

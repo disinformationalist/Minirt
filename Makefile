@@ -156,6 +156,9 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/texture_utils.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
+./src_bonus/color_utils/map_cube.c \
+./src_bonus/color_utils/map_cube2.c \
+./src_bonus/color_utils/sine_cube.c \
 ./src_bonus/color_utils/bump_mapping.c \
 ./src_bonus/color_utils/build_lumin_map.c \
 ./src_bonus/color_utils/cyl_bump.c \

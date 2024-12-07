@@ -27,7 +27,7 @@ pl          0.000,-1.000,0.000            -0.000,1.000,0.000                    
 pl          0.000,1.500,5.500             -0.000,0.000,-1.000                                 200,0,0
 
 #Cubes:     Cen_x | Cen_y | Cen_z         Nrm_x | Nrm_y | Nrm_z         W_(x)  H_(y)   D_z    R | G | B
-#cu			0.000,0.000,0.000				0,1,0		   		        1      1       1      30,20,200
+cu			0.000,0.000,0.000				0,1,0		   		        2      2       2      30,20,200
 
 #hy          0.0,0.0,0.0     0.0,1.0,0.0    0.7  0.5  1.6  000,255,100
 #cy         0.000,0.000,0.000            0.000,1.000,0.000             2.0      2.00      255,255,50
@@ -37,12 +37,13 @@ pl          0.000,1.500,5.500             -0.000,0.000,-1.000                   
 #Textures:  Image						  Bump Map(grayscale)
 tx			image_1.png
 #tx			aluminum.png				  aluminum_height.png
+tx			carina.png
 tx			neb1.png
 tx			sun.png
 tx			earth2k.png                   earthbump2k.png
-#tx			rock.png					  rock_h.png
+tx			earth.png
+tx			soap2.png
 #tx			chaos_1.png
-#tx			cracked_concrete.png		  cracked_concrete_h.png this doesnt work for some reason
 #tx			buddha_22.png
 #tx			buddha_52.png
 #tx			chaos_2.png
@@ -54,5 +55,4 @@ tx			earth2k.png                   earthbump2k.png
 #tx			julia_1.png		
 tx			julia_2.png						
 #tx			julia_3.png
-tx			ruff1.png
 

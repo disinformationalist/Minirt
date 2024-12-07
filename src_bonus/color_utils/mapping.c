@@ -2,7 +2,7 @@
 
 //maps the obj pnt to spherical, returns uv
 
-t_map	sphere_map(t_point obj_pnt)
+t_map	sphere_map(t_point obj_pnt, bool flag)
 {
 	t_map	map;
 
@@ -10,6 +10,12 @@ t_map	sphere_map(t_point obj_pnt)
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
 	map.phi = acos(obj_pnt.y);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
+	if (!flag)
+	{
+		map.u = map.u - floor(map.u);
+		if ((int)(map.u * 2) % 2 == 1)
+    		map.u = 1 - map.u;
+	}
 	map.v = 1 - map.phi / M_PI;
 	return (map);
 }
@@ -27,13 +33,19 @@ t_map	planar_map(t_point obj_pnt)
 
 //cylinder map
 
-t_map	cylinder_map(t_point obj_pnt)
+t_map	cylinder_map(t_point obj_pnt, bool flag)
 {
 	t_map	map;
 
 	map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
+	if (!flag)
+	{
+		map.u = map.u - floor(map.u);//may not need this line
+		if ((int)(map.u * 2) % 2 == 1)
+    		map.u = 1 - map.u;
+	}
 	if (map.dist2 < 1 && (obj_pnt.y >= 1 - 1e-6 || obj_pnt.y <= -1 + 1e-6))
 		map.v = sqrt(map.dist2);
 	else

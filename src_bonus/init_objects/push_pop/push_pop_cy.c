@@ -45,7 +45,8 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
+	new->pattern = uv_checker(18, 9 / M_PI, \
+	color(40, 40, 40), color(255, 255, 255));
 }
 
 //copy a cylinder and place it immediately after the current cyl in the list

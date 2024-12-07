@@ -45,7 +45,7 @@ t_cylinder cylinder, t_point obj_pnt)
 		}
 	}
 	else if (cylinder.option == 2)
-		out = pattern_at(cylinder.pattern, cylinder_map(obj_pnt));
+		out = pattern_at(cylinder.pattern, cylinder_map(obj_pnt, 1));
 	else
 		out = cylinder.color;
 	return (out);

@@ -18,6 +18,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
 	new->bump = false;
+	new->sine = false;
 	new->option = 0;
 	new->w_frost = false;
 	new->texture = NULL;

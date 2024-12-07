@@ -41,12 +41,15 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
+	new->sine = false;
 	new->w_frost = false;
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL;
 	new->emitter = false;
+	new->pattern = uv_checker(10, 10, color(30, 30, 30), \
+		color(255, 255, 255));
 }
 
 //copy a cube and place it immediately after the current cube in the list

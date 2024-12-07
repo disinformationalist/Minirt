@@ -20,7 +20,8 @@ t_vec3	sine_bump(t_vec3 obj_pnt, double rad, double freq, double amp)
 
 //only on planes, makes ripples
 
-void	sine_ring_norm(t_point obj_pnt, t_comps *comps, t_plane plane)
+void	sine_ring_norm(t_point obj_pnt, t_comps *comps, \
+t_matrix_4x4 t_tran, t_matrix_4x4 i_tran)
 {
 	t_vec3	bumpv;
 	t_vec3	bumpp;
@@ -36,11 +37,11 @@ void	sine_ring_norm(t_point obj_pnt, t_comps *comps, t_plane plane)
 	bumpv.y += 1;
 	if (comps->inside)
 		bumpv = neg(bumpv);
-	comps->normal = mat_vec_mult(plane.t_transform, bumpv);
+	comps->normal = mat_vec_mult(t_tran, bumpv);
 	comps->normal.w = 0;
 	comps->normal = norm_vec(comps->normal);
 	bumpp = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpp);
-	comps->point = mat_vec_mult(plane.i_transform, bumpp);
+	comps->point = mat_vec_mult(i_tran, bumpp);
 }
 
 t_vec3	frost(t_vec3 norm)

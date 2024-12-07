@@ -24,7 +24,7 @@ t_mat	get_mat(t_material material)
 	else if (material == CHROME)
 		mat = (t_mat){.25, 0.4, 0.9, 250.0, 1.0, 0.0, 0.95};
 	else if (material == AIR)
-		mat = (t_mat){0.1, 0.2, 0.8, 100.0, 0.8, 1.0, 1.0};
+		mat = (t_mat){0.1, 0.2, 0.8, 200.0, 0.8, .7, 1.001};
 	else
 		mat = (t_mat){0.1, 0.9, 0.9, 200, 0.0, 0.0, 1.0};
 	return (mat);

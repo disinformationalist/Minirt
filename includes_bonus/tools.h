@@ -295,17 +295,18 @@ double			randf2(void);
 t_norm_color	pattern_at(t_pattern pat, t_map map);
 t_pattern		uv_checker(double width, double height, t_norm_color color1, t_norm_color color2);
 t_map 			planar_map(t_point obj_pnt);
-t_map			sphere_map(t_point obj_pnt);
-t_map 			cylinder_map(t_point obj_pnt);
+t_map			sphere_map(t_point obj_pnt, bool flag);
+t_map 			cylinder_map(t_point obj_pnt, bool flag);
 
 //cube map
-t_vec2			cube_map(t_point obj_pnt);
+t_map			cube_map(t_point obj_pnt, t_face face);
 t_vec2			cu_uv_up(t_point pnt);
 t_vec2			cu_uv_left(t_point pnt);
 t_vec2			cu_uv_right(t_point pnt);
 t_vec2			cu_uv_back(t_point pnt);
 t_vec2			cu_uv_front(t_point pnt);
 t_vec2			cu_uv_down(t_point pnt);
+t_face			face_of_pnt(t_point pnt);
 
 /***GROUPS***/
 
