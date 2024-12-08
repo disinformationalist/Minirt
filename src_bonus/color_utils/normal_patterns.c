@@ -34,7 +34,7 @@ t_matrix_4x4 t_tran, t_matrix_4x4 i_tran)
 	rad = sqrt(obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z + 1e-6);
 	bumpv = sine_bump(obj_pnt, rad, freq, amp);
 	bumpp = bumpv;
-	bumpv.y += 1;
+	bumpv.y += 2;
 	if (comps->inside)
 		bumpv = neg(bumpv);
 	comps->normal = mat_vec_mult(t_tran, bumpv);

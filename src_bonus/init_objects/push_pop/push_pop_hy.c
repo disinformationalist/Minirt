@@ -39,14 +39,14 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->i_transform = transform;
 	new->mat = get_mat(DEFAULT);
 	*start = new;
-	new->id = 1;
 	new->shadow = true;
 	new->bump = false;
 	new->w_frost = false;
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL;
+	new->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
+	color(255, 255, 255));
 }
 
 //copy a hype and place it immediately after the current hype in the list
@@ -65,6 +65,8 @@ bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
 		trace->on->object = trace->hyperboloids;
 		trace->on->type = HYPERBOLOID;
 		trace->total_ints += 4;
+		new->texture = trace->textures;
+		new->id = 1;
 		return (false);
 	}
 	hy_to_copy = *current;

@@ -46,9 +46,8 @@ static inline void	make_default_cu(t_cube **start, t_cube *new)
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->texture = NULL;
 	new->emitter = false;
-	new->pattern = uv_checker(10, 10, color(30, 30, 30), \
+	new->pattern = uv_checker(6, 6, color(30, 30, 30), \
 		color(255, 255, 255));
 }
 
@@ -68,6 +67,7 @@ bool	insert_cucopy_after(t_trace *trace, t_cube **current)
 		trace->on->object = trace->cubes;
 		trace->on->type = CUBE;
 		trace->total_ints += 2;
+		new->texture = trace->textures;
 		return (false);
 	}
 	cu_to_copy = *current;

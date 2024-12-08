@@ -31,6 +31,8 @@ void	select_option(t_trace *trace, t_on *on)
 		increment_option(trace, &trace->curr_cy->option);
 	else if (on->type == CUBE)
 		increment_option(trace, &trace->curr_cu->option);
+	else if (on->type == HYPERBOLOID)
+		increment_option(trace, &trace->curr_hy->option);
 	else
 		return ;
 }
@@ -48,7 +50,7 @@ int	get_option(t_on *on)
 	else if (on->type == CUBE)
 		option = ((t_cube *)on->object)->option;
 	else if (on->type == HYPERBOLOID)
-		option = ((t_cube *)on->object)->option;
+		option = ((t_hyperboloid *)on->object)->option;
 	else
 		option = 0;
 	return (option);

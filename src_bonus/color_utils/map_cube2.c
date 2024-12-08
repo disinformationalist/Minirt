@@ -43,6 +43,6 @@ t_vec2	cu_uv_up(t_point pnt)
 	t_vec2	uv;
 
 	uv.x = fmod((1 - pnt.x), 2.0) / 2.0;
-	uv.y = fmod((1 - pnt.z), 2.0) / 2.0;
+	uv.y = fmod((pnt.z + 1), 2.0) / 2.0;
 	return (uv);
 }

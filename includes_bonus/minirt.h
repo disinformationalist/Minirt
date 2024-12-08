@@ -149,6 +149,7 @@ typedef struct s_hyperboloid
 	t_matrix_4x4			curr_scale;
 	t_matrix_4x4			curr_rottran;
 	t_tx					*texture;
+	t_pattern				pattern;
 	bool					w_frost;
 	int						option;
 	struct s_hyperboloid	*prev;
@@ -568,9 +569,13 @@ t_norm_color 	color(double r, double g, double b);
 
 //texture utils
 
-t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps);
+t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, \
+				t_comps *comps);
 t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
+t_norm_color	texture_cube_at(t_point obj_pnt, t_cube cube, \
+				t_comps *comps, t_face face);
+t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy, t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
 int				import_textures(void *mlx_con, t_tx *textures);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
@@ -583,7 +588,10 @@ t_vec3			frost(t_vec3 norm);
 void			bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
 void			bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 void			bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
-t_img			*build_lumin_map(void *mlx_con, t_img *img, int width, int height);
+void			bump_cu(t_point obj_pnt, t_cube cube, \
+				t_comps *comps, t_face face);
+t_img			*build_lumin_map(void *mlx_con, t_img *img, \
+				int width, int height);
 
 
 //materials

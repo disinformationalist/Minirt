@@ -67,6 +67,8 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_pl->bump = !trace->curr_pl->bump;
 	else if (on->type == CYLINDER)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
+	else if (on->type == CUBE)
+		trace->curr_cu->bump = !trace->curr_cu->bump;
 	else
 		return ;
 }

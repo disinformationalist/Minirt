@@ -26,6 +26,8 @@ t_face	face_of_pnt(t_point pnt)
 	return (BACK);
 }
 
+//normal determined by face of cube
+
 static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube, t_face face)
 {
 	t_vec3	norm;
@@ -46,13 +48,14 @@ static inline t_vec3	cu_normal_at(t_point int_pnt, t_cube cube, t_face face)
 t_norm_color	set_cu_color(t_comps *comps, t_cube cube, t_point obj_pnt)
 {
 	t_norm_color	out;
-	/* if (cube.option == 1)
+
+	if (cube.option == 1)
 	{
-		out = texture_cube_at(obj_pnt, cube, comps);
+		out = texture_cube_at(obj_pnt, cube, comps, comps->face);
 		if (cube.bump && !cube.sine)
-			bump_cu(obj_pnt, cube, comps);
-	}*/
-	if (cube.option == 2)
+			bump_cu(obj_pnt, cube, comps, comps->face);
+	}
+	else if (cube.option == 2)
 		out = pattern_at(cube.pattern, cube_map(obj_pnt, comps->face));
 	else
 		out = cube.color;

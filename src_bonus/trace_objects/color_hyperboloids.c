@@ -33,6 +33,29 @@ static inline t_vec3 hyp_normal_at(t_point int_pnt, \
 	return (norm_vec(norm));
 }
 
+static inline t_norm_color	set_hy_color(t_comps *comps, \
+t_hyperboloid hy, t_point obj_pnt)
+{
+	t_norm_color	out;
+
+	if (hy.option == 1)
+	{
+		out = texture_hy_at(obj_pnt, hy, comps);
+		/* if (hy.bump)
+		{
+			if (hy.bump)
+				bump_hy(obj_pnt, hy, comps);
+		} */
+	}
+	else if (hy.option == 2)
+		out = pattern_at(hy.pattern, hyperbolic_map(obj_pnt, 1, \
+		comps->is_top, comps->is_bot));
+	else
+		out = hy.color;
+
+	return (out);
+}
+
 static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 	t_intersects *intersects, t_ray r)
 {
@@ -44,7 +67,6 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	obj_pnt = mat_vec_mult(hyperboloid->transform, comps.point);
 	comps.normal = hyp_normal_at(obj_pnt, *hyperboloid, &comps);
-	comps.color = hyperboloid->color;
 	comps.eyev = neg(r.dir);
 	comps.mat = hyperboloid->mat;
 	if (comps.mat.transp)
@@ -58,6 +80,7 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 		comps.inside = false;
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.color = set_hy_color(&comps, *hyperboloid, obj_pnt);
 	if (hyperboloid->w_frost)
 		comps.normal = frost(comps.normal);	
 	return (comps);

@@ -45,9 +45,11 @@ t_cylinder cylinder, t_point obj_pnt)
 		}
 	}
 	else if (cylinder.option == 2)
-		out = pattern_at(cylinder.pattern, cylinder_map(obj_pnt, 1));
+		out = pattern_at(cylinder.pattern, cylinder_map(obj_pnt, 1, \
+		comps->is_top, comps->is_bot));
 	else
 		out = cylinder.color;
+
 	return (out);
 }
 

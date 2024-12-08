@@ -281,10 +281,10 @@ typedef struct s_obj_counts
 	int				tri_count;
 }	t_obj_counts;
 
-
 //some util functions
 
-t_norm_color	*set_color_wheel(int num_colors, double saturation, double lightness, int base_hue);
+t_norm_color	*set_color_wheel(int num_colors, double saturation, \
+				double lightness, int base_hue);
 t_ray			transform(t_ray r, t_matrix_4x4 m);
 void			ft_swap(double *a, double *b);
 double			randf(void);
@@ -293,10 +293,12 @@ double			randf2(void);
 //used for map
 
 t_norm_color	pattern_at(t_pattern pat, t_map map);
-t_pattern		uv_checker(double width, double height, t_norm_color color1, t_norm_color color2);
+t_pattern		uv_checker(double width, double height, \
+				t_norm_color color1, t_norm_color color2);
 t_map 			planar_map(t_point obj_pnt);
 t_map			sphere_map(t_point obj_pnt, bool flag);
-t_map 			cylinder_map(t_point obj_pnt, bool flag);
+t_map			cylinder_map(t_point obj_pnt, bool flag, bool top, bool bot);
+t_map			hyperbolic_map(t_point obj_pnt, bool flag, bool top, bool bot);
 
 //cube map
 t_map			cube_map(t_point obj_pnt, t_face face);

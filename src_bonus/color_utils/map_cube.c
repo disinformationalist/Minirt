@@ -21,7 +21,7 @@ t_vec2	cu_uv_down(t_point pnt)
 {
 	t_vec2	uv;
 
-	uv.x = fmod((1 - pnt.x), 2.0) / 2.0;
+	uv.x = fmod((pnt.x + 1), 2.0) / 2.0;
 	uv.y = fmod((pnt.z + 1), 2.0) / 2.0;
 	return (uv);
 }

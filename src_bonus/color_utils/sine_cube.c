@@ -1,6 +1,7 @@
 #include "minirt.h"
 
-t_vec3	sine_bump_dirs(t_vec2 dirs, double rad, double freq, double amp)
+static inline t_vec3	sine_bump_dirs(t_vec2 dirs, double rad, \
+double freq, double amp)
 {
 	double	dsdr;
 	double	dfdx;
@@ -18,7 +19,7 @@ t_vec3	sine_bump_dirs(t_vec2 dirs, double rad, double freq, double amp)
 	return (vec(dfdx, norm_fact, dfdy, 0));
 }
 
-void	set_dirs(t_vec2 *dirs, t_face face, t_point obj_pnt)
+static inline void	set_dirs(t_vec2 *dirs, t_face face, t_point obj_pnt)
 {
 	if (face == UP || face == DOWN)
 	{
@@ -37,8 +38,9 @@ void	set_dirs(t_vec2 *dirs, t_face face, t_point obj_pnt)
 	}
 }
 
-void	adjust_bumpv(t_vec3 *bumpv, t_face face, t_vec3 *bumpp)
+void	adjust_bumpv(t_vec3 *bumpv, t_face face)
 {
+	//bumpv->y += 2;
 	if (face == UP)
 		*bumpv = *bumpv;
 	else if (face == DOWN)
@@ -51,19 +53,6 @@ void	adjust_bumpv(t_vec3 *bumpv, t_face face, t_vec3 *bumpp)
 		*bumpv = vec(bumpv->x, bumpv->z, -bumpv->y, 0);
 	else
 		*bumpv = vec(bumpv->x, bumpv->z, bumpv->y, 0);
-	*bumpp = *bumpv;
-	if (face == UP)
-		bumpv->y += 1;
-	else if (face == DOWN)
-		bumpv->y -= 1;
-	else if (face == LEFT)
-		bumpv->x -= 1;
-	else if (face == RIGHT)
-		bumpv->x += 1;
-	else if (face == FRONT)
-		bumpv->z -= 1;	
-	else
-		bumpv->z += 1;
 }
 
 void	adjust_bumpp(t_vec3 *bumpp, t_face face, t_vec3 obj_pnt)
@@ -93,7 +82,8 @@ t_matrix_4x4 t_tran, t_matrix_4x4 i_tran)
 	rad = sqrt(comps->dirs.x * comps->dirs.x + comps->dirs.y \
 	* comps->dirs.y + 1e-6);
 	bumpv = sine_bump_dirs(comps->dirs, rad, freq, amp);
-	adjust_bumpv(&bumpv, comps->face, &bumpp);
+	adjust_bumpv(&bumpv, comps->face);
+	bumpp = bumpv;
 	if (comps->inside)
 	{
 		bumpv = neg(bumpv);

@@ -47,11 +47,23 @@ void	set_hy_transforms(t_trace *trace)
 			curr_hy->transform = mat_mult(curr_hy->curr_scale, curr_hy->curr_rottran);
 			curr_hy->i_transform = inverse(curr_hy->transform);
 			curr_hy->t_transform = transpose(curr_hy->transform);
+			curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
+			color(255, 255, 255));
+			curr_hy->texture = trace->textures;
 			curr_hy = curr_hy->next;
 			if (curr_hy == trace->hyperboloids)
 				break ;
 		}
 	}
+}
+
+void	set_cu_transforms2(t_trace *trace, t_cube *curr_cu)
+{
+	curr_cu->i_transform = inverse(curr_cu->transform);
+	curr_cu->t_transform = transpose(curr_cu->transform);
+	curr_cu->pattern = uv_checker(6, 6, color(30, 30, 30), \
+	color(255, 255, 255));
+	curr_cu->texture = trace->textures;
 }
 
 void	set_cu_transforms(t_trace *trace)
@@ -73,10 +85,7 @@ void	set_cu_transforms(t_trace *trace)
 			curr_cu->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_cu->transform = (mat_mult(curr_cu->curr_scale, \
 			curr_cu->curr_rottran));
-			curr_cu->i_transform = inverse(curr_cu->transform);
-			curr_cu->t_transform = transpose(curr_cu->transform);
-			curr_cu->pattern = uv_checker(6, 6, color(30, 30, 30), \
-			color(255, 255, 255));
+			set_cu_transforms2(trace, curr_cu);
 			curr_cu = curr_cu->next;
 			if (curr_cu == trace->cubes)
 				break ;

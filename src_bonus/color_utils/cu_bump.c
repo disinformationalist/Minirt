@@ -19,7 +19,7 @@ static inline int	min(int a, int b)
 	return (b);
 }
 
-static inline t_vec3	bumpv_pl(t_position pos, t_img *img, \
+static inline t_vec3	bumpv_cu(t_position pos, t_img *img, \
 	double strength, t_position dims)
 {
 	t_vec3			perturb;
@@ -41,21 +41,44 @@ static inline t_vec3	bumpv_pl(t_position pos, t_img *img, \
 	return (perturb);
 }
 
-void	bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps)
+static inline void	adjust_bumpv(t_vec3 *bumpv, t_face face)
+{
+	if (face == UP)
+		*bumpv = *bumpv;
+	else if (face == DOWN)
+		*bumpv = vec(bumpv->x, -bumpv->y, bumpv->z, 0);
+	else if (face == LEFT)
+		*bumpv = vec(-bumpv->y, bumpv->x, bumpv->z, 0);
+	else if (face == RIGHT)
+		*bumpv = vec(bumpv->y, bumpv->x, bumpv->z, 0);
+	else if (face == FRONT)
+		*bumpv = vec(bumpv->x, bumpv->z, -bumpv->y, 0);
+	else
+		*bumpv = vec(bumpv->x, bumpv->z, bumpv->y, 0);
+}
+
+void	bump_cu(t_point obj_pnt, t_cube cube, t_comps *comps, t_face face)
 {
 	t_vec3	bumpv;
 	t_point	bumpp;
 
-	bumpv = bumpv_pl(comps->pos, plane.texture->bump_map, 30, comps->dims);
+	bumpv = bumpv_cu(comps->pos, cube.texture->bump_map, 30, comps->dims);
+	adjust_bumpv(&bumpv, face);
 	bumpp = bumpv;
 	if (comps->inside)
 	{
 		bumpv = neg(bumpv);
 		bumpp = neg(bumpp);
 	}
-	comps->normal = mat_vec_mult(plane.t_transform, bumpv);
+	if (face == UP || face == DOWN)
+		bumpp = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpp);
+	else if (face == LEFT || face == RIGHT)
+		bumpp = add_vec(vec(0, obj_pnt.y, obj_pnt.z, 1), bumpp);
+	else 
+		bumpp = add_vec(vec(obj_pnt.x, obj_pnt.y, 0, 1), bumpp);
+	comps->normal = mat_vec_mult(cube.t_transform, bumpv);
 	comps->normal.w = 0;
 	comps->normal = norm_vec(comps->normal);
 	bumpp = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpp);
-	comps->point = mat_vec_mult(plane.i_transform, bumpp);
+	comps->point = mat_vec_mult(cube.i_transform, bumpp);
 }
