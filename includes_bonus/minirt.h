@@ -141,6 +141,7 @@ typedef struct s_hyperboloid
 	double					rad2;
 	double					height;
 	double					half_h;
+	double					waist_val;
 	t_norm_color			color;
 	t_mat					mat;
 	t_matrix_4x4			transform;
@@ -512,7 +513,7 @@ bool			intersect_caps(t_ray ray, double *t3, double *t4);
 //hyperboloid utils
 void			check_hyperboloids(t_hyperboloid *hyperboloids, \
 				t_intersects *intersects, t_ray ray);
-void			compute_abc_hy(t_vec3 *abc, t_ray ray);
+void			compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, \
@@ -616,6 +617,7 @@ void			toggle_shadow(t_trace *trace, t_on *on);
 void			toggle_bump(t_trace *trace, t_on *on);
 void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
+void			scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1, double waist_factor);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			pop_object(t_trace *trace, t_on *on);

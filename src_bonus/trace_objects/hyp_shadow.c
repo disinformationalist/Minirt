@@ -40,7 +40,7 @@ t_ray ray, double dist)
 	t_vec3	abc;
 
 	ray = transform(ray, hyperboloid.transform);
-	compute_abc_hy(&abc, ray);//make a copy 2 inline here
+	compute_abc_hy(&abc, ray, &hyperboloid);//make a copy 2 inline here
 	if (abc.x == 0)
 		return (false);
 	if (check_trunk_solutions2_hy(abc, ray, dist))

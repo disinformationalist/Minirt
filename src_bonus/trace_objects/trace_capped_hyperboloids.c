@@ -19,7 +19,7 @@ static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
 // Equation: x * x / a * a + z * z / b * b - y * y / c * c = 1
 // will need to parse a hyperboloid center, height, half_h, ray_max and ray_min
 
-void	compute_abc_hy(t_vec3 *abc, t_ray ray)
+void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
 {
 	
 	abc->x = (ray.dir.x * ray.dir.x) 
@@ -30,26 +30,27 @@ void	compute_abc_hy(t_vec3 *abc, t_ray ray)
 		- (ray.origin.y * ray.dir.y));
 	abc->z = (ray.origin.x * ray.origin.x)
 		+ (ray.origin.z * ray.origin.z)
-		- (ray.origin.y * ray.origin.y) - 1;//times times val, - 1  + times val
+		- (ray.origin.y * ray.origin.y) - (hyperboloid->waist_val);
 }
 
-bool	check_cap_hy(t_ray ray, double t)
+bool	check_cap_hy(t_ray ray, double t, t_hyperboloid *hyperboloid)
 {
 	double	x;
 	double	z;
 	double	cap_rad_sq;
+	(void) hyperboloid;
 
-	cap_rad_sq = 2;
-	x = ray.origin.x + t * ray.dir.x;
-	z = ray.origin.z + t * ray.dir.z;
-	if (((x * x) + (z * z)) <= cap_rad_sq)//times times val, capradsq * times val
+	cap_rad_sq =  1 + hyperboloid->waist_val;
+	x = (ray.origin.x + t * ray.dir.x);
+	z = (ray.origin.z + t * ray.dir.z);
+	if (((x * x) + (z * z)) <= cap_rad_sq)
 		return (true);
 	return (false);	
 }
 
 //later return false if cyl.closed == false
 
-bool	intersect_caps_hy(t_ray ray, double *t3, double *t4)
+bool	intersect_caps_hy(t_ray ray, double *t3, double *t4, t_hyperboloid *hyperboloid)
 {
 	double	t;
 	bool	hit1;
@@ -60,11 +61,11 @@ bool	intersect_caps_hy(t_ray ray, double *t3, double *t4)
 	if (fabs(ray.dir.y) < 1e-5)
 		return (false);
 	t = (-1 - ray.origin.y) / ray.dir.y;
-	hit1 = check_cap_hy(ray, t);
+	hit1 = check_cap_hy(ray, t, hyperboloid);
 	if (hit1)
 		*t4 = t;
 	t = (1 - ray.origin.y) / ray.dir.y;
-	hit2 = check_cap_hy(ray, t);
+	hit2 = check_cap_hy(ray, t, hyperboloid);
 	if (hit2)
 		*t3 = t;
 	if (hit1 || hit2)
@@ -93,7 +94,7 @@ void	ray_hyperboloid_intersect(t_hyperboloid *hyperboloids, t_ray ray, t_interse
 	double 	t4;
 
 	ray = transform(ray, hyperboloids->transform);
-	compute_abc_hy(&abc, ray);
+	compute_abc_hy(&abc, ray, hyperboloids);
 	if (abc.x != 0)
 	{
 		if (check_trunk_solutions(abc, &t1, &t2))
@@ -104,7 +105,7 @@ void	ray_hyperboloid_intersect(t_hyperboloid *hyperboloids, t_ray ray, t_interse
 				intersect(intersects, hyperboloids, t2, HYPERBOLOID);
 		}
 	}
-	if (intersect_caps_hy(ray, &t3, &t4))
+	if (intersect_caps_hy(ray, &t3, &t4, hyperboloids))
 	{
 		if (t3 < INFINITY)
 			intersect(intersects, hyperboloids, t3, HYPERBOLOID);

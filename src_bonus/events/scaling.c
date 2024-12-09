@@ -15,16 +15,18 @@ static inline void	scale_arealt(t_light *lt, t_vec3 v)
 	set_arealt(lt);
 }
 
-static inline void	scale_object4(t_trace *trace, t_on *on, t_vec3 vec1)
+void	scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1, double waist_factor)
 {
-	if (on->type == CYLINDER)
+	if (on->type == HYPERBOLOID)
 	{
-		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
-			vec1.z), trace->curr_cy->curr_scale);
-		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
-			trace->curr_cy->curr_rottran);
-		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
-		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
+		trace->curr_hy->waist_val *= waist_factor;
+		trace->curr_hy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
+			vec1.z), trace->curr_hy->curr_scale);
+		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, \
+			trace->curr_hy->curr_rottran);
+		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
+		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
+		printf("%f\n", trace->curr_hy->waist_val);//-----------------------
 	}
 	else
 		return ;
@@ -52,19 +54,19 @@ static inline void	scale_object3(t_trace *trace, t_on *on, t_vec3 vec1)
 			scale_arealt(trace->curr_lt, vec1);
 	}
 	else
-		scale_object4(trace, on, vec1);
+		scale_hyperboloid(trace, on, vec1, 1);
 }
 
 static inline void	scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 {
-	if (on->type == HYPERBOLOID)
+	if (on->type == CYLINDER)
 	{
-		trace->curr_hy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
-			vec1.z), trace->curr_hy->curr_scale);
-		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, \
-			trace->curr_hy->curr_rottran);
-		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
-		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
+		trace->curr_cy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
+			vec1.z), trace->curr_cy->curr_scale);
+		trace->curr_cy->transform = mat_mult(trace->curr_cy->curr_scale, \
+			trace->curr_cy->curr_rottran);
+		trace->curr_cy->t_transform = transpose(trace->curr_cy->transform);
+		trace->curr_cy->i_transform = inverse(trace->curr_cy->transform);
 	}
 	else if (on->type == PLANE)
 	{

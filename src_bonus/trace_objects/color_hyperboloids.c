@@ -8,15 +8,17 @@ static inline t_vec3 hyp_normal_at(t_point int_pnt, \
 {
 	t_vec3	norm;
 	double	dist;
+	double	cap_rad_sq;
 
+	cap_rad_sq = 1 + hyperboloid.waist_val;
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
-	if (dist < 2 && int_pnt.y >= 1 - 1e-6)//times times val, dist < 2 * times val
+	if (dist < cap_rad_sq && int_pnt.y >= 1 - 1e-6)
 	{
 		norm = vec(0, 1, 0, 0);
 		comps->is_top = true;
 		comps->is_bot = false;
 	}
-	else if (dist < 2 && int_pnt.y <= -1 + 1e-6)//times times val, dist < 2 * times val
+	else if (dist < cap_rad_sq && int_pnt.y <= -1 + 1e-6)
 	{
 		norm = vec(0, -1, 0, 0);
 		comps->is_top = false;
