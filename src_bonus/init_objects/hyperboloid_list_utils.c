@@ -2,16 +2,16 @@
 
 void	set_hy_vals(t_hyperboloid *new, char **line)
 {
-	char	*rad1_str;
+	char	*rad_str;
 	char	*waist_str;
 	char	*height_str;	
 
-	rad1_str = line[3];
+	rad_str = line[3];
 	waist_str = line[4];
 	height_str = line[5];
 	new->center = get_coordinates(line[1], 1.0);
 	new->norm = get_coordinates(line[2], 0.0);
-	new->rad1 = get_double(&rad1_str);
+	new->rad = get_double(&rad_str);
 	new->waist_val = get_double(&waist_str);
 	new->height = get_double(&height_str);
 	new->half_h = new->height / 2.0;

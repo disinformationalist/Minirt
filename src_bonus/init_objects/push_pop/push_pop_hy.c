@@ -25,7 +25,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	t_matrix_4x4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
-	new->rad1 = 1.0;
+	new->rad = 1.0;
 	new->waist_val = 1.0;
 	new->height = 2.0;
 	new->half_h = new->height / 2.0;//or this?

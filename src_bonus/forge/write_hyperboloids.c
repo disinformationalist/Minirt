@@ -52,7 +52,7 @@ void	write_hyperboloids(t_hyperboloid *hyperboloids, int fd)
 	
 	if (hyperboloids == NULL)
 		return ;
-	ft_putstr_fd("#Hyperboloids: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      rad1   Waist   Height       R | G | B\n", fd);
+	ft_putstr_fd("#Hyperboloids: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      rad   Waist   Height       R | G | B\n", fd);
 	curr_hy = hyperboloids;
 	while (true)
 	{

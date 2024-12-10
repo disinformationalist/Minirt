@@ -44,7 +44,7 @@ void	print_hyperboloids(t_hyperboloid *hyperboloid)
 		printf("norm_vecx: %f\n", curr_hy->norm.x);
 		printf("norm_vecy: %f\n", curr_hy->norm.y);
 		printf("norm_vecz: %f\n\n", curr_hy->norm.z);
-		printf("hyperboloid rad1: %f\n", curr_hy->rad1);
+		printf("hyperboloid rad: %f\n", curr_hy->rad);
 		printf("hyperboloid waist: %f\n", curr_hy->waist_val);
 		printf("hyperboloid height: %f\n", curr_hy->height);
 		printf("hyperboloid color rgb: r: %f, g: %f, b %f\n", curr_hy->color.r,
