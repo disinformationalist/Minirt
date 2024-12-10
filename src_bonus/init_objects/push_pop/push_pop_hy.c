@@ -26,9 +26,9 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->rad1 = 1.0;
-	new->rad2 = 1.0;
+	new->rad2 = 1.0;//do we need both anymore?
 	new->height = 2.0;
-	new->half_h = new->height / 2.0;
+	new->half_h = new->height / 2.0;//or this?
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color = color(0, 200, 100);
 	identity(&transform);
@@ -45,6 +45,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
+	new->waist_val = 1;
 	new->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 	color(255, 255, 255));
 }

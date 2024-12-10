@@ -92,7 +92,7 @@ t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy, t_comps *comps)
 	dims.i = hy.texture->i_width;
 	dims.j = hy.texture->i_height;
 	map = hyperbolic_map(obj_pnt, dims.i == dims.j * 2, \
-	comps->is_top, comps->is_bot);
+	comps, hy.waist_val);
 	map.v = 1 - map.v;
 	pos.i = ft_round(map.u * (double)(dims.j * 2 - 1));
 	pos.j = ft_round(map.v / 2 * (double)(dims.j - 1));

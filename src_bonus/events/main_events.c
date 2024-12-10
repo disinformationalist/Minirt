@@ -113,15 +113,11 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	else if (keycode == U)
 		scale_object(trace, trace->on, vec(1, 1, .9, 0), keycode);
 	else if (keycode == O)
-<<<<<<< HEAD
-		scale_object(trace, trace->on, vec(1, 1, 1.1, 0));
+		scale_object(trace, trace->on, vec(1, 1, 1.1, 0), keycode);
 	else if (trace->on->type == HYPERBOLOID && keycode == G)
 		scale_hyperboloid(trace, trace->on, vec(1, 1, 1, 0), 0.9);
 	else if (trace->on->type == HYPERBOLOID && keycode == H)
 		scale_hyperboloid(trace, trace->on, vec(1, 1, 1, 0), 1.1);
-=======
-		scale_object(trace, trace->on, vec(1, 1, 1.1, 0), keycode);
->>>>>>> Jesse
 	else if (keycode == PERIOD)
 		scale_object(trace, trace->on, vec(1.1, 1.1, 1.1, 0), keycode);
 	else if (keycode == COMMA)

@@ -584,6 +584,8 @@ void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
 void			sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
 				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
 t_vec3			frost(t_vec3 norm);
+t_map			hyperbolic_map(t_point obj_pnt, bool flag, \
+				t_comps *comps, double waist_val);
 
 //bump
 void			bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);

@@ -4,13 +4,11 @@
 //maybe all 2s mult by 3rd param to adjust waist.
 
 static inline t_vec3 hyp_normal_at(t_point int_pnt, \
-	t_hyperboloid hyperboloid, t_comps *comps)
+	t_hyperboloid hyperboloid, t_comps *comps, double cap_rad_sq)
 {
 	t_vec3	norm;
 	double	dist;
-	double	cap_rad_sq;
-
-	cap_rad_sq = 1 + hyperboloid.waist_val;
+	
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
 	if (dist < cap_rad_sq && int_pnt.y >= 1 - 1e-6)
 	{
@@ -51,10 +49,11 @@ t_hyperboloid hy, t_point obj_pnt)
 	}
 	else if (hy.option == 2)
 		out = pattern_at(hy.pattern, hyperbolic_map(obj_pnt, 1, \
-		comps->is_top, comps->is_bot));
+		comps, hy.waist_val));
 	else
 		out = hy.color;
-
+	if (hy.w_frost)
+		comps->normal = frost(comps->normal);	
 	return (out);
 }
 
@@ -68,7 +67,8 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 	comps.ray = r;
 	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
 	obj_pnt = mat_vec_mult(hyperboloid->transform, comps.point);
-	comps.normal = hyp_normal_at(obj_pnt, *hyperboloid, &comps);
+	comps.normal = hyp_normal_at(obj_pnt, *hyperboloid, &comps, \
+	1 + hyperboloid->waist_val);
 	comps.eyev = neg(r.dir);
 	comps.mat = hyperboloid->mat;
 	if (comps.mat.transp)
@@ -83,8 +83,6 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_hy_color(&comps, *hyperboloid, obj_pnt);
-	if (hyperboloid->w_frost)
-		comps.normal = frost(comps.normal);	
 	return (comps);
 }
 

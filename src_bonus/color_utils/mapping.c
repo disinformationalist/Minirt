@@ -57,11 +57,11 @@ t_map	cylinder_map(t_point obj_pnt, bool flag, bool top, bool bot)
 
 //hyper
 
-t_map	hyperbolic_map(t_point obj_pnt, bool flag, bool top, bool bot)
+t_map	hyperbolic_map(t_point obj_pnt, bool flag, \
+t_comps *comps, double waist_val)
 {
 	t_map	map;
 
-	map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
 	map.theta = atan2(obj_pnt.x, obj_pnt.z);
 	map.u = 1 - (map.theta / (2 * M_PI) + 0.5);
 	if (!flag)
@@ -70,10 +70,16 @@ t_map	hyperbolic_map(t_point obj_pnt, bool flag, bool top, bool bot)
 		if ((int)(map.u * 2) % 2 == 1)
     		map.u = 1 - map.u;
 	}
-	if (top)
-		map.v = sqrt(map.dist2 * .5);
-	else if (bot)
-		map.v = -sqrt(map.dist2 * .5);
+	if (comps->is_top)
+	{
+		map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
+		map.v = sqrt(map.dist2 / (1 + waist_val));
+	}
+	else if (comps->is_bot)
+	{
+		map.dist2 = obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z;
+		map.v = -sqrt(map.dist2 / (1 + waist_val));
+	}
 	else
 		map.v = fmod(obj_pnt.y, 1.0);
 	return (map);

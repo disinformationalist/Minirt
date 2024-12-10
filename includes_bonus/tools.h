@@ -300,7 +300,7 @@ t_pattern		uv_checker(double width, double height, \
 t_map 			planar_map(t_point obj_pnt);
 t_map			sphere_map(t_point obj_pnt, bool flag);
 t_map			cylinder_map(t_point obj_pnt, bool flag, bool top, bool bot);
-t_map			hyperbolic_map(t_point obj_pnt, bool flag, bool top, bool bot);
+
 
 //cube map
 t_map			cube_map(t_point obj_pnt, t_face face);
