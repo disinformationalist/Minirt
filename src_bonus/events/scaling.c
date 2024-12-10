@@ -82,21 +82,21 @@ static inline void	scale_object2(t_trace *trace, t_on *on, t_vec3 vec1)
 }
 
 //scales current object in xyz based on the vec1 passed in
-//for light add, make counts of sl, al and use if == 0
+//for light can add spot or area lights
 
-void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1)
+void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1, int keycode)
 {
 	if (on->object == NULL && on->type != LIGHT)
 		return ;
-	else if (trace->lights == NULL && on->type == LIGHT)
+	else if (on->type == LIGHT && (keycode == PERIOD || keycode == COMMA))
 	{
-		if (vec1.x + vec1.y + vec1.z > 3)
+		if (keycode == PERIOD && trace->al_count == 0)
 		{
-			if (insert_ltcopy_after2(trace))
+			if (insert_ltcopy_after2(trace, &trace->curr_lt))
 				close_win(trace);
 		}
-		else if (vec1.x + vec1.y + vec1.z > 2.6)
-			if (insert_ltcopy_after3(trace))
+		if (keycode == COMMA && trace->sl_count == 0)
+			if (insert_ltcopy_after3(trace, &trace->curr_lt))
 				close_win(trace);
 		return ;
 	}

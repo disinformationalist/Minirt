@@ -19,18 +19,37 @@ void	make_default_spotlt(t_light **start, t_light *new)
 	*start = new;
 }
 
-//if the list is empty, produce a spot lt.
-
-bool	insert_ltcopy_after3(t_trace *trace)
+void	adj_pntrs_copy3(t_light *to_copy, t_light *new)
 {
+	new->next = to_copy->next;
+	new->prev = to_copy;
+	to_copy->next->prev = new;
+	to_copy->next = new;
+}
+
+//produce a spot lt.
+
+bool	insert_ltcopy_after3(t_trace *trace, t_light **current)
+{
+	t_light	*lt_to_copy;
 	t_light	*new;
 
 	new = (t_light *)malloc(sizeof(t_light));
 	if (!new)
 		return (true);
 	make_default_spotlt(&trace->lights, new);
-	trace->on->object = trace->lights;
-	trace->curr_lt = trace->on->object;
-	trace->on->type = LIGHT;
+	trace->sl_count++;
+	if (!*current)
+	{
+		trace->on->object = trace->lights;
+		trace->curr_lt = trace->on->object;
+		trace->on->type = LIGHT;
+		return (false);
+	}
+	lt_to_copy = *current;
+	adj_pntrs_copy3(lt_to_copy, new);
+	next_list_ob(trace, trace->on);
+	update_light_ids(trace->lights);
 	return (false);
 }
+

@@ -15,6 +15,8 @@
 F1 => forge rt file from current scene
 F3 => save current scene to png
 
+Tab => second layer key press
+
 F1	 F3								  NUM PAD	
 +-------------------------------+	+---------+
 |1 2 3 4(lists)        (l,c)9 0	|	|		- | pad - prev obj on curr list
@@ -41,6 +43,7 @@ I,K => y dirs
 U,O => z dirs
 
 //shadow toggle strg(right) key
+//bump toggle strg(left) key
 
 //COLOR SHIFT
 mouse wheel shifts color of on object or light.
@@ -100,25 +103,29 @@ int	key_press_3(int keycode, t_trace *trace)
 int	key_press_2layer(int keycode, t_trace *trace)
 {
 	if (keycode == J)
-		scale_object(trace, trace->on, vec(.9, 1, 1, 0));
+		scale_object(trace, trace->on, vec(.9, 1, 1, 0), keycode);
 	else if (keycode == L)
-		scale_object(trace, trace->on, vec(1.1, 1, 1, 0));
+		scale_object(trace, trace->on, vec(1.1, 1, 1, 0), keycode);
 	else if (keycode == I)
-		scale_object(trace, trace->on, vec(1, 1.1, 1, 0));
+		scale_object(trace, trace->on, vec(1, 1.1, 1, 0), keycode);
 	else if (keycode == K)
-		scale_object(trace, trace->on, vec(1, .9, 1, 0));
+		scale_object(trace, trace->on, vec(1, .9, 1, 0), keycode);
 	else if (keycode == U)
-		scale_object(trace, trace->on, vec(1, 1, .9, 0));
+		scale_object(trace, trace->on, vec(1, 1, .9, 0), keycode);
 	else if (keycode == O)
+<<<<<<< HEAD
 		scale_object(trace, trace->on, vec(1, 1, 1.1, 0));
 	else if (trace->on->type == HYPERBOLOID && keycode == G)
 		scale_hyperboloid(trace, trace->on, vec(1, 1, 1, 0), 0.9);
 	else if (trace->on->type == HYPERBOLOID && keycode == H)
 		scale_hyperboloid(trace, trace->on, vec(1, 1, 1, 0), 1.1);
+=======
+		scale_object(trace, trace->on, vec(1, 1, 1.1, 0), keycode);
+>>>>>>> Jesse
 	else if (keycode == PERIOD)
-		scale_object(trace, trace->on, vec(1.1, 1.1, 1.1, 0));
+		scale_object(trace, trace->on, vec(1.1, 1.1, 1.1, 0), keycode);
 	else if (keycode == COMMA)
-		scale_object(trace, trace->on, vec(.9, .9, .9, 0));
+		scale_object(trace, trace->on, vec(.9, .9, .9, 0), keycode);
 	else
 		key_press_3(keycode, trace);
 	render(trace);

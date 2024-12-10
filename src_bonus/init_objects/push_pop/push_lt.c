@@ -2,7 +2,7 @@
 
 //update the id numbers of all lights in the list
 
-void	update_light_ids(t_light *light)
+void	update_light_ids2(t_light *light, t_light *lt_to_copy, t_trace *trace)
 {
 	t_light	*start;
 	int		id;
@@ -16,6 +16,10 @@ void	update_light_ids(t_light *light)
 		light->id = id++;
 		light = light->next;
 	}
+	if (lt_to_copy->type == SPOT)
+		trace->sl_count++;
+	if (lt_to_copy->type == AREA)
+		trace->al_count++;
 }
 
 //if list is empty, make a default light and set it as the current object
@@ -78,6 +82,6 @@ bool	insert_ltcopy_after(t_trace *trace, t_light **current)
 		trace->total_ints += 2;
 	}
 	adj_pntrs_copy(lt_to_copy, new);
-	update_light_ids(trace->lights);
+	update_light_ids2(trace->lights, lt_to_copy, trace);
 	return (false);
 }

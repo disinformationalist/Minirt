@@ -5,9 +5,9 @@ void	increment_id_count(t_obj_counts *counts, char ***rt_file, int k)
 	if (!ft_strcmp(*(rt_file[k]), "L"))
 		counts->light_count++;
 	else if (!ft_strcmp(*(rt_file[k]), "SL"))
-		counts->light_count++;
+		counts->sl_count++;
 	else if (!ft_strcmp(*(rt_file[k]), "AL"))
-		counts->light_count++;
+		counts->al_count++;
 	else if (!ft_strcmp(*(rt_file[k]), "sp"))
 		counts->sphere_count++;
 	else if (!ft_strcmp(*(rt_file[k]), "pl"))
