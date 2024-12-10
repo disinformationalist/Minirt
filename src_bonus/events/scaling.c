@@ -26,7 +26,6 @@ void	scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1, double waist_facto
 			trace->curr_hy->curr_rottran);
 		trace->curr_hy->t_transform = transpose(trace->curr_hy->transform);
 		trace->curr_hy->i_transform = inverse(trace->curr_hy->transform);
-		printf("%f\n", trace->curr_hy->waist_val);//-----------------------
 	}
 	else
 		return ;

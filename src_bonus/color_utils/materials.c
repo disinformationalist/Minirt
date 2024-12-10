@@ -14,7 +14,7 @@ t_mat	get_mat(t_material material)
 	else if (material == MATTE)
 		mat = (t_mat){0.2, 0.7, 0.1, 5.0, 0.05, 0.0, 1.0};
 	else if (material == GLASS)
-		mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.2, 0.8, 1.52};
+		mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.3, 0.8, 1.52};
 	else if (material == MIRROR)
 		mat = (t_mat){0.0, 0.0, 1.0, 1000.0, 1.0, 0.0, 1.0};
 	else if (material == DIAMOND)

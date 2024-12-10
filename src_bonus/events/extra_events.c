@@ -10,7 +10,7 @@ void	forge_or_export(int keycode, t_trace *trace)
 	if (keycode == F3)
 		name = get_nxt_name("scene_");
 	else if (keycode == F1)
-		name = get_nxt_name_rt("forged_");
+		name = get_nxt_name_rt("rt_files/forged_");
 	if (!name)
 		clear_all(trace);
 	if (keycode == F1)

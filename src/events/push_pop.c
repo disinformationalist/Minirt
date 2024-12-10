@@ -1,15 +1,5 @@
 #include "minirt.h"
 
-/* static inline void push_new2(t_trace *trace, t_on *on)
-{
-	//else if (on->type == LIGHT)////---------------
-	//{
-	//	if (insert_ltcopy_after(trace, &trace->lights))
-	//		close_win(trace);	
-	//}
-	return ;
-} */
-
 void	push_new_object(t_trace *trace, t_on *on)
 {
 	if (on->type == SPHERE)
