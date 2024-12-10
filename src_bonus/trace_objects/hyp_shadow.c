@@ -34,6 +34,36 @@ t_ray ray, double dist)
 	return (false);
 }
 
+static inline bool	check_cap2_hy(t_ray ray, double t, t_hyperboloid hyperboloid)
+{
+	double	x;
+	double	z;
+
+	x = ray.origin.x + t * ray.dir.x;
+	z = ray.origin.z + t * ray.dir.z;
+	if ((x * x + z * z) <= 1 + hyperboloid.waist_val)
+		return (true);
+	return (false);
+}
+
+static inline bool	intersect_caps2_hy(t_ray ray, double dist, t_hyperboloid hyperboloid)
+{
+	double	t;
+	bool	hit;
+
+	if (fabs(ray.dir.y) < 1e-6)
+		return (false);
+	t = (-1 - ray.origin.y) / ray.dir.y;
+	hit = check_cap2_hy(ray, t, hyperboloid);
+	if (hit && t > 0 && t < dist)
+		return (true);
+	t = (1 - ray.origin.y) / ray.dir.y;
+	hit = check_cap2_hy(ray, t, hyperboloid);
+	if (hit && t > 0 && t < dist)
+		return (true);
+	return (false);
+}
+
 static inline bool	ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, \
 t_ray ray, double dist)
 {
@@ -44,6 +74,8 @@ t_ray ray, double dist)
 	if (abc.x == 0)
 		return (false);
 	if (check_trunk_solutions2_hy(abc, ray, dist))
+		return (true);
+	if (intersect_caps2_hy(ray, dist, hyperboloid))
 		return (true);
 	return (false);
 }
