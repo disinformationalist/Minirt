@@ -42,7 +42,7 @@ void	set_hy_transforms(t_trace *trace)
 		{
 			inv_trans = translation(-curr_hy->center.x, -curr_hy->center.y, -curr_hy->center.z);
 			inv_rot = rot_to(curr_hy->norm,  vec(0, 1, 0, 0));
-			curr_hy->curr_scale = inv_scaling(curr_hy->rad1, curr_hy->half_h, curr_hy->rad2);//check what to do with radiuses
+			curr_hy->curr_scale = inv_scaling(curr_hy->rad1, curr_hy->half_h, curr_hy->rad1);
 			curr_hy->curr_rottran = mat_mult(inv_rot, inv_trans);
 			curr_hy->transform = mat_mult(curr_hy->curr_scale, curr_hy->curr_rottran);
 			curr_hy->i_transform = inverse(curr_hy->transform);

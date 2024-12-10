@@ -26,7 +26,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->rad1 = 1.0;
-	new->rad2 = 1.0;//do we need both anymore?
+	new->waist_val = 1.0;
 	new->height = 2.0;
 	new->half_h = new->height / 2.0;//or this?
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);

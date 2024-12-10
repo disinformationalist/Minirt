@@ -138,7 +138,6 @@ typedef struct s_hyperboloid
 	t_point					center;
 	t_vec3					norm;
 	double					rad1;
-	double					rad2;
 	double					height;
 	double					half_h;
 	double					waist_val;

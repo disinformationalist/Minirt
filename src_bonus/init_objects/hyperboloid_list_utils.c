@@ -3,19 +3,18 @@
 void	set_hy_vals(t_hyperboloid *new, char **line)
 {
 	char	*rad1_str;
-	char	*rad2_str;
+	char	*waist_str;
 	char	*height_str;	
 
 	rad1_str = line[3];
-	rad2_str = line[4];
+	waist_str = line[4];
 	height_str = line[5];
 	new->center = get_coordinates(line[1], 1.0);
 	new->norm = get_coordinates(line[2], 0.0);
 	new->rad1 = get_double(&rad1_str);
-	new->rad2 = get_double(&rad2_str);
+	new->waist_val = get_double(&waist_str);
 	new->height = get_double(&height_str);
 	new->half_h = new->height / 2.0;
-	new->waist_val = 1;
 	new->color = get_color(line[6], 1.0);
 	new->mat = get_mat(DEFAULT);
 	new->shadow = true;
