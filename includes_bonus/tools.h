@@ -272,6 +272,8 @@ typedef struct s_obj_counts
 	int				amb_count;
 	int				cam_count;
 	int				light_count;
+	int				sl_count;
+	int				al_count;
 	int				sphere_count;
 	int				plane_count;
 	int				cyl_count;

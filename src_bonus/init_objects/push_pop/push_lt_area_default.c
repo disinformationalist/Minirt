@@ -72,23 +72,37 @@ static inline bool	make_default_arealt(t_light **start, t_light *new)
 	return (0);
 }
 
-//if the list is empty, produce a square area lt.
-
-bool	insert_ltcopy_after2(t_trace *trace)
+void	adj_pntrs_copy2(t_light *to_copy, t_light *new)
 {
+	new->next = to_copy->next;
+	new->prev = to_copy;
+	to_copy->next->prev = new;
+	to_copy->next = new;
+}
+
+//produce a square area lt.
+
+bool	insert_ltcopy_after2(t_trace *trace, t_light **current)
+{
+	t_light	*lt_to_copy;
 	t_light	*new;
 
 	new = (t_light *)malloc(sizeof(t_light));
 	if (!new)
 		return (true);
-	if (make_default_arealt(&trace->lights, new))
-	{
-		free(new);
-		return (true);
-	}
-	trace->on->object = trace->lights;
-	trace->curr_lt = trace->on->object;
-	trace->on->type = LIGHT;
+	make_default_arealt(&trace->lights, new);	
+	trace->al_count++;
 	trace->total_ints += 2;
+	if (!*current)
+	{
+		trace->on->object = trace->lights;
+		trace->curr_lt = trace->on->object;
+		trace->on->type = LIGHT;
+		return (false);
+	}
+	lt_to_copy = *current;
+	adj_pntrs_copy2(lt_to_copy, new);
+	next_list_ob(trace, trace->on);
+	update_light_ids(trace->lights);
 	return (false);
 }

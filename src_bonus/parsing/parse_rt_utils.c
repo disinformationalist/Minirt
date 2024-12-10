@@ -26,6 +26,8 @@ void	init_counts(t_obj_counts *counts)
 	counts->cube_count = 0;
 	counts->tx_count = 0;
 	counts->tri_count = 0;
+	counts->sl_count = 0;
+	counts->al_count = 0;
 }
 
 void	count_check(int *item_count, char *msg, char ***rt_file)

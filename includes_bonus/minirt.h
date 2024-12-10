@@ -418,8 +418,8 @@ bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
 bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 bool			insert_cucopy_after(t_trace *trace, t_cube **current);
-bool			insert_ltcopy_after2(t_trace *trace);
-bool			insert_ltcopy_after3(t_trace *trace);
+bool			insert_ltcopy_after2(t_trace *trace, t_light **current);
+bool			insert_ltcopy_after3(t_trace *trace, t_light **current);
 
 //remove a list object
 void			pop_sp(t_trace *trace, t_sphere **current);
@@ -588,6 +588,7 @@ t_vec3			frost(t_vec3 norm);
 void			bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps);
 void			bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 void			bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
+void			bump_hy(t_point obj_pnt, t_hyperboloid hyp, t_comps *comps);
 void			bump_cu(t_point obj_pnt, t_cube cube, \
 				t_comps *comps, t_face face);
 t_img			*build_lumin_map(void *mlx_con, t_img *img, \
@@ -615,7 +616,7 @@ void			frost_on(t_trace *trace, t_on on);
 void			toggle_shadow(t_trace *trace, t_on *on);
 void			toggle_bump(t_trace *trace, t_on *on);
 void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
-void			scale_object(t_trace *trace, t_on *on, t_vec3 vec);
+void			scale_object(t_trace *trace, t_on *on, t_vec3 vec, int keycode);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			pop_object(t_trace *trace, t_on *on);

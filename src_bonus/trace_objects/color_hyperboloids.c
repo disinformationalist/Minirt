@@ -41,11 +41,11 @@ t_hyperboloid hy, t_point obj_pnt)
 	if (hy.option == 1)
 	{
 		out = texture_hy_at(obj_pnt, hy, comps);
-		/* if (hy.bump)
+		if (hy.bump)
 		{
 			if (hy.bump)
 				bump_hy(obj_pnt, hy, comps);
-		} */
+		}
 	}
 	else if (hy.option == 2)
 		out = pattern_at(hy.pattern, hyperbolic_map(obj_pnt, 1, \

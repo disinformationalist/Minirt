@@ -1,5 +1,21 @@
 #include "minirt.h"
 
+void	update_light_ids(t_light *light)
+{
+	t_light	*start;
+	int		id;
+
+	start = light;
+	id = 1;
+	light->id = id++;
+	light = light->next;
+	while (light != start)
+	{
+		light->id = id++;
+		light = light->next;
+	}
+}
+
 static inline void	set_empty_lights(t_trace *trace)
 {
 	trace->lights = NULL;
@@ -37,9 +53,12 @@ void	pop_lt(t_trace *trace, t_light **current)
 		set_empty_lights(trace);
 	else
 		adj_pntrs_destroy(trace, to_destroy, prev_lt, next_lt);
+	if (to_destroy->type == SPOT)
+			trace->sl_count--;
 	if (to_destroy->type == AREA)
 	{
 		trace->total_ints -= 2;
+		trace->al_count--;
 		free(to_destroy->emitter);
 	}
 	free(to_destroy);

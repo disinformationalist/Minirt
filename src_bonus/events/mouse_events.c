@@ -19,7 +19,7 @@ void	increment_option(t_trace *trace, int *option)
 		*option = 0;
 }
 
-//only for shapes with textures/patterns/bumps, allows rotating through opts
+//rotating through opts, color, texture, pattern
 
 void	select_option(t_trace *trace, t_on *on)
 {

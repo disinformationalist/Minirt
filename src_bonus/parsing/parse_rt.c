@@ -59,6 +59,8 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	total_intersects += 2 * counts.cube_count;
 	total_intersects += counts.tri_count;
 	trace->total_ints = total_intersects;
+	trace->sl_count = counts.sl_count;
+	trace->al_count = counts.al_count;
 }
 
 //parsing test: print_all_objects(trace);
@@ -69,6 +71,7 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 
 	init_counts(&counts);
 	count_ids(&counts, rt_file);
+	counts.light_count += counts.sl_count + counts.al_count;
 	if (counts.amb_count == 0)
 		free_exit(rt_file,
 			"Error\n Missing or invalid ambient lighting identifier\n", \

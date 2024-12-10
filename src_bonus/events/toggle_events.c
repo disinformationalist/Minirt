@@ -69,6 +69,8 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_cy->bump = !trace->curr_cy->bump;
 	else if (on->type == CUBE)
 		trace->curr_cu->bump = !trace->curr_cu->bump;
+	else if (on->type == HYPERBOLOID)
+		trace->curr_hy->bump = !trace->curr_hy->bump;
 	else
 		return ;
 }

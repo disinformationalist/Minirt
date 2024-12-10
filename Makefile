@@ -162,6 +162,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/bump_mapping.c \
 ./src_bonus/color_utils/build_lumin_map.c \
 ./src_bonus/color_utils/cyl_bump.c \
+./src_bonus/color_utils/hyp_bump.c \
 ./src_bonus/color_utils/pl_bump.c \
 ./src_bonus/color_utils/cu_bump.c \
 ./src_bonus/color_utils/normal_patterns.c \

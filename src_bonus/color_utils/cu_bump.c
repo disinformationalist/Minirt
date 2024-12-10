@@ -46,15 +46,15 @@ static inline void	adjust_bumpv(t_vec3 *bumpv, t_face face)
 	if (face == UP)
 		*bumpv = *bumpv;
 	else if (face == DOWN)
-		*bumpv = vec(bumpv->x, -bumpv->y, bumpv->z, 0);
+		*bumpv = vec(-bumpv->z, -bumpv->y, bumpv->x, 0);
 	else if (face == LEFT)
-		*bumpv = vec(-bumpv->y, bumpv->x, bumpv->z, 0);
+		*bumpv = vec(-bumpv->y, bumpv->z, -bumpv->x, 0);
 	else if (face == RIGHT)
-		*bumpv = vec(bumpv->y, bumpv->x, bumpv->z, 0);
+		*bumpv = vec(bumpv->y, bumpv->z, bumpv->x, 0);
 	else if (face == FRONT)
 		*bumpv = vec(bumpv->x, bumpv->z, -bumpv->y, 0);
 	else
-		*bumpv = vec(bumpv->x, bumpv->z, bumpv->y, 0);
+		*bumpv = vec(-bumpv->x, bumpv->z, bumpv->y, 0);
 }
 
 void	bump_cu(t_point obj_pnt, t_cube cube, t_comps *comps, t_face face)
