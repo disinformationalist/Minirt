@@ -72,14 +72,6 @@ static inline bool	make_default_arealt(t_light **start, t_light *new)
 	return (0);
 }
 
-void	adj_pntrs_copy2(t_light *to_copy, t_light *new)
-{
-	new->next = to_copy->next;
-	new->prev = to_copy;
-	to_copy->next->prev = new;
-	to_copy->next = new;
-}
-
 //produce a square area lt.
 
 bool	insert_ltcopy_after2(t_trace *trace, t_light **current)
@@ -90,7 +82,7 @@ bool	insert_ltcopy_after2(t_trace *trace, t_light **current)
 	new = (t_light *)malloc(sizeof(t_light));
 	if (!new)
 		return (true);
-	make_default_arealt(&trace->lights, new);	
+	make_default_arealt(&trace->lights, new);
 	trace->al_count++;
 	trace->total_ints += 2;
 	if (!*current)

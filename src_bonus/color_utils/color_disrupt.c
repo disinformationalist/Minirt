@@ -47,6 +47,8 @@ t_pattern	uv_checker(double width, double height, \
 
 //returns color for given u, v 
 
+	/* u2 = ft_round(u * pat.width);
+	v2 = ft_round(v * pat.height); */
 t_norm_color	uv_checker_at(t_pattern pat, double u, double v)
 {
 	int	u2;
@@ -54,10 +56,6 @@ t_norm_color	uv_checker_at(t_pattern pat, double u, double v)
 
 	u2 = (int)floor(u * pat.width);
 	v2 = (int)floor(v * pat.height);
-	/* u2 = ft_round(u * pat.width);
-	v2 = ft_round(v * pat.height); */
-
-
 	if (!((u2 + v2) % 2))
 		return (pat.color1);
 	else

@@ -18,39 +18,6 @@ static inline void	update_cube_ids(t_cube *cube)
 	}
 }
 
-//if list is empty, make a default cube and set it as the current object
-
-static inline void	make_default_cu(t_cube **start, t_cube *new)
-{
-	t_matrix_4x4	transform;
-
-	new->center = vec(0.0, 0.0, 0.0, 1.0);
-	new->h_width = 1.0;
-	new->h_height = 1.0;
-	new->h_depth = 1.0;
-	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(0, 0, 200);
-	identity(&transform);
-	new->curr_scale = transform;
-	new->curr_rottran = transform;
-	new->transform = transform;
-	new->t_transform = transform;
-	new->i_transform = transform;
-	new->mat = get_mat(DEFAULT);
-	*start = new;
-	new->id = 1;
-	new->shadow = true;
-	new->bump = false;
-	new->sine = false;
-	new->w_frost = false;
-	new->option = 0;
-	new->next = new;
-	new->prev = new;
-	new->emitter = false;
-	new->pattern = uv_checker(6, 6, color(30, 30, 30), \
-		color(255, 255, 255));
-}
-
 //copy a cube and place it immediately after the current cube in the list
 
 bool	insert_cucopy_after(t_trace *trace, t_cube **current)

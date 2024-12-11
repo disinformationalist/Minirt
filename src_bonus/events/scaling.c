@@ -15,7 +15,8 @@ static inline void	scale_arealt(t_light *lt, t_vec3 v)
 	set_arealt(lt);
 }
 
-void	scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1, double waist_factor)
+void	scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1,
+		double waist_factor)
 {
 	if (on->type == HYPERBOLOID)
 	{

@@ -108,10 +108,12 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/push_pop/push_pop_pl.c \
 ./src_bonus/init_objects/push_pop/push_pop_cy.c \
 ./src_bonus/init_objects/push_pop/push_pop_cu.c \
+./src_bonus/init_objects/push_pop/push_pop_cu_2.c \
 ./src_bonus/init_objects/push_pop/push_pop_hy.c \
 ./src_bonus/init_objects/push_pop/pop_lt.c \
 ./src_bonus/init_objects/push_pop/push_lt.c \
 ./src_bonus/init_objects/push_pop/push_lt_area_default.c \
+./src_bonus/init_objects/push_pop/push_lt_area_default_2.c \
 ./src_bonus/init_objects/push_pop/push_lt_spot_default.c \
 ./src_bonus/init_objects/plane_list_utils.c \
 ./src_bonus/init_objects/cylinder_list_utils.c \
@@ -133,6 +135,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/trace_capped_cylinders.c \
 ./src_bonus/trace_objects/cyl_caps.c \
 ./src_bonus/trace_objects/trace_capped_hyperboloids.c \
+./src_bonus/trace_objects/trace_capped_hyperboloids_2.c \
 ./src_bonus/trace_objects/color_cylinders.c \
 ./src_bonus/trace_objects/color_hyperboloids.c \
 ./src_bonus/trace_objects/trace_cubes.c \
@@ -142,6 +145,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/trace_objects/shadow_rays.c \
 ./src_bonus/trace_objects/cyl_shadow.c \
 ./src_bonus/trace_objects/hyp_shadow.c \
+./src_bonus/trace_objects/hyp_shadow_2.c \
 ./src_bonus/trace_objects/sp_shadow.c \
 ./src_bonus/trace_objects/pl_shadow.c \
 ./src_bonus/trace_objects/set_indicies.c \
@@ -154,6 +158,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/color_wheel.c \
 ./src_bonus/color_utils/color_disrupt.c \
 ./src_bonus/color_utils/texture_utils.c \
+./src_bonus/color_utils/texture_utils_2.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
 ./src_bonus/color_utils/map_cube.c \

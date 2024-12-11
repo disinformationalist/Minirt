@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 int	ft_iswhitespace(int c)

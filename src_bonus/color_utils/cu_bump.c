@@ -74,7 +74,7 @@ void	bump_cu(t_point obj_pnt, t_cube cube, t_comps *comps, t_face face)
 		bumpp = add_vec(vec(obj_pnt.x, 0, obj_pnt.z, 1), bumpp);
 	else if (face == LEFT || face == RIGHT)
 		bumpp = add_vec(vec(0, obj_pnt.y, obj_pnt.z, 1), bumpp);
-	else 
+	else
 		bumpp = add_vec(vec(obj_pnt.x, obj_pnt.y, 0, 1), bumpp);
 	comps->normal = mat_vec_mult(cube.t_transform, bumpv);
 	comps->normal.w = 0;

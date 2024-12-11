@@ -14,7 +14,7 @@ t_map	sphere_map(t_point obj_pnt, bool flag)
 	{
 		map.u = map.u - floor(map.u);
 		if ((int)(map.u * 2) % 2 == 1)
-    		map.u = 1 - map.u;
+			map.u = 1 - map.u;
 	}
 	map.v = 1 - map.phi / M_PI;
 	return (map);
@@ -44,7 +44,7 @@ t_map	cylinder_map(t_point obj_pnt, bool flag, bool top, bool bot)
 	{
 		map.u = map.u - floor(map.u);
 		if ((int)(map.u * 2) % 2 == 1)
-    		map.u = 1 - map.u;
+			map.u = 1 - map.u;
 	}
 	if (top)
 		map.v = sqrt(map.dist2);
@@ -68,7 +68,7 @@ t_comps *comps, double waist_val)
 	{
 		map.u = map.u - floor(map.u);
 		if ((int)(map.u * 2) % 2 == 1)
-    		map.u = 1 - map.u;
+			map.u = 1 - map.u;
 	}
 	if (comps->is_top)
 	{

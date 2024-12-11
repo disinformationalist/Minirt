@@ -40,7 +40,6 @@ static inline void	set_dirs(t_vec2 *dirs, t_face face, t_point obj_pnt)
 
 void	adjust_bumpv(t_vec3 *bumpv, t_face face)
 {
-	//bumpv->y += 1;
 	if (face == UP)
 		*bumpv = *bumpv;
 	else if (face == DOWN)

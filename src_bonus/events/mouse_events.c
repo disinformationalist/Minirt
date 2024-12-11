@@ -2,7 +2,7 @@
 
 //radial sine normal perturbation on/off
 
-void 	toggle_sine(t_trace *trace)
+void	toggle_sine(t_trace *trace)
 {
 	if (trace->on->type == PLANE)
 		trace->curr_pl->sine = !trace->curr_pl->sine;

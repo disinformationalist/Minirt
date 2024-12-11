@@ -20,19 +20,20 @@
 # include <pthread.h>
 # include <png.h>
 
-# define DEG_TO_RAD  (M_PI / 180.0)
+// (M_PI / 180.0)
+# define DEG_TO_RAD  0.01745329251
 
 typedef struct s_norm_color
 {
-	double r;
-	double g;
-	double b;
+	double	r;
+	double	g;
+	double	b;
 }	t_norm_color;
 
 typedef struct s_vec2
 {
-	double x;
-	double y;
+	double	x;
+	double	y;
 }	t_vec2;
 
 typedef struct s_depths
@@ -66,17 +67,17 @@ typedef enum e_type
 	GROUP,
 	CAM,
 	MESH
-} 	t_type;
+}	t_type;
 
 typedef struct s_triangle
 {
-	int 	v0;
+	int		v0;
 	int		v1;
-	int 	v2;
+	int		v2;
 	t_vec3	edge1;
 	t_vec3	edge2;
 	t_vec3	norm;
-} t_triangle;
+}	t_triangle;
 
 //mesh not currently used
 
@@ -85,10 +86,10 @@ typedef struct s_mesh
 	t_vec3			*verts;
 	t_triangle		*triangles;
 	int				num_verts;
-	int 			num_tris;
+	int				num_tris;
 	t_mat			mat;
 	t_norm_color	color;
-	t_type			MESH;
+	t_type			mesh;
 }	t_mesh;
 
 typedef enum e_ltype
@@ -96,7 +97,7 @@ typedef enum e_ltype
 	POINT,
 	SPOT,
 	AREA,
-} 	t_ltype;
+}	t_ltype;
 
 /***UTILS***/
 
@@ -111,9 +112,9 @@ typedef struct s_img
 
 typedef struct s_color
 {
-	uint8_t r;
-	uint8_t g;
-	uint8_t b;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
 }	t_color;
 
 typedef struct s_on
@@ -139,7 +140,6 @@ typedef struct s_track_hits
 	t_type	object_type;
 }	t_track_hits; */
 
-
 typedef struct s_track_hits
 {
 	double	t;
@@ -160,7 +160,7 @@ typedef struct s_intersects
 
 typedef struct s_amb
 {
-	double	ratio;
+	double			ratio;
 	t_norm_color	color;
 }	t_amb;
 
@@ -178,13 +178,13 @@ typedef struct s_cam
 
 typedef struct s_box
 {
-	t_point min;
-	t_point max;
+	t_point	min;
+	t_point	max;
 }	t_box;
 
 //using ll for this
 
-typedef	struct s_shape
+typedef struct s_shape
 {
 	t_type			type;
 	void			*shape;
@@ -206,10 +206,10 @@ typedef struct s_group
 
 typedef struct s_moller
 {
-	double u;
-	double v;
-	double f;
-	double det;
+	double	u;
+	double	v;
+	double	f;
+	double	det;
 }	t_moller;
 
 // util for making a color wheel
@@ -231,17 +231,17 @@ typedef struct s_wheel
 
 typedef struct s_pattern
 {
-	t_norm_color color1;
-	t_norm_color color2;
-	
+	t_norm_color	color1;
+	t_norm_color	color2;
+
 	//cube test
 	t_norm_color	main;
 	t_norm_color	ul;
 	t_norm_color	ur;
 	t_norm_color	bl;
 	t_norm_color	br;
-	float	width;
-	float	height;
+	float			width;
+	float			height;
 }	t_pattern;
 
 typedef struct s_map
@@ -297,10 +297,9 @@ double			randf2(void);
 t_norm_color	pattern_at(t_pattern pat, t_map map);
 t_pattern		uv_checker(double width, double height, \
 				t_norm_color color1, t_norm_color color2);
-t_map 			planar_map(t_point obj_pnt);
+t_map			planar_map(t_point obj_pnt);
 t_map			sphere_map(t_point obj_pnt, bool flag);
 t_map			cylinder_map(t_point obj_pnt, bool flag, bool top, bool bot);
-
 
 //cube map
 t_map			cube_map(t_point obj_pnt, t_face face);
@@ -316,8 +315,10 @@ t_face			face_of_pnt(t_point pnt);
 
 t_group			*group(void);
 void			free_group(t_group *group);
-int				add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform);
-void			check_group(t_group *group, t_intersects *intersects, t_ray ray);
+int				add_child(t_group *group, void *obj, t_type type,
+					t_matrix_4x4 transform);
+void			check_group(t_group *group, t_intersects *intersects,
+					t_ray ray);
 
 /***BVH***/
 

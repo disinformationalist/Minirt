@@ -2,7 +2,7 @@
 
 //cubetest //add params to t_pattern
 
-t_pattern uv_align_check(t_norm_color main, t_norm_color ul, \
+t_pattern	uv_align_check(t_norm_color main, t_norm_color ul, \
 	t_norm_color ur, t_norm_color bl, t_norm_color br)
 {
 	t_pattern	pat;

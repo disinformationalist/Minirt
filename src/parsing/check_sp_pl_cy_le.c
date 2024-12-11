@@ -42,7 +42,8 @@ void	check_pl(char **line, char ***rt_file)
 	"in the format r,g,b\n");
 }
 
-void	check_cy2(char **line, char ***rt_file, char *diam_str, char *height_str)
+void	check_cy2(char **line, char ***rt_file, char *diam_str,
+		char *height_str)
 {
 	if (check_double(&diam_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cylinder diameter\n", \

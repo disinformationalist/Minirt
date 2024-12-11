@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest,

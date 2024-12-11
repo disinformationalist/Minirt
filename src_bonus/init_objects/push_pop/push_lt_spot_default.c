@@ -52,4 +52,3 @@ bool	insert_ltcopy_after3(t_trace *trace, t_light **current)
 	update_light_ids(trace->lights);
 	return (false);
 }
-

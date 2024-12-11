@@ -1,4 +1,3 @@
-
 #include "../libft.h"
 
 #ifndef BUFFER_SIZE

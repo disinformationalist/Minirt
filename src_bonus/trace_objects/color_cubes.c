@@ -67,8 +67,8 @@ t_norm_color	set_cu_color(t_comps *comps, t_cube cube, t_point obj_pnt)
 static inline t_comps	set_cucomps(t_cube *cube, \
 t_intersects *intersects, t_ray r)
 {
-	t_comps	comps;
-	t_point obj_pnt;
+	t_comps		comps;
+	t_point		obj_pnt;
 
 	comps.t = intersects->closest->t;
 	comps.ray = r;

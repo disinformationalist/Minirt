@@ -49,7 +49,6 @@ t_cylinder cylinder, t_point obj_pnt)
 		comps->is_top, comps->is_bot));
 	else
 		out = cylinder.color;
-
 	return (out);
 }
 

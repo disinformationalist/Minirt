@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 void	print_matrix_4(t_matrix_4x4 *matrix)

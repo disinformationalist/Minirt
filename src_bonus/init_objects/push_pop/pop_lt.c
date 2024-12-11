@@ -54,7 +54,7 @@ void	pop_lt(t_trace *trace, t_light **current)
 	else
 		adj_pntrs_destroy(trace, to_destroy, prev_lt, next_lt);
 	if (to_destroy->type == SPOT)
-			trace->sl_count--;
+		trace->sl_count--;
 	if (to_destroy->type == AREA)
 	{
 		trace->total_ints -= 2;

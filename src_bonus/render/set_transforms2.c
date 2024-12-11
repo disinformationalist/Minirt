@@ -7,13 +7,13 @@ void	set_pltrans(t_plane *curr_pl)
 
 	inv_trans = translation(-curr_pl->point.x, \
 	-curr_pl->point.y, -curr_pl->point.z);
-	inv_rot = rot_to(curr_pl->norm,  vec(0, 1, 0, 0));
+	inv_rot = rot_to(curr_pl->norm, vec(0, 1, 0, 0));
 	curr_pl->curr_scale = scaling(1.0, 1.0, 1.0);
 	curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);
 	curr_pl->transform = (mat_mult(curr_pl->curr_scale, \
 	curr_pl->curr_rottran));
 	curr_pl->t_transform = transpose(curr_pl->transform);
-	curr_pl->i_transform = inverse(curr_pl->transform);		
+	curr_pl->i_transform = inverse(curr_pl->transform);
 }
 
 void	set_pl_transforms(t_trace *trace)
@@ -45,7 +45,7 @@ void	set_cytrans(t_cylinder *curr_cy)
 
 	inv_trans = translation(-curr_cy->center.x, \
 	-curr_cy->center.y, -curr_cy->center.z);
-	inv_rot = rot_to(curr_cy->norm,  vec(0, 1, 0, 0));
+	inv_rot = rot_to(curr_cy->norm, vec(0, 1, 0, 0));
 	curr_cy->curr_scale = inv_scaling(curr_cy->radius, \
 	curr_cy->half_h, curr_cy->radius);
 	curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);

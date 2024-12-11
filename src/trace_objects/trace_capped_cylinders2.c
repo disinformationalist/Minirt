@@ -68,7 +68,7 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 	ray = transform(ray, cylinder.transform);
 	compute_abc(&abc, ray);
 	if (abc.x == 0)
-		return false;
+		return (false);
 	if (check_trunk_solutions(abc, &t1, &t2))
 	{
 		if (within_height(ray, t1)

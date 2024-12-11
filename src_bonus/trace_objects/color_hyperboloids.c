@@ -1,14 +1,13 @@
-
 #include "minirt.h"
 
 //maybe all 2s mult by 3rd param to adjust waist.
 
-static inline t_vec3 hyp_normal_at(t_point int_pnt, \
-	t_hyperboloid hyperboloid, t_comps *comps, double cap_rad_sq)
+static inline t_vec3	hyp_normal_at(t_point int_pnt,
+			t_hyperboloid hyperboloid, t_comps *comps, double cap_rad_sq)
 {
 	t_vec3	norm;
 	double	dist;
-	
+
 	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
 	if (dist < cap_rad_sq && int_pnt.y >= 1 - 1e-6)
 	{
@@ -53,7 +52,7 @@ t_hyperboloid hy, t_point obj_pnt)
 	else
 		out = hy.color;
 	if (hy.w_frost)
-		comps->normal = frost(comps->normal);	
+		comps->normal = frost(comps->normal);
 	return (out);
 }
 
@@ -86,7 +85,7 @@ static inline t_comps	set_hycomps(t_hyperboloid *hyperboloid, \
 	return (comps);
 }
 
-t_norm_color color_hyperboloid(t_trace *trace, t_ray r, \
+t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 	t_intersects *intersects, t_depths depths)
 {
 	t_hyperboloid	*hyperboloid;
@@ -106,10 +105,10 @@ t_norm_color color_hyperboloid(t_trace *trace, t_ray r, \
 			handle_light(trace, &comps, &lt_color, lt);
 			lt = lt->next;
 			if (lt == trace->lights)
-				break;
-		}	
+				break ;
+		}
 	}
 	comps.refl_col = get_reflected(trace, comps, intersects, depths);
 	comps.refr_col = get_refracted(trace, comps, intersects, depths);
-	return (get_final_color4(trace, comps, lt_color));		
+	return (get_final_color4(trace, comps, lt_color));
 }

@@ -16,7 +16,8 @@ bool	is_in_csg_left(t_csg *csg, t_intersects **intersects, int i)
 	if (get_type((t_helper_shape *)csg->left) == CSG)
 	{
 		left_csg = (t_csg *)csg->left;
-		if (is_in_csg_left(left_csg, intersects, i) || is_in_csg_right(left_csg, intersects, i))
+		if (is_in_csg_left(left_csg, intersects, i)
+			|| is_in_csg_right(left_csg, intersects, i))
 			return (true);
 	}
 	return (false);
@@ -31,7 +32,8 @@ bool	is_in_csg_right(t_csg *csg, t_intersects **intersects, int i)
 	if (get_type((t_helper_shape *)csg->right) == CSG)
 	{
 		right_csg = (t_csg *)csg->right;
-		if (is_in_csg_left(right_csg, intersects, i) || is_in_csg_right(right_csg, intersects, i))
+		if (is_in_csg_left(right_csg, intersects, i)
+			|| is_in_csg_right(right_csg, intersects, i))
 			return (true);
 	}
 	return (false);

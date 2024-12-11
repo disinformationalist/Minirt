@@ -80,5 +80,5 @@ void	forge_rt(const char *path, t_trace *trace)
 	write_cubes(trace->cubes, fd);
 	write_textures(trace->textures, fd);
 	close(fd);
-}	
+}
 //write_hyperboloids(trace->hyperboloids, fd);

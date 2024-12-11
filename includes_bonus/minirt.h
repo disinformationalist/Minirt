@@ -1,24 +1,16 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#include "tools.h"
+# include "tools.h"
 //#include "keyboard42.h"
-#include "keyboard.h"
-#include <sys/time.h>
-#include "extras.h"
+# include "keyboard.h"
+# include <sys/time.h>
+# include "extras.h"
 
 //# define ASPECT (16.0 / 9.0)
-#define ASPECT 1.7778
+# define ASPECT 1.7778
 
 //# define ASPECT (4.0 / 3.0)
-
-/* typedef struct s_intersects
-{
-	t_track_hits	*hits;
-	int				count;
-	int				size;
-	t_track_hits	*closest;
-}	t_intersects; */
 
 /***DOUBLY LINKED CIRCULAR LISTS OBJECTS***/
 
@@ -47,14 +39,6 @@ typedef struct s_csg
 	void		*right;
 	t_csg_op	op;
 }	t_csg;
-
-/* typedef struct s_csg_pool
-{
-	t_type			type;
-	t_helper_shape	**shapes;
-	int				shape_count;
-	t_csg_op		op;
-}	t_csg_pool; */
 
 typedef struct s_sphere
 {
@@ -184,15 +168,6 @@ typedef struct s_cube
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
-
-/* typedef struct s_helper_shape
-{
-	t_type				type;
-	void				*left;
-	void				*right;
-	t_csg_op			op;
-	t_shape				*primitive;
-}	t_helper_shape; */
 
 typedef struct s_tri
 {
@@ -419,6 +394,7 @@ bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
 bool			insert_cucopy_after(t_trace *trace, t_cube **current);
 bool			insert_ltcopy_after2(t_trace *trace, t_light **current);
+void			adj_pntrs_copy2(t_light *to_copy, t_light *new);
 bool			insert_ltcopy_after3(t_trace *trace, t_light **current);
 
 //remove a list object
@@ -428,6 +404,7 @@ void			pop_hy(t_trace *trace, t_hyperboloid **current);
 void			pop_pl(t_trace *trace, t_plane **current);
 void			pop_lt(t_trace *trace, t_light **current);
 void			pop_cu(t_trace *trace, t_cube **current);
+void			make_default_cu(t_cube **start, t_cube *new);
 
 /***RENDER FUNCTIONS***/
 void			render_scene(t_trace *trace);
@@ -499,6 +476,8 @@ bool			ray_cylinder_intersect2(t_cylinder cylinder, \
 				t_ray ray, double dist);
 bool			check_hy_dist(t_hyperboloid *hyperboloids, \
 t_ray ray, double dist);
+bool			intersect_caps2_hy(t_ray ray, double dist,
+				t_hyperboloid hyperboloid);
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, \
@@ -512,11 +491,14 @@ bool			intersect_caps(t_ray ray, double *t3, double *t4);
 //hyperboloid utils
 void			check_hyperboloids(t_hyperboloid *hyperboloids, \
 				t_intersects *intersects, t_ray ray);
-void			compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid);
+void			compute_abc_hy(t_vec3 *abc, t_ray ray,
+					t_hyperboloid *hyperboloid);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, \
 				t_ray ray, t_intersects *intersects);
+bool			intersect_caps_hy(t_ray ray, double *t3,
+				double *t4, t_hyperboloid *hyp);
 
 //light utils
 void			set_arealt(t_light *lt);
@@ -530,7 +512,7 @@ void			handle_light(t_trace *trace, t_comps *comps, \
 				t_norm_color *lt_color, t_light *curr_lt);
 double			schlick(t_comps comps);
 void			set_indicies(t_intersects *intersects, double *n1, double *n2);
-t_norm_color 	get_reflected(t_trace *trace, t_comps comps, \
+t_norm_color	get_reflected(t_trace *trace, t_comps comps, \
 				t_intersects *intersects, t_depths depths);
 t_norm_color	get_refracted(t_trace *trace, t_comps comps, \
 				t_intersects *intersects, t_depths depths);
@@ -543,14 +525,14 @@ uint8_t			round_c(double d);
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
 t_vec3			vec(double x, double y, double z, double w);
-t_vec3 			add_vec(t_vec3 vec1, t_vec3 vec2);
+t_vec3			add_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scale_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			norm_vec(t_vec3 vec);
 bool			is_normalized(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
-t_vec3 			neg(t_vec3 vec);
+t_vec3			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
 t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
@@ -560,12 +542,13 @@ bool			veccmp(t_vec3 v1, t_vec3 v2);
 /***COLOR UTILS***/
 
 t_norm_color	*set_metal_colors(void);
-t_norm_color	get_final_color4(t_trace *trace, t_comps comps, t_norm_color lt_color);
+t_norm_color	get_final_color4(t_trace *trace, t_comps comps,
+					t_norm_color lt_color);
 t_norm_color	color(double r, double g, double b);
 uint8_t			clamp_color(double color);
 unsigned int	clamped_col(t_norm_color col);
 int				ft_round(double num);
-t_norm_color 	color(double r, double g, double b);
+t_norm_color	color(double r, double g, double b);
 
 //texture utils
 
@@ -575,8 +558,10 @@ t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
 t_norm_color	texture_cy_at(t_point obj_pnt, t_cylinder cyl, t_comps *comps);
 t_norm_color	texture_cube_at(t_point obj_pnt, t_cube cube, \
 				t_comps *comps, t_face face);
-t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy, t_comps *comps);
+t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy,
+					t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
+t_vec2		set_plane_uv(t_point obj_pnt, double img_iasp);
 int				import_textures(void *mlx_con, t_tx *textures);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
 				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
@@ -596,9 +581,8 @@ void			bump_cu(t_point obj_pnt, t_cube cube, \
 t_img			*build_lumin_map(void *mlx_con, t_img *img, \
 				int width, int height);
 
-
 //materials
-void			change_mat(t_trace *trace,t_on *on, const t_mat mat);
+void			change_mat(t_trace *trace, t_on *on, const t_mat mat);
 t_mat			get_mat(t_material material);
 
 //supersampling utils
@@ -619,7 +603,8 @@ void			toggle_shadow(t_trace *trace, t_on *on);
 void			toggle_bump(t_trace *trace, t_on *on);
 void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec, int keycode);
-void			scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1, double waist_factor);
+void			scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1,
+					double waist_factor);
 void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			pop_object(t_trace *trace, t_on *on);
@@ -680,10 +665,13 @@ long			get_time(void);
 void			print_times(long start, long end, char *msg);
 
 /*** CSG ***/
-void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2, t_helper_shape *shapes3, t_intersects *intersects);
-t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right, t_csg_op op);
+void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
+					t_helper_shape *shapes3, t_intersects *intersects);
+t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right,
+					t_csg_op op);
 bool			hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr);
-void			filter_intersections(t_csg *csg, t_intersects **intersects, bool *inl, bool *inr);
+void			filter_intersections(t_csg *csg, t_intersects **intersects,
+					bool *inl, bool *inr);
 
 /*** CSG utils ***/
 int				get_type(t_helper_shape *shape);
@@ -693,9 +681,13 @@ void			set_left(bool *lhit, bool *inl);
 void			set_right(bool *lhit, bool *inr);
 
 /*** CSG pool ***/
-void			check_csg_sphere_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
-void			check_csg_cyl_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
-void			check_csg_hyp_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
-void			check_csg_cube_list(t_trace *trace, t_csg_op op, t_intersects *intersects);
+void			check_csg_sphere_list(t_trace *trace, t_csg_op op,
+					t_intersects *intersects);
+void			check_csg_cyl_list(t_trace *trace, t_csg_op op,
+					t_intersects *intersects);
+void			check_csg_hyp_list(t_trace *trace, t_csg_op op,
+					t_intersects *intersects);
+void			check_csg_cube_list(t_trace *trace, t_csg_op op,
+					t_intersects *intersects);
 
 #endif

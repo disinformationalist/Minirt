@@ -62,7 +62,7 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, \
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else
-		return (color(0, 0, 0));	
+		return (color(0, 0, 0));
 	return (color_out);
 }
 

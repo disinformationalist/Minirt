@@ -29,28 +29,37 @@ void	set_sp_transforms(t_trace *trace)
 	}
 }
 
+void	set_transforms_curr(t_trace *trace, t_hyperboloid *curr_hy)
+{
+	t_matrix_4x4	inv_trans;
+	t_matrix_4x4	inv_rot;
+
+	inv_trans = translation(-curr_hy->center.x,
+			-curr_hy->center.y, -curr_hy->center.z);
+	inv_rot = rot_to(curr_hy->norm, vec(0, 1, 0, 0));
+	curr_hy->curr_scale = inv_scaling(curr_hy->rad,
+			curr_hy->half_h, curr_hy->rad);
+	curr_hy->curr_rottran = mat_mult(inv_rot, inv_trans);
+	curr_hy->transform = mat_mult(curr_hy->curr_scale,
+			curr_hy->curr_rottran);
+	curr_hy->i_transform = inverse(curr_hy->transform);
+	curr_hy->t_transform = transpose(curr_hy->transform);
+	curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
+	color(255, 255, 255));
+	curr_hy->texture = trace->textures;
+	curr_hy = curr_hy->next;
+}
+
 void	set_hy_transforms(t_trace *trace)
 {
 	t_hyperboloid	*curr_hy;
-	t_matrix_4x4	inv_trans;
-	t_matrix_4x4	inv_rot;
 
 	if (trace->hyperboloids)
 	{
 		curr_hy = trace->hyperboloids;
 		while (true)
 		{
-			inv_trans = translation(-curr_hy->center.x, -curr_hy->center.y, -curr_hy->center.z);
-			inv_rot = rot_to(curr_hy->norm,  vec(0, 1, 0, 0));
-			curr_hy->curr_scale = inv_scaling(curr_hy->rad, curr_hy->half_h, curr_hy->rad);
-			curr_hy->curr_rottran = mat_mult(inv_rot, inv_trans);
-			curr_hy->transform = mat_mult(curr_hy->curr_scale, curr_hy->curr_rottran);
-			curr_hy->i_transform = inverse(curr_hy->transform);
-			curr_hy->t_transform = transpose(curr_hy->transform);
-			curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
-			color(255, 255, 255));
-			curr_hy->texture = trace->textures;
-			curr_hy = curr_hy->next;
+			set_transforms_curr(trace, curr_hy);
 			if (curr_hy == trace->hyperboloids)
 				break ;
 		}
