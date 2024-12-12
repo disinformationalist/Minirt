@@ -154,6 +154,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/testing/print_utils.c \
 ./src_bonus/color_utils/build_textures.c \
 ./src_bonus/color_utils/color_utils.c \
+./src_bonus/color_utils/color_utils2.c \
 ./src_bonus/color_utils/color_wheel.c \
 ./src_bonus/color_utils/color_disrupt.c \
 ./src_bonus/color_utils/texture_utils.c \
