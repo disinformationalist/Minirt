@@ -67,8 +67,11 @@ void	render_scene(t_trace *trace)
 void	render(t_trace *trace)
 {
 	long	start;
+	long	end;
 
 	start = get_time();
+	if (start == -1)
+		clear_all(trace);
 	if (trace->supersample)
 	{
 		ft_putstr_color_fd(1, "SUPERSAMPLE IN PROGRESS...\n", BOLD_GREEN);
@@ -79,5 +82,8 @@ void	render(t_trace *trace)
 		render_scene(trace);
 	mlx_put_image_to_window(trace->mlx_connect,
 		trace->mlx_win, trace->img.img_ptr, 0, 0);
-	print_times(start, get_time(), "RENDER TIME: %f seconds\n");
+	end = get_time();
+	if (end == -1)
+		clear_all(trace);
+	print_times(start, end, "RENDER TIME: %f seconds\n");
 }

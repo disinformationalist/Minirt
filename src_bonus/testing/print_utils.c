@@ -33,9 +33,7 @@ long	get_time(void)
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
-	{
-		exit(EXIT_FAILURE);
-	}
+		return (-1);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 

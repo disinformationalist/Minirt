@@ -154,6 +154,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/color_utils/color_wheel.c \
 ./src_bonus/color_utils/color_disrupt.c \
 ./src_bonus/color_utils/texture_utils.c \
+./src_bonus/color_utils/texture_utils2.c \
 ./src_bonus/color_utils/materials.c \
 ./src_bonus/color_utils/mapping.c \
 ./src_bonus/color_utils/map_cube.c \
