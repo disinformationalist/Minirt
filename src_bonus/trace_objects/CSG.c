@@ -99,6 +99,8 @@ void	check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
 	bool		inl;
 	bool		inr;
 
+	test_csg = NULL;
+	secondary_csg = NULL;
 	inl = false;
 	inr = false;
 	if (!shapes1 || !shapes2 || !shapes3)
@@ -108,4 +110,21 @@ void	check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
 	filter_intersections(secondary_csg, &intersects, &inl, &inr);
 	free(test_csg);
 	free(secondary_csg);
+}
+
+void	check_simple_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
+			t_intersects *intersects, t_csg_op op)
+{
+	t_csg		*test_csg;
+	bool		inl;
+	bool		inr;
+
+	test_csg = NULL;
+	inl = false;
+	inr = false;
+	if (!shapes1 || !shapes2)
+		return ;
+	test_csg = make_new_csg(shapes1, shapes2, op);
+	filter_intersections(test_csg, &intersects, &inl, &inr);
+	free(test_csg);
 }

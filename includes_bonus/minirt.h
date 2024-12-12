@@ -667,6 +667,8 @@ void			print_times(long start, long end, char *msg);
 /*** CSG ***/
 void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
 					t_helper_shape *shapes3, t_intersects *intersects);
+void			check_simple_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
+					t_intersects *intersects, t_csg_op op);
 t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right,
 					t_csg_op op);
 bool			hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr);

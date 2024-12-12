@@ -1,5 +1,103 @@
 #include "minirt.h"
 
+// circular sphere lists, test file: test_csg_list.rt
+/* void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
+{
+	int	i;
+
+	i = 0;
+	intersects->closest->t = INFINITY;
+	intersects->closest->object = NULL;
+	intersects->closest->object_type = -1;
+	intersects->count = 0;
+	check_spheres(trace->spheres, intersects, ray);
+	check_cylinders(trace->cylinders, intersects, ray);
+	check_hyperboloids(trace->hyperboloids, intersects, ray);
+	check_cubes(trace->cubes, intersects, ray);
+	check_csg_sphere_list(trace, UNION, intersects);
+	check_planes(trace->planes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	while (i < intersects->count && intersects->hits[i].t <= 0)
+		i++;
+	if (i < intersects->count)
+		*(intersects->closest) = intersects->hits[i];
+} */
+
+// hourglass, test file: test_hourglass_3.rt
+/* void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
+{
+	int	i;
+
+	i = 0;
+	intersects->closest->t = INFINITY;
+	intersects->closest->object = NULL;
+	intersects->closest->object_type = -1;
+	intersects->count = 0;
+	check_spheres(trace->spheres, intersects, ray);
+	check_cylinders(trace->cylinders, intersects, ray);
+	check_hyperboloids(trace->hyperboloids, intersects, ray);
+	check_cubes(trace->cubes, intersects, ray);
+	check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, (t_helper_shape *)trace->spheres->next, intersects);
+	check_csg((t_helper_shape *)trace->spheres->next->next, (t_helper_shape *)trace->hyperboloids->next, (t_helper_shape *)trace->spheres->next->next->next, intersects);
+	check_planes(trace->planes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	while (i < intersects->count && intersects->hits[i].t <= 0)
+		i++;
+	if (i < intersects->count)
+		*(intersects->closest) = intersects->hits[i];
+} */
+
+// single operation hype + sphere, test file: test_hy.rt
+/* void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
+{
+	int	i;
+
+	i = 0;
+	intersects->closest->t = INFINITY;
+	intersects->closest->object = NULL;
+	intersects->closest->object_type = -1;
+	intersects->count = 0;
+	check_spheres(trace->spheres, intersects, ray);
+	check_cylinders(trace->cylinders, intersects, ray);
+	check_hyperboloids(trace->hyperboloids, intersects, ray);
+	check_cubes(trace->cubes, intersects, ray);
+	check_simple_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, intersects, DIFFERENCE);
+	check_planes(trace->planes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	while (i < intersects->count && intersects->hits[i].t <= 0)
+		i++;
+	if (i < intersects->count)
+		*(intersects->closest) = intersects->hits[i];
+} */
+
+// single operations, test file: test_csg_ops.rt
+/* void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
+{
+	int	i;
+
+	i = 0;
+	intersects->closest->t = INFINITY;
+	intersects->closest->object = NULL;
+	intersects->closest->object_type = -1;
+	intersects->count = 0;
+	check_spheres(trace->spheres, intersects, ray);
+	check_cylinders(trace->cylinders, intersects, ray);
+	check_hyperboloids(trace->hyperboloids, intersects, ray);
+	check_cubes(trace->cubes, intersects, ray);
+	check_simple_csg((t_helper_shape *)trace->cubes, (t_helper_shape *)trace->spheres, intersects, UNION);
+	check_simple_csg((t_helper_shape *)trace->cubes->next, (t_helper_shape *)trace->spheres->next, intersects, DIFFERENCE);
+	check_simple_csg((t_helper_shape *)trace->cubes->next->next, (t_helper_shape *)trace->spheres->next->next, intersects, INTERSECTION);
+	//check_csg_sphere_list(trace, UNION, intersects);
+	//check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, (t_helper_shape *)trace->spheres->next, intersects);
+	//check_csg((t_helper_shape *)trace->spheres->next->next, (t_helper_shape *)trace->hyperboloids->next, (t_helper_shape *)trace->spheres->next->next->next, intersects);
+	check_planes(trace->planes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	while (i < intersects->count && intersects->hits[i].t <= 0)
+		i++;
+	if (i < intersects->count)
+		*(intersects->closest) = intersects->hits[i];
+} */
+
 void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 {
 	int	i;
@@ -13,13 +111,6 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	//check_csg_sphere_list(trace, UNION, intersects);
-	//check_csg_cyl_list(trace, UNION, intersects);
-	//check_csg_hyp_list(trace, UNION, intersects);
-	//check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->spheres->next, (t_helper_shape *)trace->spheres->next->next, intersects);
-	//check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, (t_helper_shape *)trace->spheres->next, intersects);
-	//check_csg((t_helper_shape *)trace->spheres->next->next, (t_helper_shape *)trace->hyperboloids->next, (t_helper_shape *)trace->spheres->next->next->next, intersects);
-	//check_csg(trace->spheres, trace->cylinders, intersects);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
