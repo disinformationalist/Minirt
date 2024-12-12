@@ -35,15 +35,15 @@ cu			0.000,0.000,0.000				0,1,0		   		        2      2       2      30,20,200
 
 #add check for same tx. maybe be able to assign text to shapes in last column.
 #Textures:  Image						  Bump Map(grayscale)
-tx			image_1.png
+#tx			image_1.png
 #tx			aluminum.png				  aluminum_height.png
-tx			carina.png
-tx			neb1.png
-tx			sun.png
-tx			earth2k.png                   earthbump2k.png
-tx			earth.png
-tx			soap2.png
-tx			pillars.png
+#tx			carina.png
+#tx			neb1.png
+#tx			sun.png
+#tx			earth2k.png                   earthbump2k.png
+#tx			earth.png
+#tx			soap2.png
+#tx			pillars.png
 #tx			chaos_1.png
 #tx			buddha_22.png
 #tx			buddha_52.png
