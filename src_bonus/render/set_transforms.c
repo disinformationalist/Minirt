@@ -47,7 +47,6 @@ void	set_transforms_curr(t_trace *trace, t_hyperboloid *curr_hy)
 	curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 	color(255, 255, 255));
 	curr_hy->texture = trace->textures;
-	curr_hy = curr_hy->next;
 }
 
 void	set_hy_transforms(t_trace *trace)
@@ -60,6 +59,7 @@ void	set_hy_transforms(t_trace *trace)
 		while (true)
 		{
 			set_transforms_curr(trace, curr_hy);
+			curr_hy = curr_hy->next;
 			if (curr_hy == trace->hyperboloids)
 				break ;
 		}
