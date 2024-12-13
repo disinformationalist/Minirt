@@ -1,7 +1,5 @@
 #include "minirt.h"
 
-//maybe all 2s mult by 3rd param to adjust waist.
-
 static inline t_vec3	hyp_normal_at(t_point int_pnt,
 			t_hyperboloid hyperboloid, t_comps *comps, double cap_rad_sq)
 {

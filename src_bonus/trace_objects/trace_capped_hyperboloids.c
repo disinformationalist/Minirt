@@ -19,7 +19,8 @@ static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
 // Equation: x * x / a * a + z * z / b * b - y * y / c * c = 1
 // will need to parse a hyperboloid center, height, half_h, ray_max and ray_min
 
-void	compute_abc_hy(t_vec3 *abc, t_ray ray, t_hyperboloid *hyperboloid)
+static inline void	compute_abc_hy(t_vec3 *abc, t_ray ray, \
+t_hyperboloid *hyperboloid)
 {
 	abc->x = (ray.dir.x * ray.dir.x)
 		+ (ray.dir.z * ray.dir.z)

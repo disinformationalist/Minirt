@@ -34,13 +34,27 @@ t_ray ray, double dist)
 	return (false);
 }
 
+static inline void	compute_abc_hy2(t_vec3 *abc, t_ray ray, \
+t_hyperboloid *hyperboloid)
+{
+	abc->x = (ray.dir.x * ray.dir.x)
+		+ (ray.dir.z * ray.dir.z)
+		- (ray.dir.y * ray.dir.y);
+	abc->y = 2 * ((ray.origin.x * ray.dir.x)
+			+ (ray.origin.z * ray.dir.z)
+			- (ray.origin.y * ray.dir.y));
+	abc->z = (ray.origin.x * ray.origin.x)
+		+ (ray.origin.z * ray.origin.z)
+		- (ray.origin.y * ray.origin.y) - (hyperboloid->waist_val);
+}
+
 static inline bool	ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, \
 t_ray ray, double dist)
 {
 	t_vec3	abc;
 
 	ray = transform(ray, hyperboloid.transform);
-	compute_abc_hy(&abc, ray, &hyperboloid);//make a copy 2 inline here
+	compute_abc_hy2(&abc, ray, &hyperboloid);
 	if (abc.x == 0)
 		return (false);
 	if (check_trunk_solutions2_hy(abc, ray, dist))
