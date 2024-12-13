@@ -310,8 +310,6 @@ typedef struct t_comps
 	t_norm_color	refl_col;
 }	t_comps;
 
-t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
-t_pattern		uv_align_check(t_norm_color main, t_norm_color ul, t_norm_color ur, t_norm_color bl, t_norm_color br);
 
 /***PARSING***/
 
@@ -491,8 +489,6 @@ bool			intersect_caps(t_ray ray, double *t3, double *t4);
 //hyperboloid utils
 void			check_hyperboloids(t_hyperboloid *hyperboloids, \
 				t_intersects *intersects, t_ray ray);
-void			compute_abc_hy(t_vec3 *abc, t_ray ray,
-					t_hyperboloid *hyperboloid);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, \
@@ -561,7 +557,8 @@ t_norm_color	texture_cube_at(t_point obj_pnt, t_cube cube, \
 t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy,
 					t_comps *comps);
 t_norm_color	pixel_color_get(int x, int y, t_img *img);
-t_vec2		set_plane_uv(t_point obj_pnt, double img_iasp);
+t_vec2			set_plane_uv(t_point obj_pnt, double img_iasp);
+t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 int				import_textures(void *mlx_con, t_tx *textures);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
 				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);

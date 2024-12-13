@@ -1,20 +1,5 @@
 #include "minirt.h"
 
-//cubetest //add params to t_pattern
-
-t_pattern	uv_align_check(t_norm_color main, t_norm_color ul, \
-	t_norm_color ur, t_norm_color bl, t_norm_color br)
-{
-	t_pattern	pat;
-
-	pat.main = main;
-	pat.ul = ul;
-	pat.ur = ur;
-	pat.bl = bl;
-	pat.br = br;
-	return (pat);
-}
-
 //bot face, rest in map_cube2.c
 
 t_vec2	cu_uv_down(t_point pnt)
