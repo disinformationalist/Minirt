@@ -1,5 +1,19 @@
 #include "minirt.h"
 
+static inline t_norm_color	pixel_color_get(int x, int y, t_img *img)
+{
+	unsigned int	pixcolor;
+	t_norm_color	pixel_color;
+	int				offset;
+
+	offset = y * img->line_len + (x * (img->bpp / 8));
+	pixcolor = *(unsigned int *)(img->pixels_ptr + offset);
+	pixel_color.r = (pixcolor >> 16) & 0xFF;
+	pixel_color.g = (pixcolor >> 8) & 0xFF;
+	pixel_color.b = pixcolor & 0xFF;
+	return (pixel_color);
+}
+
 uint8_t	luminosity(t_norm_color color)
 {
 	return ((uint8_t)(0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b));

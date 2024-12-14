@@ -2,7 +2,7 @@
 
 // pixel_color_get() retreives color of pixel(x, y) of image
 
-t_norm_color	pixel_color_get(int x, int y, t_img *img)
+static inline t_norm_color	pixel_color_get1(int x, int y, t_img *img)
 {
 	unsigned int	pixcolor;
 	t_norm_color	pixel_color;
@@ -55,7 +55,7 @@ t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, t_comps *comps)
 	uv.y = 1 - uv.y;
 	pos.i = ft_round(((double)(dims.i - 1)) * uv.x);
 	pos.j = ft_round(((double)(dims.j - 1)) * uv.y);
-	col = pixel_color_get(pos.i, pos.j, plane.texture->image);
+	col = pixel_color_get1(pos.i, pos.j, plane.texture->image);
 	comps->dims = dims;
 	comps->pos = pos;
 	return (col);
@@ -76,7 +76,7 @@ t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 	map.v = 1 - map.v;
 	pos.i = ft_round(map.u * (double)(dims.j * 2 - 1));
 	pos.j = ft_round(map.v * (double)(dims.j - 1));
-	col = pixel_color_get(pos.i, pos.j, sphere.texture->image);
+	col = pixel_color_get1(pos.i, pos.j, sphere.texture->image);
 	comps->dims = dims;
 	comps->pos = pos;
 	comps->map = map;
@@ -97,7 +97,7 @@ t_comps *comps, t_face face)
 	map.v = 1 - map.v;
 	pos.i = ft_round(((double)(dims.i - 1)) * map.u);
 	pos.j = ft_round(((double)(dims.j - 1)) * map.v);
-	col = pixel_color_get(pos.i, pos.j, cube.texture->image);
+	col = pixel_color_get1(pos.i, pos.j, cube.texture->image);
 	comps->dims = dims;
 	comps->pos = pos;
 	comps->map = map;

@@ -14,7 +14,7 @@ bool	check_cap(t_ray ray, double t)
 
 //later return false if cyl.closed == false
 
-bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
+bool	intersect_caps(t_ray ray, double *t3, double *t4)
 {
 	double	t;
 	bool	hit1;
@@ -24,11 +24,11 @@ bool	intersect_caps(t_ray ray, double half_h, double *t3, double *t4)
 	*t4 = INFINITY;
 	if (fabs(ray.dir.y) < 1e-6)
 		return (false);
-	t = (-half_h - ray.origin.y) / ray.dir.y;
+	t = (-1 - ray.origin.y) / ray.dir.y;
 	hit1 = check_cap(ray, t);
 	if (hit1)
 		*t4 = t;
-	t = (half_h - ray.origin.y) / ray.dir.y;
+	t = (1 - ray.origin.y) / ray.dir.y;
 	hit2 = check_cap(ray, t);
 	if (hit2)
 		*t3 = t;
@@ -49,7 +49,7 @@ bool	within_height(t_ray ray, double t)
 	return (false);
 }
 
-void	set_t_to_smaller_value(double *t, double *t3, double *t4)
+void	set_smaller(double *t, double *t3, double *t4)
 {
 	if (*t3 > 0 && *t3 < *t)
 		*t = *t3;
@@ -78,8 +78,8 @@ bool	ray_cylinder_intersect(t_cylinder cylinder, t_ray ray, double *t)
 			&& t2 < *t)
 			*t = t2;
 	}
-	if (intersect_caps(ray, 1, &t3, &t4))
-		set_t_to_smaller_value(t, &t3, &t4);
+	if (intersect_caps(ray, &t3, &t4))
+		set_smaller(t, &t3, &t4);
 	if (*t < INFINITY)
 		return (true);
 	return (false);

@@ -18,7 +18,7 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->h_height = 1.0;
 	new->h_depth = 1.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(0, 0, 200);
+	new->color = color(0, 174, 255);
 	identity(&transform);
 	new->curr_scale = transform;
 	new->curr_rottran = transform;

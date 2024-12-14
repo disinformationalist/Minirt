@@ -25,6 +25,8 @@ void	write_amb(t_amb *amb, int fd)
 	ft_putstr_fd("#Ambient:   Intensity 							"\
 		"									      R | G | B\n", fd);
 	ratio = amb->ratio;
+	if (ratio == 0)
+		ratio = 1e-8;
 	r = round((1.0 / ratio) * amb->color.r * 255.0);
 	g = round((1.0 / ratio) * amb->color.g * 255.0);
 	b = round((1.0 / ratio) * amb->color.b * 255.0);

@@ -41,6 +41,7 @@ bool	run_trace(t_trace *trace)
 {
 	trace->num_cols = 1;
 	trace->num_rows = get_num_cores();
+	//trace->num_rows = 30;//for turn in use.(no var length arrays)
 	trace->threads = (pthread_t *)malloc(trace->num_rows \
 		* trace->num_cols * sizeof(pthread_t));
 	if (!trace->threads)

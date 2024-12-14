@@ -10,6 +10,8 @@ static inline void	free_all(t_trace *trace, \
 void	render_scene_s(t_trace *trace)
 {
 	t_piece	piece[trace->num_rows][trace->num_cols];
+//	t_piece	piece[4][1];
+
 	int		i;
 	int		j;
 
@@ -36,10 +38,14 @@ void	render_scene_s(t_trace *trace)
 
 /* render_scene starts by breaking up the screen into groupss of pixels and 
 assigns the limits of each part to a t_peice, each to be worked by a thread */
+//t_piece	piece[trace->num_rows][trace->num_cols];
+
 
 void	render_scene(t_trace *trace)
 {
 	t_piece	piece[trace->num_rows][trace->num_cols];
+//	t_piece	piece[4][1];
+
 	int		i;
 	int		j;
 

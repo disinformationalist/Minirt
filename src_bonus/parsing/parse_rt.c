@@ -80,9 +80,9 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
 	" Camera line must begin with 'C'\n");
 	count_ints(trace, counts);
-	if (counts.tx_count > 40)
+	if (counts.tx_count > 30)
 		free_exit(rt_file, "Error\n Too many textures\n", \
-		" Combined textures and height maps must total 40 or less\n");
+		" Only 30 textures allowed or less\n");
 	check_ids(rt_file);
 	init_obs(trace);
 	if (build_lists(trace, rt_file))

@@ -26,9 +26,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
-	new->color.r = 200;
-	new->color.g = 50;
-	new->color.b = 200;
+	new->color = color(255, 148, 0);
 	identity(&transform);
 	new->t_transform = transform;
 	new->i_transform = transform;

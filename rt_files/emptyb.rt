@@ -1,0 +1,26 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.001,0.001,-6.001         0.000,0.000,1.000                     70
+
+
+#Textures:  Image                      Height Map
+tx			ice.png
+tx			wood.png
+tx			stone.png
+tx          sky.png
+tx			chaos_1.png
+tx			sun.png
+tx			neb.png
+tx			chaos_2.png
+tx			chaos_3.png
+tx			carina.png
+tx			aluminum.png               aluminum_height.png
+tx			earth2k.png                earthbump2k.png
+tx			chaos_4.png
+tx			pillars.png
+tx			julia.png						
+tx			soap.png
+

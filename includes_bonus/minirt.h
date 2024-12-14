@@ -97,7 +97,6 @@ typedef struct s_cylinder
 	t_vec3				norm;
 	double				radius;
 	double				height;
-	double				half_h;
 	t_norm_color		color;
 	t_mat				mat;
 	t_matrix_4x4		transform;
@@ -556,7 +555,6 @@ t_norm_color	texture_cube_at(t_point obj_pnt, t_cube cube, \
 				t_comps *comps, t_face face);
 t_norm_color	texture_hy_at(t_point obj_pnt, t_hyperboloid hy,
 					t_comps *comps);
-t_norm_color	pixel_color_get(int x, int y, t_img *img);
 t_vec2			set_plane_uv(t_point obj_pnt, double img_iasp);
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 int				import_textures(void *mlx_con, t_tx *textures);

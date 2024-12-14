@@ -24,9 +24,9 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 {
 	t_matrix_4x4	transform;
 
-	new->point = vec(0.0, -1, 0.0, 1.0);
+	new->point = vec(0.0, -1.0, 0.0, 1.0);
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(200, 0, 0);
+	new->color = color(175, 196, 221);
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
 	new->curr_rottran = transform;
 	new->transform = transform;

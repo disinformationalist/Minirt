@@ -132,8 +132,6 @@ int				check_orientation(char *orient_str);
 int				check_normalization(char *orient_str);
 int				check_coordinates(char *coord_str);
 void			free_exit(char ***rt_file, char *msg1, char *msg2);
-int				check_spheres_intersect(char *center_str_1, char *diam_str_1,
-					char *center_str_2, char *diam_str_2);
 
 /***INIT***/
 
