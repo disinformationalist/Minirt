@@ -22,7 +22,9 @@ char	*build_cy_line(t_cylinder *cyl)
 	double			h;
 
 	cen = mat_vec_mult(cyl->i_transform, vec(0, 0, 0, 1));
+	check_tolerance(&cen);
 	n = norm_vec(mat_vec_mult(cyl->i_transform, vec(0, 1, 0, 0)));
+	check_tolerance(&n);
 	d = (2.0 / cyl->curr_scale.m[2][2]);
 	h = (2.0 / cyl->curr_scale.m[1][1]);
 	snprintf(line, sizeof(line), \
