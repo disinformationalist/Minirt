@@ -24,6 +24,7 @@ char	*build_pl_line(t_plane *plane)
 	transform = inverse(plane->transform);
 	p = mat_vec_mult(transform, vec(0, 0, 0, 1));
 	n = norm_vec(mat_vec_mult(transform, vec(0, 1, 0, 0)));
+	check_tolerance(&n);
 	spaces = 13 - count_chars(p.x) - count_chars(p.y) - count_chars(p.z);
 	snprintf(line, sizeof(line), \
 		"pl          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s", \
