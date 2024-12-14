@@ -127,6 +127,7 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/init_objects/set_amb_cam_lights.c \
 ./src_bonus/init_objects/init_cam.c \
 ./src_bonus/trace_objects/CSG.c \
+./src_bonus/trace_objects/CSG_2.c \
 ./src_bonus/trace_objects/CSG_utils.c \
 ./src_bonus/trace_objects/CSG_pool.c \
 ./src_bonus/trace_objects/trace_planes.c \
