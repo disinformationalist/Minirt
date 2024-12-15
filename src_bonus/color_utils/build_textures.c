@@ -72,10 +72,21 @@ static inline bool	fill_tx(void *mlx_con, t_tx *curr)
 		curr->bump_map = import_png(mlx_con, curr->m_name, \
 		&curr->m_width, &curr->m_height);
 	else
+	{
 		curr->bump_map = build_lumin_map(mlx_con, curr->image, \
 		curr->i_width, curr->i_height);
+		curr->m_width = curr->i_width;
+		curr->m_height = curr->i_height;
+	}
 	if (!curr->bump_map)
 		return (1);
+	if ((curr->m_width != curr->i_width) || curr->m_height != curr->i_height)
+	{
+		ft_putstr_color_fd(2, "Error\n Invalid texture params\n Texture " \
+			"image dimensions must match height map dimensions\n", RED);
+			return (1);
+		return (1);
+	}
 	curr->img_iasp = (double)curr->i_height / (double)curr->i_width;
 	return (0);
 }

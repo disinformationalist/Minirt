@@ -309,7 +309,6 @@ typedef struct t_comps
 	t_norm_color	refl_col;
 }	t_comps;
 
-
 /***PARSING***/
 
 void			parse_rt(t_trace *trace, char ***rt_file);
@@ -472,8 +471,8 @@ bool			check_pl_dist(t_plane *planes, t_ray ray, double dist);
 bool			ray_cylinder_intersect2(t_cylinder cylinder, \
 				t_ray ray, double dist);
 bool			check_hy_dist(t_hyperboloid *hyperboloids, \
-t_ray ray, double dist);
-bool			intersect_caps2_hy(t_ray ray, double dist,
+				t_ray ray, double dist);
+bool			intersect_caps2_hy(t_ray ray, double dist, \
 				t_hyperboloid hyperboloid);
 
 //cylinder utils
@@ -492,7 +491,7 @@ t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
 void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, \
 				t_ray ray, t_intersects *intersects);
-bool			intersect_caps_hy(t_ray ray, double *t3,
+bool			intersect_caps_hy(t_ray ray, double *t3, \
 				double *t4, t_hyperboloid *hyp);
 
 //light utils
@@ -662,8 +661,8 @@ void			print_times(long start, long end, char *msg);
 /*** CSG ***/
 void			check_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
 					t_helper_shape *shapes3, t_intersects *intersects);
-void			check_simple_csg(t_helper_shape *shapes1, t_helper_shape *shapes2,
-					t_intersects *intersects, t_csg_op op);
+void			check_simple_csg(t_helper_shape *shapes1, t_helper_shape \
+				*shapes2, t_intersects *intersects, t_csg_op op);
 t_csg			*make_new_csg(t_helper_shape *left, t_helper_shape *right,
 					t_csg_op op);
 bool			hit_allowed(t_csg_op op, bool lhit, bool inl, bool inr);
