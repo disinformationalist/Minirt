@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 14:53:49 by jhotchki          #+#    #+#             */
+/*   Updated: 2024/12/16 14:54:00 by jhotchki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
+
 /*-------------VIEWPORT DIAGRAM-----------Best I could manage in ascii chars :(
              |\
              | \				Using LEFT Handed Coordinates(for everything)
@@ -25,7 +38,7 @@
 
 void	info_init(t_trace *trace)
 {
-	trace->width = 1080;
+	trace->width = 1600;
 	trace->height = (int)((double)trace->width / ASPECT);
 	trace->color_i = 0;
 	trace->num_colors = 384;

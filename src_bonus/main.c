@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 14:38:10 by jhotchki          #+#    #+#             */
+/*   Updated: 2024/12/16 14:38:12 by jhotchki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	ft_3darray_len(char ***array)
@@ -37,11 +49,12 @@ int	get_num_cores(void)
 	return (num_cores);
 }
 
+//trace->num_rows = get_num_cores();
+
 bool	run_trace(t_trace *trace)
 {
 	trace->num_cols = 1;
-	trace->num_rows = get_num_cores();
-	//trace->num_rows = 30;//for turn in use.(no var length arrays)
+	trace->num_rows = 32;
 	trace->threads = (pthread_t *)malloc(trace->num_rows \
 		* trace->num_cols * sizeof(pthread_t));
 	if (!trace->threads)

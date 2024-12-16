@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 13:58:16 by jhotchki          #+#    #+#             */
+/*   Updated: 2024/12/16 13:58:18 by jhotchki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	ft_3darray_len(char ***array)
@@ -31,7 +43,8 @@ int	main(int ac, char **av)
 	t_trace		trace;
 
 	if (ac != 2)
-		return (free_exit(NULL, "Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);
+		return (free_exit(NULL, "Error\n Usage: ./minirt_bonus [scene.rt]\n", \
+	NULL), 1);
 	if (!is_rt_file_valid(av[1]))
 		return (free_exit(NULL, "Error\n Invalid rt file\n", NULL), 1);
 	file = ft_strjoin("rt_files/", av[1]);

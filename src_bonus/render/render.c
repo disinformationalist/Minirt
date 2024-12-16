@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 14:53:12 by jhotchki          #+#    #+#             */
+/*   Updated: 2024/12/16 14:53:14 by jhotchki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static inline void	free_all(t_trace *trace, \
@@ -7,11 +19,11 @@ static inline void	free_all(t_trace *trace, \
 	clear_all(trace);
 }
 
+//t_piece	piece[trace->num_rows][trace->num_cols];
+
 void	render_scene_s(t_trace *trace)
 {
-	t_piece	piece[trace->num_rows][trace->num_cols];
-//	t_piece	piece[4][1];
-
+	t_piece	piece[32][1];
 	int		i;
 	int		j;
 
@@ -40,12 +52,9 @@ void	render_scene_s(t_trace *trace)
 assigns the limits of each part to a t_peice, each to be worked by a thread */
 //t_piece	piece[trace->num_rows][trace->num_cols];
 
-
 void	render_scene(t_trace *trace)
 {
-	t_piece	piece[trace->num_rows][trace->num_cols];
-//	t_piece	piece[4][1];
-
+	t_piece	piece[32][1];
 	int		i;
 	int		j;
 

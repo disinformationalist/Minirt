@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   build_textures.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jhotchki <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/16 14:31:13 by jhotchki          #+#    #+#             */
+/*   Updated: 2024/12/16 14:31:14 by jhotchki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 //check valid here using subdir name
@@ -84,7 +96,6 @@ static inline bool	fill_tx(void *mlx_con, t_tx *curr)
 	{
 		ft_putstr_color_fd(2, "Error\n Invalid texture params\n Texture " \
 			"image dimensions must match height map dimensions\n", RED);
-			return (1);
 		return (1);
 	}
 	curr->img_iasp = (double)curr->i_height / (double)curr->i_width;
