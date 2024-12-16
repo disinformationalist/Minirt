@@ -37,8 +37,12 @@
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	check_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, (t_helper_shape *)trace->spheres->next, intersects);
-	check_csg((t_helper_shape *)trace->spheres->next->next, (t_helper_shape *)trace->hyperboloids->next, (t_helper_shape *)trace->spheres->next->next->next, intersects);
+	check_csg((t_helper_shape *)trace->spheres,
+		(t_helper_shape *)trace->hyperboloids,
+		(t_helper_shape *)trace->spheres->next, intersects);
+	check_csg((t_helper_shape *)trace->spheres->next->next,
+		(t_helper_shape *)trace->hyperboloids->next,
+		(t_helper_shape *)trace->spheres->next->next->next, intersects);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
@@ -61,7 +65,8 @@
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	check_simple_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, intersects, DIFFERENCE);
+	check_simple_csg((t_helper_shape *)trace->spheres,
+		(t_helper_shape *)trace->hyperboloids, intersects, DIFFERENCE);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
@@ -90,13 +95,15 @@
 	curr_cu = trace->cubes;
 	while (1)
 	{
-		check_simple_csg((t_helper_shape *)curr_cu, (t_helper_shape *)curr_cy, intersects, DIFFERENCE);
+		check_simple_csg((t_helper_shape *)curr_cu,
+			(t_helper_shape *)curr_cy, intersects, DIFFERENCE);
 		curr_cy = curr_cy->next;
 		curr_cu = curr_cu->next;
 		if (curr_cy == trace->cylinders || curr_cu == trace->cubes)
 			break ;
 	}
-	check_simple_csg((t_helper_shape *)trace->spheres, (t_helper_shape *)trace->hyperboloids, intersects, DIFFERENCE);
+	check_simple_csg((t_helper_shape *)trace->spheres,
+		(t_helper_shape *)trace->hyperboloids, intersects, DIFFERENCE);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
@@ -125,7 +132,8 @@
 	curr_cu = trace->cubes;
 	while (1)
 	{
-		check_simple_csg((t_helper_shape *)curr_cu, (t_helper_shape *)curr_sp, intersects, DIFFERENCE);
+		check_simple_csg((t_helper_shape *)curr_cu,
+			(t_helper_shape *)curr_sp, intersects, DIFFERENCE);
 		curr_sp = curr_sp->next;
 		curr_cu = curr_cu->next;
 		if (curr_sp == trace->spheres || curr_cu == trace->cubes)
@@ -153,9 +161,12 @@
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
-	check_simple_csg((t_helper_shape *)trace->cubes, (t_helper_shape *)trace->spheres, intersects, UNION);
-	check_simple_csg((t_helper_shape *)trace->cubes->next, (t_helper_shape *)trace->spheres->next, intersects, DIFFERENCE);
-	check_simple_csg((t_helper_shape *)trace->cubes->next->next, (t_helper_shape *)trace->spheres->next->next, intersects, INTERSECTION);
+	check_simple_csg((t_helper_shape *)trace->cubes,
+		(t_helper_shape *)trace->spheres, intersects, UNION);
+	check_simple_csg((t_helper_shape *)trace->cubes->next,
+		(t_helper_shape *)trace->spheres->next, intersects, DIFFERENCE);
+	check_simple_csg((t_helper_shape *)trace->cubes->next->next,
+		(t_helper_shape *)trace->spheres->next->next, intersects, INTERSECTION);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
