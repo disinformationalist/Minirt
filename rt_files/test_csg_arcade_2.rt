@@ -107,7 +107,7 @@ hy          0.0,3.5,11.0     0.0,1.0,0.0    1.5  0.01  7.0  250,230,200
 #tx			chaos_6.png
 #tx			chaos_7.png
 #tx			chaos_8.png
-#tx			julia_1.png		
-tx			julia_2.png						
+tx			julia.png		
+#tx			julia_2.png						
 #tx			julia_3.png
 
