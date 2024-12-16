@@ -239,7 +239,7 @@ endef
 all:  $(LIBFT_ARCH) $(NAME)
 
 $(NAME): $(OBS)
-	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+	$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -lm -lmlx -lX11 -lXext -o $@ -lpng
 	$(call print_colored, "[SUCCESS]", "./$(NAME)", "Ready")
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -251,8 +251,12 @@ $(LIBFT_ARCH):
 
 bonus: $(LIBFT_ARCH) $(NAME_BONUS)
 
-$(NAME_BONUS): $(OBS_B)
-	$(CC) $(OBS_B)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+#$(CC) $(OBS)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+#$(CC) $(OBS_B)  -L$(LIBFT_PATH) -lft -lm -Lminilibx-linux -lmlx_Linux -lX11 -lXext -o $@ -lpng
+
+
+$(NAME_BONUS): $(OBS_B) -lm -lmlx -lX11 -lXext 
+	$(CC) $(OBS_B)  -L$(LIBFT_PATH) -lft -lm -lmlx -lX11 -lXext -o $@ -lpng
 	$(call print_colored, "[SUCCESS]", "./$(NAME_BONUS)", "Ready")
 
 $(OBJ_DIR_BONUS)/%.o: $(SRC_DIR_BONUS)/%.c

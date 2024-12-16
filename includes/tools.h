@@ -7,7 +7,8 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <math.h>
-# include "../minilibx-linux/mlx.h"
+//# include "../minilibx-linux/mlx.h"
+# include <mlx.h>
 # include "../libft/libft.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
