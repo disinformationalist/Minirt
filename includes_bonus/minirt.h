@@ -50,11 +50,11 @@ typedef struct s_sphere
 	double			radius;
 	t_norm_color	color;
 	t_mat			mat;
-	t_matrix_4x4	transform;
-	t_matrix_4x4	t_transform;
-	t_matrix_4x4	i_transform;
-	t_matrix_4x4	curr_scale;
-	t_matrix_4x4	curr_rottran;
+	t_mat4	transform;
+	t_mat4	t_transform;
+	t_mat4	i_transform;
+	t_mat4	curr_scale;
+	t_mat4	curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -73,11 +73,11 @@ typedef struct s_plane
 	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
-	t_matrix_4x4	transform;
-	t_matrix_4x4	t_transform;
-	t_matrix_4x4	i_transform;
-	t_matrix_4x4	curr_scale;
-	t_matrix_4x4	curr_rottran;
+	t_mat4	transform;
+	t_mat4	t_transform;
+	t_mat4	i_transform;
+	t_mat4	curr_scale;
+	t_mat4	curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -99,11 +99,11 @@ typedef struct s_cylinder
 	double				height;
 	t_norm_color		color;
 	t_mat				mat;
-	t_matrix_4x4		transform;
-	t_matrix_4x4		t_transform;
-	t_matrix_4x4		i_transform;
-	t_matrix_4x4		curr_scale;
-	t_matrix_4x4		curr_rottran;
+	t_mat4		transform;
+	t_mat4		t_transform;
+	t_mat4		i_transform;
+	t_mat4		curr_scale;
+	t_mat4		curr_rottran;
 	t_tx				*texture;
 	int					option;
 	t_pattern			pattern;
@@ -126,11 +126,11 @@ typedef struct s_hyperboloid
 	double					waist_val;
 	t_norm_color			color;
 	t_mat					mat;
-	t_matrix_4x4			transform;
-	t_matrix_4x4			t_transform;
-	t_matrix_4x4			i_transform;
-	t_matrix_4x4			curr_scale;
-	t_matrix_4x4			curr_rottran;
+	t_mat4			transform;
+	t_mat4			t_transform;
+	t_mat4			i_transform;
+	t_mat4			curr_scale;
+	t_mat4			curr_rottran;
 	t_tx					*texture;
 	t_pattern				pattern;
 	bool					w_frost;
@@ -152,11 +152,11 @@ typedef struct s_cube
 	double			h_depth;
 	t_norm_color	color;
 	t_mat			mat;
-	t_matrix_4x4	transform;
-	t_matrix_4x4	t_transform;
-	t_matrix_4x4	i_transform;
-	t_matrix_4x4	curr_scale;
-	t_matrix_4x4	curr_rottran;
+	t_mat4	transform;
+	t_mat4	t_transform;
+	t_mat4	i_transform;
+	t_mat4	curr_scale;
+	t_mat4	curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -206,9 +206,9 @@ typedef struct s_light
 	int					usteps;
 	int					vsteps;
 	int					samples;
-	t_matrix_4x4		transform;
-	t_matrix_4x4		curr_scale;
-	t_matrix_4x4		curr_rottran;
+	t_mat4		transform;
+	t_mat4		curr_scale;
+	t_mat4		curr_rottran;
 	t_cube				*emitter;
 	double				area;
 	struct s_light		*prev;
@@ -529,8 +529,8 @@ t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
-t_matrix_4x4	rot_to(t_vec3 from, t_vec3 to);
-t_matrix_4x4	get_rotation(t_vec3 ax, double cos, double sin);
+t_mat4	rot_to(t_vec3 from, t_vec3 to);
+t_mat4	get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 /***COLOR UTILS***/
@@ -558,9 +558,9 @@ t_vec2			set_plane_uv(t_point obj_pnt, double img_iasp);
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 int				import_textures(void *mlx_con, t_tx *textures);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
-				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
+				t_mat4 t_tran, t_mat4 i_tran);
 void			sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
-				t_matrix_4x4 t_tran, t_matrix_4x4 i_tran);
+				t_mat4 t_tran, t_mat4 i_tran);
 t_vec3			frost(t_vec3 norm);
 t_map			hyperbolic_map(t_point obj_pnt, bool flag, \
 				t_comps *comps, double waist_val);
@@ -585,8 +585,8 @@ t_norm_color	sum_rgbs(t_norm_color sum, t_norm_color to_add);
 t_norm_color	mult_color(double scalar, t_norm_color color);
 
 //patterns
-t_norm_color	ring_at(t_point point, t_matrix_4x4 transform);
-t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, \
+t_norm_color	ring_at(t_point point, t_mat4 transform);
+t_norm_color	gradient_at(t_point point, t_mat4 transform, \
 				t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
@@ -599,7 +599,7 @@ void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec, int keycode);
 void			scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1,
 					double waist_factor);
-void			rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot);
+void			rotate_object(t_trace *trace, t_on *on, t_mat4 rot);
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec);
 void			pop_object(t_trace *trace, t_on *on);
 void			push_new_object(t_trace *trace, t_on *on);

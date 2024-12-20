@@ -35,7 +35,7 @@ static inline t_vec3	set_hytbn(t_point obj_pnt, t_vec3 bumpv, t_vec3 *bumpp)
 {
 	t_vec3			tan;
 	t_vec3			bitan;
-	t_matrix_4x4	tbn;
+	t_mat4	tbn;
 	t_vec3			norm;
 
 	norm = vec(2 * obj_pnt.x, -2 * obj_pnt.y, 2 * obj_pnt.z, 0);

@@ -22,7 +22,7 @@ static inline void	update_plane_ids(t_plane *plane)
 
 static inline void	make_default_pl(t_plane **start, t_plane *new)
 {
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	new->point = vec(0.0, -1.0, 0.0, 1.0);
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
@@ -30,7 +30,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
 	new->curr_rottran = transform;
 	new->transform = transform;
-	identity(&transform);
+	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
 	new->curr_scale = transform;

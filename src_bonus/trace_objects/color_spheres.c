@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static inline t_vec3	sp_normal_at(t_point obj_pnt, t_matrix_4x4 transform)
+static inline t_vec3	sp_normal_at(t_point obj_pnt, t_mat4 transform)
 {
 	t_vec3	norm;
 

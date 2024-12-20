@@ -67,6 +67,15 @@ SRCS := ./src/main.c \
 ./src/events/scaling.c \
 ./src/events/supersample.c \
 
+
+#./src_bonus/math_utils/matrix_ops/matrix_vec_conv.c \
+./src_bonus/math_utils/matrix_ops/print_matrix.c \
+./src_bonus/math_utils/matrix_ops/inverse.c \
+./src_bonus/math_utils/matrix_ops/inverse_utils.c \
+./src_bonus/math_utils/matrix_ops/matrix_4x4_ops.c \
+./src_bonus/math_utils/matrix_ops/matrix_rotation.c \
+./src_bonus/math_utils/matrix_ops/matrix_scale_tran.c \
+
 SRCS_B := ./src_bonus/main.c \
 ./src_bonus/render/init.c \
 ./src_bonus/render/minirt.c \
@@ -82,13 +91,12 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/math_utils/vector_ops.c \
 ./src_bonus/math_utils/vector_ops2.c \
 ./src_bonus/math_utils/vector_ops3.c \
-./src_bonus/math_utils/matrix_ops/matrix_vec_conv.c \
-./src_bonus/math_utils/matrix_ops/print_matrix.c \
-./src_bonus/math_utils/matrix_ops/inverse.c \
-./src_bonus/math_utils/matrix_ops/inverse_utils.c \
-./src_bonus/math_utils/matrix_ops/matrix_4x4_ops.c \
-./src_bonus/math_utils/matrix_ops/matrix_rotation.c \
-./src_bonus/math_utils/matrix_ops/matrix_scale_tran.c \
+./src_bonus/math_utils/matrix/inverse.c \
+./src_bonus/math_utils/matrix/inverse_utils.c \
+./src_bonus/math_utils/matrix/multiply.c \
+./src_bonus/math_utils/matrix/rotation.c \
+./src_bonus/math_utils/matrix/print.c \
+./src_bonus/math_utils/matrix/scale_tran_shear.c \
 ./src_bonus/math_utils/rotate_to.c \
 ./src_bonus/parsing/split_file.c \
 ./src_bonus/parsing/split_by_whitespace.c \
@@ -210,7 +218,7 @@ SRCS_B := ./src_bonus/main.c \
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
 
-CFLAGS_B :=  -Wall -Wextra -Werror -I$(INC_DIR_BONUS) -g -fPIE -Ofast -march=native -Wno-unused-result
+CFLAGS_B :=  -Wall -Wextra -Werror -I$(INC_DIR_BONUS) -g -mavx -mavx2 -fPIE -Ofast -march=native -Wno-unused-result
 
 RM := rm -f
 

@@ -2,8 +2,8 @@
 
 void	set_pltrans(t_plane *curr_pl)
 {
-	t_matrix_4x4	inv_trans;
-	t_matrix_4x4	inv_rot;
+	t_mat4	inv_trans;
+	t_mat4	inv_rot;
 
 	inv_trans = translation(-curr_pl->point.x, \
 	-curr_pl->point.y, -curr_pl->point.z);
@@ -40,8 +40,8 @@ void	set_pl_transforms(t_trace *trace)
 
 void	set_cytrans(t_cylinder *curr_cy)
 {
-	t_matrix_4x4	inv_trans;
-	t_matrix_4x4	inv_rot;
+	t_mat4	inv_trans;
+	t_mat4	inv_rot;
 
 	inv_trans = translation(-curr_cy->center.x, \
 	-curr_cy->center.y, -curr_cy->center.z);

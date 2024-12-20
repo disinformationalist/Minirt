@@ -19,7 +19,7 @@ char	*build_pl_line(t_plane *plane)
 	t_point			p;
 	t_vec3			n;
 	int				spaces;
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	transform = inverse(plane->transform);
 	p = mat_vec_mult(transform, vec(0, 0, 0, 1));

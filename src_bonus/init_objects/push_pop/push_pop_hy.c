@@ -22,7 +22,7 @@ static inline void	update_hyperboloid_ids(t_hyperboloid *hyperboloid)
 
 static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 {
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->rad = 1.0;
@@ -30,7 +30,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->height = 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color = color(0, 200, 100);
-	identity(&transform);
+	transform = identity();
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;

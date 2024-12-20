@@ -2,7 +2,7 @@
 
 //rings
 
-t_norm_color	ring_at(t_point point, t_matrix_4x4 transform)
+t_norm_color	ring_at(t_point point, t_mat4 transform)
 {
 	t_norm_color	col;
 	t_point			obj_pnt;
@@ -18,7 +18,7 @@ t_norm_color	ring_at(t_point point, t_matrix_4x4 transform)
 
 //not really working this way... must rework.. map
 
-t_norm_color	gradient_at(t_point point, t_matrix_4x4 transform, \
+t_norm_color	gradient_at(t_point point, t_mat4 transform, \
 	t_norm_color col1, t_norm_color col2)
 {
 	t_norm_color	col;

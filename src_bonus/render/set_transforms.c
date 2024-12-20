@@ -19,6 +19,8 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->curr_rottran));
 			curr_sp->t_transform = transpose(curr_sp->transform);
 			curr_sp->i_transform = inverse(curr_sp->transform);
+		/* 	print_mat4(curr_sp->transform);
+			print_mat4(curr_sp->i_transform); */
 			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
 			color(255, 255, 255));
 			curr_sp->texture = trace->textures;
@@ -31,8 +33,8 @@ void	set_sp_transforms(t_trace *trace)
 
 void	set_transforms_curr(t_trace *trace, t_hyperboloid *curr_hy)
 {
-	t_matrix_4x4	inv_trans;
-	t_matrix_4x4	inv_rot;
+	t_mat4	inv_trans;
+	t_mat4	inv_rot;
 
 	inv_trans = translation(-curr_hy->center.x,
 			-curr_hy->center.y, -curr_hy->center.z);
@@ -78,8 +80,8 @@ void	set_cu_transforms2(t_trace *trace, t_cube *curr_cu)
 void	set_cu_transforms(t_trace *trace)
 {
 	t_cube			*curr_cu;
-	t_matrix_4x4	inv_rot;
-	t_matrix_4x4	inv_trans;
+	t_mat4	inv_rot;
+	t_mat4	inv_trans;
 
 	if (trace->cubes)
 	{

@@ -16,13 +16,13 @@ void	add_hy_color(t_hyperboloid *hyp, char *line)
 void	get_hy_transformations(t_hyperboloid *hyp, t_point *cen,
 		t_vec3 *n, double *results)
 {
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	transform = inverse(hyp->transform);
 	*cen = mat_vec_mult(transform, vec(0, 0, 0, 1));
 	*n = norm_vec(mat_vec_mult(transform, vec(0, 1, 0, 0)));
-	results[0] = (2.0 / hyp->curr_scale.m[2][2]);
-	results[1] = (1.0 / hyp->curr_scale.m[1][1]) * hyp->height;
+	results[0] = (2.0 / hyp->curr_scale.mat[10]);
+	results[1] = (1.0 / hyp->curr_scale.mat[5]) * hyp->height;
 }
 
 void	get_hy_spaces(t_point *cen, t_vec3 *n, double *results, int *spaces)

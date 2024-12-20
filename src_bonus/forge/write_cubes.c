@@ -22,18 +22,20 @@ char	*build_cu_line(t_cube *cu)
 	double			h;
 
 	cen = mat_vec_mult(cu->i_transform, vec(0, 0, 0, 1));
+	printf("%f\n", cen.x);
 	check_tolerance(&cen);
 	n = norm_vec(mat_vec_mult(cu->i_transform, vec(0, 1, 0, 0)));
 	check_tolerance(&n);
-	w = (2.0 / cu->curr_scale.m[0][0]);
-	h = (2.0 / cu->curr_scale.m[1][1]);
+	w = (2.0 / cu->curr_scale.mat[0]);
+	h = (2.0 / cu->curr_scale.mat[5]);
+
 	snprintf(line, sizeof(line), \
 		"cu          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s%.3f%*s%.3f%*s", \
 		cen.x, cen.y, cen.z, 13 - count_chars(cen.x) - count_chars(cen.y) \
 		- count_chars(cen.z), "", n.x, n.y, n.z, 13 - count_chars(n.x) \
 		- count_chars(n.y) - count_chars(n.z), "", w, 4 - count_chars(w), \
-		"", h, 4 - count_chars(h), "", (2.0 / cu->curr_scale.m[2][2]), \
-		4 - count_chars((2.0 / cu->curr_scale.m[2][2])), "");
+		"", h, 4 - count_chars(h), "", (2.0 / cu->curr_scale.mat[10]), \
+		4 - count_chars((2.0 / cu->curr_scale.mat[10])), "");
 	add_cu_color(cu, line);
 	return (line);
 }

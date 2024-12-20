@@ -36,8 +36,8 @@ char	*build_alt_line(t_light *light)
 	double			wid;
 	double			len;
 
-	wid = (2.0 * light->curr_scale.m[0][0]);
-	len = (2.0 * light->curr_scale.m[2][2]);
+	wid = (2.0 * light->curr_scale.mat[0]);
+	len = (2.0 * light->curr_scale.mat[10]);
 	cen = light->center;
 	n = light->dir;
 	check_tolerance(&n);

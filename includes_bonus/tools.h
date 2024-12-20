@@ -14,7 +14,9 @@
 # include "ansi_colors.h"
 # include "limits.h"
 # include <stdint.h>//uint8_t
-# include "matrix_ops.h"
+//# include "matrix_ops.h"
+
+# include "matrix.h"
 # include "materials.h"
 
 # include <pthread.h>
@@ -170,8 +172,8 @@ typedef struct s_cam
 	t_vec3			orient;
 	t_vec3			true_up;
 	int				fov;
-	t_matrix_4x4	transform;
-	t_matrix_4x4	transform_up;
+	t_mat4	transform;
+	t_mat4	transform_up;
 }	t_cam;
 
 /***GROUPS AND BVH***/
@@ -189,7 +191,7 @@ typedef struct s_shape
 	t_type			type;
 	void			*shape;
 	void			*parent;
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 	struct s_shape	*next;
 	struct s_shape	*prev;
 
@@ -199,7 +201,7 @@ typedef struct s_group
 {
 	t_shape			*shapes;
 	t_type			type;
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 }	t_group;
 
 // for möller-trumbore triangle intersect ft
@@ -287,7 +289,7 @@ typedef struct s_obj_counts
 
 t_norm_color	*set_color_wheel(int num_colors, double saturation, \
 				double lightness, int base_hue);
-t_ray			transform(t_ray r, t_matrix_4x4 m);
+t_ray			transform(t_ray r, t_mat4 m);
 void			ft_swap(double *a, double *b);
 double			randf(void);
 double			randf2(void);
@@ -316,7 +318,7 @@ t_face			face_of_pnt(t_point pnt);
 t_group			*group(void);
 void			free_group(t_group *group);
 int				add_child(t_group *group, void *obj, t_type type,
-					t_matrix_4x4 transform);
+					t_mat4 transform);
 void			check_group(t_group *group, t_intersects *intersects,
 					t_ray ray);
 
@@ -329,7 +331,7 @@ t_box			*bounds_of(t_type type);
 void			add_to(t_box *b1, t_box b2);
 bool			contains_pnt(t_box box, t_point point);
 bool			contains_box(t_box b1, t_box b2);
-t_box			*transform_box(t_box *box, t_matrix_4x4 transf);
+t_box			*transform_box(t_box *box, t_mat4 transf);
 t_box			*bops(t_shape *shape);
 
 #endif
