@@ -11,7 +11,7 @@ t_group	*group(void)
 		return (NULL);
 	new->shapes = NULL;
 	new->type = GROUP;
-	identity(&new->transform);
+	new->transform = identity();
 	return (new);
 }
 
@@ -19,7 +19,7 @@ t_group	*group(void)
 add to group(first argument) when adjusting group transform 
 it must reapply to all */
 
-int	add_child(t_group *group, void *obj, t_type type, t_matrix_4x4 transform)
+int	add_child(t_group *group, void *obj, t_type type, t_mat4 transform)
 {
 	t_shape	*new;
 	t_shape	*last;

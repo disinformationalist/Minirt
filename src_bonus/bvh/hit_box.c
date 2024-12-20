@@ -25,7 +25,7 @@
 
 //might need: ray = transform(ray, ctransform);
 
-bool	ray_box_intersect(t_box *box, t_matrix_4x4 ctransform, t_ray ray)
+bool	ray_box_intersect(t_box *box, t_mat4 ctransform, t_ray ray)
 {
 	t_vec3	mins;
 	t_vec3	maxs;

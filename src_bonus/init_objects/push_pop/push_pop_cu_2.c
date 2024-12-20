@@ -11,7 +11,7 @@ static inline void	make_links(t_cube **start, t_cube *new)
 
 void	make_default_cu(t_cube **start, t_cube *new)
 {
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->h_width = 1.0;
@@ -19,7 +19,7 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->h_depth = 1.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color = color(0, 174, 255);
-	identity(&transform);
+	transform = identity();
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;

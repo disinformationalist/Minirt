@@ -21,7 +21,7 @@ t_vec3	sine_bump(t_vec3 obj_pnt, double rad, double freq, double amp)
 //only on planes, makes ripples
 
 void	sine_ring_norm(t_point obj_pnt, t_comps *comps, \
-t_matrix_4x4 t_tran, t_matrix_4x4 i_tran)
+t_mat4 t_tran, t_mat4 i_tran)
 {
 	t_vec3	bumpv;
 	t_vec3	bumpp;

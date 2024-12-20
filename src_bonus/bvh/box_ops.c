@@ -31,7 +31,7 @@ bool	contains_box(t_box b1, t_box b2)
 
 //return a new box with a transform applied to an existing one
 
-t_box	*transform_box(t_box *box, t_matrix_4x4 transf)
+t_box	*transform_box(t_box *box, t_mat4 transf)
 {
 	t_point	point;
 	t_box	*new;

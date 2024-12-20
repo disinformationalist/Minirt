@@ -22,14 +22,14 @@ static inline void	update_cylinder_ids(t_cylinder *cylinder)
 
 static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 {
-	t_matrix_4x4	transform;
+	t_mat4	transform;
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
 	new->height = 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
 	new->color = color(127, 0, 255);
-	identity(&transform);
+	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
 	new->curr_scale = transform;

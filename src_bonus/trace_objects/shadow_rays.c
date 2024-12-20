@@ -42,7 +42,7 @@ double *min, double *max)
 		ft_swap(min, max);
 }
 
-static inline bool	ray_cube_intersect2(t_matrix_4x4 ctransform, \
+static inline bool	ray_cube_intersect2(t_mat4 ctransform, \
 t_ray ray, double dist)
 {
 	t_vec3	mins;

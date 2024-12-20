@@ -9,7 +9,7 @@ t_ray	ray(t_vec3 dir, t_point origin)
 	return (r);
 }
 
-t_ray	transform(t_ray r, t_matrix_4x4 m)
+t_ray	transform(t_ray r, t_mat4 m)
 {
 	t_ray	new;
 

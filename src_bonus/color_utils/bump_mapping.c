@@ -29,9 +29,9 @@ static inline t_vec3	bump(t_position pos, t_img *img, double stren)
 	return (perturb);
 }
 
-static inline t_matrix_4x4	set_sptbn(t_point obj_pnt)
+static inline t_mat4	set_sptbn(t_point obj_pnt)
 {
-	t_matrix_4x4	tbn;
+	t_mat4	tbn;
 	t_vec3			tan;
 	t_vec3			bitan;
 
@@ -47,7 +47,7 @@ static inline t_matrix_4x4	set_sptbn(t_point obj_pnt)
 
 void	bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 {
-	t_matrix_4x4	tbn;
+	t_mat4	tbn;
 	t_vec3			bumpv;
 	t_point			bumpp;
 

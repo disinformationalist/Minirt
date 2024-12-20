@@ -67,7 +67,7 @@ void	adjust_bumpp(t_vec3 *bumpp, t_face face, t_vec3 obj_pnt)
 }
 
 void	sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
-t_matrix_4x4 t_tran, t_matrix_4x4 i_tran)
+t_mat4 t_tran, t_mat4 i_tran)
 {
 	t_vec3	bumpv;
 	t_vec3	bumpp;

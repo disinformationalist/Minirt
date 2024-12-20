@@ -30,26 +30,9 @@ cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.0
 cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,174,255
 
 
-#Hyper:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Radius  Waist  Height  R | G | B
-hy          2.000,1.000,5.500          0.000,0.966,0.259          1.000   1.000  2.000   000,255,100
-
-
-
 #Textures:  Image                      Height Map
-#tx			soft.png
-#tx			ice.png
-#tx			wood.png
-#tx			stone.png
-#tx          sky.png
-#tx			chaos_1.png
-tx			sun.png
-#tx			neb.png
-#tx			chaos_2.png
-#tx			chaos_3.png
-#tx			carina.png
-tx			aluminum.png               aluminum_height.png
-#tx			earth2k.png                earthbump2k.png
-#tx			chaos_4.png
-#tx			pillars.png
-tx			julia.png						
-#tx			soap.png
+tx          sun.png
+tx          aluminum.png               aluminum_height.png
+tx          julia.png
+
+

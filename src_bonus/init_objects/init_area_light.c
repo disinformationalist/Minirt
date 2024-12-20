@@ -2,8 +2,8 @@
 
 void	set_arealt_transform(t_light *lt, double width, double length)
 {
-	t_matrix_4x4	rot;
-	t_matrix_4x4	trans;
+	t_mat4	rot;
+	t_mat4	trans;
 
 	trans = translation(lt->center.x, lt->center.y, lt->center.z);
 	rot = rot_to(vec(0, 1, 0, 0), lt->dir);
@@ -26,8 +26,8 @@ void	set_arealt(t_light *lt)
 
 void	set_lt_cube_transform(t_cube *cube)
 {
-	t_matrix_4x4	inv_rot;
-	t_matrix_4x4	inv_trans;
+	t_mat4	inv_rot;
+	t_mat4	inv_trans;
 
 	inv_rot = rot_to(cube->norm, vec(0, 1, 0, 0));
 	inv_trans = translation(-cube->center.x, -cube->center.y, -cube->center.z);

@@ -25,8 +25,8 @@ char	*build_cy_line(t_cylinder *cyl)
 	check_tolerance(&cen);
 	n = norm_vec(mat_vec_mult(cyl->i_transform, vec(0, 1, 0, 0)));
 	check_tolerance(&n);
-	d = (2.0 / cyl->curr_scale.m[2][2]);
-	h = (2.0 / cyl->curr_scale.m[1][1]);
+	d = (2.0 / cyl->curr_scale.mat[10]);
+	h = (2.0 / cyl->curr_scale.mat[5]);
 	snprintf(line, sizeof(line), \
 		"cy          %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%.3f%*s%.3f%*s", \
 		cen.x, cen.y, cen.z, 13 - count_chars(cen.x) - count_chars(cen.y) \

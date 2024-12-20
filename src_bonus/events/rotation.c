@@ -2,7 +2,7 @@
 
 //cam rotates in local space for best use
 
-static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
+static inline void	rotate_cam(t_trace *trace, t_mat4 rot)
 {
 	t_vec3	g_up;
 	t_vec3	f;
@@ -19,7 +19,7 @@ static inline void	rotate_cam(t_trace *trace, t_matrix_4x4 rot)
 
 //rotates an area light, the light, not its emitter, lt uses forward transforms
 
-void	rot_arealt(t_light *lt, t_matrix_4x4 rot)
+void	rot_arealt(t_light *lt, t_mat4 rot)
 {
 	lt->curr_rottran = mat_mult(inverse(rot), lt->curr_rottran);
 	lt->transform = mat_mult(lt->curr_scale, lt->curr_rottran);
@@ -29,7 +29,7 @@ void	rot_arealt(t_light *lt, t_matrix_4x4 rot)
 	set_arealt(lt);
 }
 
-static inline void	rotate_object3(t_trace *trace, t_on *on, t_matrix_4x4 rot)
+static inline void	rotate_object3(t_trace *trace, t_on *on, t_mat4 rot)
 {
 	if (on->type == CUBE)
 	{
@@ -57,7 +57,7 @@ static inline void	rotate_object3(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 
 //continued below ft
 
-static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
+static inline void	rotate_object2(t_trace *trace, t_on *on, t_mat4 rot)
 {
 	if (on->type == CYLINDER)
 	{
@@ -83,7 +83,7 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_matrix_4x4 rot)
 
 // rotates current "on" object
 
-void	rotate_object(t_trace *trace, t_on *on, t_matrix_4x4 rot)
+void	rotate_object(t_trace *trace, t_on *on, t_mat4 rot)
 {
 	t_vec3	up;
 

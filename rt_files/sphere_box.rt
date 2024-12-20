@@ -16,7 +16,7 @@ sp          1.000,12.500,-1.500                                   40.000        
 
 
 #Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
-pl          0.000,3.000,-1.500         0.000,1.000,0.000                                  112,127,142
+pl          0.000,3.000,0.000          0.000,1.000,0.000                                  112,127,142
 
 
 #Textures:  Image                      Height Map
@@ -37,5 +37,3 @@ tx          chaos_4.png
 tx          pillars.png
 tx          julia.png
 tx          soap.png
-
-

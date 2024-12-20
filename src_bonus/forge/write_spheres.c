@@ -42,8 +42,8 @@ char	*build_sp_line(t_sphere *sphere)
 	int				spaces;
 	int				spaces2;
 
-	cen = mat_vec_mult(inverse(sphere->transform), vec(0, 0, 0, 1));
-	d = (2.0 / sphere->curr_scale.m[2][2]);
+	cen = mat_vec_mult(sphere->i_transform, vec(0, 0, 0, 1));
+	d = (2.0 / sphere->curr_scale.mat[10]);
 	spaces = 40 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
 	spaces2 = 20 - count_chars(d);
 	snprintf(line, sizeof(line), \
