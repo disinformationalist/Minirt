@@ -3,10 +3,6 @@
 void	check_al2(char **line, char ***rt_file, \
 	char **wid_str, char **bright_ratio)
 {
-	if (check_normalization(line[2]))
-		free_exit(rt_file, "Error\n Invalid area light orientation vector\n", \
-	"Area light orientation vector must be normalized," \
-	" with magnitude of one\n");
 	if (check_double(bright_ratio, 0.0, 1.0))
 		free_exit(rt_file, "Error\n Invalid light brightness\n", \
 	" Light brightness must be between 0.0 and 1.0\n");
@@ -101,10 +97,6 @@ void	check_sl(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid spot light orientation\n", \
 	" Spot light orientation must be in the format x,y,z," \
 	" with values between zero and one\n");
-	if (check_normalization(line[2]))
-		free_exit(rt_file, "Error\n Invalid SL orientation vector\n", \
-	"SL orientation vector must be normalized," \
-	" with magnitude of one\n");
 	if (check_double(&bright_ratio, 0.0, 1.0))
 		free_exit(rt_file, "Error\n Invalid light brightness\n", \
 	" Light brightness must be between 0.0 and 1.0\n");

@@ -36,20 +36,12 @@ void	check_hy(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid hyperboloid orientation\n", \
 	"Hyperboloid orientation must be in the format x,y,z," \
 	"with values between minus one and one\n");
-	if (check_normalization(line[2]))
-		free_exit(rt_file, "Error\n Invalid hyperboloid orientation\n", \
-	"Hyperboloid orientation vector must be normalized," \
-	" with magnitude of one\n");
 	check_hy2(line, rt_file);
 }
 
 void	check_cu2(char **line, char ***rt_file, \
 	char *height_str, char *depth_str)
 {
-	if (check_normalization(line[2]))
-		free_exit(rt_file, "Error\n Invalid cube orientation vector\n", \
-	"Cube orientation vector must be normalized," \
-	" with magnitude of one\n");
 	if (check_double(&height_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid cube height\n", \
 	"Cube height must be between 0.001 and 999\n");

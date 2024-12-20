@@ -9,7 +9,7 @@ t_ray	ray(t_vec3 dir, t_point origin)
 	return (r);
 }
 
-t_ray	transform(t_ray r, t_matrix_4x4 m)
+t_ray	transform(t_ray r, t_mat4 m)
 {
 	t_ray	new;
 
@@ -31,17 +31,6 @@ t_vec3	norm_vec(t_vec3 vec)
 	normed.z = vec.z / length;
 	normed.w = 0;
 	return (normed);
-}
-
-bool	is_normalized(t_vec3 vec)
-{
-	double	magnit;
-
-	magnit = magnitude(vec);
-	if ((magnit >= 1 - (1e-3)) && (magnit <= 1 + (1e-3)))
-		return (true);
-	else
-		return (false);
 }
 
 t_vec3	cross_prod(t_vec3 vec1, t_vec3 vec2)

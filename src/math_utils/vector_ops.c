@@ -11,6 +11,7 @@ double	dot_product(t_vec3 vec1, t_vec3 vec2)
 }
 
 //makes a vector and returns it
+
 t_vec3	vec(double x, double y, double z, double w)
 {
 	t_vec3	v;

@@ -8,6 +8,12 @@ void	set_sp_vals(t_sphere *new, char **line)
 	new->center = get_coordinates(line[1], 1.0);
 	new->radius = get_double(&diam_str) / 2.0;
 	new->color = get_color(line[3], 1.0);
+	new->mat = get_mat(DEFAULT);
+	new->shadow = true;
+	new->bump = false;
+	new->option = 0;
+	new->w_frost = false;
+	new->texture = NULL;
 }
 
 t_sphere	*create_sphere(char **line)

@@ -10,7 +10,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	height_str = line[4];
 	depth_str = line[5];
 	new->center = get_coordinates(line[1], 1.0);
-	new->norm = get_coordinates(line[2], 0.0);
+	new->norm = norm_vec(get_coordinates(line[2], 0.0));
 	new->h_width = get_double(&width_str) / 2.0;
 	new->h_height = get_double(&height_str) / 2.0;
 	new->h_depth = get_double(&depth_str) / 2.0;

@@ -11,6 +11,20 @@ void	free_exit(char ***rt_file, char *msg1, char *msg2)
 	exit(EXIT_FAILURE);
 }
 
+//used to check param length of each item in a line
+
+void	check_str_len(char **line, char ***rt_file)
+{
+	int	i;
+
+	i = -1;
+	while (line[++i])
+	{
+		if (ft_strlen(line[i]) > 30)
+			free_exit(rt_file, "Error\n Parameter string too long\n", NULL);
+	}
+}
+
 static inline int	check_rgb_color(char **s)
 {
 	int		i;
@@ -49,20 +63,6 @@ int	check_color(char *color_str)
 	if (*(color_str) != '\0')
 		return (1);
 	return (0);
-}
-
-//check length of each parameter in a line
-
-void	check_str_len(char **line, char ***rt_file)
-{
-	int	i;
-
-	i = -1;
-	while (line[++i])
-	{
-		if (ft_strlen(line[i]) > 30)
-			free_exit(rt_file, "Error\n Parameter string too long\n", NULL);
-	}
 }
 
 int	check_double(char **doub_str, double lower_lim, double upper_lim)

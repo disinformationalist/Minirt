@@ -3,8 +3,15 @@
 void	set_pl_vals(t_plane *new, char **line)
 {
 	new->point = get_coordinates(line[1], 1.0);
-	new->norm = get_coordinates(line[2], 0.0);
+	new->norm = norm_vec(get_coordinates(line[2], 0.0));
 	new->color = get_color(line[3], 1.0);
+	new->mat = get_mat(DEFAULT);
+	new->shadow = true;
+	new->bump = false;
+	new->texture = NULL;
+	new->option = 0;
+	new->w_frost = false;
+	new->sine = false;
 }
 
 t_plane	*create_plane(char **line)

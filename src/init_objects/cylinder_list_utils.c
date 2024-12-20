@@ -8,11 +8,16 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	diam_str = line[3];
 	height_str = line[4];
 	new->center = get_coordinates(line[1], 1.0);
-	new->norm = get_coordinates(line[2], 0.0);
+	new->norm = norm_vec(get_coordinates(line[2], 0.0));
 	new->radius = get_double(&diam_str) / 2;
 	new->height = get_double(&height_str);
-	new->half_h = new->height / 2;
 	new->color = get_color(line[5], 1.0);
+	new->mat = get_mat(DEFAULT);
+	new->shadow = true;
+	new->bump = false;
+	new->option = 0;
+	new->w_frost = false;
+	new->texture = NULL;
 }
 
 t_cylinder	*create_cylinder(char **line)

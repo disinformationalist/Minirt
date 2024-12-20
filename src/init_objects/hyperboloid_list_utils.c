@@ -10,7 +10,7 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	waist_str = line[4];
 	height_str = line[5];
 	new->center = get_coordinates(line[1], 1.0);
-	new->norm = get_coordinates(line[2], 0.0);
+	new->norm = norm_vec(get_coordinates(line[2], 0.0));
 	new->rad = get_double(&rad_str);
 	new->waist_val = get_double(&waist_str);
 	new->height = get_double(&height_str);

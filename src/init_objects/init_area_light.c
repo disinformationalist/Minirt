@@ -74,7 +74,7 @@ int	set_al_vals(t_trace *trace, t_light *new, char **line)
 	len = get_double(&len_str);
 	bright_ratio = line[3];
 	new->area = wid * len;
-	new->dir = get_coordinates(line[2], 1.0);
+	new->dir = norm_vec(get_coordinates(line[2], 1.0));
 	new->brightness = get_double(&bright_ratio);
 	new->center = get_coordinates(line[1], 1.0);
 	new->color = get_color(line[6], 255.0);

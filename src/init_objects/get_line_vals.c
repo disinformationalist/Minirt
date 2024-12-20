@@ -2,9 +2,9 @@
 
 double	get_double(char **doub_str)
 {
-	int			i;
-	double		ret;
-	char		str[50];
+	int		i;
+	double	ret;
+	char	str[50];
 
 	i = -1;
 	if (**doub_str == '-')

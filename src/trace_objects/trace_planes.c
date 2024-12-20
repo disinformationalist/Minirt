@@ -1,18 +1,17 @@
 #include "minirt.h"
 
-bool	ray_plane_intersect(t_plane plane, t_ray ray, double *t)
+void	ray_plane_intersect(t_plane *plane, t_ray ray, t_intersects *intersects)
 {
-	ray = transform(ray, plane.transform);
+	double	t;
+
+	ray = transform(ray, plane->transform);
 	if (fabs(ray.dir.y) < 1e-6)
-		return (false);
-	*t = -ray.origin.y / ray.dir.y;
-	if (*t > 0)
-		return (true);
-	return (false);
+		return ;
+	t = -ray.origin.y / ray.dir.y;
+	intersect(intersects, plane, t, PLANE);
 }
 
-void	check_planes(t_plane *planes, t_track_hits *closest,
-		t_ray ray, double *t)
+void	check_planes(t_plane *planes, t_intersects *intersects, t_ray ray)
 {
 	t_plane		*curr_pl;
 
@@ -21,58 +20,87 @@ void	check_planes(t_plane *planes, t_track_hits *closest,
 	curr_pl = planes;
 	while (true)
 	{
-		if (ray_plane_intersect(*curr_pl, ray, t))
-		{
-			if (*t < closest->t)
-			{
-				closest->t = *t;
-				closest->object = curr_pl;
-				closest->object_type = PLANE;
-			}
-		}
+		ray_plane_intersect(curr_pl, ray, intersects);
 		curr_pl = curr_pl->next;
 		if (curr_pl == planes)
 			break ;
 	}
 }
 
-//diff plus specular for sp
+//for setting colors/patterns/txs/bump  0 = col, 1 = text, 2 = pattern
 
-static inline double	get_pllight_int(t_vec3 norm, t_vec3 light_dir,
-				t_vec3 view_dir)
+t_norm_color	set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 {
-	t_vec3	ref;
-	double	spec;
-	double	light_int;
-	double	cos_a;
+	t_norm_color	out;
 
-	cos_a = dot_product(norm, light_dir);
-	ref = subtract_vec(scale_vec(2 * cos_a, norm), light_dir);
-	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
-	light_int = fmax(cos_a, 0.0) + .5 * spec;
-	return (light_int);
+	if (plane.option == 1)
+	{
+		out = texture_plane_at(obj_pnt, plane, comps);
+		if (plane.bump && !plane.sine)
+			bump_pl(obj_pnt, plane, comps);
+	}
+	else if (plane.option == 2)
+		out = pattern_at(plane.pattern, planar_map(obj_pnt));
+	else
+		out = plane.color;
+	if (plane.sine)
+		sine_ring_norm(obj_pnt, comps, plane.t_transform, plane.i_transform);
+	return (out);
 }
 
-t_norm_color	color_plane(t_trace *trace, t_ray r, t_track_hits *closest)
+t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r)
 {
-	t_plane	*plane;
-	t_vec3	int_pnt;
-	t_vec3	light_dir;
-	t_vec3	norm;
-	double	light_int;
+	t_comps	comps;
+	t_point	obj_pnt;
 
-	plane = (t_plane *)closest->object;
-	light_int = 0;
+	comps.t = intersects->closest->t;
+	comps.ray = r;
+	comps.point = add_vec(r.origin, scale_vec(comps.t, r.dir));
+	obj_pnt = mat_vec_mult(plane->transform, comps.point);
+	comps.normal = plane->norm;
+	comps.eyev = neg(r.dir);
+	comps.mat = plane->mat;
+	if (comps.mat.transp)
+		set_indicies(intersects, &comps.n1, &comps.n2);
+	if (dot_product(comps.normal, comps.eyev) < 0)
+	{
+		comps.normal = neg(comps.normal);
+		comps.inside = true;
+	}
+	else
+		comps.inside = false;
+	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
+	comps.color = set_pl_color(&comps, *plane, obj_pnt);
+	if (plane->w_frost)
+		comps.normal = frost(comps.normal);
+	return (comps);
+}
+
+t_norm_color	color_plane(t_trace *trace, t_ray r, \
+t_intersects *intersects, t_depths depths)
+{
+	t_plane			*plane;
+	t_comps			comps;
+	t_norm_color	lt_color;
+	t_light			*lt;
+
+	plane = (t_plane *)intersects->closest->object;
+	lt_color = color(0, 0, 0);
+	comps = set_plcomps(plane, intersects, r);
 	if (trace->lights)
 	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		norm = plane->norm;
-		if (dot_product(norm, r.dir) > 0)
-			norm = neg(norm);
-		if (!obscured(trace, int_pnt, light_dir, norm))
-			light_int = trace->lights->brightness * get_pllight_int(norm,
-					light_dir, neg(r.dir));
+		lt = trace->lights;
+		while (true)
+		{
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light(trace, &comps, &lt_color, lt);
+			lt = lt->next;
+			if (lt == trace->lights)
+				break ;
+		}
 	}
-	return (get_final_color(trace, plane->color, light_int));
+	comps.refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color4(trace, comps, lt_color));
 }

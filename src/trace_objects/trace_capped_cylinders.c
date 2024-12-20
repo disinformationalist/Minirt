@@ -1,7 +1,71 @@
 #include "minirt.h"
 
-void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest,
-		t_ray ray, double *t)
+static inline bool	check_trunk_solutions(t_vec3 abc, double *t1, double *t2)
+{
+	double	discrim;
+	double	inv_2a;
+	double	sq_discrim;
+
+	discrim = abc.y * abc.y - 4 * abc.x * abc.z;
+	if (discrim < 1e-6)
+		return (false);
+	sq_discrim = sqrt(discrim);
+	inv_2a = 0.5 / abc.x;
+	*t1 = (-abc.y - sq_discrim) * inv_2a;
+	*t2 = (-abc.y + sq_discrim) * inv_2a;
+	return (true);
+}
+
+void	compute_abc(t_vec3 *abc, t_ray ray)
+{
+	abc->x = ray.dir.x * ray.dir.x + ray.dir.z * ray.dir.z;
+	abc->y = 2 * (ray.origin.x * ray.dir.x + ray.origin.z * ray.dir.z);
+	abc->z = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1;
+}
+
+bool	within_height(t_ray ray, double t)
+{
+	double	y;
+
+	if (t < 1e-6)
+		return (false);
+	y = ray.origin.y + t * ray.dir.y;
+	if (y > -1 && y < 1)
+		return (true);
+	return (false);
+}
+
+void	ray_cylinder_intersect(t_cylinder *cylinder, \
+t_ray ray, t_intersects *intersects)
+{
+	t_vec3	abc;
+	double	t1;
+	double	t2;
+	double	t3;
+	double	t4;
+
+	ray = transform(ray, cylinder->transform);
+	compute_abc(&abc, ray);
+	if (abc.x == 0)
+		return ;
+	if (check_trunk_solutions(abc, &t1, &t2))
+	{
+		if (within_height(ray, t1))
+			intersect(intersects, cylinder, t1, CYLINDER);
+		if (within_height(ray, t2))
+			intersect(intersects, cylinder, t2, CYLINDER);
+	}
+	if (intersect_caps(ray, &t3, &t4))
+	{
+		if (t3 < INFINITY)
+			intersect(intersects, cylinder, t3, CYLINDER);
+		if (t4 < INFINITY)
+			intersect(intersects, cylinder, t4, CYLINDER);
+	}
+}
+
+void	check_cylinders(t_cylinder *cylinders, \
+t_intersects *intersects, t_ray ray)
 {
 	t_cylinder	*curr_cy;
 
@@ -10,76 +74,9 @@ void	check_cylinders(t_cylinder *cylinders, t_track_hits *closest,
 	curr_cy = cylinders;
 	while (true)
 	{
-		if (ray_cylinder_intersect(*curr_cy, ray, t))
-		{
-			if (*t < closest->t)
-			{
-				closest->t = *t;
-				closest->object = curr_cy;
-				closest->object_type = CYLINDER;
-			}
-		}
+		ray_cylinder_intersect(curr_cy, ray, intersects);
 		curr_cy = curr_cy->next;
 		if (curr_cy == cylinders)
 			break ;
 	}
-}
-
-//diff plus specular for sp
-
-static inline double	get_cylight_int(t_vec3 norm, t_vec3 light_dir,
-				t_vec3 view_dir)
-{
-	t_vec3	ref;
-	double	spec;
-	double	light_int;
-	double	cos_a;
-
-	cos_a = dot_product(norm, light_dir);
-	ref = subtract_vec(scale_vec(2 * cos_a, norm), light_dir);
-	spec = pow(fmax(dot_product(ref, view_dir), 0), 200);
-	light_int = fmax(cos_a, 0.0) + .5 * spec;
-	return (light_int);
-}
-
-static inline t_vec3	cyl_normal_at(t_point int_pnt, t_matrix_4x4 transform)
-{
-	t_vec3	norm;
-	double	dist;
-
-	int_pnt = mat_vec_mult(transform, int_pnt);
-	dist = int_pnt.x * int_pnt.x + int_pnt.z * int_pnt.z;
-	if (dist < 1 && int_pnt.y >= 1 - 1e-6)
-		norm = vec(0, 1, 0, 0);
-	else if (dist < 1 && int_pnt.y <= -1 + 1e-6)
-		norm = vec(0, -1, 0, 0);
-	else
-		norm = vec(int_pnt.x, 0, int_pnt.z, 0);
-	norm = mat_vec_mult(transpose(transform), norm);
-	norm.w = 0;
-	return (norm_vec(norm));
-}
-
-t_norm_color	color_cylinder(t_trace *trace, t_ray r, t_track_hits *closest)
-{
-	t_cylinder		*cylinder;
-	t_vec3			int_pnt;
-	t_vec3			normal;
-	t_vec3			light_dir;
-	double			light_int;
-
-	cylinder = (t_cylinder *)closest->object;
-	light_int = 0;
-	if (trace->lights)
-	{
-		int_pnt = add_vec(r.origin, scale_vec(closest->t, r.dir));
-		normal = cyl_normal_at(int_pnt, cylinder->transform);
-		light_dir = norm_vec(subtract_vec(trace->lights->center, int_pnt));
-		if (dot_product(normal, r.dir) > 0)
-			normal = neg(normal);
-		if (!obscured(trace, int_pnt, light_dir, normal))
-			light_int = trace->lights->brightness * get_cylight_int(normal,
-					light_dir, neg(r.dir));
-	}
-	return (get_final_color(trace, cylinder->color, light_int));
 }

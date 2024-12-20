@@ -1,10 +1,5 @@
 #include "minirt.h"
 
-uint8_t	round_c(double d)
-{
-	return (floor(d + .5));
-}
-
 //ambient has already adjusted its color based on intensity
 
 bool	set_amb(t_amb **amb, char **line)
@@ -29,7 +24,7 @@ bool	set_cam(t_cam **cam, char **line)
 	if (!*cam)
 		return (1);
 	(*cam)->center = get_coordinates(line[1], 1.0);
-	(*cam)->orient = get_coordinates(line[2], 0.0);
+	(*cam)->orient = norm_vec(get_coordinates(line[2], 0.0));
 	(*cam)->fov = ft_atoi(line[3]);
 	return (0);
 }
@@ -44,5 +39,7 @@ bool	set_light(t_light **light, char **line)
 		return (1);
 	(*light)->center = get_coordinates(line[1], 1.0);
 	(*light)->brightness = get_double(&bright_ratio);
+	if (line[3])
+		(*light)->color = get_color(line[3], 255.0);
 	return (0);
 }

@@ -1,44 +1,58 @@
 #include "minirt.h"
 
-static inline void	find_closest_s(t_trace *trace, t_ray ray,
-				t_track_hits *closest)
-{
-	double	t;
+//super sample version in separate for optimization
 
-	closest->t = INFINITY;
-	closest->object = NULL;
-	closest->object_type = -1;
-	t = INFINITY;
-	check_spheres(trace->spheres, closest, ray, &t);
-	t = INFINITY;
-	check_planes(trace->planes, closest, ray, &t);
-	t = INFINITY;
-	check_cylinders(trace->cylinders, closest, ray, &t);
+static inline void	find_closest_s(t_trace *trace, t_ray ray, \
+	t_intersects *intersects)
+{
+	int	i;
+
+	i = 0;
+	intersects->closest->t = INFINITY;
+	intersects->closest->object = NULL;
+	intersects->closest->object_type = -1;
+	intersects->count = 0;
+	check_spheres(trace->spheres, intersects, ray);
+	check_planes(trace->planes, intersects, ray);
+	check_cylinders(trace->cylinders, intersects, ray);
+	check_hyperboloids(trace->hyperboloids, intersects, ray);
+	check_cubes(trace->cubes, intersects, ray);
+	check_arealts(trace->lights, intersects, ray);
+	while (i < intersects->count && intersects->hits[i].t <= 0)
+		i++;
+	if (i < intersects->count)
+		*(intersects->closest) = intersects->hits[i];
 }
 
-static inline t_norm_color	check_intersects_s(t_trace *trace,
-					t_ray r, t_track_hits *closest)
+static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_depths depths)
 {
-	t_norm_color	final_color;
+	t_norm_color	color_out;
+	t_track_hits	*closest;
 
-	find_closest_s(trace, r, closest);
+	if (depths.refl <= 0 && depths.refr <= 0)
+		return (color(0, 0, 0));
+	find_closest_s(trace, r, intersects);
+	closest = intersects->closest;
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
-		final_color = color_sphere(trace, r, closest);
+		color_out = color_sphere(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
-		final_color = color_plane(trace, r, closest);
+		color_out = color_plane(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == CYLINDER)
-		final_color = color_cylinder(trace, r, closest);
+		color_out = color_cylinder(trace, r, intersects, depths);
+	else if (closest->t != INFINITY && closest->object_type == HYPERBOLOID)
+		color_out = color_hyperboloid(trace, r, intersects, depths);
+	else if (closest->t != INFINITY && closest->object_type == CUBE)
+		color_out = color_cube(trace, r, intersects, depths);
 	else
-	{
-		final_color.r = 0;
-		final_color.g = 0;
-		final_color.b = 0;
-	}
-	return (final_color);
+		return (color(0, 0, 0));
+	return (color_out);
 }
 
-static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r,
-			t_track_hits *closest, t_vec3 currpix)
+//sampling each pixel multiple times, summing results
+
+static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r, \
+	t_intersects *intersects, t_vec3 currpix)
 {
 	int				k;
 	int				l;
@@ -46,11 +60,9 @@ static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r,
 	t_vec3			subpix;
 	t_vec3			row_start;
 
-	sum.r = 0;
-	sum.g = 0;
-	sum.b = 0;
-	l = -1;
+	sum = color(0, 0, 0);
 	row_start = currpix;
+	l = -1;
 	while (++l < trace->n)
 	{
 		k = -1;
@@ -58,7 +70,8 @@ static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r,
 		while (++k < trace->n)
 		{
 			r.dir = norm_vec(subtract_vec(subpix, r.origin));
-			sum = sum_rgbs(sum, check_intersects_s(trace, r, closest));
+			sum = sum_rgbs(sum, check_intersects_s(trace, \
+			r, intersects, trace->depths));
 			subpix = add_vec(subpix, trace->move_x);
 		}
 		row_start = add_vec(row_start, trace->move_y);
@@ -66,7 +79,8 @@ static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r,
 	return (sum);
 }
 
-void	compute_pixels_s(t_trace *trace, t_track_hits *closest)
+static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
+	t_intersects *intersects)
 {
 	t_ray			r;
 	t_point			current_pixel;
@@ -76,19 +90,32 @@ void	compute_pixels_s(t_trace *trace, t_track_hits *closest)
 
 	color = 0;
 	r.origin = trace->cam->center;
-	pos.j = -1;
-	while (++pos.j < trace->height)
+	pos.j = piece->y_s - 1;
+	while (++pos.j < piece->y_e)
 	{
 		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel,
-				scale_vec(pos.j, trace->pix_delta_down));
-		pos.i = -1;
-		while (++pos.i < trace->width)
+		current_pixel = add_vec(current_pixel, \
+			scale_vec(pos.j, trace->pix_delta_down));
+		pos.i = piece->x_s - 1;
+		while (++pos.i < piece->x_e)
 		{
-			sum = sum_subpixels(trace, r, closest, current_pixel);
+			sum = sum_subpixels(trace, r, intersects, current_pixel);
 			color = avg_samples(sum, trace->n2);
 			my_pixel_put(pos.i, pos.j, &trace->img, color);
 			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
 		}
 	}
+}
+
+//routine to loop through all pixels and compute.
+
+void	*ray_trace_s(void *arg)
+{
+	t_piece			*piece;
+	t_trace			*trace;
+
+	piece = (t_piece *)arg;
+	trace = piece->trace;
+	compute_pixels(trace, piece, piece->intersects);
+	pthread_exit(NULL);
 }

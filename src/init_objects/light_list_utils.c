@@ -7,7 +7,7 @@ void	set_sl_vals(t_light *new, char **line)
 	bright_ratio = line[3];
 	new->type = SPOT;
 	new->center = get_coordinates(line[1], 1.0);
-	new->dir = neg(get_coordinates(line[2], 0.0));
+	new->dir = neg(norm_vec(get_coordinates(line[2], 0.0)));
 	new->brightness = get_double(&bright_ratio);
 	if (line[4])
 	{
