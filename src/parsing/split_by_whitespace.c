@@ -1,83 +1,80 @@
 #include "minirt.h"
 
-int	ft_iswhitespace(int c)
+bool	ft_isspace(char c)
 {
-	if (c == ' ' || c == '\f' || c == '\n'
-		|| c == '\r' || c == '\t' || c == '\v')
-		return (1);
-	else
-		return (0);
+	return ((c >= 9 && c <= 13) || c == 32);
 }
 
-int	count_words(char const *s)
+static size_t	str_count(char *str)
 {
-	int	words;
+	size_t	i;
+	size_t	count;
+	int		in_word;
 
-	words = 0;
-	if (!*s)
-		return (0);
+	i = 0;
+	count = 0;
+	in_word = 0;
+	while (str[i])
+	{
+		if (ft_isspace(str[i]))
+			in_word = 0;
+		else if (!in_word)
+		{
+			in_word = 1;
+			count++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+static void	makes_free(char **strs, size_t j)
+{
+	while (j)
+	{
+		free(strs[j - 1]);
+		j--;
+	}
+	free(strs);
+}
+
+static char	**ft_allocate(char **split, const char *s)
+{
+	size_t	j;
+	char	*start;
+
+	j = 0;
 	while (*s)
 	{
-		while (*s && ft_iswhitespace(*s))
+		while (*s && ft_isspace(*s))
 			s++;
 		if (*s)
-			words++;
-		while (*s && !ft_iswhitespace(*s))
-			s++;
-	}
-	return (words);
-}
-
-int	count_word_len(char const *s)
-{
-	int	word_len;
-
-	word_len = 0;
-	while (*s && ft_iswhitespace(*s))
-		s++;
-	while (*s && !ft_iswhitespace(*s))
-	{
-		s++;
-		word_len++;
-	}
-	return (word_len);
-}
-
-void	*free_whole_array(int i, char **array)
-{
-	while (--i >= 0)
-	{
-		free(array[i]);
-	}
-	free(array);
-	return (NULL);
-}
-
-char	**split_by_whitespace(char const *s)
-{
-	int		i;
-	char	**array;
-	char	num_of_words;
-
-	if (!s)
-		return (NULL);
-	num_of_words = count_words(s);
-	array = (char **)malloc(sizeof(char *) * (num_of_words + 1));
-	if (!(array))
-		return (NULL);
-	i = 0;
-	while (*s)
-	{
-		while (ft_iswhitespace(*s))
-			s++;
-		if (*s && count_word_len(s) > 0)
 		{
-			array[i++] = ft_substr(s, 0, count_word_len(s));
-			if (!(array[i - 1]))
-				return (free_whole_array(i - 1, array), NULL);
-			s += count_word_len(s);
+			start = (char *)s;
+			while (*s && !ft_isspace(*s))
+				s++;
+			split[j] = ft_substr(start, 0, s - start);
+			if (split[j] == NULL)
+			{
+				makes_free(split, j);
+				return (NULL);
+			}
+			j++;
 		}
 	}
-	array[i] = NULL;
-	return (array);
+	split[j] = NULL;
+	return (split);
+}
+
+char	**split_by_whitespace(const char *s)
+{
+	size_t	count;
+	char	**split;
+
+	count = str_count((char *)s);
+	split = (char **)malloc(((count + 1) * sizeof (char *)));
+	if (split == NULL)
+		return (NULL);
+	split = ft_allocate(split, s);
+	return (split);
 }
