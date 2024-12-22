@@ -10,6 +10,7 @@ SRCS := ./src/main.c \
 ./src/render/init.c \
 ./src/render/minirt.c \
 ./src/render/minirt_super.c \
+./src/render/minirt_low.c \
 ./src/render/render.c \
 ./src/render/set_transforms.c \
 ./src/render/set_transforms2.c \
@@ -64,25 +65,25 @@ SRCS := ./src/main.c \
 ./src/init_objects/get_line_vals.c \
 ./src/init_objects/set_amb_cam_lights.c \
 ./src/init_objects/init_cam.c \
-./src/trace_objects/trace_planes.c \
-./src/trace_objects/trace_spheres.c \
+./src/trace_objects/intersection/trace_planes.c \
+./src/trace_objects/intersection/trace_spheres.c \
+./src/trace_objects/intersection/trace_capped_cylinders.c \
+./src/trace_objects/intersection/cyl_caps.c \
+./src/trace_objects/intersection/trace_capped_hyperboloids.c \
+./src/trace_objects/intersection/trace_capped_hyperboloids_2.c \
+./src/trace_objects/intersection/trace_cubes.c \
+./src/trace_objects/shadow/shadow_rays.c \
+./src/trace_objects/shadow/cyl_shadow.c \
+./src/trace_objects/shadow/hyp_shadow.c \
+./src/trace_objects/shadow/hyp_shadow_2.c \
+./src/trace_objects/shadow/sp_shadow.c \
+./src/trace_objects/shadow/pl_shadow.c \
 ./src/trace_objects/color_spheres.c \
-./src/trace_objects/trace_capped_cylinders.c \
-./src/trace_objects/cyl_caps.c \
-./src/trace_objects/trace_capped_hyperboloids.c \
-./src/trace_objects/trace_capped_hyperboloids_2.c \
 ./src/trace_objects/color_cylinders.c \
 ./src/trace_objects/color_hyperboloids.c \
-./src/trace_objects/trace_cubes.c \
 ./src/trace_objects/color_cubes.c \
 ./src/trace_objects/light_utils.c \
 ./src/trace_objects/refl_refr.c \
-./src/trace_objects/shadow_rays.c \
-./src/trace_objects/cyl_shadow.c \
-./src/trace_objects/hyp_shadow.c \
-./src/trace_objects/hyp_shadow_2.c \
-./src/trace_objects/sp_shadow.c \
-./src/trace_objects/pl_shadow.c \
 ./src/trace_objects/set_indicies.c \
 ./src/testing/print_all_objects.c \
 ./src/testing/print_all_objects2.c \
@@ -109,6 +110,7 @@ SRCS := ./src/main.c \
 ./src/events/main_events.c \
 ./src/events/toggle_events.c \
 ./src/events/set_tx.c \
+./src/events/set_on.c \
 ./src/events/prev_list_ob.c \
 ./src/events/next_list_ob.c \
 ./src/events/switch_list.c \
@@ -120,6 +122,7 @@ SRCS := ./src/main.c \
 ./src/events/supersample.c \
 ./src/events/extra_events.c \
 ./src/events/mouse_events.c \
+./src/events/mouse_move.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \
 ./src/forge/write_planes.c \
@@ -141,7 +144,6 @@ SRCS := ./src/main.c \
 ./src/bvh/boxes.c \
 ./src/bvh/box_ops.c \
 ./src/bvh/box_ops2.c \
-
 
 CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -mavx -mavx2 -fPIE -Ofast -march=native -Wno-unused-result
 

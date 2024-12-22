@@ -24,11 +24,11 @@ typedef struct s_sphere
 	double			radius;
 	t_norm_color	color;
 	t_mat			mat;
-	t_mat4	transform;
-	t_mat4	t_transform;
-	t_mat4	i_transform;
-	t_mat4	curr_scale;
-	t_mat4	curr_rottran;
+	t_mat4			transform;
+	t_mat4			t_transform;
+	t_mat4			i_transform;
+	t_mat4			curr_scale;
+	t_mat4			curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -47,11 +47,11 @@ typedef struct s_plane
 	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
-	t_mat4	transform;
-	t_mat4	t_transform;
-	t_mat4	i_transform;
-	t_mat4	curr_scale;
-	t_mat4	curr_rottran;
+	t_mat4			transform;
+	t_mat4			t_transform;
+	t_mat4			i_transform;
+	t_mat4			curr_scale;
+	t_mat4			curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -73,11 +73,11 @@ typedef struct s_cylinder
 	double				height;
 	t_norm_color		color;
 	t_mat				mat;
-	t_mat4		transform;
-	t_mat4		t_transform;
-	t_mat4		i_transform;
-	t_mat4		curr_scale;
-	t_mat4		curr_rottran;
+	t_mat4				transform;
+	t_mat4				t_transform;
+	t_mat4				i_transform;
+	t_mat4				curr_scale;
+	t_mat4				curr_rottran;
 	t_tx				*texture;
 	int					option;
 	t_pattern			pattern;
@@ -100,11 +100,11 @@ typedef struct s_hyperboloid
 	double					waist_val;
 	t_norm_color			color;
 	t_mat					mat;
-	t_mat4			transform;
-	t_mat4			t_transform;
-	t_mat4			i_transform;
-	t_mat4			curr_scale;
-	t_mat4			curr_rottran;
+	t_mat4					transform;
+	t_mat4					t_transform;
+	t_mat4					i_transform;
+	t_mat4					curr_scale;
+	t_mat4					curr_rottran;
 	t_tx					*texture;
 	t_pattern				pattern;
 	bool					w_frost;
@@ -126,11 +126,11 @@ typedef struct s_cube
 	double			h_depth;
 	t_norm_color	color;
 	t_mat			mat;
-	t_mat4	transform;
-	t_mat4	t_transform;
-	t_mat4	i_transform;
-	t_mat4	curr_scale;
-	t_mat4	curr_rottran;
+	t_mat4			transform;
+	t_mat4			t_transform;
+	t_mat4			i_transform;
+	t_mat4			curr_scale;
+	t_mat4			curr_rottran;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -239,6 +239,13 @@ typedef struct s_trace
 	int				num_cols;
 	int				num_rows;
 	pthread_t		*threads;
+	bool			shift_on;
+	bool			low_res;
+	int				low_inc;
+	bool			dragging;
+	int				start_x;
+	int				start_y;
+	bool			menu_open;
 }	t_trace;
 
 typedef struct s_piece
@@ -383,8 +390,13 @@ void			*ray_trace(void *arg);
 //super
 void			*ray_trace_s(void *arg);
 
+//low resolution
+void			*ray_trace_l(void *arg);
+
+
 //thread
 void			join_threads(t_trace *trace);
+t_intersects	*create_ints(int total);
 void			thread_error(t_trace *trace, int i);
 int				set_pieces(t_trace *trace, \
 				t_piece piece[][trace->num_cols], int i, int j);
@@ -488,7 +500,7 @@ t_norm_color	get_refracted(t_trace *trace, t_comps comps, \
 void			reinit_viewing(t_trace *trace);
 
 /***MATH UTILS***/
-uint8_t			round_c(double d);
+
 double			magnitude(t_vec3 vec);
 double			dot_product(t_vec3 vec1, t_vec3 vec2);
 t_vec3			vec(double x, double y, double z, double w);
@@ -497,13 +509,12 @@ t_vec3			subtract_vec(t_vec3 vec1, t_vec3 vec2);
 t_vec3			scale_vec(double scalar, t_vec3 vec);
 t_vec3			div_vec(double scalar, t_vec3 vec);
 t_vec3			norm_vec(t_vec3 vec);
-bool			is_normalized(t_vec3 vec);
 t_vec3			cross_prod(t_vec3 vec1, t_vec3 vec2);
 t_vec3			neg(t_vec3 vec);
 t_vec3			mult_vec(t_vec3 v1, t_vec3 v2);
 t_ray			ray(t_vec3 dir, t_point origin);
-t_mat4	rot_to(t_vec3 from, t_vec3 to);
-t_mat4	get_rotation(t_vec3 ax, double cos, double sin);
+t_mat4			rot_to(t_vec3 from, t_vec3 to);
+t_mat4			get_rotation(t_vec3 ax, double cos, double sin);
 bool			veccmp(t_vec3 v1, t_vec3 v2);
 
 /***COLOR UTILS***/
@@ -568,6 +579,8 @@ int				close_win(t_trace *trace);
 void			frost_on(t_trace *trace, t_on on);
 void			toggle_shadow(t_trace *trace, t_on *on);
 void			toggle_bump(t_trace *trace, t_on *on);
+void			toggle_sine(t_trace *trace);
+void			toggle_lowres(t_trace *trace);
 void			rotate_colors(t_trace *trace, int button, t_norm_color *curr);
 void			scale_object(t_trace *trace, t_on *on, t_vec3 vec, int keycode);
 void			scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1,
@@ -579,10 +592,16 @@ void			push_new_object(t_trace *trace, t_on *on);
 void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);
-int				mouse_handler(int button, int x, int y, t_trace *trace);
+int				mouse_press(int button, int x, int y, t_trace *trace);
 void			set_next_tx(int button, t_tx *textures, t_on *on);
 void			forge_or_export(int keycode, t_trace *trace);
 char			*get_nxt_name_rt(char *name);
+void			set_mouse_on(t_trace *trace, t_track_hits *closest);
+int				mouse_move(int x, int y, t_trace *trace);
+int				mouse_release(int button, int x, int y, t_trace *trace);
+int				key_release(int keycode, t_trace *trace);
+void			track_object(t_trace *trace, double x, double y);
+
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);

@@ -48,9 +48,16 @@ U,O => z dirs
 //COLOR SHIFT
 mouse wheel shifts color of on object or light.
 
-NUM PAD 1 - 9 => change material of current object */
+NUM PAD 1 - 9 => change material of current object 
 
-//change material of current object
+PAD DIV => toggle sine ripple on plane
+PAD MULT => toggle frost any object surface
+
+PAD 0 => low resolution mode toggle for fast adjusting
+*/
+
+
+//transfigure() changes material of current object
 
 int	transfigure(int keycode, t_trace *trace)
 {
@@ -92,7 +99,13 @@ int	key_press_3(int keycode, t_trace *trace)
 	else if (keycode == E)
 		rotate_object(trace, trace->on, rot_z(-M_PI / 12));
 	else if (keycode == PAD_0)
+		toggle_lowres(trace);
+	else if (keycode == DIV)
+		toggle_sine(trace);
+	else if (keycode == MULT)
 		frost_on(trace, *(trace->on));
+	else if (keycode == SHIFT)
+		trace->shift_on = true;
 	else
 		transfigure(keycode, trace);
 	return (0);
@@ -158,10 +171,11 @@ int	key_press_2(int keycode, t_trace *trace)
 	return (0);
 }
 
-//top function for keypress events
+//main function for keypress events
 
 int	key_press(int keycode, t_trace *trace)
 {
+	//printf("%d\n", keycode);
 	if (keycode == XK_Escape)
 		close_win(trace);
 	else if (keycode == XK_Tab)

@@ -13,6 +13,8 @@ void	add_cu_color(t_cube *cyl, char *line)
 		200 - ft_strlen(line), "%d,%d,%d\n", r, g, b);
 }
 
+//problem when rotating about the normal axis, like with the cam
+
 char	*build_cu_line(t_cube *cu)
 {
 	static char		line[200];
@@ -22,7 +24,6 @@ char	*build_cu_line(t_cube *cu)
 	double			h;
 
 	cen = mat_vec_mult(cu->i_transform, vec(0, 0, 0, 1));
-	printf("%f\n", cen.x);
 	check_tolerance(&cen);
 	n = norm_vec(mat_vec_mult(cu->i_transform, vec(0, 1, 0, 0)));
 	check_tolerance(&n);

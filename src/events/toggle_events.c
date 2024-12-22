@@ -15,6 +15,16 @@ int	close_win(t_trace *trace)
 	return (0);
 }
 
+//radial sine normal perturbation on/off
+
+void	toggle_sine(t_trace *trace)
+{
+	if (trace->on->type == PLANE)
+		trace->curr_pl->sine = !trace->curr_pl->sine;
+	else if (trace->on->type == CUBE)
+		trace->curr_cu->sine = !trace->curr_cu->sine;
+}
+
 //random normal perturb "frost" on/off
 
 void	frost_on(t_trace *trace, t_on on)
@@ -73,4 +83,10 @@ void	toggle_bump(t_trace *trace, t_on *on)
 		trace->curr_hy->bump = !trace->curr_hy->bump;
 	else
 		return ;
+}
+
+void	toggle_lowres(t_trace *trace)
+{
+	trace->low_inc = 10;
+	trace->low_res = !trace->low_res;
 }

@@ -1,5 +1,116 @@
 #include "minirt.h"
 
+//***---------------Repeated functions for inline opti-----------------***/
+
+static inline void	my_pixel_put1(int x, int y, t_img *img, unsigned int color)
+{
+	int	offset;
+
+	offset = (y * img->line_len) + (x * (img->bpp / 8));
+	*(unsigned int *)(img->pixels_ptr + offset) = color;
+}
+
+static inline t_vec3	add_vec1(t_vec3 vec1, t_vec3 vec2)
+{
+	t_vec3	res;
+
+	res.x = vec1.x + vec2.x;
+	res.y = vec1.y + vec2.y;
+	res.z = vec1.z + vec2.z;
+	res.w = vec1.w + vec2.w;
+	return (res);
+}
+
+static inline t_vec3	scale_vec1(double scalar, t_vec3 vec)
+{
+	t_vec3	res;
+
+	res.x = scalar * vec.x;
+	res.y = scalar * vec.y;
+	res.z = scalar * vec.z;
+	res.w = 0;
+	return (res);
+}
+
+static inline t_vec3	norm_vec1(t_vec3 vec)
+{
+	t_vec3	normed;
+	double	length;
+
+	length = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	if (!length)
+		return (vec);
+	normed.x = vec.x / length;
+	normed.y = vec.y / length;
+	normed.z = vec.z / length;
+	normed.w = 0;
+	return (normed);
+}
+
+static inline uint8_t	clamp_color1(double color)
+{
+	if (color >= 255)
+		return (255);
+	if (color < 0)
+		return (0);
+	else
+		return ((uint8_t)(color));
+}
+
+static inline unsigned int	clamped_col1(t_norm_color col)
+{
+	t_color	clamped;
+
+	clamped.r = clamp_color1(col.r);
+	clamped.g = clamp_color1(col.g);
+	clamped.b = clamp_color1(col.b);
+	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
+}
+
+static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
+{
+	t_vec3	res;
+
+	res.x = vec1.x - vec2.x;
+	res.y = vec1.y - vec2.y;
+	res.z = vec1.z - vec2.z;
+	res.w = vec1.w - vec2.w;
+	return (res);
+}
+
+static inline unsigned int	avg_samples1(t_norm_color sum, double n)
+{
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+
+	r = clamp_color1(sum.r / n);
+	g = clamp_color1(sum.g / n);
+	b = clamp_color1(sum.b / n);
+	return (r << 16 | g << 8 | b);
+}
+
+static inline t_norm_color	sum_rgbs1(t_norm_color sum, t_norm_color to_add)
+{
+	sum.r += to_add.r;
+	sum.g += to_add.g;
+	sum.b += to_add.b;
+	return (sum);
+}
+
+static inline t_norm_color	color1(double r, double g, double b)
+{
+	t_norm_color	col;
+
+	col.r = r;
+	col.g = g;
+	col.b = b;
+	return (col);
+}
+
+//***---------------------------End repeats----------------------------***/
+
+
 //super sample version in separate for optimization
 
 static inline void	find_closest_s(t_trace *trace, t_ray ray, \
@@ -10,7 +121,7 @@ static inline void	find_closest_s(t_trace *trace, t_ray ray, \
 	i = 0;
 	intersects->closest->t = INFINITY;
 	intersects->closest->object = NULL;
-	intersects->closest->object_type = -1;
+	intersects->closest->object_type = VOID;
 	intersects->count = 0;
 	check_spheres(trace->spheres, intersects, ray);
 	check_planes(trace->planes, intersects, ray);
@@ -31,7 +142,7 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
 	t_track_hits	*closest;
 
 	if (depths.refl <= 0 && depths.refr <= 0)
-		return (color(0, 0, 0));
+		return (color1(0, 0, 0));
 	find_closest_s(trace, r, intersects);
 	closest = intersects->closest;
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
@@ -45,7 +156,7 @@ static inline t_norm_color	check_intersects_s(t_trace *trace, t_ray r, \
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else
-		return (color(0, 0, 0));
+		return (color1(0, 0, 0));
 	return (color_out);
 }
 
@@ -60,7 +171,7 @@ static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r, \
 	t_vec3			subpix;
 	t_vec3			row_start;
 
-	sum = color(0, 0, 0);
+	sum = color1(0, 0, 0);
 	row_start = currpix;
 	l = -1;
 	while (++l < trace->n)
@@ -69,12 +180,12 @@ static inline t_norm_color	sum_subpixels(t_trace *trace, t_ray r, \
 		subpix = row_start;
 		while (++k < trace->n)
 		{
-			r.dir = norm_vec(subtract_vec(subpix, r.origin));
-			sum = sum_rgbs(sum, check_intersects_s(trace, \
+			r.dir = norm_vec1(subtract_vec1(subpix, r.origin));
+			sum = sum_rgbs1(sum, check_intersects_s(trace, \
 			r, intersects, trace->depths));
-			subpix = add_vec(subpix, trace->move_x);
+			subpix = add_vec1(subpix, trace->move_x);
 		}
-		row_start = add_vec(row_start, trace->move_y);
+		row_start = add_vec1(row_start, trace->move_y);
 	}
 	return (sum);
 }
@@ -84,6 +195,7 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
 {
 	t_ray			r;
 	t_point			current_pixel;
+	t_point			row_start;
 	t_position		pos;
 	unsigned int	color;
 	t_norm_color	sum;
@@ -91,18 +203,17 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
 	color = 0;
 	r.origin = trace->cam->center;
 	pos.j = piece->y_s - 1;
+	row_start = add_vec1(trace->pixel00, scale_vec1(piece->x_s, trace->pix_delta_rht));
 	while (++pos.j < piece->y_e)
 	{
-		current_pixel = trace->pixel00;
-		current_pixel = add_vec(current_pixel, \
-			scale_vec(pos.j, trace->pix_delta_down));
+		current_pixel = add_vec1(row_start, scale_vec1(pos.j, trace->pix_delta_down));
 		pos.i = piece->x_s - 1;
 		while (++pos.i < piece->x_e)
 		{
 			sum = sum_subpixels(trace, r, intersects, current_pixel);
-			color = avg_samples(sum, trace->n2);
-			my_pixel_put(pos.i, pos.j, &trace->img, color);
-			current_pixel = add_vec(current_pixel, trace->pix_delta_rht);
+			color = avg_samples1(sum, trace->n2);
+			my_pixel_put1(pos.i, pos.j, &trace->img, color);
+			current_pixel = add_vec1(current_pixel, trace->pix_delta_rht);
 		}
 	}
 }

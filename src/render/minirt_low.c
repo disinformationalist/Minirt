@@ -78,6 +78,26 @@ static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
 	return (res);
 }
 
+static inline unsigned int	avg_samples1(t_norm_color sum, double n)
+{
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+
+	r = clamp_color1(sum.r / n);
+	g = clamp_color1(sum.g / n);
+	b = clamp_color1(sum.b / n);
+	return (r << 16 | g << 8 | b);
+}
+
+static inline t_norm_color	sum_rgbs1(t_norm_color sum, t_norm_color to_add)
+{
+	sum.r += to_add.r;
+	sum.g += to_add.g;
+	sum.b += to_add.b;
+	return (sum);
+}
+
 static inline t_norm_color	color1(double r, double g, double b)
 {
 	t_norm_color	col;
@@ -90,7 +110,9 @@ static inline t_norm_color	color1(double r, double g, double b)
 
 //***---------------------------End repeats----------------------------***/
 
-void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
+//low resolution mode for speed
+
+void	find_closest_l(t_trace *trace, t_ray ray, t_intersects *intersects)
 {
 	int	i;
 
@@ -111,20 +133,20 @@ void	find_closest(t_trace *trace, t_ray ray, t_intersects *intersects)
 		*(intersects->closest) = intersects->hits[i];
 }
 
-unsigned int	clamped_col(t_norm_color col)
+static inline unsigned int	clamped_col_l(t_norm_color col)
 {
 	t_color	clamped;
 
-	clamped.r = clamp_color(col.r);
-	clamped.g = clamp_color(col.g);
-	clamped.b = clamp_color(col.b);
+	clamped.r = clamp_color1(col.r);
+	clamped.g = clamp_color1(col.g);
+	clamped.b = clamp_color1(col.b);
 	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
 }
 
 //checking for the closest intersection and computing color
 //if switch obj colors to norm_col, color_out = mult_color(255.0, color_out);
 
-t_norm_color	check_intersects(t_trace *trace, t_ray r, \
+t_norm_color	check_intersects_l(t_trace *trace, t_ray r, \
 	t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	color_out;
@@ -132,7 +154,7 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, \
 
 	if (depths.refl <= 0 && depths.refr <= 0)
 		return (color1(0, 0, 0));
-	find_closest(trace, r, intersects);
+	find_closest_l(trace, r, intersects);
 	closest = intersects->closest;
 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		color_out = color_sphere(trace, r, intersects, depths);
@@ -149,7 +171,22 @@ t_norm_color	check_intersects(t_trace *trace, t_ray r, \
 	return (color_out);
 }
 
-static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
+static inline void	set_pixels(t_trace *trace, t_position pos, 
+								unsigned int color, int xlim, int ylim)
+{
+	int	k;
+	int	l;
+
+	k = -1;
+	while (++k < ylim)
+	{
+		l = -1;
+		while (++l < xlim)
+			my_pixel_put1(pos.i + l, pos.j + k, &trace->img, color);
+	}
+}
+
+static inline void	compute_pixels_l(t_trace *trace, t_piece *piece, \
 	t_intersects *intersects)
 {
 	t_ray			r;
@@ -157,34 +194,41 @@ static inline void	compute_pixels(t_trace *trace, t_piece *piece, \
 	t_point			current_pixel;
 	t_point			row_start;
 	t_position		pos;
+	int				incx = trace->low_inc;
+	int				incy =  ft_round(1 / ASPECT);
+	t_vec3			pix_delta_rh = scale_vec1(incx, trace->pix_delta_rht);
+	t_vec3			pix_delta_dn = scale_vec1(incy, trace->pix_delta_down);
 
 	r.origin = trace->cam->center;
-	pos.j = piece->y_s - 1;
+	pos.j = piece->y_s;
 	row_start = add_vec1(trace->pixel00, scale_vec1(piece->x_s, trace->pix_delta_rht));
-	while (++pos.j < piece->y_e)
+	while (pos.j < piece->y_e)
 	{
-		current_pixel = add_vec1(row_start, scale_vec1(pos.j, trace->pix_delta_down));
-		pos.i = piece->x_s - 1;
-		while (++pos.i < piece->x_e)
+		current_pixel = add_vec1(row_start, scale_vec1(pos.j, pix_delta_dn));
+		pos.i = piece->x_s;
+		while (pos.i < piece->x_e)
 		{
-			r.dir = norm_vec1(subtract_vec1(current_pixel, r.origin));
-			color = clamped_col1(check_intersects(trace, r, intersects, \
+			r.dir = norm_vec1(subtract_vec(current_pixel, r.origin));
+			color = clamped_col_l(check_intersects_l(trace, r, intersects, \
 				trace->depths));
-			my_pixel_put1(pos.i, pos.j, &trace->img, color);
-			current_pixel = add_vec1(current_pixel, trace->pix_delta_rht);
+			set_pixels(trace, pos, color, incx, incy);
+			
+			current_pixel = add_vec1(current_pixel, pix_delta_rh);
+			pos.i += incx;
 		}
+		pos.j += incy;
 	}
 }
 
 //routine to loop through all pixels and compute.
 
-void	*ray_trace(void *arg)
+void	*ray_trace_l(void *arg)
 {
 	t_piece			*piece;
 	t_trace			*trace;
 
 	piece = (t_piece *)arg;
 	trace = piece->trace;
-	compute_pixels(trace, piece, piece->intersects);
+	compute_pixels_l(trace, piece, piece->intersects);
 	pthread_exit(NULL);
 }

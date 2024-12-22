@@ -67,7 +67,8 @@ typedef enum e_type
 	CSG,
 	GROUP,
 	CAM,
-	MESH
+	MESH,
+	VOID
 }	t_type;
 
 typedef struct s_triangle
@@ -182,7 +183,7 @@ typedef struct s_shape
 	t_type			type;
 	void			*shape;
 	void			*parent;
-	t_mat4	transform;
+	t_mat4			transform;
 	struct s_shape	*next;
 	struct s_shape	*prev;
 
@@ -192,7 +193,7 @@ typedef struct s_group
 {
 	t_shape			*shapes;
 	t_type			type;
-	t_mat4	transform;
+	t_mat4			transform;
 }	t_group;
 
 // for möller-trumbore triangle intersect ft

@@ -1,15 +1,5 @@
 #include "minirt.h"
 
-//radial sine normal perturbation on/off
-
-void	toggle_sine(t_trace *trace)
-{
-	if (trace->on->type == PLANE)
-		trace->curr_pl->sine = !trace->curr_pl->sine;
-	else if (trace->on->type == CUBE)
-		trace->curr_cu->sine = !trace->curr_cu->sine;
-}
-
 void	increment_option(t_trace *trace, int *option)
 {
 	(*option)++;
@@ -56,19 +46,19 @@ int	get_option(t_on *on)
 	return (option);
 }
 
-//handle mouse hooks
+//handle mouse hooks,//try making a struct that contains the stuff for hooks sep of trace
 
-int	mouse_handler(int button, int x, int y, t_trace *trace)
+int	mouse_press(int button, int x, int y, t_trace *trace)
 {
 	t_norm_color	curr_col;
 	int				option;
 
-	(void)x;
-	(void)y;
+	if (button == 1)
+		track_object(trace, x, y);
 	if (trace->on->object == NULL)
 		return (0);
 	option = get_option(trace->on);
-	if (button == 1)
+	if (button == 3)
 		select_option(trace, trace->on);
 	else if (button == 4 || button == 5)
 	{
@@ -77,8 +67,6 @@ int	mouse_handler(int button, int x, int y, t_trace *trace)
 		else if (option == 1)
 			set_next_tx(button, trace->textures, trace->on);
 	}
-	if (button == 3)
-		toggle_sine(trace);
 	render(trace);
 	return (0);
 }

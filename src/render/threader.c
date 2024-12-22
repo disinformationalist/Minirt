@@ -54,7 +54,7 @@ int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 	piece[i][j].trace = trace;
 	piece[i][j].intersects = create_ints(trace->total_ints);
 	if (!piece[i][j].intersects)
-		return (1);
+		return (1);	
 	return (0);
 }
 

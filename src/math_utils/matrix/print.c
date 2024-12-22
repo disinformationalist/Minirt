@@ -15,9 +15,10 @@ void print_mat4(t_mat4 m)
 			printf("%f ", m.mat[i * 4 + j]);
 		printf("\n");
 	}
+	printf("\n");
 }
 
 void print_vec(t_vec3 v)
 {
-	printf("vec: (%f, %f, %f, %f)\n", v.x, v.y, v.z, v.w);
+	printf("vec: (%f, %f, %f, %f)\n\n", v.x, v.y, v.z, v.w);
 }

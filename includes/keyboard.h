@@ -110,5 +110,6 @@
 
 # define LFT_STRG 65507
 # define RGHT_STRG 65508
+# define SHIFT 65505
 
 #endif

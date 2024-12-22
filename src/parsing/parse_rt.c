@@ -72,13 +72,9 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 	init_counts(&counts);
 	count_ids(&counts, rt_file);
 	counts.light_count += counts.sl_count + counts.al_count;
-	if (counts.amb_count == 0)
-		free_exit(rt_file,
-			"Error\n Missing or invalid ambient lighting identifier\n", \
-	" Ambient lighting line must begin with 'A'\n");
 	if (counts.cam_count == 0)
-		free_exit(rt_file, "Error\n Missing or invalid camera identifier\n", \
-	" Camera line must begin with 'C'\n");
+		free_exit(rt_file, "Error\n Scene must contain a camera\n", \
+	"format: <type id> <x,y,z> <x,y,z> <fov>\n");
 	count_ints(trace, counts);
 	if (counts.tx_count > 30)
 		free_exit(rt_file, "Error\n Too many textures\n", \

@@ -39,7 +39,12 @@ void	info_init(t_trace *trace)
 	trace->m_colors = NULL;
 	trace->supersample = false;
 	trace->layer = false;
+	trace->low_res = false;
+	trace->dragging = false;
+	trace->shift_on = false;
+	trace->menu_open = false;
 	trace->n = 4.0;
+	trace->low_inc = 50;
 	trace->depths.refl = 6;
 	trace->depths.refr = 6;
 	init_viewing(trace);
@@ -47,13 +52,49 @@ void	info_init(t_trace *trace)
 
 static void	events_init(t_trace *trace)
 {
-	trace->on->object = trace->spheres;
-	trace->on->type = SPHERE;
+	
+	if (trace->spheres)
+	{
+		trace->on->object = trace->spheres;
+		trace->on->type = SPHERE;
+	}
+	else if (trace->planes)
+	{
+		trace->on->object = trace->planes;
+		trace->on->type = PLANE;
+	}
+	else if (trace->cylinders)
+	{
+		trace->on->object = trace->cylinders;
+		trace->on->type = CYLINDER;
+	}
+	else if (trace->hyperboloids)
+	{
+		trace->on->object = trace->hyperboloids;
+		trace->on->type = HYPERBOLOID;
+	}
+	else if (trace->cubes)
+	{
+		trace->on->object = trace->cubes;
+		trace->on->type = CUBE;
+	}
+	else if (trace->lights)
+	{
+		trace->on->object = trace->lights;
+		trace->on->type = LIGHT;
+	}
+	else
+	{
+		trace->on->object = NULL;
+		trace->on->type = VOID;
+	}
 	mlx_hook(trace->mlx_win, KeyPress, KeyPressMask, key_press, trace);
-	mlx_hook(trace->mlx_win, DestroyNotify, \
-		StructureNotifyMask, close_win, trace);
-	mlx_hook(trace->mlx_win, ButtonPress, \
-	ButtonPressMask, mouse_handler, trace);
+	mlx_hook(trace->mlx_win, DestroyNotify, StructureNotifyMask, close_win, trace);
+	mlx_hook(trace->mlx_win, ButtonPress, ButtonPressMask, mouse_press, trace);
+
+	mlx_hook(trace->mlx_win, MotionNotify, PointerMotionMask, mouse_move, trace);
+	mlx_hook(trace->mlx_win, ButtonRelease, ButtonReleaseMask, mouse_release, trace);
+	mlx_hook(trace->mlx_win, KeyRelease, KeyReleaseMask, key_release, trace);
 }
 
 void	init_transforms(t_trace *trace)
