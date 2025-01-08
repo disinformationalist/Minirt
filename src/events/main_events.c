@@ -54,6 +54,8 @@ PAD DIV => toggle sine ripple on plane
 PAD MULT => toggle frost any object surface
 
 PAD 0 => low resolution mode toggle for fast adjusting
+
+F4 	TO OPEN GUI
 */
 
 
@@ -141,6 +143,101 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	return (0);
 }
 
+unsigned int pixel_color_get3(int x, int y, t_img *img)
+{
+	unsigned int	pixel_color;
+	int 			offset;
+
+	offset = y * img->line_len + (x * (img->bpp / 8));
+	pixel_color = *(unsigned int *)(img->pixels_ptr + offset);
+	return (pixel_color);
+}
+
+void	set_knobs(t_img *img, t_control control, int k_width, t_on *on)
+{
+	int				i;
+	int				j;
+	unsigned int	color;
+	int				x_startr;
+	int				x_startg;
+	int				x_startb;
+	int				y_startr;
+	int				y_startg;
+	int				y_startb;
+	int				start;
+	t_norm_color	obj_col;
+
+	obj_col = get_obj_color2(on);
+	start = 22 - k_width / 2;
+
+	x_startr = start + (int)obj_col.r;
+	x_startg = start + (int)obj_col.g;
+	x_startb = start + (int)obj_col.b;
+	y_startr = start + 89;
+	y_startg = y_startr + 25;
+	y_startb = y_startg + 25;
+
+	j = -1;
+	while (++j < k_width)
+	{
+		i = -1;
+		while (++i < k_width)
+		{
+			color = pixel_color_get3(i, j , control.r);
+			if (color != 0x202020)
+				my_pixel_put(x_startr + i, y_startr + j, img, color);
+			color = pixel_color_get3(i, j , control.g);
+			if (color != 0x202020)
+				my_pixel_put(x_startg + i, y_startg + j, img, color);
+			color = pixel_color_get3(i, j , control.b);
+			if (color != 0x202020)
+				my_pixel_put(x_startb + i, y_startb + j, img, color);
+		}
+	}
+}
+
+void	set_controls(t_trace *trace)
+{
+	t_control	control;
+	int		i;
+	int		j;
+
+	control = *trace->obj_control;
+	{
+		j = -1;
+		while(++j < control.m_height)
+		{
+			i = -1;
+			while (++i < control.m_width)
+			my_pixel_put(i, j, &trace->img, pixel_color_get3(i, j, control.menu));
+		}
+		set_knobs(&trace->img, control, control.k_width, trace->on);
+		set_pknobs1(&trace->img, control, trace->on);
+	}
+}
+
+//if open putstrs after put to win
+
+void	controls(t_trace *trace)
+{
+	if (!trace->menu_open)
+		set_controls(trace);
+	trace->menu_open = !trace->menu_open;
+	if (!trace->menu_open)
+	{
+		trace->obj_control->rot_open = false;
+		trace->obj_control->pos_open = false;
+		//trace->obj_control->sca_open = false;
+		render(trace);
+	}
+	else
+	{
+		mlx_put_image_to_window(trace->mlx_connect,
+		trace->mlx_win, trace->img.img_ptr, 0, 0);
+		set_menu_vals(trace, trace->on);
+	}
+}
+
 //translation, push, and pop functions
 
 int	key_press_2(int keycode, t_trace *trace)
@@ -167,6 +264,8 @@ int	key_press_2(int keycode, t_trace *trace)
 		toggle_bump(trace, trace->on);
 	else
 		key_press_3(keycode, trace);
+	if (trace->menu_open)
+		trace->menu_open = false;
 	render(trace);
 	return (0);
 }
@@ -194,6 +293,8 @@ int	key_press(int keycode, t_trace *trace)
 		prev_list_ob(trace, trace->on);
 	else if ((keycode == F1) | (keycode == F3))
 		forge_or_export(keycode, trace);
+	else if (keycode == F4)
+		controls(trace);
 	else if (trace->layer)
 		key_press_2layer(keycode, trace);
 	else

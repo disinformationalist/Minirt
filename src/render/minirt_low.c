@@ -195,7 +195,7 @@ static inline void	compute_pixels_l(t_trace *trace, t_piece *piece, \
 	t_point			row_start;
 	t_position		pos;
 	int				incx = trace->low_inc;
-	int				incy =  ft_round(1 / ASPECT);
+	int				incy = 1;
 	t_vec3			pix_delta_rh = scale_vec1(incx, trace->pix_delta_rht);
 	t_vec3			pix_delta_dn = scale_vec1(incy, trace->pix_delta_down);
 

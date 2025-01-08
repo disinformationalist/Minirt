@@ -46,6 +46,60 @@ typedef struct s_tx
 	struct s_tx		*next;
 }	t_tx;
 
+typedef struct s_control
+{
+	t_img	*menu;
+	t_img	*r;
+	t_img	*g;
+	t_img	*b;
+	t_img	*bron;
+	t_img	*sil;
+	t_img	*ct;
+	t_img	*pt;
+
+	t_img	*rot_dials;
+	t_img	*rot;
+	t_img	*dtx;
+	t_img	*dty;
+	t_img	*dtz;
+
+	t_img	*pos_dials;
+	t_img	*pos;
+	t_img	*dtpx;
+	t_img	*dtpy;
+	t_img	*dtpz;
+
+	int		dials_ys;
+	int		d_width;
+	int		d_height;
+	int		m_height;
+	int		m_width;
+	int		k_width;
+	int		k_height;
+	int		ct_height;
+	int		ct_width;
+	int		pt_width;
+	int		pt_height;
+	int		dt_width;
+	int		dt_height;
+
+	bool	on_dials;
+	bool	rot_open;
+	bool	pos_open;
+	bool	sca_open;
+
+	t_vec3		rots;
+	t_position	rotsx;
+	t_position	rotsy;
+	t_position	rotsz;
+
+	t_vec3		poss;
+	t_position	posx;
+	t_position	posy;
+	t_position	posz;
+
+} t_control;
+
 /***PNG IMPORT/EXPORT***/
 
 //export lossless png image

@@ -245,7 +245,16 @@ typedef struct s_trace
 	bool			dragging;
 	int				start_x;
 	int				start_y;
+
+	double			start_xangle;
+	double			start_yangle;
+	double			start_zangle;
+
+	bool			low_flag;
 	bool			menu_open;
+	t_control		*obj_control;
+	bool			on_menu;
+	int				knob;
 }	t_trace;
 
 typedef struct s_piece
@@ -413,6 +422,7 @@ void			set_cu_transforms(t_trace *trace);
 //mlx utils
 int				new_img_init(void *mlx_con, t_img *img, int width, int height);
 void			my_pixel_put(int x, int y, t_img *img, unsigned int color);
+t_img			*create_img(void *mlx_ptr, int width, int height);
 
 //intersect
 t_norm_color	check_intersects(t_trace *trace, t_ray r, \
@@ -601,12 +611,54 @@ int				mouse_move(int x, int y, t_trace *trace);
 int				mouse_release(int button, int x, int y, t_trace *trace);
 int				key_release(int keycode, t_trace *trace);
 void			track_object(t_trace *trace, double x, double y);
-
+void			set_obj_color(t_on *on, t_norm_color new_col);
+t_norm_color	get_obj_color(t_on *on);
+char			*get_obj_type(t_type type);
 
 //traverse lists
 void			switch_list(int keycode, t_trace *trace, t_on *on);
 void			next_list_ob(t_trace *trace, t_on *on);
 void			prev_list_ob(t_trace *trace, t_on *on);
+
+/*****MENU*****/
+
+void			destroy_img(t_img *img, void *mlx);
+void			set_controls(t_trace *trace);
+void			set_menu_vals(t_trace *trace, t_on *on);
+void			set_pos_vals(void *mlx_con, void *win, t_trace *trace);
+void			set_type(void *mlx_con, void *mlx_win, t_type type);
+
+int				get_option(t_on *on);
+t_norm_color	get_obj_color2(t_on *on);
+void			controls(t_trace *trace);
+void			set_controls(t_trace *trace);
+unsigned int	pixel_color_get3(int x, int y, t_img *img);
+void			set_bknob(t_img *img, t_control control, t_on *on);
+void			set_rknob(t_img *img, t_control control, t_on *on);
+void			set_gknob(t_img *img, t_control control, t_on *on);
+void			reset_track(t_img *img, t_control control, int move_y);
+void			reset_ptrack(t_img *img, t_control control, int move_y);
+t_mat			get_obj_mat(t_on *on);
+
+void			set_pknobs1(t_img *img, t_control control, t_on *on);
+void 			set_rotknobs(t_trace *trace, t_control control);
+void		 	set_posknobs(t_trace *trace, t_control control);
+void			set_pos(t_trace *trace);
+
+
+void			set_rot_dials(t_trace *trace);
+void			set_rot_vals(void *mlx_con, void *win, t_trace *trace);
+
+t_vec3			get_rot(t_on *on, t_trace *trace);
+void			set_rotpos(t_trace *trace);
+t_mat4			get_rottran(t_type type, t_trace *trace);
+
+
+
+
+
+
+
 
 /***CLEAN_UP***/
 void			clear_few(t_trace *trace);
@@ -621,6 +673,8 @@ void			free_tri_list(t_tri **start);
 void			free_tx_list(void *mlx_con, t_tx **start);
 void			free_lt_list(t_light **start);
 void			free_all_objects(t_trace *trace);
+void			free_curr_tx(void *mlx_con, t_tx *curr);
+
 
 /***FORGE FILE***/
 

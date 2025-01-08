@@ -83,6 +83,7 @@ static inline void	set_empty_planes(t_trace *trace)
 	trace->planes = NULL;
 	trace->curr_pl = NULL;
 	trace->on->object = trace->curr_pl;
+	trace->on->type = VOID;
 }
 
 //remove plane from list

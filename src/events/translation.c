@@ -6,7 +6,6 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 {
 	t_vec3	right;
 	t_vec3	move;
-
 	right = cross_prod(trace->cam->true_up, trace->cam->orient);
 	move = scale_vec(vec1.x, right);
 	move = add_vec(move, scale_vec(vec1.y, trace->cam->true_up));

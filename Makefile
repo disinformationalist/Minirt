@@ -144,8 +144,12 @@ SRCS := ./src/main.c \
 ./src/bvh/boxes.c \
 ./src/bvh/box_ops.c \
 ./src/bvh/box_ops2.c \
+./src/events/menu/menu.c \
+./src/events/menu/set_menu_vals.c
 
-CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -mavx -mavx2 -fPIE -Ofast -march=native -Wno-unused-result
+
+CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g  -fPIE -Ofast -march=native -Wno-unused-result
+#-mavx -mavx2, when ready to try some simd stuff
 
 RM := rm -f
 

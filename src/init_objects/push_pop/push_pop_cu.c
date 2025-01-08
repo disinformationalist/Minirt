@@ -53,6 +53,7 @@ static inline void	set_empty_cubes(t_trace *trace)
 	trace->cubes = NULL;
 	trace->curr_cu = NULL;
 	trace->on->object = trace->curr_cu;
+	trace->on->type = VOID;
 }
 
 //remove cube from list

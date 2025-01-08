@@ -85,6 +85,7 @@ static inline void	set_empty_hyperboloids(t_trace *trace)
 	trace->hyperboloids = NULL;
 	trace->curr_hy = NULL;
 	trace->on->object = trace->curr_hy;
+	trace->on->type = VOID;
 }
 
 //remove hyperboloid from list

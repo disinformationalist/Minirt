@@ -83,6 +83,7 @@ static inline void	set_empty_cylinders(t_trace *trace)
 	trace->cylinders = NULL;
 	trace->curr_cy = NULL;
 	trace->on->object = trace->curr_cy;
+	trace->on->type = VOID;
 }
 
 //remove cylinder from list

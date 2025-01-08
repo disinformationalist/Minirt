@@ -35,7 +35,7 @@ static inline int	match_index(int num_colors, t_norm_color *colors, \
 	return (best_match);
 }
 
-static inline t_norm_color	get_obj_color(t_on *on)
+t_norm_color	get_obj_color(t_on *on)
 {
 	if (on->type == LIGHT)
 		return (((t_light *)on->object)->color);
@@ -53,7 +53,7 @@ static inline t_norm_color	get_obj_color(t_on *on)
 		return (color(0, 0, 0));
 }
 
-static inline void	set_obj_color(t_on *on, t_norm_color new_col)
+void	set_obj_color(t_on *on, t_norm_color new_col)
 {
 	t_light	*lt;
 

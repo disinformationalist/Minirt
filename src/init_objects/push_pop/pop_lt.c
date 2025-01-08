@@ -21,6 +21,7 @@ static inline void	set_empty_lights(t_trace *trace)
 	trace->lights = NULL;
 	trace->curr_lt = NULL;
 	trace->on->object = trace->curr_lt;
+	trace->on->type = VOID;
 }
 
 void	adj_pntrs_destroy(t_trace *trace, t_light *to_destroy, \

@@ -7,12 +7,11 @@ static inline void	free_all(t_trace *trace, \
 	clear_all(trace);
 }
 
-//combine this options pass selection parameter
+//combine this options pass selection parameter or pass function pointer
 
 void	render_scene_s(t_trace *trace)
 {
 	t_piece	piece[trace->num_rows][trace->num_cols];
-
 	int		i;
 	int		j;
 
@@ -45,7 +44,6 @@ assigns the limits of each part to a t_peice, each to be worked by a thread */
 void	render_scene(t_trace *trace)
 {
 	t_piece	piece[trace->num_rows][trace->num_cols];
-
 	int		i;
 	int		j;
 

@@ -8,25 +8,25 @@ t_mat	get_mat(t_material material)
 	t_mat	mat;
 
 	if (material == DEFAULT)
-		mat = (t_mat){0.8, 0.9, 0.9, 200.0, 0.0, 0.0, 1.0};
+		mat = (t_mat){0.8, 0.9, 0.9, 200.0, 0.0, 0.0, 1.0, 0};
 	else if (material == METAL)
-		mat = (t_mat){0.2, 0.8, 1.0, 128.0, 0.8, 0.0, 1.0};
+		mat = (t_mat){0.2, 0.8, 1.0, 128.0, 0.8, 0.0, 1.0, 1};
 	else if (material == MATTE)
-		mat = (t_mat){0.2, 0.7, 0.1, 5.0, 0.05, 0.0, 1.0};
+		mat = (t_mat){0.2, 0.7, 0.1, 5.0, 0.05, 0.0, 1.0, 2};
 	else if (material == GLASS)
-		mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.3, 0.8, 1.52};
+		mat = (t_mat){0.02, 0.05, 0.9, 200.0, 0.3, 0.8, 1.52, 3};
 	else if (material == MIRROR)
-		mat = (t_mat){0.0, 0.0, 1.0, 1000.0, 1.0, 0.0, 1.0};
+		mat = (t_mat){0.0, 0.0, 1.0, 1000.0, 1.0, 0.0, 1.0, 4};
 	else if (material == DIAMOND)
-		mat = (t_mat){0.0, 0.1, 1.0, 300.0, 0.5, 0.9, 2.417};
+		mat = (t_mat){0.0, 0.1, 1.0, 300.0, 0.5, 0.9, 2.417, 5};
 	else if (material == WATER)
-		mat = (t_mat){0.1, 0.1, 0.5, 40.0, 0.2, 0.8, 1.33};
+		mat = (t_mat){0.1, 0.1, 0.5, 40.0, 0.2, 0.8, 1.33, 6};
 	else if (material == CHROME)
-		mat = (t_mat){.25, 0.4, 0.9, 250.0, 1.0, 0.0, 0.95};
+		mat = (t_mat){.25, 0.4, 0.9, 250.0, 1.0, 0.0, 0.95, 7};
 	else if (material == AIR)
-		mat = (t_mat){0.1, 0.2, 0.8, 200.0, 0.8, .7, 1.001};
+		mat = (t_mat){0.1, 0.2, 0.8, 200.0, 0.8, .7, 1.001, 8};
 	else
-		mat = (t_mat){0.1, 0.9, 0.9, 200, 0.0, 0.0, 1.0};
+		mat = (t_mat){0.8, 0.9, 0.9, 200, 0.0, 0.0, 1.0, 0};
 	return (mat);
 }
 

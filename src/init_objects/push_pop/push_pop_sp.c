@@ -80,6 +80,7 @@ static inline void	set_empty_spheres(t_trace *trace)
 	trace->spheres = NULL;
 	trace->curr_sp = NULL;
 	trace->on->object = trace->curr_sp;
+	trace->on->type = VOID;
 }
 
 //remove sphere from list
