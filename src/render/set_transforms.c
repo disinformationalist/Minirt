@@ -19,8 +19,6 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->curr_rottran));
 			curr_sp->t_transform = transpose(curr_sp->transform);
 			curr_sp->i_transform = inverse(curr_sp->transform);
-		/* 	print_mat4(curr_sp->transform);
-			print_mat4(curr_sp->i_transform); */
 			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
 			color(255, 255, 255));
 			curr_sp->texture = trace->textures;

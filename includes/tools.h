@@ -166,6 +166,7 @@ typedef struct s_cam
 	int				fov;
 	t_mat4			transform;
 	t_mat4			transform_up;
+	t_mat4			rottran;
 }	t_cam;
 
 /***GROUPS AND BVH***/

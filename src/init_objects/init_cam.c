@@ -69,6 +69,7 @@ void	init_viewing(t_trace *trace)
 	set_view_topleft(trace, view_center, view_width, view_height);
 	trace->cam->transform = rot_to(vec(0, 0, 1, 0), trace->cam->orient);
 	trace->cam->transform_up = rot_to(vec(0, 1, 0, 0), trace->cam->true_up);
+	trace->cam->rottran = trace->cam->transform_up;
 }
 
 static inline void	reset_topleft(t_trace *trace, t_vec3 view_center, \

@@ -164,6 +164,8 @@ t_mat4	get_transform(t_type type, t_trace *trace)
 		mat = trace->curr_hy->i_transform;
 	else if (type == CUBE)
 		mat = trace->curr_cu->i_transform;
+	else if (type == CAM)
+		mat = inverse(trace->cam->rottran);
 	return (mat);
 }
 
@@ -296,8 +298,8 @@ t_mat4	get_rottran(t_type type, t_trace *trace)
 		mat = trace->curr_cu->curr_rottran;
 	else if (type == LIGHT)// && (trace->curr_lt->type == SPOT || trace->curr_lt->type == AREA))
 		mat = trace->curr_lt->curr_rottran;
-	/* else if (type == CAM)//must set up and a rottran
-		mat = trace->cam->curr_rottran; */ 
+	else if (type == CAM)//must set up and a rottran
+		mat = trace->cam->rottran;
 	else
 		mat = identity();
 	return (mat);
