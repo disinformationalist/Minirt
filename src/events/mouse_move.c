@@ -258,7 +258,30 @@ void	reset_ptrack(t_img *img, t_control control, int move_y)//x162 y213
 	}
 }
 
-void	set_pknobs1(t_img *img, t_control control, t_on *on)//todo, each prop increments diff, this for 0 - 1s
+void	set_bumpknob(t_img *img, t_control control, t_on *on)
+{
+	int				i;
+	int				j;
+	unsigned int	color;
+	double			level;
+
+	level = get_bump_level(on);
+	int x_start = 165 + level;
+	int y_start = 453;
+	j = -1;
+	while (++j < 17)
+	{
+		i = -1;
+		while (++i < 17)
+		{
+			color = pixel_color_get3(i, j , control.bron);
+			if (color != 0xFF202020)
+				my_pixel_put(x_start + i, y_start + j, img, color);
+		}
+	}
+}
+
+void	set_pknobs1(t_img *img, t_control control, t_on *on)
 {
 	int				i;
 	int				j;
@@ -598,6 +621,23 @@ void	set_rotposz(t_trace *trace)
 	trace->obj_control->rotsz.j = ft_round(60 * sin(rot.z));
 }
 
+void	set_bump_level(t_on *on, double new_val)
+{
+	t_type	type;
+	
+	type = on->type;
+	if (type == SPHERE)
+		((t_sphere *)on->object)->bump_level = new_val;
+	else if (type == PLANE)
+		((t_plane *)on->object)->bump_level = new_val;
+	else if (type == CYLINDER)
+		((t_cylinder *)on->object)->bump_level = new_val;
+	else if (type == CUBE)
+		((t_cube *)on->object)->bump_level = new_val;
+	else if (type == HYPERBOLOID)
+		((t_hyperboloid *)on->object)->bump_level = new_val;
+}
+
 int mouse_move(int x, int y, t_trace *trace)
 {
 	double			delta_x;
@@ -758,7 +798,7 @@ int mouse_move(int x, int y, t_trace *trace)
 			else if (knob == 9) current_knob_pos = 167 + (mat.refract - 1) * 33;
 
 			//printf("curr_pos : %d\n", current_knob_pos);
-     		new_knob_pos= fmax(167, fmin(267, current_knob_pos + delta_x));//check bot to top
+     		new_knob_pos= fmax(167, fmin(267, current_knob_pos + delta_x));
 			//set new param
 			//printf("new_pos : %d\n", new_knob_pos);
 			if (knob == 6)
@@ -773,6 +813,15 @@ int mouse_move(int x, int y, t_trace *trace)
 			set_prop(trace->on, trace->on->type, knob, new_val);
 			reset_ptrack(&trace->img, *trace->obj_control, 213 + 25 * (knob - 3));//x162 y213
 			set_pknobs1(&trace->img, *trace->obj_control, trace->on);
+		}
+		else//knob == 10, bump level
+		{
+			current_knob_pos = 167 + get_bump_level(trace->on);
+     		new_knob_pos= fmax(167, fmin(267, current_knob_pos + delta_x));
+     		new_val = (double)(new_knob_pos - 167);
+			set_bump_level(trace->on, new_val);
+			reset_ptrack(&trace->img, *trace->obj_control, 453);
+			set_bumpknob(&trace->img, *trace->obj_control, trace->on);
 		}
 		trace->start_x = x;
 		mlx_put_image_to_window(trace->mlx_connect,

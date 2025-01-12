@@ -47,6 +47,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->waist_val = 1;
 	new->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 	color(255, 255, 255));
+	new->bump_level = DEFAULT_BUMP;
 }
 
 //copy a hype and place it immediately after the current hype in the list

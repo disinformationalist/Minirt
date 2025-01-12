@@ -61,6 +61,23 @@ void	set_option(t_trace *trace, t_on *on, int option)
 	else
 		return ;
 }
+
+double	get_bump_level(t_on *on)
+{
+	if (on->type == SPHERE)
+		return (((t_sphere *)on->object)->bump_level);
+	else if (on->type == PLANE)
+		return (((t_plane *)on->object)->bump_level);
+	else if (on->type == CYLINDER)
+		return (((t_cylinder *)on->object)->bump_level);
+	else if (on->type == CUBE)
+		return (((t_cube *)on->object)->bump_level);
+	else if (on->type == HYPERBOLOID)
+		return (((t_hyperboloid *)on->object)->bump_level);
+	else
+		return (0);
+}
+
 //rerender knobs and tracks 
 
 void		reset_knobs(t_img *img, t_control control, t_on *on)
@@ -75,6 +92,8 @@ void		reset_knobs(t_img *img, t_control control, t_on *on)
 	i = -1;
 	while(++i < 7)
 		reset_ptrack(img, control, 213 + i * 25);
+	reset_ptrack(img, control, 213 + (i - 1) * 25 + 90);
+	set_bumpknob(img, control, on);
 	set_bknob(img, control, on);
 	set_rknob(img, control, on);
 	set_gknob(img, control, on);
@@ -103,8 +122,8 @@ void 	set_rotknobs(t_trace *trace, t_control control)
 	int				putyy;
 	int				putzx;
 	int				putzy;
-	int				shift = control.dials_ys - 8;
 	unsigned int	color;
+	int				shift = control.dials_ys - 8;
 
 	putxx = control.rotsx.i + 92;
 	putxy = -control.rotsx.j + shift + 120;
@@ -352,7 +371,6 @@ void	set_rot_vals(void *mlx_con, void *win, t_trace *trace)
 	rot = trace->obj_control->rots;
 	color = 0x90C4FF;
 	
-	//can use floor to set readout to wholes, but is a lie
 	//x
 	degrees = rot.x / DEG_TO_RAD;
 	sprintf(deg, "%.2f", degrees);
@@ -369,17 +387,55 @@ void	set_rot_vals(void *mlx_con, void *win, t_trace *trace)
 	mlx_string_put(mlx_con, win, 81, 415 + trace->obj_control->dials_ys, color, deg);
 }
 
+static inline void	set_drag(t_trace *trace, int x, int knob)
+{
+	trace->start_x = x;
+	trace->dragging = true;
+	trace->knob = knob;
+}
+
+void	check_knobs(int x, int y, t_trace *trace)
+{
+	t_norm_color	obj_col;
+	t_mat			mat;
+
+	obj_col = get_obj_color2(trace->on);
+	mat	= get_obj_mat(trace->on);
+	//color
+	if (in_circle(x, y, 23 + (int)obj_col.r, 112, 8))
+		set_drag(trace, x, 0);
+	else if (in_circle(x, y, 23 + (int)obj_col.g, 137, 8))
+		set_drag(trace, x, 1);
+	else if (in_circle(x, y, 23 + (int)obj_col.b, 162, 8))
+		set_drag(trace, x, 2);
+	//props
+	else if (in_circle(x, y, 173 + mat.amb * 100, 221 , 8))// 167 + 6 + start val
+		set_drag(trace, x, 3);
+	else if (in_circle(x, y, 173 + mat.diff * 100, 246, 8))
+		set_drag(trace, x, 4);//diff
+	else if (in_circle(x, y, 173 + mat.spec * 100, 271, 8))
+		set_drag(trace, x, 5);//spec
+	else if (in_circle(x, y, 173 + mat.shine / 10, 296, 8))
+		set_drag(trace, x, 6);//shine
+	else if (in_circle(x, y, 173 + mat.ref * 100, 321, 8))
+		set_drag(trace, x, 7);//reflect
+	else if (in_circle(x, y, 173 + mat.transp * 100, 346, 8))
+		set_drag(trace, x, 8);//transp
+	else if (in_circle(x, y, 173 + (mat.refract - 1) * 33, 371, 8))
+		set_drag(trace, x, 9);//refract
+	else if (in_circle(x, y, 173 + get_bump_level(trace->on), 461, 8))
+		set_drag(trace, x, 10);//bump level
+	else
+		return ;
+}
 
 
 //handles presses upon the menu when open for object manipulation
 
 int menu_press(int x, int y, t_trace *trace)
 {
-	t_norm_color	obj_col;
-	int 			r, g, b;
-	t_mat			mat;
-
 	trace->on_menu = true;
+
 	if ((x >= 172 && x <= 274) && (y > 390 && y <= 413)) 
 		toggle_shadow(trace, trace->on);
 	else if ((x >= 172 && x <= 274) && (y > 420 && y <= 443)) 
@@ -390,7 +446,7 @@ int menu_press(int x, int y, t_trace *trace)
 		set_rot_dials(trace);
 		mlx_put_image_to_window(trace->mlx_connect, trace->mlx_win, trace->img.img_ptr, 0, 0);
 	}
-	else if((y > 480 && y <= 504) && (x >= 148 && x <= 252))//swap out with scale later
+	else if((y > 480 && y <= 504) && (x >= 148 && x <= 252))
 	{
 		printf("on scale button\n");
 	}
@@ -427,6 +483,7 @@ int menu_press(int x, int y, t_trace *trace)
 		int			j;
 		t_img		*img = &trace->img;
 		t_control	control = *trace->obj_control;
+		t_mat		mat;
 	
 		i = (i) % 9 + 1;
 		printf("mat_i %d\n", i);
@@ -448,82 +505,8 @@ int menu_press(int x, int y, t_trace *trace)
 	}
 	else if ((y > 70 && y <= 93) && (x >= 194 && x <= 297))
 			set_option(trace, trace->on, 2);
-	obj_col = get_obj_color2(trace->on);
-	r = (int)obj_col.r;
-	g = (int)obj_col.g;
-	b = (int)obj_col.b;
-	mat	= get_obj_mat(trace->on);
-
-	int x_starta = 167 + mat.amb * 100;
-	int x_startd = 167 + mat.diff * 100;
-	int x_starts = 167 + mat.spec * 100;
-	int x_startsh = 167 + mat.shine / 10;
-	int x_startr = 167 + mat.ref * 100;
-	int x_startt = 167 + mat.transp * 100;
-	int x_startrt = 167 + (mat.refract - 1) * 33;
-
-	//color
-	if (in_circle(x, y, 23 + r, 112, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = 16 + r;
-		trace->knob = 0;
-	}
-	else if (in_circle(x, y, 23 + g, 137, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = 16 + g;
-		trace->knob = 1;
-	}
-	else if (in_circle(x, y, 23 + b, 162, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = 16 + b;
-		trace->knob = 2;
-	}
-	//props
-	else if (in_circle(x, y, 6 + x_starta, 221 , 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_starta;
-		trace->knob = 3;//amb
-	}
-	else if (in_circle(x, y, 6 + x_startd, 246, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_startd;
-		trace->knob = 4;//diff
-	}
-	else if (in_circle(x, y, 6 + x_starts, 271, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_starts;
-		trace->knob = 5;//spec
-	} 	
-	else if (in_circle(x, y, 6 + x_startsh, 296, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_startsh;
-		trace->knob = 6;//shine
-	}
-	else if (in_circle(x, y, 6 + x_startr, 321, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_startr;
-		trace->knob = 7;//reflect
-	}
-	else if (in_circle(x, y, 6 + x_startt, 346, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_startt;
-		trace->knob = 8;//transp
-	}
-	else if (in_circle(x, y, 6 + x_startrt, 371, 8))
-	{
-		trace->dragging = true;
-		trace->start_x = x_startrt;
-		trace->knob = 9;//refract
-	}
+	else
+		check_knobs(x, y, trace);
 	return (0);
 }
 

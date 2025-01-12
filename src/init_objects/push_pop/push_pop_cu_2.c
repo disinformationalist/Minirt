@@ -35,5 +35,6 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->emitter = false;
 	new->pattern = uv_checker(6, 6, color(30, 30, 30), \
 		color(255, 255, 255));
+	new->bump_level = DEFAULT_BUMP;
 	make_links(start, new);
 }

@@ -51,7 +51,7 @@ void	bump_sp(t_point obj_pnt, t_sphere sphere, t_comps *comps)
 	t_vec3			bumpv;
 	t_point			bumpp;
 
-	bumpv = bump(comps->pos, sphere.texture->bump_map, 30);
+	bumpv = bump(comps->pos, sphere.texture->bump_map, sphere.bump_level);
 	obj_pnt.w = 0;
 	tbn = set_sptbn(obj_pnt);
 	bumpv = mat_vec_mult(tbn, bumpv);

@@ -18,6 +18,7 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->option = 0;
 	new->w_frost = false;
 	new->texture = NULL;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 t_cylinder	*create_cylinder(char **line)

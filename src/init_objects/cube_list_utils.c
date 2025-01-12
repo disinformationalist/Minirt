@@ -23,6 +23,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->w_frost = false;
 	new->texture = NULL;
 	new->emitter = false;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 t_cube	*create_cube(char **line)

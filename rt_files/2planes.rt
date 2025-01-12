@@ -20,14 +20,14 @@ tx			soft.png
 #tx			ice.png	
 #tx			wood.png
 #tx			stone.png
-#tx          sky.png
+#tx         sky.png
 tx			chaos_1.png
 #tx			sun.png
 tx			neb.png
 tx			chaos_2.png
 tx			chaos_3.png
 #tx			carina.png
-#tx			aluminum.png               aluminum_height.png
+tx			aluminum.png               aluminum_height.png
 tx			earth2k.png                earthbump2k.png
 #tx			chaos_4.png
 #tx			pillars.png

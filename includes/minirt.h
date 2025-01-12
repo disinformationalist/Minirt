@@ -9,6 +9,7 @@
 
 //# define ASPECT (16.0 / 9.0)
 # define ASPECT 1.7778
+# define DEFAULT_BUMP 30
 
 //# define ASPECT (4.0 / 3.0)
 
@@ -20,6 +21,7 @@ typedef struct s_sphere
 	int				id;
 	bool			shadow;
 	bool			bump;
+	double			bump_level;
 	t_point			center;
 	double			radius;
 	t_norm_color	color;
@@ -43,6 +45,7 @@ typedef struct s_plane
 	int				id;
 	bool			shadow;
 	bool			bump;
+	double			bump_level;
 	t_point			point;
 	t_vec3			norm;
 	t_norm_color	color;
@@ -67,6 +70,7 @@ typedef struct s_cylinder
 	int					id;
 	bool				shadow;
 	bool				bump;
+	double				bump_level;
 	t_point				center;
 	t_vec3				norm;
 	double				radius;
@@ -92,6 +96,7 @@ typedef struct s_hyperboloid
 	int						id;
 	bool					shadow;
 	bool					bump;
+	double					bump_level;
 	t_point					center;
 	t_vec3					norm;
 	double					rad;
@@ -119,6 +124,7 @@ typedef struct s_cube
 	int				id;
 	bool			shadow;
 	bool			bump;
+	double			bump_level;
 	t_point			center;
 	t_vec3			norm;
 	double			h_width;
@@ -620,7 +626,7 @@ void			switch_list(int keycode, t_trace *trace, t_on *on);
 void			next_list_ob(t_trace *trace, t_on *on);
 void			prev_list_ob(t_trace *trace, t_on *on);
 
-/*****MENU*****/
+/*****GUI CONTROLS*****/
 
 void			destroy_img(t_img *img, void *mlx);
 void			set_controls(t_trace *trace);
@@ -631,6 +637,7 @@ void			set_type(void *mlx_con, void *mlx_win, t_type type);
 int				get_option(t_on *on);
 t_norm_color	get_obj_color2(t_on *on);
 void			controls(t_trace *trace);
+t_control		*make_controls(void *con);
 void			set_controls(t_trace *trace);
 unsigned int	pixel_color_get3(int x, int y, t_img *img);
 void			set_bknob(t_img *img, t_control control, t_on *on);
@@ -652,13 +659,8 @@ void			set_rot_vals(void *mlx_con, void *win, t_trace *trace);
 t_vec3			get_rot(t_on *on, t_trace *trace);
 void			set_rotpos(t_trace *trace);
 t_mat4			get_rottran(t_type type, t_trace *trace);
-
-
-
-
-
-
-
+double			get_bump_level(t_on *on);
+void			set_bumpknob(t_img *img, t_control control, t_on *on);
 
 /***CLEAN_UP***/
 void			clear_few(t_trace *trace);
@@ -674,7 +676,6 @@ void			free_tx_list(void *mlx_con, t_tx **start);
 void			free_lt_list(t_light **start);
 void			free_all_objects(t_trace *trace);
 void			free_curr_tx(void *mlx_con, t_tx *curr);
-
 
 /***FORGE FILE***/
 

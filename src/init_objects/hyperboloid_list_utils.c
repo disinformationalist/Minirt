@@ -22,6 +22,7 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	new->w_frost = false;
 	new->option = 0;
 	new->texture = NULL;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 t_hyperboloid	*create_hyperboloid(char **line)

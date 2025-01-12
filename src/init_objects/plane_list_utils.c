@@ -12,6 +12,7 @@ void	set_pl_vals(t_plane *new, char **line)
 	new->option = 0;
 	new->w_frost = false;
 	new->sine = false;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 t_plane	*create_plane(char **line)

@@ -12,7 +12,7 @@ void	check_hy2(char **line, char ***rt_file)
 	if (check_double(&rad_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid hyperboloid rad\n", \
 	"Hyperboloid rad must be between 0.001 and 999\n");
-	if (check_double(&waist_str, 0.001, 999.0))
+	if (check_double(&waist_str, -10, 10))
 		free_exit(rt_file, "Error\n Invalid hyperboloid waist\n", \
 	"Hyperboloid waist must be between 0.001 and 999\n");
 	if (check_double(&height_str, 0.001, 999.0))
@@ -31,7 +31,7 @@ void	check_hy(char **line, char ***rt_file)
 	"<rad> <waist> <height> <r,g,b>\n");
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid hyperboloid coordinates\n", \
-	"Hyperboloid coordinates must be in the format x,y,z\n");
+	" Hyperboloid coordinates must be in the format x,y,z\n");
 	if (check_orientation(line[2]))
 		free_exit(rt_file, "Error\n Invalid hyperboloid orientation\n", \
 	"Hyperboloid orientation must be in the format x,y,z," \

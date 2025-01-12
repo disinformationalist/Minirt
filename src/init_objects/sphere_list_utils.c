@@ -14,6 +14,7 @@ void	set_sp_vals(t_sphere *new, char **line)
 	new->option = 0;
 	new->w_frost = false;
 	new->texture = NULL;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 t_sphere	*create_sphere(char **line)

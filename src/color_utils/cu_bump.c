@@ -62,7 +62,7 @@ void	bump_cu(t_point obj_pnt, t_cube cube, t_comps *comps, t_face face)
 	t_vec3	bumpv;
 	t_point	bumpp;
 
-	bumpv = bumpv_cu(comps->pos, cube.texture->bump_map, 30, comps->dims);
+	bumpv = bumpv_cu(comps->pos, cube.texture->bump_map, cube.bump_level, comps->dims);
 	adjust_bumpv(&bumpv, face);
 	bumpp = bumpv;
 	if (comps->inside)

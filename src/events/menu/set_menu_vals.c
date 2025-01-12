@@ -42,6 +42,7 @@ char	*copy_till(char *s1, char *s2, char c)
 
 	while (s1[++i] != c && i < 9)
 			s2[i] = s1[i];
+	s2[i] = '\0';
 	return (s2);
 }
 
@@ -52,7 +53,7 @@ void	set_color(void *mlx_con, void *mlx_win, t_on *on)
 	char 			r[10];
 	char 			g[10];
 	char 			b[10];
-	char			hex[20];
+	char			hex[10];
 	int				y_s;
 	int				opt;
 	unsigned int	color1;
@@ -69,7 +70,6 @@ void	set_color(void *mlx_con, void *mlx_win, t_on *on)
 		hex_col = (unsigned int)(((uint8_t)color.r << 16) | ((uint8_t)color.g << 8) | ((uint8_t)color.b));
 		sprintf(hex, "0x%x", hex_col);
 	}
-
 	sprintf(r, "%d", (uint8_t)color.r);
 	sprintf(g, "%d", (uint8_t)color.g);
 	sprintf(b, "%d", (uint8_t)color.b);
@@ -181,33 +181,38 @@ void	set_props(void *mlx_con, void *mlx_win, t_on *on)
 
 void	set_shadow_bump(void *con, void *win, t_type type, t_trace *trace)
 {
-	bool shadow;
-	bool bump;
+	bool 	shadow;
+	bool 	bump;
 
 	if (type == SPHERE)
 	{
-		shadow = trace->curr_sp->shadow;
-		bump = trace->curr_sp->bump;
+		t_sphere sp = *trace->curr_sp;
+		shadow = sp.shadow;
+		bump = sp.bump;
 	}
 	else if (type == PLANE)
 	{
-		shadow = trace->curr_pl->shadow;
-		bump = trace->curr_pl->bump;
+		t_plane pl = *trace->curr_pl;
+		shadow = pl.shadow;
+		bump = pl.bump;
 	}
 	else if (type == CYLINDER)
 	{
-		shadow = trace->curr_cy->shadow;
-		bump = trace->curr_cy->bump;
+		t_cylinder cy = *trace->curr_cy;
+		shadow = cy.shadow;
+		bump = cy.bump;
 	}
 	else if (type == CUBE)
 	{
+		t_cube cu = *trace->curr_cu;
 		shadow = trace->curr_cu->shadow;
-		bump = trace->curr_cu->bump;
+		bump = cu.bump;
 	}
 	else if (type == HYPERBOLOID)
 	{
-		shadow = trace->curr_hy->shadow;
-		bump = trace->curr_hy->bump;
+		t_hyperboloid hy = *trace->curr_hy;
+		shadow = hy.shadow;
+		bump = hy.bump;
 	}
 	else
 		return ;
@@ -218,15 +223,27 @@ void	set_shadow_bump(void *con, void *win, t_type type, t_trace *trace)
 	if (bump)
 		mlx_string_put(con, win, 331, 437, 0x00FF00, "ON");
 	else
-		mlx_string_put(con, win, 329, 437, 0xFF0000, "OFF");	
+		mlx_string_put(con, win, 329, 437, 0xFF0000, "OFF");
+}
+
+void	put_bump_level(void *con, void *win, t_trace *trace)
+{
+	double 			level;
+	unsigned int	color;
+	char			bump[10];
+
+	color = 0x90C4FF;	
+	level = get_bump_level(trace->on);
+	sprintf(bump, "%.2f", level);
+	mlx_string_put(con, win, 324, 467, color, bump);
 }
 
 //sets the current vals on the control board
 
 void	set_menu_vals(t_trace *trace, t_on *on)
 {
-	void	*con;
-	void	*win;
+	void			*con;
+	void			*win;
 	
 	con = trace->mlx_connect;
 	win = trace->mlx_win;
@@ -234,4 +251,5 @@ void	set_menu_vals(t_trace *trace, t_on *on)
 	set_color(con, win, on);
 	set_props(con, win, on);
 	set_shadow_bump(con, win, on->type, trace);
+	put_bump_level(con, win, trace);
 }

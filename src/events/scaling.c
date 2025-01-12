@@ -20,7 +20,10 @@ void	scale_hyperboloid(t_trace *trace, t_on *on, t_vec3 vec1,
 {
 	if (on->type == HYPERBOLOID)
 	{
-		trace->curr_hy->waist_val *= waist_factor;
+		(void)waist_factor;
+		//trace->curr_hy->waist_val *= waist_factor;
+		trace->curr_hy->waist_val -= .25;
+		
 		trace->curr_hy->curr_scale = mat_mult(inv_scaling(vec1.x, vec1.y, \
 			vec1.z), trace->curr_hy->curr_scale);
 		trace->curr_hy->transform = mat_mult(trace->curr_hy->curr_scale, \

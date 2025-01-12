@@ -46,6 +46,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL;
+	new->bump_level = DEFAULT_BUMP;
 }
 
 //copy a plane and place it immediately after the current plane in the list

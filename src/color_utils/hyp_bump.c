@@ -67,7 +67,7 @@ void	bump_hy(t_point obj_pnt, t_hyperboloid hyp, t_comps *comps)
 	t_vec3			bumpv;
 	t_vec3			bumpp;
 
-	bumpv = bump_h(comps->pos, hyp.texture->bump_map, 30);
+	bumpv = bump_h(comps->pos, hyp.texture->bump_map, hyp.bump_level);
 	bumpp = bumpv;
 	if (comps->is_top)
 		bumpv.y += 1;

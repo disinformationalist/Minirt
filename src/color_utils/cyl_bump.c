@@ -67,7 +67,7 @@ void	bump_cy(t_point obj_pnt, t_cylinder cyl, t_comps *comps)
 	t_vec3			bumpv;
 	t_vec3			bumpp;
 
-	bumpv = bump(comps->pos, cyl.texture->bump_map, 30);
+	bumpv = bump(comps->pos, cyl.texture->bump_map, cyl.bump_level);
 	bumpp = bumpv;
 	if (comps->is_top)
 		bumpv.y += 1;

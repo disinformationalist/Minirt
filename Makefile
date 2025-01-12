@@ -8,6 +8,7 @@ INC_DIR = ./includes
 
 SRCS := ./src/main.c \
 ./src/render/init.c \
+./src/render/init_controls.c \
 ./src/render/minirt.c \
 ./src/render/minirt_super.c \
 ./src/render/minirt_low.c \

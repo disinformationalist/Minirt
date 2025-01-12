@@ -46,7 +46,7 @@ void	bump_pl(t_point obj_pnt, t_plane plane, t_comps *comps)
 	t_vec3	bumpv;
 	t_point	bumpp;
 
-	bumpv = bumpv_pl(comps->pos, plane.texture->bump_map, 30, comps->dims);
+	bumpv = bumpv_pl(comps->pos, plane.texture->bump_map, plane.bump_level, comps->dims);
 	bumpp = bumpv;
 	if (comps->inside)
 	{

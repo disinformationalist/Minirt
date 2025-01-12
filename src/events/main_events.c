@@ -199,9 +199,13 @@ void	set_knobs(t_img *img, t_control control, int k_width, t_on *on)
 void	set_controls(t_trace *trace)
 {
 	t_control	control;
-	int		i;
-	int		j;
+	int			i;
+	int			j;
+	t_img		*img;
+	t_on		*on;
 
+	img = &trace->img;
+	on = trace->on;
 	control = *trace->obj_control;
 	{
 		j = -1;
@@ -211,8 +215,9 @@ void	set_controls(t_trace *trace)
 			while (++i < control.m_width)
 			my_pixel_put(i, j, &trace->img, pixel_color_get3(i, j, control.menu));
 		}
-		set_knobs(&trace->img, control, control.k_width, trace->on);
-		set_pknobs1(&trace->img, control, trace->on);
+		set_knobs(img, control, control.k_width, on);
+		set_pknobs1(img, control, on);
+		set_bumpknob(img, control, on);
 	}
 }
 
