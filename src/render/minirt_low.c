@@ -57,16 +57,6 @@ static inline uint8_t	clamp_color1(double color)
 		return ((uint8_t)(color));
 }
 
-static inline unsigned int	clamped_col1(t_norm_color col)
-{
-	t_color	clamped;
-
-	clamped.r = clamp_color1(col.r);
-	clamped.g = clamp_color1(col.g);
-	clamped.b = clamp_color1(col.b);
-	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
-}
-
 static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
 {
 	t_vec3	res;
@@ -76,26 +66,6 @@ static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
 	res.z = vec1.z - vec2.z;
 	res.w = vec1.w - vec2.w;
 	return (res);
-}
-
-static inline unsigned int	avg_samples1(t_norm_color sum, double n)
-{
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
-
-	r = clamp_color1(sum.r / n);
-	g = clamp_color1(sum.g / n);
-	b = clamp_color1(sum.b / n);
-	return (r << 16 | g << 8 | b);
-}
-
-static inline t_norm_color	sum_rgbs1(t_norm_color sum, t_norm_color to_add)
-{
-	sum.r += to_add.r;
-	sum.g += to_add.g;
-	sum.b += to_add.b;
-	return (sum);
 }
 
 static inline t_norm_color	color1(double r, double g, double b)
@@ -208,7 +178,7 @@ static inline void	compute_pixels_l(t_trace *trace, t_piece *piece, \
 		pos.i = piece->x_s;
 		while (pos.i < piece->x_e)
 		{
-			r.dir = norm_vec1(subtract_vec(current_pixel, r.origin));
+			r.dir = norm_vec1(subtract_vec1(current_pixel, r.origin));
 			color = clamped_col_l(check_intersects_l(trace, r, intersects, \
 				trace->depths));
 			set_pixels(trace, pos, color, incx, incy);

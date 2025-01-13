@@ -185,6 +185,8 @@ t_mat4	get_transform(t_type type, t_trace *trace)
 		mat = trace->curr_cu->i_transform;
 	else if (type == CAM)
 		mat = inverse(trace->cam->rottran);
+	else
+		mat = identity();
 	return (mat);
 }
 

@@ -57,16 +57,6 @@ static inline uint8_t	clamp_color1(double color)
 		return ((uint8_t)(color));
 }
 
-static inline unsigned int	clamped_col1(t_norm_color col)
-{
-	t_color	clamped;
-
-	clamped.r = clamp_color1(col.r);
-	clamped.g = clamp_color1(col.g);
-	clamped.b = clamp_color1(col.b);
-	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
-}
-
 static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
 {
 	t_vec3	res;
