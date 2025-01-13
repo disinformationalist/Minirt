@@ -16,6 +16,7 @@ pl          0.000,1.500,5.500          0.000,0.000,-1.000                       
 
 
 #Textures:  Image                      Height Map
+tx          scene_1.png
 tx			soft.png
 tx			ice.png	
 tx			wood.png

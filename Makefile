@@ -1,5 +1,5 @@
-NAME := minirt
-NAME_BONUS := minirt_bonus
+NAME := miniRT
+NAME_BONUS := miniRT_bonus
 
 SRC_DIR = ./src
 SRC_DIR_BONUS = ./src_bonus
@@ -208,9 +208,9 @@ SRCS_B := ./src_bonus/main.c \
 ./src_bonus/bvh/box_ops.c \
 ./src_bonus/bvh/box_ops2.c \
 
-CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -g -fPIE -Ofast -march=native -Wno-unused-result
+CFLAGS :=  -Wall -Wextra -Werror -I$(INC_DIR) -Ofast -march=native
 
-CFLAGS_B :=  -Wall -Wextra -Werror -I$(INC_DIR_BONUS) -g -fPIE -Ofast -march=native -Wno-unused-result
+CFLAGS_B :=  -Wall -Wextra -Werror -I$(INC_DIR_BONUS) -Ofast -march=native
 
 RM := rm -f
 
