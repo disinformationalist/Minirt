@@ -496,8 +496,40 @@ int menu_press(int x, int y, t_trace *trace)
 			reset_ptrack(img, control, 213 + j * 25);
 		set_pknobs1(img, control, trace->on);
 	}
-	else if ((y > 70 && y <= 93) && (x >= 21 && x <= 99))
+	else if ((y > 70 && y <= 93) && (x >= 21 && x <= 99))//color
+	{
 		set_option(trace, trace->on, 0);
+		
+	/* 	//TEST FLASH
+		int x, y, i, j;
+		y = 69;
+		j = 0;
+		while (++y < 93)
+		{
+			x = 20;
+			i = -1;
+			while (++x < 99)
+			{
+				my_pixel_put(++i, j, trace->obj_control->flash, pixel_color_get3(x, y, trace->obj_control->menu));
+				my_pixel_put(x, y, &trace->img, 0xFFFFFF);//white test
+			}
+			j++;
+		}
+		mlx_put_image_to_window(trace->mlx_connect, trace->mlx_win, trace->img.img_ptr, 0, 0);
+		set_menu_vals(trace, trace->on);
+		usleep(1500);
+		//maybe try on mouse button release to return color to normal
+		y = 69;
+		j = 0;
+		while (++y < 93)
+		{
+			x = 20;
+			i = -1;
+			while (++x < 99)
+				my_pixel_put(x, y, &trace->img,  pixel_color_get3(++i, j, trace->obj_control->flash));
+			j++;
+		} */
+	}
 	else if ((y > 70 && y <= 93) && (x >= 104 && x <= 189))
 	{
 		if (get_option(trace->on) == 1)

@@ -123,6 +123,10 @@ void	free_control(void *con, t_control *controls)
 		destroy_img(controls->dtpy, con);
 	if (controls->dtpz)
 		destroy_img(controls->dtpz, con);
+
+	if (controls->flash)
+		destroy_img(controls->flash, con);
+
 }
 
 void	free_all_objects(t_trace *trace)

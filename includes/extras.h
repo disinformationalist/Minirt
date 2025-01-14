@@ -69,6 +69,7 @@ typedef struct s_control
 	t_img	*dtpy;
 	t_img	*dtpz;
 
+	t_img	*flash;
 	int		dials_ys;
 	int		d_width;
 	int		d_height;

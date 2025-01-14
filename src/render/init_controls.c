@@ -20,6 +20,7 @@ void	null_init2(t_control *new)
 	new->dtpx = NULL;
 	new->dtpy = NULL;
 	new->dtpz = NULL;
+	new->flash = NULL;
 	new->rot_open = false;
 	new->pos_open = false;
 	new->sca_open = false;
@@ -108,5 +109,10 @@ t_control	*make_controls(void *con)
 	"src/events/menu/images/pos.png", &new->d_width, &new->d_height);
 	if (!new->pos_dials)
 		return (NULL);
+
+	new->flash = create_img(con, 104, 24);//24 x 104(largest button) to store button pixels temp
+	if (!new->flash)
+		return (NULL);
+
 	return (new);
 }
