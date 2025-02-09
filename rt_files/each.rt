@@ -1,0 +1,56 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.200                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.001,1.001,-7.501         0.000,0.000,1.000                     70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           -0.502,7.002,-3.502                                   0.500                   255,255,255
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900                   0,89,255        15           22
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
+sp          -5.500,1.000,4.500                                    2.000                   255,148,0
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  175,196,221
+
+
+#Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B
+cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.000        127,0,255
+
+
+#Cubes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      W_(x)   H_(y)   D_(z)   R | G | B
+cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,174,255
+
+
+#Hypes:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Radius  Waist  Height   R | G | B
+hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   .35    2.000    28,114,45
+
+#Tori:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Main_Rad  Tube_Rad      R | G | B
+#to			0.000,0.000,0.000          0.000,1.000,0.000          1.000      0.500        020,200,244
+
+#Textures:  Image                      Height Map
+tx			soft.png
+#tx			ice.png
+#tx			wood.png
+#tx			stone.png
+#tx          sky.png
+tx			chaos_1.png
+tx			sun.png
+#tx			neb.png
+#tx			chaos_2.png
+tx			chaos_3.png
+#tx			carina.png
+tx			aluminum.png               aluminum_height.png
+#tx			earth2k.png                earthbump2k.png
+#tx			chaos_4.png
+#tx			pillars.png
+tx			julia.png						
+#tx			soap.png
