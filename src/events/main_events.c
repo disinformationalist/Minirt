@@ -73,6 +73,8 @@ int	transfigure(int keycode, t_trace *trace)
 		return (0);
 	if (trace->menu_open)
 		reset_con(trace);
+	else
+		render(trace);
 	return (1);
 }
 
