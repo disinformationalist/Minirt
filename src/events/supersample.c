@@ -4,14 +4,14 @@
 
 int	supersample_handle(int keycode, t_trace *trace)
 {
-	if (keycode == SPACE)
-	{
-		if (trace->supersample)
-			reinit_viewing(trace);
-		else
-			reinit_viewing(trace);
-		trace->supersample = !trace->supersample;
-	}
+	(void)keycode;
+	trace->supersample = !trace->supersample;
+	trace->low_res = false;
+	trace->low_flag = false;
+	reinit_viewing(trace);
+	render(trace);
+	if (trace->menu_open)
+		set_con_vals(trace->mlx_connect, trace->mlx_win, trace);
 	return (0);
 }
 

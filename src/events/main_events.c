@@ -332,23 +332,19 @@ int	key_press_2(int keycode, t_trace *trace)
 	}
 	else if (keycode == SPACE)
 	{
-		trace->supersample = !trace->supersample;
-		trace->low_res = false;
-		trace->low_flag = false;
-		reinit_viewing(trace);
-		render(trace);
-		if (trace->menu_open)
-			set_con_vals(con, win, trace);
+		supersample_handle(SPACE, trace);
 		return (0);
 	}
 	else if (keycode == XK_Control_R)
 		toggle_shadow(trace, trace->on);
 	else if (keycode == XK_Control_L)
 		toggle_bump(trace, trace->on);
-	else if (keycode == XK_Left)
+	else if (keycode == XK_Left || keycode == XK_Right)
+	{
 		adjust_lowres(keycode, trace);
-	else if (keycode == XK_Right)
-		adjust_lowres(keycode, trace);
+		if (!trace->low_res)
+			return (0);
+	}
 	else if (key_press_3(keycode, trace))
 		return (0);
 	if (trace->menu_open)
