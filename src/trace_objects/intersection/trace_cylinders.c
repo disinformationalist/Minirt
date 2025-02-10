@@ -100,8 +100,6 @@ t_ray ray, t_intersects *intersects)
 
 	ray = transform(ray, cylinder->transform);
 	compute_abc(&abc, ray);
-	if (fabs(abc.x) < 1e-6)
-		return ;
 	if (check_trunk_solutions(abc, &t1, &t2))
 	{
 		if (within_height(ray, t1))

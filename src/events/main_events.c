@@ -9,6 +9,15 @@ void	print_stat(bool state, char *stat)
 		ft_putstr_fd(RED": false\n"RESET, 1);
 }
 
+void	print_onoff(bool state, char *stat)
+{
+	ft_putstr_fd(stat, 1);
+	if (state)
+		ft_putstr_fd(GREEN": ON\n"RESET, 1);
+	else
+		ft_putstr_fd(RED": OFF\n"RESET, 1);
+}
+
 void	print_menu_status(t_trace *trace)
 {
 	t_control con = *trace->obj_control;
@@ -18,6 +27,8 @@ void	print_menu_status(t_trace *trace)
 	printf("Supersample level: "GREEN"%.0f"RESET" (%0.fsamples per pixel)\n", trace->n, trace->n * trace->n);
 	printf("Lowres level     : "GREEN"%d"RESET" (%dtimes lower resolution)\n\n", trace->m_lowinc, trace->m_lowinc * trace->m_lowinc);
 	print_stat(trace->supersample, "super on  ");
+	print_stat(trace->stash, "stash on  ");
+
 	printf("\n");
 
 	print_stat(trace->menu_open, "menu open ");
@@ -41,7 +52,8 @@ void		update_button(t_trace *trace, void *con, void *win)
 	trace->obj_control->on_dials = false;
 	trace->obj_control->rot_open = false;
 	trace->obj_control->sca_open = false;
-	trace->on_menu = true;
+	if (trace->menu_open)
+		trace->on_menu = true;
 	update_no_low(con, win, trace);	
 	set_controls(trace);
 	set_menu_vals(trace, trace->on);
@@ -71,9 +83,11 @@ int	transfigure(int keycode, t_trace *trace)
 		change_mat(trace, trace->on, get_mat(AIR));
 	else
 		return (0);
-	if (trace->menu_open)
+	if (trace->menu_open && !trace->stash)
 		reset_con(trace);
-	else
+	else if (trace->menu_open)
+		reset_con_non(trace);
+	else if (!trace->stash)
 		render(trace);
 	return (1);
 }
@@ -247,6 +261,7 @@ void	controls(t_trace *trace)
 		trace->obj_control->rot_open = false;
 		trace->obj_control->pos_open = false;
 		trace->obj_control->sca_open = false;
+		trace->on_menu = false;
 		trace->knob = -1;
 		render(trace);
 	}
@@ -405,7 +420,10 @@ int	key_press(int keycode, t_trace *trace)
 	else if (keycode == F5)
 		print_gui_guide();
 	else if (keycode == X)
+	{
 		trace->stash = !trace->stash;
+		print_onoff(trace->stash, "Stash");
+	}
 	else if (keycode == PAD_0)
 		toggle_lowres(trace);
 	else if (trace->layer)

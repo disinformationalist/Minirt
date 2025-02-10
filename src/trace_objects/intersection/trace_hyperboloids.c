@@ -103,8 +103,6 @@ t_ray r, t_intersects *intersects)
 
 	r = transform(r, hype->transform);
 	compute_abc(&abc, r, hype->waist3);
-	if (fabs(abc.x) < 1e-6)
-		return ;
 	if (check_trunk_solutions(abc, &t1, &t2))
 	{
 		if (within_height(r, t1))

@@ -819,9 +819,13 @@ void	buttons1(t_trace *trace, t_on *on, void (*action)(t_trace *trace, t_on *on)
 
 void	create_new_light(t_trace *trace, t_light **lt, bool (*create_lt)(t_trace *trace, t_light **lt))
 {
-	create_lt(trace, lt);//pro
+	if (create_lt(trace, lt))
+		clear_all(trace);
 	reset_window(trace);
-	update(trace->mlx_connect, trace->mlx_win, trace);
+	if (create_lt == &insert_ltcopy_after2)
+		update(trace->mlx_connect, trace->mlx_win, trace);
+	else
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 }
 
 void	prelim_buttons(int x, int y, t_trace *trace)

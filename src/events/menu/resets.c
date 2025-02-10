@@ -30,7 +30,7 @@ void	reset_con(t_trace *trace)
 	t_control	con;
 
 	con = *trace->obj_control;
-	render(trace);
+		render(trace);
 	if (trace->menu_open)
 	{
 		trace->menu_open = false;

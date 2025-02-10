@@ -72,7 +72,7 @@ char	***split_file(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error\n Error opening file\n");
+		perror(RED"Error\n Error opening file\n"RESET);
 		return (NULL);
 	}
 	num_lines = count_lines(fd);

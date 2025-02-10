@@ -494,9 +494,11 @@ int	mouse_release(int button, int x, int y, t_trace *trace)
 			trace->low_inc = trace->m_lowinc;
 		else
 			trace->low_res = false;
-		if (trace->menu_open)
+		if (trace->menu_open && !trace->stash)
 			reset_con(trace);
-		else
+		else if (trace->menu_open)
+			reset_con_non(trace);
+		else if (!trace->stash)
 			render(trace);
 	}
 	return (0);

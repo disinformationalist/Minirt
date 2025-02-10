@@ -10,16 +10,18 @@ int	ft_3darray_len(char ***array)
 	return (i);
 }
 
-int	is_rt_file_valid(char *filename)
+int	is_valid_rt(char *filename)
 {
-	int		len;
-	char	*dot;
+	const char	*ext;
+	size_t		name_len;
+	size_t		ext_len;
 
-	len = ft_strlen(filename);
-	if (len < 4)
+	ext = ".rt";
+	name_len = ft_strlen(filename);
+	ext_len = ft_strlen(ext);
+	if (name_len < ext_len + 1)
 		return (0);
-	dot = ft_strrchr(filename, '.');
-	if (!dot || ft_strcmp(dot, ".rt"))
+	if (ft_strcmp(filename + name_len - ext_len, (char *)ext))
 		return (0);
 	return (1);
 }
@@ -66,7 +68,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		return (free_exit(NULL, \
 		"Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);
-	if (!is_rt_file_valid(av[1]))
+	if (!is_valid_rt(av[1]))
 		return (free_exit(NULL, "Error\n Invalid rt file\n", NULL), 1);
 	file = ft_strjoin("rt_files/", av[1]);
 	if (!file)
