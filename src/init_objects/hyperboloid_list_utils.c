@@ -17,7 +17,7 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	new->height = get_double(&height_str);
 	new->half_h = new->height / 2.0;
 	new->color = get_color(line[6], 1.0);
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	new->shadow = true;
 	new->bump = false;
 	new->w_frost = false;

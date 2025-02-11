@@ -26,14 +26,14 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
-	new->color = color(255, 148, 0);
+	new->color = color(220, 155, 43);
 	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
@@ -49,7 +49,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 
 //copy a sphere and place it immediately after the current sphere in the list
 
-bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
+bool	insert_spcopy_after(t_trace *trace, t_sphere **current, bool flag)
 {
 	t_sphere	*sp_to_copy;
 	t_sphere	*new;
@@ -57,17 +57,23 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current)
 	new = (t_sphere *)malloc(sizeof(t_sphere));
 	if (!new)
 		return (true);
+	sp_to_copy = *current;
 	if (!*current)
 	{
 		make_default_sp(&trace->spheres, new);
-		new->texture = trace->textures;
 		trace->on->object = trace->spheres;
+		new->texture = trace->textures;
 		trace->on->type = SPHERE;
 		trace->total_ints += 2;
 		return (false);
 	}
-	sp_to_copy = *current;
-	*new = *sp_to_copy;
+	else if (!flag)
+	{
+		make_default_sp(&trace->spheres, new);
+		new->texture = trace->textures;
+	}
+	else
+		*new = *sp_to_copy;
 	new->next = sp_to_copy->next;
 	new->prev = sp_to_copy;
 	sp_to_copy->next->prev = new;

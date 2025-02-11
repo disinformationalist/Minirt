@@ -51,7 +51,7 @@ void	info_init(t_trace *trace)
 	trace->stash = false;
 	trace->depths.refl = 6;
 	trace->depths.refr = 6;
-	trace->m_lowinc = 16;
+	trace->m_lowinc = 10;
 	trace->knob = -1;
 	init_viewing(trace);
 }
@@ -94,6 +94,7 @@ void	init_transforms(t_trace *trace)
 	set_cy_transforms(trace);
 	set_hy_transforms(trace);
 	set_cu_transforms(trace);
+	
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
 	trace->obj_control = make_controls(trace->mlx_connect);

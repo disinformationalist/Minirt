@@ -7,7 +7,7 @@ C           0.001,1.001,-7.501         0.000,0.000,1.000                     70
 
 
 #Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
-L           -0.502,7.002,-3.502                                   0.500                   255,255,255
+L           -0.502,7.002,-3.502                                   0.700                   255,255,255
 
 
 #SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
@@ -15,7 +15,7 @@ SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900         
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
-sp          -5.500,1.000,4.500                                    2.000                   255,148,0
+sp          -5.500,1.000,4.500                                    2.000                   220,155,43
 
 
 #Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
@@ -23,15 +23,15 @@ pl          0.000,-1.000,0.000         0.000,1.000,0.000                        
 
 
 #Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B
-cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.000        127,0,255
+cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.000        79,0,173
 
 
 #Cubes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      W_(x)   H_(y)   D_(z)   R | G | B
-cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,174,255
+cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,120,210
 
 
 #Hypes:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Radius  Waist  Height   R | G | B
-hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   .35    2.000    28,114,45
+hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   1.000  2.000    28,114,45
 
 #Tori:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Main_Rad  Tube_Rad      R | G | B
 #to			0.000,0.000,0.000          0.000,1.000,0.000          1.000      0.500        020,200,244

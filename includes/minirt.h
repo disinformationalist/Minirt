@@ -270,6 +270,7 @@ typedef struct s_trace
 	double			start_xangle;
 	double			start_yangle;
 	double			start_zangle;
+	double			m_raydist;
 
 	bool			low_flag;
 	int				m_lowinc;
@@ -406,12 +407,12 @@ bool			append_light(t_trace *trace, t_light **start, char **line);
 bool			append_tri(t_tri **start, char **line);
 
 //copy and push new list obs, if empty make default
-bool			insert_spcopy_after(t_trace *trace, t_sphere **current);
-bool			insert_plcopy_after(t_trace *trace, t_plane **current);
-bool			insert_cycopy_after(t_trace *trace, t_cylinder **current);
-bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current);
+bool			insert_spcopy_after(t_trace *trace, t_sphere **current, bool flag);
+bool			insert_plcopy_after(t_trace *trace, t_plane **current, bool flag);
+bool			insert_cycopy_after(t_trace *trace, t_cylinder **current, bool flag);
+bool			insert_hycopy_after(t_trace *trace, t_hyperboloid **current, bool flag);
 bool			insert_ltcopy_after(t_trace *trace, t_light **current);
-bool			insert_cucopy_after(t_trace *trace, t_cube **current);
+bool			insert_cucopy_after(t_trace *trace, t_cube **current, bool flag);
 bool			insert_ltcopy_after2(t_trace *trace, t_light **current);
 void			adj_pntrs_copy2(t_light *to_copy, t_light *new);
 bool			insert_ltcopy_after3(t_trace *trace, t_light **current);
@@ -629,6 +630,7 @@ void			rotate_object(t_trace *trace, t_on *on, t_mat4 rot, t_vec3 add, bool flag
 void			translate_object(t_trace *trace, t_on *on, t_vec3 vec, bool flag);
 void			pop_object(t_trace *trace, t_on *on);
 void			push_new_object(t_trace *trace, t_on *on);
+void			push_new_object2(t_trace *trace, t_on *on);
 void			adjust_super(int keycode, t_trace *trace);
 int				supersample_handle(int keycode, t_trace *trace);
 void			switch_list(int keycode, t_trace *trace, t_on *on);

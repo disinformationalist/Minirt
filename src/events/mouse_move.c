@@ -455,15 +455,14 @@ printf("object pointer: %p\n\n", intersects->closest->object); */
 
 void	track_object(t_trace *trace, double x, double y)
 {
-	t_ray	r;
-	t_vec3	current_pixel;
-	t_intersects *intersects;
+	t_ray			r;
+	t_vec3			current_pixel;
+	t_intersects 	*intersects;
 
 	current_pixel = add_vec(trace->pixel00, scale_vec(x, trace->pix_delta_rht));
 	current_pixel = add_vec(current_pixel, scale_vec(y, trace->pix_delta_down));
 	r.origin = trace->cam->center;
 	r.dir = norm_vec(subtract_vec(current_pixel, r.origin));
-
 	intersects = create_ints(trace->total_ints);
 	if (!intersects)
 		close_win(trace);
@@ -471,8 +470,7 @@ void	track_object(t_trace *trace, double x, double y)
 	set_mouse_on(trace, intersects->closest);
 	if (trace->on->object)
 	{
-		/* if (trace->low_res)
-			trace->low_flag = true; */
+		trace->m_raydist = intersects->closest->t;
 		trace->dragging = true;
 		trace->start_x = x;
 		trace->start_y = y;
@@ -993,14 +991,17 @@ int mouse_move(int x, int y, t_trace *trace)
 	}
 	else if (trace->dragging)
 	{
+		double factor;
+		
+		factor = trace->m_raydist;
 		delta_x = (x - trace->start_x);
 		delta_y = (y - trace->start_y);
 		if (trace->shift_on)
-			move = vec(0, 0, delta_y / 5, 0);
+			move = vec(0, 0, -(delta_y * factor) / 100, 0);
 		else
 		{
-			move = add_vec(scale_vec(delta_x * 10, trace->pix_delta_rht), 
-						scale_vec(delta_y * 10, trace->pix_delta_down));
+			move = add_vec(scale_vec(delta_x * factor, trace->pix_delta_rht), 
+						scale_vec(delta_y * factor, trace->pix_delta_down));
 		}
 		trace->low_res = true;
 		trace->start_x = x;

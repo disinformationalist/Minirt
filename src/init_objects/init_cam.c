@@ -57,10 +57,12 @@ void	init_viewing(t_trace *trace)
 	double	focal_len;
 	double	view_width;
 	double	view_height;
+	t_vec3	cam_cen;
 
+	cam_cen = trace->cam->center;
 	trace->cam->orient = norm_vec(trace->cam->orient);
 	focal_len = 1.0;
-	view_center = add_vec(trace->cam->center, \
+	view_center = add_vec(cam_cen, \
 		scale_vec(1.0 / focal_len, trace->cam->orient));
 	view_width = 2.0 * tan((double)(trace->cam->fov / 2.0) * DEG_TO_RAD);
 	view_height = view_width / ASPECT;
@@ -70,6 +72,7 @@ void	init_viewing(t_trace *trace)
 	trace->cam->transform = rot_to(vec(0, 0, 1, 0), trace->cam->orient);
 	trace->cam->transform_up = rot_to(vec(0, 1, 0, 0), trace->cam->true_up);
 	trace->cam->rottran = trace->cam->transform_up;
+	trace->cam->rottran = mat_mult(trace->cam->rottran, translation(-cam_cen.x, -cam_cen.y, -cam_cen.z));
 	trace->cam->rots = vec(0, 0, 0, 0);
 }
 

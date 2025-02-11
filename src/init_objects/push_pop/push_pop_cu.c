@@ -20,7 +20,7 @@ static inline void	update_cube_ids(t_cube *cube)
 
 //copy a cube and place it immediately after the current cube in the list
 
-bool	insert_cucopy_after(t_trace *trace, t_cube **current)
+bool	insert_cucopy_after(t_trace *trace, t_cube **current, bool flag)
 {
 	t_cube	*cu_to_copy;
 	t_cube	*new;
@@ -28,17 +28,23 @@ bool	insert_cucopy_after(t_trace *trace, t_cube **current)
 	new = (t_cube *)malloc(sizeof(t_cube));
 	if (!new)
 		return (true);
+	cu_to_copy = *current;
 	if (!*current)
 	{
 		make_default_cu(&trace->cubes, new);
 		trace->on->object = trace->cubes;
+		new->texture = trace->textures;
 		trace->on->type = CUBE;
 		trace->total_ints += 2;
-		new->texture = trace->textures;
 		return (false);
 	}
-	cu_to_copy = *current;
-	*new = *cu_to_copy;
+	else if (!flag)
+	{
+		make_default_cu(&trace->cubes, new);
+		new->texture = trace->textures;
+	}
+	else
+		*new = *cu_to_copy;
 	new->next = cu_to_copy->next;
 	new->prev = cu_to_copy;
 	cu_to_copy->next->prev = new;

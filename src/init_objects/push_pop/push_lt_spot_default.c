@@ -5,7 +5,7 @@ void	make_default_spotlt(t_light **start, t_light *new)
 	new->type = SPOT;
 	new->dir = vec(0, 1, 0, 0);
 	new->brightness = 0.75;
-	new->center = vec(0, 1, 0, 1);
+	new->center = vec(0, 2, 0, 1);
 	new->color = color(1.0, 1.0, 1.0);
 	new->inner_cone = cos(15 * DEG_TO_RAD);
 	new->outer_cone = cos(22 * DEG_TO_RAD);

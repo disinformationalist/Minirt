@@ -392,7 +392,6 @@ void	set_sca_vals(void *mlx_con, void *win, t_trace *trace)
 	//z
 	sprintf(val, "%.2f", pos.z);
 	mlx_string_put(mlx_con, win, 296, shifty, color, val);
-
 	if (trace->on->type == HYPERBOLOID)
 	{
 		waist = ((t_hyperboloid *)(trace->on->object))->waist_val;
@@ -531,7 +530,6 @@ void	set_sca(t_trace *trace)
 		scale_3 = (scale_3 - 1) / 3.006 - PI_HALVES;
 	else
 		scale_3 = -PI_HALVES - (1 - scale_3) * 3;
-
 
 	//1st circle
 	con->sca1x.i = ft_round(60 * cos(scale.x));//rad*cos(angle)
@@ -830,28 +828,50 @@ void	create_new_light(t_trace *trace, t_light **lt, bool (*create_lt)(t_trace *t
 
 void	prelim_buttons(int x, int y, t_trace *trace)
 {
-	if ((y > 510 && y <= 534) && (x >= 203 && x <= 307))
+	t_type type = trace->on->type;
+
+	if((y > 41 && y <= 64) && (x >= 52 && x <= 140))
+		buttons1(trace, trace->on, prev_list);
+	else if((y > 41 && y <= 64) && (x >= 257 && x <= 345))
+		buttons1(trace, trace->on, next_list);
+	if (type == CAM)
+		return ;
+	else if (type == LIGHT)
+	{
+		if ((y > 510 && y <= 534) && (x >= 203 && x <= 307))
+		{
+			buttons1(trace, trace->on, push_new_object);
+			update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+		}
+	}
+	else if ((y > 510 && y <= 534) && (x >= 258 && x <= 362))
 	{
 		buttons1(trace, trace->on, push_new_object);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	}
-	else if((y > 41 && y <= 64) && (x >= 52 && x <= 140))
-		buttons1(trace, trace->on, prev_list);
-	else if((y > 41 && y <= 64) && (x >= 257 && x <= 345))
-		buttons1(trace, trace->on, next_list);
+	else if ((y > 510 && y <= 534) && (x >= 148 && x <= 252) && type != LIGHT)
+	{
+		buttons1(trace, trace->on, push_new_object2);
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+	}
 }
 
 void	prev_next_pop_obj(int x, int y, t_trace *trace)
 {
-	if ((y > 510 && y <= 534) && (x >= 93 && x <= 197))
+	if ((y > 540 && y <= 564) && (x >= 93 && x <= 197))
+		buttons1(trace, trace->on, prev_list_ob);
+	else if ((y > 540 && y <= 564) && (x >= 203 && x <= 307))
+		buttons1(trace, trace->on, next_list_ob);
+	else if ((y > 510 && y <= 534) && (x >= 93 && x <= 197) && trace->on->type == LIGHT)
 	{
 		buttons1(trace, trace->on, pop_object);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	}
-	else if ((y > 540 && y <= 564) && (x >= 93 && x <= 197))
-		buttons1(trace, trace->on, prev_list_ob);
-	else if ((y > 540 && y <= 564) && (x >= 203 && x <= 307))
-		buttons1(trace, trace->on, next_list_ob);
+	else if ((y > 510 && y <= 534) && (x >= 38 && x <= 142))
+	{
+		buttons1(trace, trace->on, pop_object);
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+	}
 }
 
 void	open_dials(t_trace *trace, bool *open_dial, void (*set_dial)(t_trace *))
@@ -965,16 +985,6 @@ int menu_press(int x, int y, t_trace *trace)
 	prelim_buttons(x, y, trace);
 	if (trace->on->object == NULL)
 		return (0);
-	else if ((x >= 172 && x <= 274) && (y > 390 && y <= 413)) 
-	{
-		toggle_shadow(trace, trace->on);
-		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
-	}
-	else if ((x >= 172 && x <= 274) && (y > 420 && y <= 443)) 
-	{
-		toggle_bump(trace, trace->on);
-		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
-	}
 	else if ((y > 480 && y <= 504) && (x >= 38 && x <= 142))
 		open_dials(trace, &trace->obj_control->rot_open, set_rot_dials);
 	else if ((y > 480 && y <= 504) && (x >= 258 && x <= 362))
@@ -984,6 +994,16 @@ int menu_press(int x, int y, t_trace *trace)
 		if (in_circle(x, y, 111 + ((t_cam *)(trace->on->object))->fov, 82, 8))
 			set_drag(trace, x, 32);
 		return (0);
+	}
+	else if ((x >= 172 && x <= 274) && (y > 390 && y <= 413)) 
+	{
+		toggle_shadow(trace, trace->on);
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+	}
+	else if ((x >= 172 && x <= 274) && (y > 420 && y <= 443)) 
+	{
+		toggle_bump(trace, trace->on);
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	}
 	else if((y > 480 && y <= 504) && (x >= 148 && x <= 252))
 		open_dials(trace, &trace->obj_control->sca_open, set_sca_dials);
@@ -1165,7 +1185,5 @@ int	mouse_press(int button, int x, int y, t_trace *trace)
 		trace->menu_open = false;
 	if (trace->on_menu && trace->menu_open)
 		manage_windows(trace, control);
-	else
-		render(trace);
 	return (0);
 }

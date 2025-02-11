@@ -28,14 +28,14 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->radius = 1;
 	new->height = 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(127, 0, 255);
+	new->color = color(79, 0, 173);
 	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;
@@ -53,7 +53,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 
 //copy a cylinder and place it immediately after the current cyl in the list
 
-bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
+bool	insert_cycopy_after(t_trace *trace, t_cylinder **current, bool flag)
 {
 	t_cylinder	*cy_to_copy;
 	t_cylinder	*new;
@@ -61,17 +61,23 @@ bool	insert_cycopy_after(t_trace *trace, t_cylinder **current)
 	new = (t_cylinder *)malloc(sizeof(t_cylinder));
 	if (!new)
 		return (true);
+	cy_to_copy = *current;
 	if (!*current)
 	{
 		make_default_cy(&trace->cylinders, new);
-		new->texture = trace->textures;
 		trace->on->object = trace->cylinders;
+		new->texture = trace->textures;
 		trace->on->type = CYLINDER;
 		trace->total_ints += 4;
 		return (false);
 	}
-	cy_to_copy = *current;
-	*new = *cy_to_copy;
+	else if (!flag)
+	{
+		make_default_cy(&trace->cylinders, new);
+		new->texture = trace->textures;
+	}
+	else
+		*new = *cy_to_copy;
 	new->next = cy_to_copy->next;
 	new->prev = cy_to_copy;
 	cy_to_copy->next->prev = new;

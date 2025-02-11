@@ -4,7 +4,7 @@ static inline void	push_new2(t_trace *trace, t_on *on)
 {
 	if (on->type == HYPERBOLOID)
 	{
-		if (insert_hycopy_after(trace, &trace->curr_hy))
+		if (insert_hycopy_after(trace, &trace->curr_hy, 1))
 			close_win(trace);
 	}
 	else if (on->type == LIGHT)
@@ -14,7 +14,7 @@ static inline void	push_new2(t_trace *trace, t_on *on)
 	}
 	else if (on->type == CUBE)
 	{
-		if (insert_cucopy_after(trace, &trace->curr_cu))
+		if (insert_cucopy_after(trace, &trace->curr_cu, 1))
 			close_win(trace);
 	}
 	return ;
@@ -24,21 +24,64 @@ void	push_new_object(t_trace *trace, t_on *on)
 {
 	if (on->type == SPHERE)
 	{
-		if (insert_spcopy_after(trace, &trace->curr_sp))
+		if (insert_spcopy_after(trace, &trace->curr_sp, 1))
 			close_win(trace);
 	}
 	else if (on->type == PLANE)
 	{
-		if (insert_plcopy_after(trace, &trace->curr_pl))
+		if (insert_plcopy_after(trace, &trace->curr_pl, 1))
 			close_win(trace);
 	}
 	else if (on->type == CYLINDER)
 	{
-		if (insert_cycopy_after(trace, &trace->curr_cy))
+		if (insert_cycopy_after(trace, &trace->curr_cy, 1))
 			close_win(trace);
 	}
 	else
 		push_new2(trace, on);
+	next_list_ob(trace, trace->on);
+}
+
+static inline void	push_new22(t_trace *trace, t_on *on)
+{
+	if (on->type == HYPERBOLOID)
+	{
+		printf("send it\n");
+		if (insert_hycopy_after(trace, &trace->curr_hy, 0))
+			close_win(trace);
+	}
+	else if (on->type == LIGHT)
+	{
+		if (insert_ltcopy_after(trace, &trace->curr_lt))
+			close_win(trace);
+	}
+	else if (on->type == CUBE)
+	{
+		if (insert_cucopy_after(trace, &trace->curr_cu, 0))
+			close_win(trace);
+	}
+	return ;
+}
+
+void	push_new_object2(t_trace *trace, t_on *on)
+{
+	if (on->type == SPHERE)
+	{
+		if (insert_spcopy_after(trace, &trace->curr_sp, 0))
+			close_win(trace);
+	}
+	else if (on->type == PLANE)
+	{
+		if (insert_plcopy_after(trace, &trace->curr_pl, 0))
+			close_win(trace);
+	}
+	else if (on->type == CYLINDER)
+	{
+		if (insert_cycopy_after(trace, &trace->curr_cy, 0))
+			close_win(trace);
+	}
+	else
+		push_new22(trace, on);
 	next_list_ob(trace, trace->on);
 }
 

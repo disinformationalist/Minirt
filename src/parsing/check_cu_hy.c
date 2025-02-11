@@ -12,9 +12,9 @@ void	check_hy2(char **line, char ***rt_file)
 	if (check_double(&rad_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid hyperboloid rad\n", \
 	"Hyperboloid rad must be between 0.001 and 999\n");
-	if (check_double(&waist_str, -1, 1))
+	if (check_double(&waist_str, -.99, 1))
 		free_exit(rt_file, "Error\n Invalid hyperboloid waist\n", \
-	"Hyperboloid waist must be between -1 and 1\n");
+	"Hyperboloid waist must be between -.99 and 1\n");
 	if (check_double(&height_str, 0.001, 999.0))
 		free_exit(rt_file, "Error\n Invalid hyperboloid height\n", \
 	"Hyperboloid height must be between 0.001 and 999\n");

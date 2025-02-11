@@ -79,6 +79,9 @@ int	main(int ac, char **av)
 		return (1);
 	parse_rt(&trace, rt_file);
 	free_3d_array_i(rt_file, ft_3darray_len(rt_file));
+	ft_putstr_color_fd(1, "\n  ***************** PRESS [F2] FOR KEYHOOK GUIDE *****************\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "   ******************* PRESS [F5] FOR GUI GUIDE *****************\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, " **************** PRESS [F4] TO OPEN/CLOSE THE GUI ****************\n\n", BRIGHT_BLUE);
 	if (run_trace(&trace))
 		return (1);
 	return (0);

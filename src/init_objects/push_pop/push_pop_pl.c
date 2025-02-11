@@ -52,7 +52,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 
 //copy a plane and place it immediately after the current plane in the list
 
-bool	insert_plcopy_after(t_trace *trace, t_plane **current)
+bool	insert_plcopy_after(t_trace *trace, t_plane **current, bool flag)
 {
 	t_plane	*pl_to_copy;
 	t_plane	*new;
@@ -60,6 +60,7 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 	new = (t_plane *)malloc(sizeof(t_plane));
 	if (!new)
 		return (true);
+	pl_to_copy = *current;
 	if (!*current)
 	{
 		make_default_pl(&trace->planes, new);
@@ -69,8 +70,13 @@ bool	insert_plcopy_after(t_trace *trace, t_plane **current)
 		trace->total_ints += 1;
 		return (false);
 	}
-	pl_to_copy = *current;
-	*new = *pl_to_copy;
+	else if (!flag)
+	{
+		make_default_pl(&trace->planes, new);
+		new->texture = trace->textures;
+	}
+	else
+		*new = *pl_to_copy;
 	new->next = pl_to_copy->next;
 	new->prev = pl_to_copy;
 	pl_to_copy->next->prev = new;

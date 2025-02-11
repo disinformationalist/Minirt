@@ -37,7 +37,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->transform = transform;
 	new->t_transform = transform;
 	new->i_transform = transform;
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	*start = new;
 	new->shadow = true;
 	new->bump = false;
@@ -55,7 +55,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 
 //copy a hype and place it immediately after the current hype in the list
 
-bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
+bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current, bool flag)
 {
 	t_hyperboloid	*hy_to_copy;
 	t_hyperboloid	*new;
@@ -63,6 +63,7 @@ bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
 	new = (t_hyperboloid *)malloc(sizeof(t_hyperboloid));
 	if (!new)
 		return (true);
+	hy_to_copy = *current;
 	if (!*current)
 	{
 		make_default_hy(&trace->hyperboloids, new);
@@ -73,8 +74,13 @@ bool	insert_hycopy_after(t_trace *trace, t_hyperboloid **current)
 		new->id = 1;
 		return (false);
 	}
-	hy_to_copy = *current;
-	*new = *hy_to_copy;
+	else if (!flag)
+	{
+		make_default_hy(&trace->hyperboloids, new);
+		new->texture = trace->textures;
+	}
+	else
+		*new = *hy_to_copy;
 	new->next = hy_to_copy->next;
 	new->prev = hy_to_copy;
 	hy_to_copy->next->prev = new;

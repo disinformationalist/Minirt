@@ -1,4 +1,4 @@
-NAME := megaRT
+NAME := miniRT
 
 SRC_DIR = ./src
 

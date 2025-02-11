@@ -15,7 +15,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->h_height = get_double(&height_str) / 2.0;
 	new->h_depth = get_double(&depth_str) / 2.0;
 	new->color = get_color(line[6], 1.0);
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	new->shadow = true;
 	new->bump = false;
 	new->sine = false;

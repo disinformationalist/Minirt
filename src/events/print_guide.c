@@ -14,41 +14,45 @@ void	print_gui_guide(void)
 	ft_putstr_color_fd(1, "| -> Can click 'to <shape>' areas to navigate object lists|\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| as well as cam and lights, lights show diff controls    |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| -> For bump mapping to work, the object must be textured|\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, " -> Use Duplicate button to create initial default object",  BRIGHT_BLUE);
+	ft_putstr_color_fd(1, " -> Use Create button to create initial default object   ",  BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "|\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "|", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, " on an empty list, ex: navigate to spheres => press      ", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "| ", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "ex: navigate to spheres(use 'to' <shape>), press create ", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "|\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "|", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, " Duplicate at menu bottom. Now Duplicate copies current  ", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "|\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "|", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, " 'on' object and sets the copy 'on', move it to see it   ", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "|\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| -> Duplicate makes an exact copy of the current object, |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| and sets it to 'on', move it to see it. Default on empty|\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Changes made will take effect immediately. A low res |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| mode activates while knobs are being dragged. Stash     |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| changes([s] to toggle) to activate all upon closing[F4] |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Only Position, Rotate, FOV are available on Camera   |\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "| -> Next/Prev: go to next object of same type            |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| -> Next/Prev: go to next/prev object of same type       |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Texture/Presets must keep clicking to go through all |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Rotate, Position, Scale open control dials           |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Key hooks can still be used while the gui is open,   |\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "| and makes things even easier. Try 1-5, 9, 0, to navigate|\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "| between obj types for example                           |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| and makes things even easier. For example Try 1-5, 9, 0 |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| to navigate between obj types(instead of to <shape>)    |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Note: Area lights are VERY slow, creating goes low   |\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "| res automatically.                                      |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| res automatically. More cells = more quality, less speed|\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| ----------------- Using Scaling Dials ------------------|\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Scale shape in xyz, work outward in.                 |\n", BRIGHT_GREEN);
-	ft_putstr_color_fd(1, "| -> Outer scales all three x, y, z                       |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| -> Outer scales all three   xyz                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Mids scale pairs      xz, yz, xy                     |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "| -> Inner scale individual x, y ,z                       |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| -> Using pair or all scaling(outer 2 circles) will      |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| reset the pair(or all 3) to the lowest of them, and set |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| in accordance with dimension ratios of shape from the rt|\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| file, default objects created at run have = xyz ratios  |\n", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "| this is why working circles outward in is reccommended  |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "|                                                         |\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "+---------------------------------------------------------+\n", BRIGHT_GREEN);
 }
@@ -72,16 +76,20 @@ void	print_guide(void)
 	ft_putstr_color_fd(1, "╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [UP ⬆]     => Raise supersample level(max 10)   ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [Down ⬇]   => Lower supersample level(min 2)    ╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ [Left ]    => Lower Low Res level(min 3)        ╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ [right ]   => Raise Low Res level(max 50)       ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ samples = level² samples per pixel (max = 100)  ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ starts initialized at 4 (16 samples per pixel)  ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ [Left ⬅]   => Lower Low Res level(min 2)        ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ [right ➡]  => Raise Low Res level(max 50)       ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ starts at 10(100 times lower resolution)        ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [C]        => Caps on/off cylinder/hyperboloid  ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ [X]        => Stash changes made in gui (they   ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ will activate all at once upon closing the gui  ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, " [NPAD 0]   => Low resolution mode on/off        ", BRIGHT_GREEN);
+	ft_putstr_color_fd(1, "╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [NPAD DIV] => Radial sine wave on plane         ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [NPAD X]   => Frost surface(with glass to frost)╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ [NPAD 0]   => Low resolution mode on/off        ╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ [X]        => Stash changes made in gui (they   ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ activate all at once upon closing gui)          ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ ------- Below are also available in gui ------- ╠╣\n", BRIGHT_BLUE);
@@ -112,6 +120,4 @@ void	print_guide(void)
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╚╩═════════════════════════════════════════════════╩╝\n", BRIGHT_BLUE);
 }
-//╔ ╗ ╚ ╝ ═ ║, ╦ ╩ ╠ ╣
-
-
+//╔ ╗ ╚ ╝ ═ ║, ╦ ╩ ╠ ╣, ➡ ⬅ ⬆ ⬇

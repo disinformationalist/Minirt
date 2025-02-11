@@ -139,7 +139,7 @@ void	free_control(void *con, t_control *controls)
 		destroy_img(controls->flash, con);
 	if (controls->fov)
 		destroy_img(controls->fov, con);
-
+	free(controls);
 }
 
 void	free_all_objects(t_trace *trace)

@@ -55,6 +55,8 @@ void	set_mouse_on(t_trace *trace, t_track_hits *closest)
 		t_cube *cube = (t_cube *)obj;
 		if (cube->emitter)
 			set_matching_light(trace, cube);
+		else
+			trace->curr_cu = (t_cube *)obj;
 	}
 	else if (type == LIGHT)
 		trace->curr_lt = (t_light *)obj;

@@ -18,14 +18,14 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->h_height = 1.0;
 	new->h_depth = 1.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(0, 174, 255);
+	new->color = color(0, 120, 210);
 	transform = identity();
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
 	new->transform = transform;
 	new->t_transform = transform;
 	new->i_transform = transform;
-	new->mat = get_mat(DEFAULT);
+	new->mat = get_mat(ENAMEL);
 	new->id = 1;
 	new->shadow = true;
 	new->bump = false;

@@ -279,8 +279,8 @@ void	adjust_lowres(int keycode, t_trace *trace)
 	if (keycode == XK_Left)
 	{
 		trace->m_lowinc -= 1;
-		if (trace->m_lowinc < 3)
-			trace->m_lowinc = 3;
+		if (trace->m_lowinc < 2)
+			trace->m_lowinc = 2;
 	}
 	else if (keycode == XK_Right)
 	{
