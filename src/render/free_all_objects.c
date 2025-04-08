@@ -144,6 +144,12 @@ void	free_control(void *con, t_control *controls)
 
 void	free_all_objects(t_trace *trace)
 {
+	if (trace->group)
+		free_group(trace->group);
+	if (trace->bvh)
+		free_group(trace->bvh);
+	if (trace->box)
+		free(trace->box);
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);

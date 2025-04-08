@@ -13,12 +13,12 @@ void	check_al2(char **line, char ***rt_file, \
 		free_exit(rt_file, "Error\n Invalid light color value\n", \
 	" Light color channel values must be between 0 and 255" \
 	" in the format r,g,b\n");
-	if (check_int(line[7], 2, 20))
+	if (check_int(line[7], 1, 20))
 		free_exit(rt_file, "Error\n Invalid area light width cells\n", \
-	" Area light width cells must be between 2 and 20\n");
-	if (check_int(line[8], 2, 20))
+	" Area light width cells must be between 1 and 20\n");
+	if (check_int(line[8], 1, 20))
 		free_exit(rt_file, "Error\n Invalid area light length cells\n", \
-	" Area light length cells must be between 2 and 20\n");
+	" Area light length cells must be between 1 and 20\n");
 }
 
 //check area light line vals

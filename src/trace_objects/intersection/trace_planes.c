@@ -63,7 +63,7 @@ t_norm_color	set_pl_color(t_comps *comps, t_plane plane, t_point obj_pnt)
 	else
 		out = plane.color;
 	if (plane.sine)
-		sine_ring_norm(obj_pnt, comps, plane.t_transform, plane.i_transform);
+		sine_ring_norm(obj_pnt, comps, plane.t_transform, plane.i_transform, plane.amp);
 	return (out);
 }
 
@@ -92,7 +92,7 @@ t_comps	set_plcomps(t_plane *plane, t_intersects *intersects, t_ray r)
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_pl_color(&comps, *plane, obj_pnt);
 	if (plane->w_frost)
-		comps.normal = frost(comps.normal);
+		comps.normal = frost(comps.normal, plane->fuzz_lev);
 	return (comps);
 }
 

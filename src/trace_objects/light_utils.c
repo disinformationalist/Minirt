@@ -98,11 +98,13 @@ t_norm_color *lt_color, t_light *curr_lt)
 		comps->spot_int = get_spot_int(comps->light_dir, curr_lt);
 		if (comps->spot_int)
 		{
-			comps->cos_a = dot_product(comps->normal, comps->light_dir);
 			if (!obscured_b(trace, curr_lt->center, *comps))
+			{
+				comps->cos_a = dot_product(comps->normal, comps->light_dir);
 				*lt_color = sum_rgbs(*lt_color, \
 				mult_color(curr_lt->brightness * comps->spot_int \
 				* get_light_int(*comps, comps->mat), curr_lt->color));
+			}
 		}
 	}
 	else if (curr_lt->type == AREA)
@@ -110,9 +112,11 @@ t_norm_color *lt_color, t_light *curr_lt)
 		* inten_at(trace, *curr_lt, comps) * comps->sqlt_int, curr_lt->color));
 	else
 	{
-		comps->cos_a = dot_product(comps->normal, comps->light_dir);
 		if (!obscured_b(trace, curr_lt->center, *comps))
+		{
+			comps->cos_a = dot_product(comps->normal, comps->light_dir);
 			*lt_color = sum_rgbs(*lt_color, mult_color(curr_lt->brightness \
 			* get_light_int(*comps, comps->mat), curr_lt->color));
+		}
 	}
 }

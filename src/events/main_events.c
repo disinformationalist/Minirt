@@ -108,6 +108,8 @@ int	key_press_3(int keycode, t_trace *trace)
 		rotate_object(trace, trace->on, rot_z(-PI_12THS), vec(0, 0, PI_12THS, 0), 1);
 	else if (keycode == C)
 		toggle_caps(trace);
+	else if (keycode == V && trace->on->type == HYPERBOLOID)
+		trace->curr_hy->single = !trace->curr_hy->single;
 	else if (keycode == DIV)
 		toggle_sine(trace);
 	else if (keycode == MULT)
@@ -327,6 +329,14 @@ int	key_press_2(int keycode, t_trace *trace)
 		translate_object(trace, trace->on, vec(0, 0, .5, 0), 1);
 	else if (keycode == O)
 		translate_object(trace, trace->on, vec(0, 0, -.5, 0), 1);
+	else if (keycode == 93)
+	{
+		trace->sp_box = !trace->sp_box;
+		if (trace->sp_box)
+			append_sp_box(trace, &trace->spheres);
+		else if (!trace->sp_box)
+			pop_sp(trace, &trace->spheres);
+	}
 	else if (keycode == M)
 	{
 		push_new_object(trace, trace->on);

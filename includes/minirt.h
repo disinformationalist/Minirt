@@ -26,6 +26,7 @@ typedef struct s_sphere
 	bool			shadow;
 	bool			bump;
 	double			bump_level;
+	double			fuzz_lev;
 	t_point			center;
 	double			radius;
 	t_norm_color	color;
@@ -40,6 +41,7 @@ typedef struct s_sphere
 	t_pattern		pattern;
 	int				option;
 	bool			w_frost;
+	bool			is_box;
 	struct s_sphere	*next;
 	struct s_sphere	*prev;
 }	t_sphere;
@@ -51,6 +53,7 @@ typedef struct s_plane
 	bool			shadow;
 	bool			bump;
 	double			bump_level;
+	double			fuzz_lev;
 	t_point			point;
 	t_vec3			norm;
 	t_norm_color	color;
@@ -66,6 +69,7 @@ typedef struct s_plane
 	int				option;
 	bool			sine;
 	bool			w_frost;
+	double			amp;
 	struct s_plane	*next;
 	struct s_plane	*prev;
 }	t_plane;
@@ -78,6 +82,7 @@ typedef struct s_cylinder
 	bool				shadow;
 	bool				bump;
 	double				bump_level;
+	double				fuzz_lev;
 	t_point				center;
 	t_vec3				norm;
 	double				radius;
@@ -106,6 +111,7 @@ typedef struct s_hyperboloid
 	bool					shadow;
 	bool					bump;
 	double					bump_level;
+	double					fuzz_lev;
 	t_point					center;
 	t_vec3					norm;
 	double					rad;
@@ -124,6 +130,7 @@ typedef struct s_hyperboloid
 	t_tx					*texture;
 	t_pattern				pattern;
 	bool					w_frost;
+	bool					single;
 	int						option;
 	struct s_hyperboloid	*prev;
 	struct s_hyperboloid	*next;
@@ -136,6 +143,7 @@ typedef struct s_cube
 	bool			shadow;
 	bool			bump;
 	double			bump_level;
+	double			fuzz_lev;
 	t_point			center;
 	t_vec3			norm;
 	double			h_width;
@@ -156,6 +164,7 @@ typedef struct s_cube
 	bool			sine;
 	bool			w_frost;
 	double			bright;
+	double			amp;
 	struct s_cube	*prev;
 	struct s_cube	*next;
 }	t_cube;
@@ -215,6 +224,8 @@ typedef struct s_light
 typedef struct s_trace
 {
 	t_group			*group;
+	t_group			*bvh;
+	t_box			*box;
 	int				total_ints;
 	t_depths		depths;
 	t_img			img;
@@ -279,6 +290,8 @@ typedef struct s_trace
 	t_control		*obj_control;
 	bool			on_menu;
 	int				knob;
+
+	bool			sp_box;
 }	t_trace;
 
 //thread info
@@ -474,6 +487,9 @@ t_norm_color	color_sphere(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
 void			ray_sphere_intersect(t_sphere *sphere, \
 				t_ray ray, t_intersects *intersects);
+bool			append_sp_box(t_trace *trace, t_sphere **start);
+
+
 
 //sp shadow
 bool			check_sp_dist(t_sphere *spheres, t_ray ray, double dist);
@@ -500,8 +516,11 @@ bool			ray_cylinder_intersect2(t_cylinder cylinder, \
 				t_ray ray, double dist);
 bool			check_hy_dist(t_hyperboloid *hyperboloids, \
 				t_ray ray, double dist);
-bool			intersect_caps2_hy(t_ray ray, double dist, \
-				t_hyperboloid hyperboloid);
+
+bool			check_group_dist(t_group *group, double dist, t_ray ray);
+bool			check_hier_dist(t_group *top, double dist, t_ray ray);
+
+
 
 //cylinder utils
 void			check_cylinders(t_cylinder *cylinders, \
@@ -516,8 +535,8 @@ void			check_hyperboloids(t_hyperboloid *hyperboloids, \
 				t_intersects *intersects, t_ray ray);
 t_norm_color	color_hyperboloid(t_trace *trace, t_ray r, \
 				t_intersects *intersects, t_depths depths);
-void			ray_hyperboloid_intersect(t_hyperboloid *hyperboloid, \
-				t_ray ray, t_intersects *intersects);
+void			ray_hype_intersect(t_hyperboloid *hype, \
+				t_ray r, t_intersects *intersects, bool flag);
 
 //light utils
 void			set_arealt(t_light *lt);
@@ -582,10 +601,10 @@ t_vec2			set_plane_uv(t_point obj_pnt, double img_iasp);
 t_norm_color	uv_pattern_at(t_pattern check, t_vec2 uv);
 int				import_textures(void *mlx_con, t_tx *textures);
 void			sine_ring_norm(t_point obj_pnt, t_comps *comps, \
-				t_mat4 t_tran, t_mat4 i_tran);
+				t_mat4 t_tran, t_mat4 i_tran, double amp);
 void			sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
-				t_mat4 t_tran, t_mat4 i_tran);
-t_vec3			frost(t_vec3 norm);
+				t_mat4 t_tran, t_mat4 i_tran, double amp);
+t_vec3			frost(t_vec3 norm, double strength);
 t_map			hyperbolic_map(t_point obj_pnt, bool flag, \
 				t_comps *comps);
 
@@ -614,6 +633,8 @@ t_norm_color	gradient_at(t_point point, t_mat4 transform, \
 				t_norm_color col1, t_norm_color col2);
 
 /***EVENTS***/
+void			build_group(t_trace *trace);
+void			rebuild_hierarchy(t_trace *trace);
 int				key_press(int keycode, t_trace *trace);
 void			print_guide(void);
 void			print_gui_guide(void);

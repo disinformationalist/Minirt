@@ -82,6 +82,7 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 	return (false);
 }
 
+
 //check for light obstruction
 
 bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
@@ -91,15 +92,20 @@ bool	obscured_b(t_trace *trace, t_point lt_pos, t_comps comps)
 
 	s_ray = ray(comps.light_dir, comps.over_pnt);
 	light_dist = magnitude(subtract_vec(lt_pos, comps.point));
-	if (check_sp_dist(trace->spheres, s_ray, light_dist))
+	/* if (check_pl_dist(trace->planes, s_ray, light_dist))
 		return (true);
-	if (check_pl_dist(trace->planes, s_ray, light_dist))
+	if (check_sp_dist(trace->spheres, s_ray, light_dist))
 		return (true);
 	if (check_cy_dist(trace->cylinders, s_ray, light_dist))
 		return (true);
 	if (check_hy_dist(trace->hyperboloids, s_ray, light_dist))
 		return (true);
 	if (check_cu_dist(trace->cubes, s_ray, light_dist))
+		return (true); */
+	if (check_hier_dist(trace->bvh, light_dist, s_ray))
 		return (true);
+	if (check_pl_dist(trace->planes, s_ray, light_dist))
+		return (true);
+
 	return (false);
 }

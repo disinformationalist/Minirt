@@ -534,15 +534,37 @@ void	set_bump_level(t_on *on, double new_val)
 	
 	type = on->type;
 	if (type == SPHERE)
-		((t_sphere *)on->object)->bump_level = new_val;
+	{
+		t_sphere *sp = ((t_sphere *)on->object);
+		sp->bump_level = new_val;
+		sp->fuzz_lev = new_val / 1000;
+	}
 	else if (type == PLANE)
-		((t_plane *)on->object)->bump_level = new_val;
+	{
+		t_plane *pl= (t_plane *)on->object;
+		pl->bump_level = new_val;
+		pl->amp = new_val / 1000;
+		pl->fuzz_lev = new_val / 1000;
+	}
 	else if (type == CYLINDER)
-		((t_cylinder *)on->object)->bump_level = new_val;
+	{
+		t_cylinder *cy = ((t_cylinder *)on->object);
+		cy->bump_level = new_val;
+		cy->fuzz_lev = new_val / 1000;
+	}
 	else if (type == CUBE)
-		((t_cube *)on->object)->bump_level = new_val;
+	{
+		t_cube *cu = (t_cube *)on->object;
+		cu->bump_level = new_val;
+		cu->amp = new_val / 1000;
+		cu->fuzz_lev = new_val / 1000;
+	}
 	else if (type == HYPERBOLOID)
-		((t_hyperboloid *)on->object)->bump_level = new_val;
+	{
+		t_hyperboloid *hy = (t_hyperboloid *)on->object;
+		hy->bump_level = new_val;
+		hy->fuzz_lev = new_val / 1000;
+	}
 }
 
 double	get_delta_translate(double y, double x, double *start)

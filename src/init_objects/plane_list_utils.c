@@ -13,6 +13,8 @@ void	set_pl_vals(t_plane *new, char **line)
 	new->w_frost = false;
 	new->sine = false;
 	new->bump_level = DEFAULT_BUMP;
+	new->amp = new->bump_level / 1000;
+	new->fuzz_lev = new->bump_level / 1000;
 }
 
 t_plane	*create_plane(char **line)

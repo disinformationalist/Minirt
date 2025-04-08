@@ -862,12 +862,12 @@ void	prev_next_pop_obj(int x, int y, t_trace *trace)
 		buttons1(trace, trace->on, prev_list_ob);
 	else if ((y > 540 && y <= 564) && (x >= 203 && x <= 307))
 		buttons1(trace, trace->on, next_list_ob);
-	else if ((y > 510 && y <= 534) && (x >= 93 && x <= 197) && trace->on->type == LIGHT)
+	else if (trace->on->type != LIGHT && (y > 510 && y <= 534) && (x >= 38 && x <= 142))
 	{
 		buttons1(trace, trace->on, pop_object);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	}
-	else if ((y > 510 && y <= 534) && (x >= 38 && x <= 142))
+	else if (trace->on->type == LIGHT && (y > 510 && y <= 534) && (x >= 93 && x <= 197))
 	{
 		buttons1(trace, trace->on, pop_object);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
@@ -1020,6 +1020,8 @@ int menu_press(int x, int y, t_trace *trace)
 	}
 	else if ((y > 70 && y <= 93) && (x >= 104 && x <= 189))
 	{
+		if (trace->textures == NULL)
+			return (0);
 		if (get_option(trace->on) == 1)
 			set_next_tx(4, trace->textures, trace->on);
 		else

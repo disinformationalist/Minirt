@@ -14,6 +14,10 @@ L           -0.502,7.002,-3.502                                   0.700         
 SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900                   0,89,255        15           22
 
 
+#ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells
+AL          0.000,6.000,12.000          0.000,-1.000,0.000        0.65       4.5  4.5     255,255,255     4        4
+
+
 #Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
 sp          -5.500,1.000,4.500                                    2.000                   220,155,43
 
@@ -33,24 +37,22 @@ cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000 
 #Hypes:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Radius  Waist  Height   R | G | B
 hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   1.000  2.000    28,114,45
 
-#Tori:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Main_Rad  Tube_Rad      R | G | B
-#to			0.000,0.000,0.000          0.000,1.000,0.000          1.000      0.500        020,200,244
 
 #Textures:  Image                      Height Map
 tx			soft.png
-#tx			ice.png
-#tx			wood.png
-#tx			stone.png
-#tx          sky.png
+tx			aluminum.png               aluminum_height.png
+tx			earth2k.png                earthbump2k.png
+tx			ice.png
+tx			wood.png
+tx			stone.png
+tx          sky.png
 tx			chaos_1.png
 tx			sun.png
-#tx			neb.png
-#tx			chaos_2.png
+tx			neb.png
+tx			chaos_2.png
 tx			chaos_3.png
-#tx			carina.png
-tx			aluminum.png               aluminum_height.png
-#tx			earth2k.png                earthbump2k.png
-#tx			chaos_4.png
-#tx			pillars.png
+tx			carina.png
+tx			chaos_4.png
+tx			pillars.png
 tx			julia.png						
-#tx			soap.png
+tx			soap.png

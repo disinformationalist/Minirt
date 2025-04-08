@@ -1,0 +1,53 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.002,0.002,-4.002         0.000,0.000,1.000                     70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           0.000,1.000,0.000                                     0.600                   171,191,171
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          0.000,2.000,-5.000         0.000,-0.482,0.876         0.570                   209,174,53      10           26
+SL          3.000,2.000,-1.000         -0.683,-0.707,0.183        0.830                   247,211,0       16           83
+SL          -3.000,2.000,-1.000        0.683,-0.707,0.183         0.830                   7,55,247        15           85
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
+sp          -0.000,0.176,0.000                                    1.155                   220,155,43
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  0,225,255
+pl          -5.000,-0.500,5.500        0.000,0.000,-1.000                                 0,46,255
+
+
+#Hypes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Rad     Waist   Height  R | G | B
+hy          0.000,-1.137,0.000         0.000,1.000,0.000          0.626   0.200   1.253   28,114,45
+
+
+#Cubes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      W_(x)   H_(y)   D_(z)   R | G | B
+cu          0.000,0.000,-2.000         0.000,1.000,0.000          1.260   0.807   0.058   53,0,129
+cu          -1.598,-0.188,0.726        0.000,1.000,0.000          2.274   1.975   0.053   255,255,255
+cu          1.611,-0.198,0.720         0.000,1.000,0.000          2.280   1.976   0.053   255,255,255
+cu          1.611,-0.198,0.720         0.000,1.000,0.000          2.280   1.976   0.053   255,255,255
+
+
+#Textures:  Image                      Height Map
+tx          soft.png
+tx          chaos_1.png
+tx          sun.png
+tx          neb.png
+tx          chaos_2.png
+tx          chaos_3.png
+tx          carina.png
+tx          aluminum.png               aluminum_height.png
+tx          earth4k.png                earth_bump4k.png
+tx          chaos_4.png
+tx          pillars.png
+tx          julia.png
+
+

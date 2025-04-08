@@ -71,8 +71,6 @@ bool	ray_cylinder_intersect2(t_cylinder cylinder, t_ray ray, double dist)
 	abc.x = ray.dir.x * ray.dir.x + ray.dir.z * ray.dir.z;
 	abc.y = 2 * (ray.origin.x * ray.dir.x + ray.origin.z * ray.dir.z);
 	abc.z = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1;
-	if (fabs(abc.x) < 1e-6)
-		return (false);
 	if (check_trunk_solutions2(abc, ray, dist))
 		return (true);
 	if (cylinder.caps && intersect_caps2(ray, dist))

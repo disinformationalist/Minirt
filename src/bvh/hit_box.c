@@ -48,7 +48,7 @@ bool	ray_box_intersect(t_box *box, t_mat4 ctransform, t_ray ray)
 }
 
 //cube intersect check 
-static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
+/* static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 {
 	t_cube	*curr_cu;
 
@@ -65,4 +65,4 @@ static inline bool	check_cu_dist(t_cube *cubes, t_ray ray, double dist)
 			break;
 	}
 	return (false);
-}
+} */

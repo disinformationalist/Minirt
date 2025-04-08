@@ -60,7 +60,7 @@ t_norm_color	set_cu_color(t_comps *comps, t_cube cube, t_point obj_pnt)
 	else
 		out = cube.color;
 	if (cube.sine)
-		sine_ring_norm_cu(obj_pnt, comps, cube.t_transform, cube.i_transform);
+		sine_ring_norm_cu(obj_pnt, comps, cube.t_transform, cube.i_transform, cube.amp);
 	return (out);
 }
 
@@ -86,7 +86,7 @@ t_intersects *intersects, t_ray r)
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_cu_color(&comps, *cube, obj_pnt);
 	if (cube->w_frost)
-		comps.normal = frost(comps.normal);
+		comps.normal = frost(comps.normal, cube->fuzz_lev);
 	return (comps);
 }
 

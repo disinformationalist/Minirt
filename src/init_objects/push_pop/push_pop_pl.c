@@ -47,6 +47,8 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->prev = new;
 	new->texture = NULL;
 	new->bump_level = DEFAULT_BUMP;
+	new->amp = new->bump_level / 1000;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->rots = vec(0, 0, 0, 0);
 }
 

@@ -2,6 +2,9 @@
 
 void	init_obs(t_trace *trace)
 {
+	trace->group = NULL;
+	trace->bvh = NULL;
+	trace->box = NULL;
 	trace->amb = NULL;
 	trace->cam = NULL;
 	trace->lights = NULL;
@@ -11,7 +14,6 @@ void	init_obs(t_trace *trace)
 	trace->hyperboloids = NULL;
 	trace->cubes = NULL;
 	trace->textures = NULL;
-	trace->group = NULL;
 	trace->obj_control = NULL;
 }
 

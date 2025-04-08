@@ -23,7 +23,7 @@ void	adjust_super(int keycode, t_trace *trace)
 	{
 		trace->n += 1.0;
 		if (trace->n > 10.0)
-			trace->n = 10.0;
+			trace->n = 13.0;
 	}
 	if (keycode == XK_Down)
 	{

@@ -22,15 +22,16 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
 			color(255, 255, 255));
 			curr_sp->texture = trace->textures;
-			curr_sp = curr_sp->next;
 			curr_sp->rots = vec(0, 0, 0, 0);
+			add_child(trace->bvh, curr_sp, SPHERE, curr_sp->transform, curr_sp->i_transform, NULL);
+			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break ;
 		}
 	}
 }
 
-void	set_transforms_curr(t_trace *trace, t_hyperboloid *curr_hy)
+void	set_curr_hy(t_trace *trace, t_hyperboloid *curr_hy)
 {
 	t_mat4	inv_trans;
 	t_mat4	inv_rot;
@@ -49,6 +50,7 @@ void	set_transforms_curr(t_trace *trace, t_hyperboloid *curr_hy)
 	color(255, 255, 255));
 	curr_hy->texture = trace->textures;
 	curr_hy->rots = extract_rot(inv_rot);
+	add_child(trace->bvh, curr_hy, HYPERBOLOID, curr_hy->transform, curr_hy->i_transform, NULL);
 }
 
 void	set_hy_transforms(t_trace *trace)
@@ -60,7 +62,7 @@ void	set_hy_transforms(t_trace *trace)
 		curr_hy = trace->hyperboloids;
 		while (true)
 		{
-			set_transforms_curr(trace, curr_hy);
+			set_curr_hy(trace, curr_hy);
 			curr_hy = curr_hy->next;
 			if (curr_hy == trace->hyperboloids)
 				break ;
@@ -75,6 +77,7 @@ void	set_cu_transforms2(t_trace *trace, t_cube *curr_cu)
 	curr_cu->pattern = uv_checker(6, 6, color(30, 30, 30), \
 	color(255, 255, 255));
 	curr_cu->texture = trace->textures;
+	add_child(trace->bvh, curr_cu, CUBE, curr_cu->transform, curr_cu->i_transform, NULL);
 }
 
 void	set_cu_transforms(t_trace *trace)

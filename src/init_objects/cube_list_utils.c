@@ -16,6 +16,8 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->h_depth = get_double(&depth_str) / 2.0;
 	new->color = get_color(line[6], 1.0);
 	new->mat = get_mat(ENAMEL);
+//	new->mat = get_mat(DEFAULT);
+
 	new->shadow = true;
 	new->bump = false;
 	new->sine = false;
@@ -24,6 +26,8 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->texture = NULL;
 	new->emitter = false;
 	new->bump_level = DEFAULT_BUMP;
+	new->amp = new->bump_level / 1000;
+	new->fuzz_lev = new->bump_level / 1000;
 }
 
 t_cube	*create_cube(char **line)

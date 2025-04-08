@@ -1,0 +1,39 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.002,5.778,-2.946         0.000,-0.866,0.500                    70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           0.001,3.001,-3.001                                    0.750                   255,255,255
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
+sp          2.500,0.000,0.000                                     2.000                   220,155,43
+sp          -2.500,0.000,-1.000                                   2.000                   59,155,210
+sp          0.000,0.000,0.000                                     2.000                   220,155,43
+#sp          0.000,0.000,0.000                                     100.000                  61,155,237
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  0,225,255
+
+
+#Textures:  Image                      Height Map
+#tx          soft.png
+#tx          ice.png
+#tx          chaos_1.png
+#tx          sun.png
+#tx          neb.png
+#tx          chaos_2.png
+#tx          chaos_3.png
+#tx          carina.png
+#tx          aluminum.png               aluminum_height.png
+#tx          earth4k.png                earth_bump4k.png
+#tx          chaos_4.png
+#tx          pillars.png
+#tx          julia.png
+
+

@@ -85,13 +85,12 @@ static inline void	rotate_cam(t_trace *trace, t_mat4 rot, t_vec3 add)
 
 	f = vec(0.0, 0.0, 1.0, 0.0);
 	g_up = vec(0.0, 1.0, 0.0, 0.0);
-	trace->cam->transform = mat_mult(rot, trace->cam->transform);
-	trace->cam->transform_up = mat_mult(rot, trace->cam->transform_up);
+	trace->cam->transform = mat_mult(trace->cam->transform, rot);
+	trace->cam->transform_up = mat_mult(trace->cam->transform_up, rot);
 	trace->cam->orient = norm_vec(mat_vec_mult(trace->cam->transform, f));
 	trace->cam->true_up = \
 		norm_vec(mat_vec_mult(trace->cam->transform_up, g_up));
-	trace->cam->rottran = \
-			mat_mult(rot, trace->cam->rottran);
+	trace->cam->rottran = mat_mult(rot, trace->cam->rottran);
 	trace->cam->rots = set_rots(trace->cam->rots, add);
 	reinit_viewing(trace);
 }
@@ -212,6 +211,7 @@ void	rotate_object(t_trace *trace, t_on *on, t_mat4 rot, t_vec3 add, bool flag)
 		update(con, win, trace);
 		set_con_vals(con, win, trace);
 	}
+	rebuild_hierarchy(trace);
 }
 //one at a time version
 /* 	if (add.x)

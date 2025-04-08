@@ -17,6 +17,8 @@ t_intersects *intersects, t_depths depths)
 
 	if (comps.mat.ref && depths.refl > 0)
 	{
+		//other fuzzing method
+		//comps.reflectv = norm_vec(add_vec(reflect(comps.ray.dir, comps.normal), scale_vec(.08, random_unit_vec())));
 		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
 		depths.refl--;
 		ref_col = check_intersects(trace, ray(comps.reflectv, \
@@ -41,6 +43,7 @@ t_vec3 normal, t_vec3 *refr_dir)
 	cos_t = sqrt(1.0 - sin2_t);
 	*refr_dir = scale_vec(n_ratio * cos_i - cos_t, normal);
 	*refr_dir = norm_vec(subtract_vec(*refr_dir, scale_vec(n_ratio, eyev)));
+
 	return (true);
 }
 

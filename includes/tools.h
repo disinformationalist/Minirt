@@ -178,25 +178,33 @@ typedef struct s_box
 	t_point	max;
 }	t_box;
 
+typedef struct s_boxes
+{
+	t_box	*left;
+	t_box	*right;
+	//int		axis;//0 = x, 1 = y, 2 = z 
+}	t_boxes;
+
 //using ll for this
 
 typedef struct s_shape
 {
+	struct s_shape	*shapes;
 	t_type			type;
+	t_mat4			tran;
+	t_box			*box;
+
+	int				count;
+	int				depth;
+
 	void			*shape;
 	void			*parent;
-	t_mat4			transform;
+	t_mat4			i_tran;
 	struct s_shape	*next;
 	struct s_shape	*prev;
-
 }	t_shape;
 
-typedef struct s_group
-{
-	t_shape			*shapes;
-	t_type			type;
-	t_mat4			transform;
-}	t_group;
+typedef t_shape	t_group;
 
 // for möller-trumbore triangle intersect ft
 
@@ -287,6 +295,11 @@ t_ray			transform(t_ray r, t_mat4 m);
 void			ft_swap(double *a, double *b);
 double			randf(void);
 double			randf2(void);
+double			random_double(double min, double max);
+t_vec3			rand_vec(void);
+t_vec3			random_vec(double min, double max);
+t_vec3			random_unit_vec();
+
 
 //used for map
 
@@ -310,15 +323,22 @@ t_face			face_of_pnt(t_point pnt);
 /***GROUPS***/
 
 t_group			*group(void);
+t_group			*copy_group(t_group *in);
 void			free_group(t_group *group);
 int				add_child(t_group *group, void *obj, t_type type,
-					t_mat4 transform);
+					t_mat4 tran, t_mat4 i_tran, t_box *box_in);
 void			check_group(t_group *group, t_intersects *intersects,
 					t_ray ray);
 
 /***BVH***/
 
+void			build_hierarchy(t_group *top);
+void			print_hierarchy(t_group *top);
+void			check_hierarchy(t_group *top, t_intersects *intersects, t_ray ray);
+void			divide(t_group *group_in, int threshold);
+bool			ray_box_intersect(t_box *box, t_mat4 ctransform, t_ray ray);
 t_box			*box(t_point min, t_point max);
+t_boxes			*boxes(t_box *left, t_box *right);
 t_box			*empty_box(void);
 void			add_pnt(t_box *box, t_point to_add);
 t_box			*bounds_of(t_type type);
@@ -327,5 +347,6 @@ bool			contains_pnt(t_box box, t_point point);
 bool			contains_box(t_box b1, t_box b2);
 t_box			*transform_box(t_box *box, t_mat4 transf);
 t_box			*bops(t_shape *shape);
+t_box 			*bog(t_group *group);
 
 #endif

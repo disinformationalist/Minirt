@@ -74,9 +74,9 @@ void	print_guide(void)
 	ft_putstr_color_fd(1, "╠╣", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, " [SPACE]    => Supersample on/off(antialiasing)  ", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ [UP ⬆]     => Raise supersample level(max 10)   ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ [UP ⬆]     => Raise supersample level(max 13)   ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [Down ⬇]   => Lower supersample level(min 2)    ╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ samples = level² samples per pixel (max = 100)  ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ samples = level² samples per pixel (max = 169)  ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ starts initialized at 4 (16 samples per pixel)  ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [Left ⬅]   => Lower Low Res level(min 2)        ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [right ➡]  => Raise Low Res level(max 50)       ╠╣\n", BRIGHT_BLUE);
@@ -84,13 +84,13 @@ void	print_guide(void)
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [C]        => Caps on/off cylinder/hyperboloid  ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [X]        => Stash changes made in gui (they   ╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ will activate all at once upon closing the gui  ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ will activate all at once upon closing the gui) ╠╣\n", BRIGHT_BLUE);
+	ft_putstr_color_fd(1, "╠╣ [V]        => One half on/off hyperboloid       ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, " [NPAD 0]   => Low resolution mode on/off        ", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [NPAD DIV] => Radial sine wave on plane         ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ [NPAD X]   => Frost surface(with glass to frost)╠╣\n", BRIGHT_BLUE);
-	ft_putstr_color_fd(1, "╠╣ activate all at once upon closing gui)          ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣ ------- Below are also available in gui ------- ╠╣\n", BRIGHT_BLUE);
 	ft_putstr_color_fd(1, "╠╣                                                 ╠╣\n", BRIGHT_BLUE);

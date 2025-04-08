@@ -57,5 +57,6 @@ t_box	*transform_box(t_box *box, t_mat4 transf)
 	add_pnt(new, mat_vec_mult(transf, point));
 	point = box->max;
 	add_pnt(new, mat_vec_mult(transf, point));
+	free(box);
 	return (new);
 }

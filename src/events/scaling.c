@@ -116,4 +116,5 @@ void	scale_object(t_trace *trace, t_on *on, t_vec3 vec1, int keycode)
 		set_scaknobs(trace, *trace->obj_control);
 		set_con_vals(trace->mlx_connect, trace->mlx_win, trace);
 	}
+	rebuild_hierarchy(trace);
 }

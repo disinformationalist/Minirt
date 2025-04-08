@@ -53,7 +53,7 @@ t_intersects *intersects, t_ray r)
 	comps.over_pnt = add_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_sp_color(&comps, *sphere, obj_pnt);
 	if (sphere->w_frost)
-		comps.normal = frost(comps.normal);
+		comps.normal = frost(comps.normal, sphere->fuzz_lev);
 	return (comps);
 }
 

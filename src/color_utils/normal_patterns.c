@@ -21,15 +21,13 @@ t_vec3	sine_bump(t_vec3 obj_pnt, double rad, double freq, double amp)
 //only on planes, makes ripples
 
 void	sine_ring_norm(t_point obj_pnt, t_comps *comps, \
-t_mat4 t_tran, t_mat4 i_tran)
+t_mat4 t_tran, t_mat4 i_tran, double amp)
 {
 	t_vec3	bumpv;
 	t_vec3	bumpp;
-	double	amp;
 	double	freq;
 	double	rad;
 
-	amp = 0.025;
 	freq = 13;
 	rad = sqrt(obj_pnt.x * obj_pnt.x + obj_pnt.z * obj_pnt.z + 1e-6);
 	bumpv = sine_bump(obj_pnt, rad, freq, amp);
@@ -44,12 +42,10 @@ t_mat4 t_tran, t_mat4 i_tran)
 	comps->point = mat_vec_mult(i_tran, bumpp);
 }
 
-t_vec3	frost(t_vec3 norm)
+t_vec3	frost(t_vec3 norm, double strength)
 {
 	t_vec3	frost;
-	double	strength;
 
-	strength = .04;
 	frost = vec(strength * randf2(), \
 		strength * randf2(), strength * randf2(), 0);
 	norm = norm_vec(add_vec(norm, frost));

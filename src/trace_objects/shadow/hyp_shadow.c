@@ -12,17 +12,20 @@ static inline bool	check_cap(t_ray r, double t)
 	return (false);
 }
 
-static inline bool	intersect_caps(t_ray ray, double dist)
+static inline bool	intersect_caps(t_ray ray, double dist, bool flag)
 {
 	double	t;
 	bool	hit;
 
 	if (fabs(ray.dir.y) < 1e-6)
 		return (false);
-	t = (-1 - ray.origin.y) / ray.dir.y;
-	hit = check_cap(ray, t);
-	if (hit && t > 0 && t < dist)
-		return (true);
+	if (!flag)
+	{
+		t = (-1 - ray.origin.y) / ray.dir.y;
+		hit = check_cap(ray, t);
+		if (hit && t > 0 && t < dist)
+			return (true);
+	}
 	t = (1 - ray.origin.y) / ray.dir.y;
 	hit = check_cap(ray, t);
 	if (hit && t > 0 && t < dist)
@@ -30,20 +33,25 @@ static inline bool	intersect_caps(t_ray ray, double dist)
 	return (false);
 }
 
-static inline bool	within_height(t_ray r, double t)
+static inline bool	within_height(t_ray r, double t, bool flag)
 {
 	double	y;
+	double	lim;
 
 	if (t < 1e-6)
 		return (false);
+	if (flag)
+		lim = 0;
+	else
+		lim = -1;
 	y = r.origin.y + t * r.dir.y;
-	if (y > -1 && y < 1)
+	if (y > lim && y < 1)
 		return (true);
 	return (false);
 }
 
 static inline bool	check_trunk_solutions(t_vec3 abc, \
-t_ray ray, double dist)
+t_ray ray, double dist, bool flag)
 {
 	double	discrim;
 	double	inv_2a;
@@ -56,10 +64,10 @@ t_ray ray, double dist)
 	sq_discrim = sqrt(discrim);
 	inv_2a = 0.5 / abc.x;
 	t = (-abc.y - sq_discrim) * inv_2a;
-	if (within_height(ray, t) && t < dist)
+	if (within_height(ray, t, flag) && t < dist)
 		return (true);
 	t = (-abc.y + sq_discrim) * inv_2a;
-	if (within_height(ray, t) && t < dist)
+	if (within_height(ray, t, flag) && t < dist)
 		return (true);
 	return (false);
 }
@@ -74,18 +82,16 @@ static inline void	compute_abc(t_vec3 *abc, t_ray r, double waist)
 	abc->z = (r.origin.x * r.origin.x + r.origin.z * r.origin.z) * factor - r.origin.y * r.origin.y - waist;
 }
 
-static inline bool	ray_hyperboloid_intersect2(t_hyperboloid hyperboloid, \
-t_ray ray, double dist)
+static inline bool	ray_hyperboloid_intersect2(t_hyperboloid hype, \
+t_ray ray, double dist, bool flag)
 {
 	t_vec3	abc;
 
-	ray = transform(ray, hyperboloid.transform);
-	compute_abc(&abc, ray, hyperboloid.waist3);
-	if (fabs(abc.x) < 1e-6)
-		return (false);
-	if (check_trunk_solutions(abc, ray, dist))
+	ray = transform(ray, hype.transform);
+	compute_abc(&abc, ray, hype.waist3);
+	if (check_trunk_solutions(abc, ray, dist, flag))
 		return (true);
-	if (intersect_caps(ray, dist))
+	if (hype.caps && intersect_caps(ray, dist, flag))
 		return (true);
 	return (false);
 }
@@ -100,7 +106,7 @@ t_ray ray, double dist)
 	curr_hy = hyperboloids;
 	while (true)
 	{
-		if (curr_hy->shadow && ray_hyperboloid_intersect2(*curr_hy, ray, dist))
+		if (curr_hy->shadow && ray_hyperboloid_intersect2(*curr_hy, ray, dist, curr_hy->single))
 			return (true);
 		curr_hy = curr_hy->next;
 		if (curr_hy == hyperboloids)

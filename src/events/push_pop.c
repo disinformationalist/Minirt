@@ -40,13 +40,13 @@ void	push_new_object(t_trace *trace, t_on *on)
 	else
 		push_new2(trace, on);
 	next_list_ob(trace, trace->on);
+	rebuild_hierarchy(trace);
 }
 
 static inline void	push_new22(t_trace *trace, t_on *on)
 {
 	if (on->type == HYPERBOLOID)
 	{
-		printf("send it\n");
 		if (insert_hycopy_after(trace, &trace->curr_hy, 0))
 			close_win(trace);
 	}
@@ -83,6 +83,7 @@ void	push_new_object2(t_trace *trace, t_on *on)
 	else
 		push_new22(trace, on);
 	next_list_ob(trace, trace->on);
+	rebuild_hierarchy(trace);
 }
 
 void	pop_object(t_trace *trace, t_on *on)
@@ -101,4 +102,5 @@ void	pop_object(t_trace *trace, t_on *on)
 		pop_cu(trace, &trace->curr_cu);
 	else
 		return ;
+	rebuild_hierarchy(trace);
 }

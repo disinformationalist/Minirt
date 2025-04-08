@@ -78,7 +78,7 @@ t_intersects *intersects, t_ray r)
 	comps.under_pnt = subtract_vec(comps.point, scale_vec(1e-6, comps.normal));
 	comps.color = set_cyl_color(&comps, *cylinder, obj_pnt);
 	if (cylinder->w_frost)
-		comps.normal = frost(comps.normal);
+		comps.normal = frost(comps.normal, cylinder->fuzz_lev);
 	return (comps);
 }
 

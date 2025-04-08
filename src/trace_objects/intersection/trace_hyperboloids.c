@@ -57,7 +57,7 @@ static inline bool	check_cap(t_ray r, double t)
 	return (false);
 }
 
-static inline bool	intersect_caps(t_ray r, double *t3, double *t4)
+static inline bool	intersect_caps(t_ray r, double *t3, double *t4, bool flag)
 {
 	double	t;
 	bool	hit1;
@@ -67,12 +67,19 @@ static inline bool	intersect_caps(t_ray r, double *t3, double *t4)
 	*t4 = INFINITY;
 	if (fabs(r.dir.y) < 1e-6)
 		return (false);
-	t = (-1 - r.origin.y) / r.dir.y;
-	hit1 = check_cap(r, t);
+	
+	if (!flag)
+	{
+		t = (-1 - r.origin.y) / r.dir.y;
+		hit1 = check_cap(r, t);
+	}
+	else
+		hit1 = false;
 	if (hit1)
 		*t4 = t;
 	t = (1 - r.origin.y) / r.dir.y;
 	hit2 = check_cap(r, t);
+	
 	if (hit2)
 		*t3 = t;
 	if (hit1 || hit2)
@@ -80,20 +87,25 @@ static inline bool	intersect_caps(t_ray r, double *t3, double *t4)
 	return (false);
 }
 
-static inline bool	within_height(t_ray r, double t)
+static inline bool	within_height(t_ray r, double t, double flag)
 {
 	double	y;
+	double lim;
 
+	if (flag)
+		lim = 0;
+	else
+		lim = -1;
 	if (t < 1e-6)
 		return (false);
 	y = r.origin.y + t * r.dir.y;
-	if (y > -1 && y < 1)
+	if (y > lim && y < 1)
 		return (true);
 	return (false);
 }
 
-void	r_hype_intersect(t_hyperboloid *hype, \
-t_ray r, t_intersects *intersects)
+void	ray_hype_intersect(t_hyperboloid *hype, \
+t_ray r, t_intersects *intersects, bool flag)
 {
 	t_vec3	abc;
 	double	t1;
@@ -105,12 +117,12 @@ t_ray r, t_intersects *intersects)
 	compute_abc(&abc, r, hype->waist3);
 	if (check_trunk_solutions(abc, &t1, &t2))
 	{
-		if (within_height(r, t1))
+		if (within_height(r, t1, flag))
 			intersect(intersects, hype, t1, HYPERBOLOID);
-		if (within_height(r, t2))
+		if (within_height(r, t2, flag))
 			intersect(intersects, hype, t2, HYPERBOLOID);
 	}
-	if (hype->caps && intersect_caps(r, &t3, &t4))
+	if (hype->caps && intersect_caps(r, &t3, &t4, flag))
 	{
 		if (t3 < INFINITY)
 			intersect(intersects, hype, t3, HYPERBOLOID);
@@ -129,7 +141,7 @@ t_intersects *intersects, t_ray r)
 	curr_hy = hypes;
 	while (true)
 	{
-		r_hype_intersect(curr_hy, r, intersects);
+		ray_hype_intersect(curr_hy, r, intersects, curr_hy->single);
 		curr_hy = curr_hy->next;
 		if (curr_hy == hypes)
 			break ;

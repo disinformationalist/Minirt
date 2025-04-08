@@ -42,8 +42,10 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->prev = new;
 	new->option = 0;
 	new->w_frost = false;
+	new->is_box = false;
 	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
 	new->bump_level = DEFAULT_BUMP;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->rots = vec(0, 0, 0, 0);
 }
 
@@ -83,11 +85,12 @@ bool	insert_spcopy_after(t_trace *trace, t_sphere **current, bool flag)
 	return (false);
 }
 
-static inline void	set_empty_spheres(t_trace *trace)
+static inline void	set_empty_spheres(t_trace *trace, bool is_box)
 {
 	trace->spheres = NULL;
 	trace->curr_sp = NULL;
-	trace->on->object = trace->curr_sp;
+	if (!is_box)
+		trace->on->object = trace->curr_sp;
 	//trace->on->type = VOID;
 }
 
@@ -102,8 +105,10 @@ void	pop_sp(t_trace *trace, t_sphere **current)
 	if (!current || !*current)
 		return ;
 	to_destroy = *current;
+	if (to_destroy->is_box)
+		trace->sp_box = false;
 	if (to_destroy->next == to_destroy)
-		set_empty_spheres(trace);
+		set_empty_spheres(trace, to_destroy->is_box);
 	else
 	{
 		prev_sp = to_destroy->prev;

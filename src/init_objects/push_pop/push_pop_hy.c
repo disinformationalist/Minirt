@@ -42,6 +42,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->shadow = true;
 	new->bump = false;
 	new->w_frost = false;
+	new->single = false;
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
@@ -49,6 +50,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 	color(255, 255, 255));
 	new->bump_level = DEFAULT_BUMP;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->caps = true;
 	new->rots = vec(0, 0, 0, 0);
 }

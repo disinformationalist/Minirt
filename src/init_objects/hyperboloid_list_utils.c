@@ -20,10 +20,12 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	new->mat = get_mat(ENAMEL);
 	new->shadow = true;
 	new->bump = false;
+	new->single = false;
 	new->w_frost = false;
 	new->option = 0;
 	new->texture = NULL;
 	new->bump_level = DEFAULT_BUMP;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->caps = true;
 }
 

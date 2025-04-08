@@ -67,15 +67,13 @@ void	adjust_bumpp(t_vec3 *bumpp, t_face face, t_vec3 obj_pnt)
 }
 
 void	sine_ring_norm_cu(t_point obj_pnt, t_comps *comps, \
-t_mat4 t_tran, t_mat4 i_tran)
+t_mat4 t_tran, t_mat4 i_tran, double amp)
 {
 	t_vec3	bumpv;
 	t_vec3	bumpp;
-	double	amp;
 	double	freq;
 	double	rad;
 
-	amp = 0.025;
 	freq = 13;
 	set_dirs(&comps->dirs, comps->face, obj_pnt);
 	rad = sqrt(comps->dirs.x * comps->dirs.x + comps->dirs.y \

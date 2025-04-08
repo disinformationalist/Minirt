@@ -59,4 +59,5 @@ void	gui_scale_object(t_trace *trace, t_on * on, t_vec3 scale)
 		cu->t_transform = transpose(cu->transform);
 		cu->i_transform = inverse(cu->transform);
 	}
+	rebuild_hierarchy(trace);
 }

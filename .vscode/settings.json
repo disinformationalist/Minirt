@@ -4,6 +4,14 @@
 		"minirt.h": "c",
 		"cstdlib": "c",
 		"keyboard.h": "c",
-		"materials.h": "c"
+		"materials.h": "c",
+		"array": "c",
+		"compare": "c",
+		"functional": "c",
+		"ostream": "c",
+		"ranges": "c",
+		"tuple": "c",
+		"type_traits": "c",
+		"utility": "c"
 	}
 }

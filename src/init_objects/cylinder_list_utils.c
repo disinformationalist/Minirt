@@ -19,6 +19,7 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->w_frost = false;
 	new->texture = NULL;
 	new->bump_level = DEFAULT_BUMP;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->caps = true;
 }
 

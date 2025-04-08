@@ -49,12 +49,12 @@ t_box	*bounds_of(t_type type)
 	t_box	*new;
 
 	if (type == SPHERE || type == CUBE)
-		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
-	if (type == PLANE)
-		new = box(vec(-INFINITY, 0, -INFINITY, 0), \
+		new = box(vec(-1, -1, -1, 1), vec(1, 1, 1, 1));
+	else if (type == CYLINDER || type == HYPERBOLOID)
+		new = box(vec(-1, -1, -1, 1), vec(1, 1, 1, 1));
+	else if (type == PLANE)
+		new = box(vec(-INFINITY, 0, -INFINITY, 1), \
 		vec(INFINITY, 0, INFINITY, 0));
-	if (type == CYLINDER)
-		new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
 	else
 		return (NULL);
 	if (!new)

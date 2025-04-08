@@ -65,6 +65,18 @@ int	main(int ac, char **av)
 	char		***rt_file;
 	t_trace		trace;
 
+
+/* 	//box testing
+	t_box *new = box(vec(-1, -1, -1, 0), vec(1, 1, 1, 0));
+	t_mat4 mat = mat_mult(rot_x(-M_PI / 4), rot_y(-M_PI / 4));
+	t_box *b2 = transform_box(new, mat);
+	print_vec(b2->min);
+	print_vec(b2->max);
+	free(new);
+	free(b2);
+	return (0); */
+
+
 	if (ac != 2)
 		return (free_exit(NULL, \
 		"Error\n Usage: ./minirt_bonus [scene.rt]\n", NULL), 1);

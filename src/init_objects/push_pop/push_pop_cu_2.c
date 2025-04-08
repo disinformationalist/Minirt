@@ -36,6 +36,8 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->pattern = uv_checker(6, 6, color(30, 30, 30), \
 		color(255, 255, 255));
 	new->bump_level = DEFAULT_BUMP;
+	new->amp = new->bump_level / 1000;
+	new->fuzz_lev = new->bump_level / 1000;
 	new->rots = vec(0, 0, 0, 0);
 	make_links(start, new);
 }

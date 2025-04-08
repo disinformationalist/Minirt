@@ -91,12 +91,18 @@ void	find_closest_l(t_trace *trace, t_ray ray, t_intersects *intersects)
 	intersects->closest->object = NULL;
 	intersects->closest->object_type = VOID;
 	intersects->count = 0;
-	check_spheres(trace->spheres, intersects, ray);
+	/* check_spheres(trace->spheres, intersects, ray);
 	check_cylinders(trace->cylinders, intersects, ray);
 	check_hyperboloids(trace->hyperboloids, intersects, ray);
 	check_cubes(trace->cubes, intersects, ray);
+	check_planes(trace->planes, intersects, ray); */
+
+
+	check_hierarchy(trace->bvh, intersects, ray);
 	check_planes(trace->planes, intersects, ray);
 	check_arealts(trace->lights, intersects, ray);
+	if (trace->sp_box)
+		ray_sphere_intersect(trace->spheres, ray, intersects);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
 		i++;
 	if (i < intersects->count)
@@ -126,7 +132,22 @@ t_norm_color	check_intersects_l(t_trace *trace, t_ray r, \
 		return (color1(0, 0, 0));
 	find_closest_l(trace, r, intersects);
 	closest = intersects->closest;
-	if (closest->t != INFINITY && closest->object_type == SPHERE)
+
+	if (closest->t == INFINITY)
+		return (color1(0, 0, 0));
+	if (closest->object_type == SPHERE)
+		color_out = color_sphere(trace, r, intersects, depths);
+	else if (closest->object_type == PLANE)
+		color_out = color_plane(trace, r, intersects, depths);
+	else if (closest->object_type == CYLINDER)
+		color_out = color_cylinder(trace, r, intersects, depths);
+	else if (closest->object_type == HYPERBOLOID)
+		color_out = color_hyperboloid(trace, r, intersects, depths);
+	else if (closest->object_type == CUBE)
+		color_out = color_cube(trace, r, intersects, depths);
+	else
+		return (color1(0, 0, 0));
+/* 	if (closest->t != INFINITY && closest->object_type == SPHERE)
 		color_out = color_sphere(trace, r, intersects, depths);
 	else if (closest->t != INFINITY && closest->object_type == PLANE)
 		color_out = color_plane(trace, r, intersects, depths);
@@ -137,7 +158,7 @@ t_norm_color	check_intersects_l(t_trace *trace, t_ray r, \
 	else if (closest->t != INFINITY && closest->object_type == CUBE)
 		color_out = color_cube(trace, r, intersects, depths);
 	else
-		return (color1(0, 0, 0));
+		return (color1(0, 0, 0)); */
 	return (color_out);
 }
 

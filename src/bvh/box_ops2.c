@@ -1,19 +1,18 @@
 #include "minirt.h"
 
 /* bops: bounds of object in parent space. 
-TRANSFORM NEEDS TO BE THE REGULAR, NOT THE INVERSE AS IS CURRENTLY SET, 
-add these to prims in set transforms
-ret null on fail */
+i_transform is normal transform in this implement, 
+transform is technically inverse */
 
 t_box	*bops(t_shape *shape)
 {
-	return (transform_box(bounds_of(shape->type), shape->transform));
+	return (transform_box(bounds_of(shape->type), shape->i_tran));
 }
 
-/* in progress 
+/* 
 bounds of group by combining sub-boxes
-traverse the group recursively combining boxes
-must test , protect functions
+traverse the group recursively assigning and combining boxes */
+
 t_box *bog(t_group *group)
 {
 	t_shape	*curr;
@@ -31,17 +30,33 @@ t_box *bog(t_group *group)
 		if (curr->type == GROUP)
 			cbox = bog((t_group *)curr->shape);
 		else
+		{
 			cbox = bops(curr);
+		}
 		if (!cbox)
 			free(box);
 		if (cbox)
 		{
 			add_to(box, *cbox);
-			free(cbox);
+			if (curr->box)
+				free(curr->box);
+			curr->box = cbox;
 		}
 		curr = curr->next;
 		if (curr == group->shapes)
 			break;
 	}
 	return (box);
-} */
+}
+
+t_boxes	*boxes(t_box *left, t_box *right)
+{
+	t_boxes	*new;
+
+	new = (t_boxes *)malloc(sizeof(t_boxes));
+	if (!new)
+		return (NULL);
+	new->left = left;
+	new->right = right;
+	return (new);
+}

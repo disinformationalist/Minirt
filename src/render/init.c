@@ -25,7 +25,7 @@
 
 void	info_init(t_trace *trace)
 {
-	trace->width = 1080;
+	trace->width = 1660;
 	trace->height = (int)((double)trace->width / ASPECT);
 	//trace->height = 1080;
 	trace->color_i = 0;
@@ -53,6 +53,7 @@ void	info_init(t_trace *trace)
 	trace->depths.refr = 6;
 	trace->m_lowinc = 10;
 	trace->knob = -1;
+	trace->sp_box = false;
 	init_viewing(trace);
 }
 
@@ -65,7 +66,10 @@ static inline void	set_on(t_trace *trace, void *obj, t_type type)
 static void	events_init(t_trace *trace)
 {
 	if (trace->spheres)
+	{
 		set_on(trace, trace->spheres, SPHERE);
+		//trace->spheres->mat = get_mat(DEFAULT);
+	}
 	else if (trace->planes)
 		set_on(trace, trace->planes, PLANE);
 	else if (trace->cylinders)
@@ -94,7 +98,7 @@ void	init_transforms(t_trace *trace)
 	set_cy_transforms(trace);
 	set_hy_transforms(trace);
 	set_cu_transforms(trace);
-	
+	build_hierarchy(trace->bvh);
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
 	trace->obj_control = make_controls(trace->mlx_connect);
@@ -125,5 +129,8 @@ void	trace_init(t_trace *trace)
 	if (!trace->m_colors)
 		clear_all(trace);
 	events_init(trace);
+	trace->bvh = group();
+	if (!trace->bvh)
+		clear_all(trace);
 	init_transforms(trace);
 }

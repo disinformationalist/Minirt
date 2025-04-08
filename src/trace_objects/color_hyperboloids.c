@@ -49,7 +49,7 @@ t_hyperboloid hy, t_point obj_pnt)
 	else
 		out = hy.color;
 	if (hy.w_frost)
-		comps->normal = frost(comps->normal);
+		comps->normal = frost(comps->normal, hy.fuzz_lev);
 	return (out);
 }
 

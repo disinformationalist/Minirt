@@ -11,8 +11,7 @@ static inline void	translate_cam(t_trace *trace, t_vec3 vec1)
 	move = add_vec(move, scale_vec(vec1.y, trace->cam->true_up));
 	move = add_vec(move, scale_vec(vec1.z, trace->cam->orient));
 	trace->cam->center = add_vec(trace->cam->center, move);
-	trace->cam->rottran = mat_mult(trace->cam->rottran, \
-			translation(-vec1.x, -vec1.y, -vec1.z));
+	trace->cam->rottran = mat_mult(trace->cam->rottran, translation(-vec1.x, -vec1.y, -vec1.z));
 	reinit_viewing(trace);
 }
 
@@ -118,4 +117,5 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1, bool flag)
 		update_no_low(con, win, trace);
 		set_con_vals(con, win, trace);
 	}
+	rebuild_hierarchy(trace);
 }

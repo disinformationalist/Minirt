@@ -72,6 +72,7 @@ SRCS := ./src/main.c \
 ./src/trace_objects/intersection/trace_hyperboloids.c \
 ./src/trace_objects/intersection/trace_cubes.c \
 ./src/trace_objects/shadow/shadow_rays.c \
+./src/trace_objects/shadow/group_shadow.c \
 ./src/trace_objects/shadow/cyl_shadow.c \
 ./src/trace_objects/shadow/hyp_shadow.c \
 ./src/trace_objects/shadow/sp_shadow.c \
@@ -143,8 +144,11 @@ SRCS := ./src/main.c \
 ./src/png/get_png_name.c \
 ./src/bvh/groups.c \
 ./src/bvh/boxes.c \
+./src/bvh/hit_box.c \
 ./src/bvh/box_ops.c \
 ./src/bvh/box_ops2.c \
+./src/bvh/hierarchy.c \
+./src/bvh/divide.c \
 ./src/events/menu/set_menu_vals.c \
 ./src/events/menu/set_light_vals.c \
 ./src/events/menu/set_lt_widlen.c \

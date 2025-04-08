@@ -32,6 +32,7 @@ void	set_pl_transforms(t_trace *trace)
 			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), \
 			color(255, 255, 255));
 			curr_pl->texture = trace->textures;
+			//add_child(trace->group, curr_pl, PLANE, curr_pl->transform, curr_pl->i_transform, NULL);
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
 				break ;
@@ -69,6 +70,7 @@ void	set_cy_transforms(t_trace *trace)
 			curr_cy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 			color(255, 255, 255));
 			curr_cy->texture = trace->textures;
+			add_child(trace->bvh, curr_cy, CYLINDER, curr_cy->transform, curr_cy->i_transform, NULL);
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)
 				break ;
