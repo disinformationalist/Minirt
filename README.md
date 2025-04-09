@@ -2,7 +2,7 @@
 
 ![Earth](readme_imgs/earth.png)
 
-	Raytracing offers the opportunity to better understand and mimic real world light transport and interaction, 
+Raytracing offers the opportunity to better understand and mimic real world light transport and interaction, 
 enabling the user to create whatever they can imagine, as well as to perform enjoyable thought experiments. 
 And being able to do so quickly and satisfyingly is challenging even with modern computers. The ideas that can
 be implemented and tried are nearly bottomless. It's the perfect practice/play ground for a programmer.
