@@ -2,7 +2,7 @@
 
 ![Earth](readme_imgs/earth.png)
 
-Raytracing offers the opportunity to better understand and mimic real world light transport and interaction, 
+	Raytracing offers the opportunity to better understand and mimic real world light transport and interaction, 
 enabling the user to create whatever they can imagine, as well as to perform enjoyable thought experiments. 
 And being able to do so quickly and satisfyingly is challenging even with modern computers. The ideas that can
 be implemented and tried are nearly bottomless. It's the perfect practice/play ground for a programmer.
@@ -35,7 +35,7 @@ example:
 note: any additional .rt files must be placed in the rt_files sub directory.
 and any additional textures and height maps must be placed in the textures sub directory.
 <br>
-further information about the controls can be found below. [#Controls and Documentation](#controls-and-documentation)
+further information about the controls can be found below. [#Controls](#controls)
 
 ## Features
 - Phong shading model (Ambient + Diffuse + Specular)
@@ -80,7 +80,7 @@ and improved ability to maintain and optimize.
 
 The number of threads automatically sets to the number of cores on the machine being used. 
 Threads are set with individual structs containing copies of needed data and the limits unique to that thread, 
-based upon the current needs such as screen resolution, whether or not the gui is open, which mode is in 
+based upon the current needs such as screen resolution, whether or not the GUI is open, which mode is in 
 use(low res, normal, or super) eliminating the need for expensive mutexes. After joining, adjustments 
 such as rotations, scales, translations, texture assigments and all other parameter changes are made before 
 the rendering process begins again.
@@ -108,11 +108,14 @@ and is very effective. The hierarchy is rebuilt whenever an object is pushed, po
 And makes larger scenes like the sphereflake(4187 spheres), seen in some images below, possible in minutes at 
 100 samples per pixel and only 4 threads.
 
-## Controls and Documentation
+## Controls
 
 Click thumbs to view full size.
 
-The GUI opens into the top left corner panel as in the first image, the next three images show some of the other gui screens that can be accessed.
+The scene opens with the initial .rt file, and is modified using the GUI and/or keyhooks.
+F4 opens/closes the GUI, F2 opens the keyhook guide, and F5 the GUI guide.
+
+The GUI opens into the top left corner panel as in the first image, the next three images show some of the other GUI screens that can be accessed.
 
 
 <a href="readme_imgs/custom.png">
