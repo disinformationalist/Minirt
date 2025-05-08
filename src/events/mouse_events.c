@@ -261,6 +261,8 @@ t_vec3	get_init_scale(t_on *on, t_trace *trace)
 		t_cube *cube = trace->curr_cu;
 		temp = vec(cube->h_width, cube->h_height, cube->h_depth, 0);
 	}
+	else
+		temp = vec(1, 1, 1, 0);
 	return (temp);
 }
 

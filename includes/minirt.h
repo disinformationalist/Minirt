@@ -511,7 +511,7 @@ t_norm_color	color_cube(t_trace *trace, t_ray r, \
 
 //obj shadow
 bool			obscured_b(t_trace *trace, t_point lt_pos, t_comps comps);
-bool			check_pl_dist(t_plane *planes, t_ray ray, double dist);
+//bool			check_pl_dist(t_plane *planes, t_ray ray, double dist);
 bool			ray_cylinder_intersect2(t_cylinder cylinder, \
 				t_ray ray, double dist);
 bool			check_hy_dist(t_hyperboloid *hyperboloids, \

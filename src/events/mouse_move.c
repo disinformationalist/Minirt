@@ -745,6 +745,11 @@ int mouse_move(int x, int y, t_trace *trace)
 			delta_angle = get_delta_translate(480 - y, x - 300, &trace->start_zangle);
 			move = vec(0, 0, delta_angle * ratio, 0);
 		}
+		else
+		{
+			delta_angle = get_delta_translate(190 - y, x - 300, &trace->start_xangle);
+			move = vec(delta_angle * ratio, 0, 0, 0);
+		}
 		trace->low_res = true;
 		translate_object(trace, trace->on, move, 0);
 	}

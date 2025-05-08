@@ -76,7 +76,6 @@ SRCS := ./src/main.c \
 ./src/trace_objects/shadow/cyl_shadow.c \
 ./src/trace_objects/shadow/hyp_shadow.c \
 ./src/trace_objects/shadow/sp_shadow.c \
-./src/trace_objects/shadow/pl_shadow.c \
 ./src/trace_objects/color_spheres.c \
 ./src/trace_objects/color_cylinders.c \
 ./src/trace_objects/color_hyperboloids.c \
