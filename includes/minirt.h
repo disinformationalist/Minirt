@@ -5,7 +5,6 @@
 # include "keyboard.h"
 # include <sys/time.h>
 # include "extras.h"
-
 //# define ASPECT (16.0 / 9.0)
 # define ASPECT 1.7778
 # define DEFAULT_BUMP 30
@@ -701,6 +700,8 @@ void			reset_ptrack(t_img *img, t_control control, int move_x, int move_y);
 t_mat			get_obj_mat(t_on *on);
 void			set_pknobs1(t_img *img, t_control control, t_on *on);
 void			reset_prtrack(t_img *img, t_img *track, int move_x, int move_y);
+void			reset_track_new(t_trace *r, t_control *con, t_img *panel, t_img *knob, int x1, int y1, int x2, int y2, int shift);
+
 //pos
 int				position_press(int x, int y, t_trace *trace, t_control control);
 void			set_pos_dials(t_trace *trace);
@@ -723,11 +724,10 @@ void 			set_rotknobs(t_trace *trace, t_control control);
 int				scale_press(int x, int y, t_trace *trace, t_control control);
 void			set_sca_dials(t_trace *trace);
 void			reset_scatrack(t_img *img, t_control control, int move_y);
+
 void 			set_scaknobs(t_trace *trace, t_control control);
 void			set_sca(t_trace *trace);
-void			set_sca_vals(void *mlx_con, void *win, t_trace *trace);
-t_vec3			get_scale(t_on *on, t_trace *trace);
-t_vec3			get_init_scale(t_on *on, t_trace *trace);
+
 void			gui_scale_object(t_trace *trace, t_on * on, t_vec3 scale);
 void			set_waistknob(t_img *img, t_control control, t_on *on);
 //--

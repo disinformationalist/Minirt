@@ -144,12 +144,7 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	else
 		key_press_3(keycode, trace);
 	if (trace->menu_open)
-	{
-		void *con = trace->mlx_connect;
-		void *win = trace->mlx_win;
-		update_no_low(con, win, trace);
-		set_con_vals(con, win, trace);
-	}
+		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	else
 		render(trace);
 	return (0);
@@ -292,23 +287,6 @@ void	adjust_lowres(int keycode, t_trace *trace)
 	}
 }
 
-void	set_con_vals(void *con, void *win, t_trace *trace)
-{
-	if (trace->obj_control->rot_open)
-		set_rot_vals(con, win, trace);
-	if (!trace->obj_control->pos_open && !trace->obj_control->sca_open)
-		set_menu_vals(trace, trace->on);
-	else if (trace->obj_control->sca_open)
-	{
-		set_sca_vals(con, win, trace);
-		set_type(con, win, trace->on->type);
-	}
-	else
-	{
-		set_pos_vals(con, win, trace);
-		set_type(con, win, trace->on->type);
-	}
-}
 
 //translation, push, and pop functions
 
@@ -377,7 +355,6 @@ int	key_press_2(int keycode, t_trace *trace)
 		t_control cont = *trace->obj_control;
 		if (cont.pos_open)
 		{
-			
 			set_pos(trace);
 			reset_postracks(&trace->img, cont);
 			set_posknobs(trace, *trace->obj_control);
@@ -387,10 +364,8 @@ int	key_press_2(int keycode, t_trace *trace)
 			set_rotpos(trace);
 			reset_rottracks(&trace->img, cont);
 			set_rotknobs(trace, *trace->obj_control);
-		
 		}
 		update_no_low(con, win, trace);
-		set_con_vals(con, win, trace);
 		return (0);
 	}
 	else

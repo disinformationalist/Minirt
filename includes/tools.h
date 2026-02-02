@@ -287,6 +287,14 @@ typedef struct s_obj_counts
 	int				tri_count;
 }	t_obj_counts;
 
+typedef struct 
+{
+    int x;
+    int y;
+    int w;
+    int h;
+}	Rect;
+
 //some util functions
 
 t_norm_color	*set_color_wheel(int num_colors, double saturation, \

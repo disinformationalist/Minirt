@@ -108,13 +108,10 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1, bool flag)
 		translate_object2(trace, on, vec1);
 	if (trace->obj_control->pos_open && !flag)
 	{
-		t_control cont = *trace->obj_control;
-		void			*con = trace->mlx_connect;
-		void			*win = trace->mlx_win;
-		set_pos(trace);
-		reset_postracks(&trace->img, cont);
-		set_posknobs(trace, *trace->obj_control);
-		update_no_low(con, win, trace);
+		void	*con = trace->mlx_connect;
+		void	*win = trace->mlx_win;
+
+		update(con, win, trace);
 		set_con_vals(con, win, trace);
 	}
 	rebuild_hierarchy(trace);

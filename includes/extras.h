@@ -47,6 +47,44 @@ typedef struct s_tx
 	struct s_tx		*next;
 }	t_tx;
 
+typedef	struct s_knob
+{
+	t_img *img;
+
+	int		cx;
+	int		cy;
+	int		posx;
+	int		posy;
+
+	double	angle;
+
+	int 	w;
+	int 	h;
+
+} t_knob;
+
+typedef	struct s_knobs
+{
+	t_knob		posx;
+	t_knob		posy;
+	t_knob		posz;
+
+	t_knob		rotx;
+	t_knob		roty;
+	t_knob		rotz;
+
+	t_knob		scalex;
+	t_knob		scaley;
+	t_knob		scalez;
+
+	t_knob		scalexy;
+	t_knob		scalexz;
+	t_knob		scaleyz;
+
+	t_knob		scalexyz;
+}	t_knobs;
+
+
 typedef struct s_control
 {
 	t_img		*menu;
@@ -58,6 +96,8 @@ typedef struct s_control
 	t_img		*sil;
 	t_img		*ct;
 	t_img		*pt;
+
+	t_knobs		knobs;
 
 	t_img		*rot_dials;
 	t_img		*rot;
@@ -115,11 +155,6 @@ typedef struct s_control
 	t_position	rotsy;
 	t_position	rotsz;
 
-	t_vec3		poss;
-	t_position	posx;
-	t_position	posy;
-	t_position	posz;
-
 	t_vec3		sca1;
 	t_position	sca1x;
 	t_position	sca1y;
@@ -129,6 +164,7 @@ typedef struct s_control
 	t_position	sca2x;
 	t_position	sca2y;
 	t_position	sca2z;
+
 
 	t_vec3		scale;
 	t_position	scale_xyz;

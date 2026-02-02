@@ -18,7 +18,7 @@ void	set_lt_widlen(t_light *lt, double wid, double len)
 void	gui_scale_object(t_trace *trace, t_on * on, t_vec3 scale)
 {
 	t_type type = on->type;
-	(void)trace;
+	
 	if (type == SPHERE)
 	{
 		t_sphere *sp = (t_sphere *)on->object;

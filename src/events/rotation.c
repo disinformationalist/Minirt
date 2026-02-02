@@ -165,6 +165,20 @@ static inline void	rotate_object2(t_trace *trace, t_on *on, t_mat4 rot, t_vec3 a
 		rotate_object3(trace, on, rot, add);
 }
 
+void set_rot_tracks(t_trace *r, t_control *con, double rot, t_knob *knob)
+{
+	int oldx, oldy, newx, newy;
+	
+	knob->angle = rot;
+	oldx = knob->posx;
+	oldy = knob->posy;
+	newx = ft_round(60 * cos(rot)) + knob->cx;
+	newy = knob->cy - ft_round(60 * sin(rot));
+	knob->posx = newx;
+	knob->posy = newy;
+	reset_track_new(r, con, con->rot_dials, con->r, oldx, oldy, newx, newy, -con->dials_ys);
+}
+
 // rotates current "on" object
 
 void	rotate_object(t_trace *trace, t_on *on, t_mat4 rot, t_vec3 add, bool flag)
@@ -202,17 +216,21 @@ void	rotate_object(t_trace *trace, t_on *on, t_mat4 rot, t_vec3 add, bool flag)
 		rotate_object2(trace, on, rot, add);
 	if (trace->obj_control->rot_open && !flag)
 	{
-		t_control cont = *trace->obj_control;
 		void			*con = trace->mlx_connect;
 		void			*win = trace->mlx_win;
-		set_rotpos(trace);
-		reset_rottracks(&trace->img, cont);
-		set_rotknobs(trace, *trace->obj_control);
+		t_control		*cont;
+
+		cont = trace->obj_control;
+		t_vec3 rots = get_rot(trace->on, trace);
+		set_rot_tracks(trace, cont, rots.x, &(cont->knobs.rotx));
+		set_rot_tracks(trace, cont, rots.y, &(cont->knobs.roty));
+		set_rot_tracks(trace, cont, rots.z, &(cont->knobs.rotz));
 		update(con, win, trace);
 		set_con_vals(con, win, trace);
 	}
 	rebuild_hierarchy(trace);
 }
+
 //one at a time version
 /* 	if (add.x)
 		{

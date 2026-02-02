@@ -123,6 +123,7 @@ SRCS := ./src/main.c \
 ./src/events/supersample.c \
 ./src/events/extra_events.c \
 ./src/events/mouse_events.c \
+./src/events/scale_events.c \
 ./src/events/mouse_move.c \
 ./src/forge/forge_rt.c \
 ./src/forge/write_spheres.c \

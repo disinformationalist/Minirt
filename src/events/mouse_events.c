@@ -1,4 +1,6 @@
 #include "minirt.h"
+#include "scale.h"
+
 
 void	increment_option(t_trace *trace, int *option)
 {
@@ -126,12 +128,12 @@ void 	set_rotknobs(t_trace *trace, t_control control)
 	int				putzy;
 	unsigned int	color;
 
-	putxx = control.rotsx.i + 92;
-	putxy = -control.rotsx.j + 182;
-	putyx = control.rotsy.i + 92;
-	putyy = -control.rotsy.j + 327;
-	putzx = control.rotsz.i + 92;
-	putzy = -control.rotsz.j + 472;
+	putxx = control.knobs.rotx.posx;
+	putxy = control.knobs.rotx.posy;
+	putyx = control.knobs.roty.posx;
+	putyy = control.knobs.roty.posy;
+	putzx = control.knobs.rotz.posx;
+	putzy = control.knobs.rotz.posy;
 	j = -1;
 	while(++j < control.k_height)
 	{
@@ -191,26 +193,6 @@ t_mat4	get_transform(t_type type, t_trace *trace)
 	return (mat);
 }
 
-t_mat4	get_curr_scale(t_type type, t_trace *trace)
-{
-	t_mat4	mat;
-
-	if (!trace->on->object)
-		return (identity());
-	if (type == PLANE)
-		mat = trace->curr_pl->curr_scale;
-	else if (type == SPHERE)
-		mat = trace->curr_sp->curr_scale;
-	else if (type == CYLINDER)
-		mat = trace->curr_cy->curr_scale;
-	else if (type == HYPERBOLOID)
-		mat = trace->curr_hy->curr_scale;
-	else if (type == CUBE)
-		mat = trace->curr_cu->curr_scale;
-	else
-		mat = identity();
-	return (mat);
-}
 
 //gets current trans(pos) (x,y,z,0)
 
@@ -233,58 +215,14 @@ t_vec3	get_pos(t_on *on, t_trace *trace)
 	return (temp);
 }
 
-t_vec3	get_init_scale(t_on *on, t_trace *trace)
-{
-	t_vec3			temp;
-	t_type			type = on->type;
-	double			val;
-
-	if (type == PLANE || !trace->on->object)
-		temp = vec(1, 1, 1, 0);
-	else if (type == SPHERE)
-	{
-		val = trace->curr_sp->radius;
-		temp = vec(val, val, val, 0);
-	}
-	else if (type == CYLINDER)
-	{
-		val = trace->curr_cy->radius;
-		temp = vec(val, trace->curr_cy->height / 2, val, 0);
-	}
-	else if (type == HYPERBOLOID)
-	{
-		val = trace->curr_hy->rad;
-		temp = vec(val, trace->curr_hy->height / 2, val, 0);
-	}
-	else if (type == CUBE)
-	{
-		t_cube *cube = trace->curr_cu;
-		temp = vec(cube->h_width, cube->h_height, cube->h_depth, 0);
-	}
-	else
-		temp = vec(1, 1, 1, 0);
-	return (temp);
-}
-
-t_vec3	get_scale(t_on *on, t_trace *trace)
-{
-	t_mat4			scale;
-	t_vec3			temp;
-
-	scale = get_curr_scale(on->type, trace);
-	temp = vec(scale.mat[0], scale.mat[5], scale.mat[10], 0);
-	check_tolerance(&temp);
-	return (temp);
-}
-
 void	set_pos_vals(void *mlx_con, void *win, t_trace *trace)
 {
 	t_vec3			pos;
-	char			deg[10];
+	char			deg[20];
 	unsigned int	color;
 	
 	color = 0x90C4FF;
-	pos = trace->obj_control->poss;
+	pos = get_pos(trace->on, trace);
 	//x
 	sprintf(deg, "%.2f", pos.x);
 	mlx_string_put(mlx_con, win, 281, 195, color, deg);
@@ -308,19 +246,20 @@ void 	set_posknobs(t_trace *trace, t_control control)
 	int				putzy;
 	unsigned int	color;
 
-	putxx = control.posx.i + 292;
-	putxy = -control.posx.j + 182;
-	putyx = control.posy.i + 292;
-	putyy = -control.posy.j + 327;
-	putzx = control.posz.i + 292;
-	putzy = -control.posz.j + 472;
+	putxx = control.knobs.posx.posx;
+	putxy = control.knobs.posx.posy;
+	putyx = control.knobs.posy.posx;
+	putyy = control.knobs.posy.posy;
+	putzx = control.knobs.posz.posx;
+	putzy = control.knobs.posz.posy;
+	
 	j = -1;
 	while(++j < control.k_height)
 	{
 		i = -1;
 		while (++i < control.k_width)
 		{
-			color = pixel_color_get3(i, j, control.pos);
+			color = pixel_color_get3(i, j, control.knobs.posx.img);
 			if (color != 0xFF202020)
 			{
 				my_pixel_put(putxx + i, putxy + j, &trace->img, color);
@@ -335,18 +274,23 @@ void	set_pos(t_trace *trace)
 {
 	t_vec3		pos;
 	t_control	*con = trace->obj_control;
+	double		angle;
 
 	pos = get_pos(trace->on, trace);
-	con->poss = pos;
-	pos.x = fmod(pos.x, 10) * PI_FIFTHS; 
-	pos.y = fmod(pos.y, 10) * PI_FIFTHS;
-	pos.z = fmod(pos.z, 10) * PI_FIFTHS;
-	con->posx.i = ft_round(60 * cos(pos.x));
-	con->posx.j = ft_round(60 * sin(pos.x));
-	con->posy.i = ft_round(60 * cos(pos.y));
-	con->posy.j = ft_round(60 * sin(pos.y));
-	con->posz.i = ft_round(60 * cos(pos.z));
-	con->posz.j = ft_round(60 * sin(pos.z));
+	angle = fmod(pos.x, 10) * PI_FIFTHS; 
+	con->knobs.posx.angle = angle;
+	con->knobs.posx.posx = ft_round(60 * cos(angle)) + con->knobs.posx.cx;
+	con->knobs.posx.posy = con->knobs.posx.cy - ft_round(60 * sin(angle));
+	
+	angle = fmod(pos.y, 10) * PI_FIFTHS;
+	con->knobs.posy.angle = angle;
+	con->knobs.posy.posx = ft_round(60 * cos(angle)) + con->knobs.posy.cx;
+	con->knobs.posy.posy = con->knobs.posy.cy - ft_round(60 * sin(angle));
+
+	angle = fmod(pos.z, 10) * PI_FIFTHS;
+	con->knobs.posz.angle = angle;
+	con->knobs.posz.posx = ft_round(60 * cos(angle)) + con->knobs.posz.cx;
+	con->knobs.posz.posy = con->knobs.posz.cy - ft_round(60 * sin(angle));
 }
 
 void	set_pos_dials(t_trace *trace)
@@ -374,184 +318,6 @@ void	set_pos_dials(t_trace *trace)
 	set_posknobs(trace, *trace->obj_control);
 }
 
-void	set_sca_vals(void *mlx_con, void *win, t_trace *trace)
-{
-	t_vec3			pos;
-	char			val[10];
-	unsigned int	color;
-	int				shifty;
-	double			waist;
-
-	color = 0x90C4FF;
-	pos = trace->obj_control->sca1;
-	shifty = 225;
-	//y
-	sprintf(val, "%.2f", pos.y);
-	mlx_string_put(mlx_con, win, 86, shifty, color, val);
-	//x
-	sprintf(val, "%.2f", pos.x);
-	mlx_string_put(mlx_con, win, 191, shifty, color, val);
-	//z
-	sprintf(val, "%.2f", pos.z);
-	mlx_string_put(mlx_con, win, 296, shifty, color, val);
-	if (trace->on->type == HYPERBOLOID)
-	{
-		waist = ((t_hyperboloid *)(trace->on->object))->waist_val;
-		sprintf(val, "%.2f", waist);
-		mlx_string_put(mlx_con, win, 296, 539, color, val);
-	}
-}
-
-void 	set_scaknobs(t_trace *trace, t_control control)
-{
-	int				i;
-	int				j;
-	int				putxx;
-	int				putxy;
-	int				putyx;
-	int				putyy;
-	int				putzx;
-	int				putzy;
-	int				putxx2;
-	int				putxy2;
-	int				putyx2;
-	int				putyy2;
-	int				putzx2;
-	int				putzy2;
-	int				putxyzx;
-	int				putxyzy;
-	int				shift = 371;
-	int				xshift = 191;
-	unsigned int	color;
-
-	//c1
-	putxx = control.sca1x.i + xshift;
-	putxy = -control.sca1x.j + shift;
-	putyx = control.sca1y.i + xshift;
-	putyy = -control.sca1y.j + shift;
-	putzx = control.sca1z.i + xshift;
-	putzy = -control.sca1z.j + shift;
-	//c2
-	putxx2 = control.sca2x.i + xshift;
-	putxy2 = -control.sca2x.j + shift;
-	putyx2 = control.sca2y.i + xshift;
-	putyy2 = -control.sca2y.j + shift;
-	putzx2 = control.sca2z.i + xshift;
-	putzy2 = -control.sca2z.j + shift;
-	//c3
-	putxyzx = control.scale_xyz.i + xshift;
-	putxyzy = -control.scale_xyz.j + shift;
-
-	j = -1;
-	while(++j < control.k_height)
-	{
-		i = -1;
-		while (++i < control.k_width)
-		{
-			color = pixel_color_get3(i, j, control.sca);
-			if (color != 0xFF202020)
-			{
-				my_pixel_put(putxx + i, putxy + j, &trace->img, color);
-				my_pixel_put(putyx + i, putyy + j, &trace->img, color);
-				my_pixel_put(putzx + i, putzy + j, &trace->img, color);
-
-				my_pixel_put(putxyzx + i, putxyzy + j, &trace->img, color);
-			}
-			color = pixel_color_get3(i, j, control.sil);
-			if (color != 0xFF202020)
-			{
-				my_pixel_put(putxx2 + i, putxy2 + j, &trace->img, color);
-				my_pixel_put(putyx2 + i, putyy2 + j, &trace->img, color);
-				my_pixel_put(putzx2 + i, putzy2 + j, &trace->img, color);
-			}
-		}
-	}
-}
-
-void	set_sca(t_trace *trace)
-{
-	t_vec3		scale;
-	t_vec3		init_scale;
-	t_vec3		scale_2;
-	double		scale_3;
-	t_on		*on = trace->on;
-	t_control	*con = trace->obj_control;
-
-
-	scale = get_scale(on, trace);
-	init_scale = get_init_scale(on, trace);
-	scale.x = 1 / (scale.x);
-	scale.y = 1 / (scale.y);
-	scale.z = 1 / (scale.z);
-
-	trace->obj_control->sca1 = scale;
-
-	init_scale.x = 1 / (init_scale.x);
-	init_scale.y = 1 / (init_scale.y);
-	init_scale.z = 1 / (init_scale.z);
-	trace->obj_control->sca2 = init_scale;
- 
-	//remove init
-	scale = mult_vec(scale, init_scale);
-
-	//xz, yz, xy, leave amount common to pair
-	scale_2.x = fmin(scale.x, scale.z);
-	scale_2.y = fmin(scale.y, scale.z);
-	scale_2.z = fmin(scale.y, scale.x);
-	scale_3 = fmin(scale_2.x, scale.y);
-
-	//convert scale val to angle
-	//scale = individual
-	if (scale.x >= 1)
-		scale.x = (scale.x - 1) / 10.01 + PI_SIXTHS;
-	else
-		scale.x = PI_SIXTHS - (1 - scale.x) / 1.111;
-	if (scale.y >= 1)
-		scale.y = (scale.y - 1) / 10.01 + FIVE_PI_SIXTHS;
-	else
-		scale.y = FIVE_PI_SIXTHS - (1 - scale.y) / 1.111;
-	if (scale.z >= 1)
-		scale.z = (scale.z - 1) / 10.01 - PI_HALVES;
-	else
-		scale.z = -PI_HALVES - (1 - scale.z) / 1.111;
-	//scale_2 = pairs
-	if (scale_2.x >= 1)
-		scale_2.x = (scale_2.x - 1) / 10.01 - PI_SIXTHS;
-	else
-		scale_2.x = -PI_SIXTHS - (1 - scale_2.x) / 1.111;
-	if (scale_2.y >= 1)
-		scale_2.y = (scale_2.y - 1) / 10.01 - FIVE_PI_SIXTHS;
-	else
-		scale_2.y = - FIVE_PI_SIXTHS - (1 - scale_2.y) / 1.111;
-	if (scale_2.z >= 1)
-		scale_2.z = (scale_2.z - 1) / 10.01 + PI_HALVES;
-	else
-		scale_2.z = PI_HALVES - (1 - scale_2.z) / 1.111;
-	//scale_3 = all
-	if (scale_3 >= 1)
-		scale_3 = (scale_3 - 1) / 3.006 - PI_HALVES;
-	else
-		scale_3 = -PI_HALVES - (1 - scale_3) * 3;
-
-	//1st circle
-	con->sca1x.i = ft_round(60 * cos(scale.x));//rad*cos(angle)
-	con->sca1x.j = ft_round(60 * sin(scale.x));
-	con->sca1y.i = ft_round(60 * cos(scale.y));
-	con->sca1y.j = ft_round(60 * sin(scale.y));
-	con->sca1z.i = ft_round(60 * cos(scale.z));
-	con->sca1z.j = ft_round(60 * sin(scale.z));
-	//2nd
-	con->sca2x.i = ft_round(90 * cos(scale_2.x));
-	con->sca2x.j = ft_round(90 * sin(scale_2.x));
-	con->sca2y.i = ft_round(90 * cos(scale_2.y));
-	con->sca2y.j = ft_round(90 * sin(scale_2.y));
-	con->sca2z.i = ft_round(90 * cos(scale_2.z));
-	con->sca2z.j = ft_round(90 * sin(scale_2.z));
-	//3rd
-	con->scale_xyz.i = ft_round(120 * cos(scale_3));
-	con->scale_xyz.j = ft_round(120 * sin(scale_3));
-}
-
 void	img_copyto(t_img *to, t_img *from, int xs, int ys, int width, int height)
 {
 	int i, j;
@@ -562,36 +328,6 @@ void	img_copyto(t_img *to, t_img *from, int xs, int ys, int width, int height)
 		i = -1;
 		while (++i < width)
 			my_pixel_put(xs + i, ys + j, to, pixel_color_get3(i, j, from));
-	}
-}
-
-void	set_sca_dials(t_trace *trace)
-{
-	t_control		control;
-	int				i;
-	int				j;
-	int				l;
-	int				k;
-	int				lstart;
-
-	control = *trace->obj_control;
-	j = 139;
-	k = 0;
-	lstart = -1;
-	while (++j < control.m_height)
-	{
-		i = -1;
-		l = lstart;
-		while (++i < control.sd_width)
-			my_pixel_put(++l, j, &trace->img, pixel_color_get3(i, k, control.sca_dials));
-		k++;
-	}
-	set_sca(trace);
-	set_scaknobs(trace, *trace->obj_control);
-	if (trace->on && trace->on->type == HYPERBOLOID)
-	{
-		img_copyto(&trace->img, control.waist, 54, 522, control.w_width, control.w_height);
-		set_waistknob(&trace->img, control, trace->on);
 	}
 }
 
@@ -709,18 +445,22 @@ t_vec3	get_rot(t_on *on, t_trace *trace)
 void	set_rotpos(t_trace *trace)
 {
 	t_vec3		rot;
-	t_control	*con =  trace->obj_control;
-	/* set_rots(trace->on->type, trace, extract_rot(get_rottran(trace->on->type, trace)));
-	rot = get_rots(trace->on->type, trace); */
+	t_control	*con = trace->obj_control;
+	t_knobs		knobs = con->knobs;
+
 	rot = get_rot(trace->on, trace);
-	//rot = extract_rot(get_rottran(trace->on->type, trace));
-	con->rots = rot;
-	con->rotsx.i = ft_round(60 * cos(rot.x));
-	con->rotsx.j = ft_round(60 * sin(rot.x));
-	con->rotsy.i = ft_round(60 * cos(rot.y));
-	con->rotsy.j = ft_round(60 * sin(rot.y));
-	con->rotsz.i = ft_round(60 * cos(rot.z));
-	con->rotsz.j = ft_round(60 * sin(rot.z));
+	trace->obj_control->rots = rot;
+
+	con->knobs.rotx.angle = rot.x;
+	con->knobs.roty.angle = rot.y;
+	con->knobs.rotz.angle = rot.z;
+
+	con->knobs.rotx.posx = ft_round(60 * cos(rot.x)) + knobs.rotx.cx;
+	con->knobs.rotx.posy = knobs.rotx.cy - ft_round(60 * sin(rot.x));
+	con->knobs.roty.posx = ft_round(60 * cos(rot.y)) + knobs.roty.cx;
+	con->knobs.roty.posy = knobs.roty.cy - ft_round(60 * sin(rot.y));
+	con->knobs.rotz.posx = ft_round(60 * cos(rot.z)) + knobs.rotz.cx;
+	con->knobs.rotz.posy = knobs.rotz.cy - ft_round(60 * sin(rot.z));
 }
 
 void	set_rot_vals(void *mlx_con, void *win, t_trace *trace)
@@ -730,7 +470,7 @@ void	set_rot_vals(void *mlx_con, void *win, t_trace *trace)
 	unsigned int	color;
 	t_vec3			rot;
 
-	rot = trace->obj_control->rots;
+	rot = get_rot(trace->on, trace);
 	check_tolerance(&rot);
 
 	color = 0x90C4FF;
@@ -760,10 +500,10 @@ void	check_knobs(int x, int y, t_trace *trace)
 	t_norm_color	obj_col;
 	t_mat			mat;
 	t_on			*on = trace->on;
+	int 			s_val;
 
 	obj_col = get_obj_color2(on);
 	mat	= get_obj_mat(on);
-	int s_val;
 	if (mat.shine > 20)
 		s_val = mat.shine / 10;
 	else
@@ -832,7 +572,7 @@ void	prelim_buttons(int x, int y, t_trace *trace)
 {
 	t_type type = trace->on->type;
 
-	if((y > 41 && y <= 64) && (x >= 52 && x <= 140))
+	if ((y > 41 && y <= 64) && (x >= 52 && x <= 140))
 		buttons1(trace, trace->on, prev_list);
 	else if((y > 41 && y <= 64) && (x >= 257 && x <= 345))
 		buttons1(trace, trace->on, next_list);
@@ -880,7 +620,6 @@ void	open_dials(t_trace *trace, bool *open_dial, void (*set_dial)(t_trace *))
 {
 	*open_dial = true;
 	set_dial(trace);
-	mlx_put_image_to_window(trace->mlx_connect, trace->mlx_win, trace->img.img_ptr, 0, 0);
 }
 
 int lt_press(int x, int y, t_trace *trace)
@@ -988,9 +727,9 @@ int menu_press(int x, int y, t_trace *trace)
 	if (trace->on->object == NULL)
 		return (0);
 	else if ((y > 480 && y <= 504) && (x >= 38 && x <= 142))
-		open_dials(trace, &trace->obj_control->rot_open, set_rot_dials);
+		return (open_dials(trace, &trace->obj_control->rot_open, set_rot_dials), 0);
 	else if ((y > 480 && y <= 504) && (x >= 258 && x <= 362))
-		open_dials(trace, &trace->obj_control->pos_open, set_pos_dials);
+		return (open_dials(trace, &trace->obj_control->pos_open, set_pos_dials), 0);
 	if (trace->on->type == CAM)
 	{
 		if (in_circle(x, y, 111 + ((t_cam *)(trace->on->object))->fov, 82, 8))
@@ -1001,17 +740,19 @@ int menu_press(int x, int y, t_trace *trace)
 	{
 		toggle_shadow(trace, trace->on);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+		return (0);
 	}
 	else if ((x >= 172 && x <= 274) && (y > 420 && y <= 443)) 
 	{
 		toggle_bump(trace, trace->on);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+		return (0);
 	}
-	else if((y > 480 && y <= 504) && (x >= 148 && x <= 252))
-		open_dials(trace, &trace->obj_control->sca_open, set_sca_dials);
+	else if ((y > 480 && y <= 504) && (x >= 148 && x <= 252))
+		return (open_dials(trace, &trace->obj_control->sca_open, set_sca_dials), 0);
 	prev_next_pop_obj(x, y, trace);
 	if ((y > 180 && y <= 203) && (x >= 172 && x <= 274))
-		next_preset_material(trace);
+		return (next_preset_material(trace), 0);
 	else if ((y > 70 && y <= 93) && (x >= 21 && x <= 99))//color
 	{
 		set_option(trace, trace->on, 0);
@@ -1074,6 +815,24 @@ void	off_dials_click(t_trace *trace, t_control control, t_control *con)
 	{
 		trace->obj_control->sca_open = false;
 		set_windows(trace, &con->rot_open, &con->pos_open);
+	}
+}
+
+void	set_con_vals(void *con, void *win, t_trace *trace)
+{
+	if (trace->obj_control->rot_open)
+		set_rot_vals(con, win, trace);
+	if (!trace->obj_control->pos_open && !trace->obj_control->sca_open)
+		set_menu_vals(trace, trace->on);
+	else if (trace->obj_control->sca_open)
+	{
+		set_sca_vals(con, win, trace);
+		set_type(con, win, trace->on->type);
+	}
+	else
+	{
+		set_pos_vals(con, win, trace);
+		set_type(con, win, trace->on->type);
 	}
 }
 

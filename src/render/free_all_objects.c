@@ -115,8 +115,8 @@ void	free_control(void *con, t_control *controls)
 	if (controls->dtz)
 		destroy_img(controls->dtz, con);
 
-	if (controls->pos)
-		destroy_img(controls->pos, con);
+/* 	if (controls->pos)
+		destroy_img(controls->pos, con); */
 	if (controls->pos_dials)
 		destroy_img(controls->pos_dials, con);
 	if (controls->dtpx)

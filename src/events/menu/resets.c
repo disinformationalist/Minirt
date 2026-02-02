@@ -17,11 +17,11 @@ void	reset_con_non(t_trace *trace)
 		else
 		{
 			if (con.pos_open)
-				set_pos_dials(trace);
+				return (set_pos_dials(trace));
 			if (con.rot_open)
-				set_rot_dials(trace);
+				return (set_rot_dials(trace));
 		}
-		set_con_vals(trace->mlx_connect, trace->mlx_win, trace);
+		mlx_put_image_to_window(trace->mlx_connect, trace->mlx_win, trace->img.img_ptr, 0, 0);
 	}
 }
 
@@ -123,7 +123,6 @@ void	update_pos(t_trace *trace)
 		img = &trace->img;
 		reset_postracks(img, cont);
 		set_posknobs(trace, *trace->obj_control);
-		//set_con_vals(con, win, trace);
 	}
 	if (!trace->stash)
 	{

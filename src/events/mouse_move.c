@@ -1,4 +1,6 @@
 #include "minirt.h"
+#include "scale.h"
+
 
 char *get_obj_type(t_type type)
 {
@@ -660,6 +662,86 @@ void	set_fovknob(t_img *img, t_control control, t_on *on)
 	}
 }
 
+//new knob reset-----------------
+
+static inline Rect rect_union(Rect a, Rect b)
+{
+    int x1 = (a.x < b.x) ? a.x : b.x;
+    int y1 = (a.y < b.y) ? a.y : b.y;
+
+    int x2 = ((a.x + a.w) > (b.x + b.w)) ? (a.x + a.w) : (b.x + b.w);
+    int y2 = ((a.y + a.h) > (b.y + b.h)) ? (a.y + a.h) : (b.y + b.h);
+
+    Rect r;
+    r.x = x1;
+    r.y = y1;
+    r.w = x2 - x1;
+    r.h = y2 - y1;
+    return r;
+}
+
+void	draw_knob(t_trace *r, t_control *con, t_img *knob, int x, int y)
+{
+	int 			i, j;
+	unsigned int	color;
+	(void)con;
+	j = -1;
+	while (++j < 17)
+	{
+		i = -1;
+		while (++i < 17)
+		{
+			color = pixel_color_get3(i, j, knob);
+			if (color != 0xFF202020)//later if uint8_t trans = (color >> 24), if (trans == 255), else if (trans != 0) blend with lerp
+				my_pixel_put(x + i, y + j, &r->img, color);
+		}
+	}
+}
+
+// takes the smallest pos. union rect from knobs before and afer pos, then draws bottom image that size and draws knob on top.
+void	reset_track_new(t_trace *r, t_control *con, t_img *panel, t_img *knob, int x1, int y1, int x2, int y2, int shift)
+{
+	int i, j;
+	Rect a, b;
+
+	//start knob pos
+	a.x = x1;
+	a.y = y1;
+	a.w = 17;
+	a.h = 17;
+	//end knob pos
+	b.x = x2;
+	b.y = y2;
+	b.w = 17;
+	b.h = 17;
+	Rect Union = rect_union(a, b);
+	if (Union.h <= 0)
+	{
+		j = -1;
+		while (++j < 17)
+		{
+			i = -1;
+			while (++i < 17)
+			{
+				my_pixel_put(x1 + i , y1 + j,  &r->img, pixel_color_get3(x1 + i , y1 + j + shift, panel));
+				my_pixel_put(x2 + i , y2 + j,  &r->img, pixel_color_get3(x2 + i , y2 + j + shift, panel));		
+			}
+	
+		}
+	}
+
+
+	j = Union.y - 1;
+	while (++j < Union.y + Union.h)
+	{
+		i = Union.x - 1;
+		while (++i < Union.x + Union.w)
+			my_pixel_put(i , j,  &r->img, pixel_color_get3(i , j + shift, panel));
+	}
+	//redraw at new pos
+	draw_knob(r, con, knob, x2, y2);
+}
+
 // update the window with changes or just the menu, stash changes till close
 
 void	update(void *con, void *win, t_trace *trace) 
@@ -679,6 +761,24 @@ void	update_no_low(void *con, void *win, t_trace *trace)
 		render(trace);
 	else
 		mlx_put_image_to_window(con, win, trace->img.img_ptr, 0, 0);
+}
+
+//replaces minimum to reset using the union of knob pos rectangles(before + after locations)
+
+t_knob	update_dial_knob(t_trace *r, t_control *con, t_img *panel, t_knob knob, double angle, double rad, int shift)
+{
+	int oldx, oldy, newx, newy;
+
+	knob.angle = angle;
+	oldx = knob.posx;
+	oldy = knob.posy;
+	newx = ft_round(rad * cos(angle)) + knob.cx;
+	newy = knob.cy - ft_round(rad * sin(angle));
+	knob.posx = newx;
+	knob.posy = newy;
+
+	reset_track_new(r, con, panel, knob.img, oldx, oldy, newx, newy, shift);
+	return (knob);
 }
 
 int mouse_move(int x, int y, t_trace *trace)
@@ -704,26 +804,26 @@ int mouse_move(int x, int y, t_trace *trace)
 	{
 		if (knob == 11)
 		{
-			angle = atan2((190- y), x - 100);
-			delta_angle = angle - trace->start_xangle;
+			angle = atan2((190 - y), x - 100);
+			delta_angle = angle - control->knobs.rotx.angle;
+			control->knobs.rotx.angle = angle;
 			rotate_object(trace, trace->on, rot_x(delta_angle), vec(delta_angle, 0, 0, 0), 0);
-			trace->start_xangle = angle;
 		}
 		else if (knob == 12)
 		{
 			angle = atan2((335 - y), x - 100);
-			delta_angle = angle - trace->start_yangle;
+			delta_angle = angle - control->knobs.roty.angle;
+			control->knobs.roty.angle = angle;
 			rotate_object(trace, trace->on, rot_y(delta_angle), vec(0, delta_angle, 0, 0), 0);
-			trace->start_yangle = angle;
 		}
 		else if (knob == 13)
 		{
 			angle = atan2((480 - y), x - 100);
-			delta_angle = angle - trace->start_zangle;
-			//delta_angle = floor(delta_angle / DEG_TO_RAD) * DEG_TO_RAD;//magnetize to whole degrees, knob drag is bad with
+			delta_angle = angle - control->knobs.rotz.angle;
+			control->knobs.rotz.angle = angle;
 			rotate_object(trace, trace->on, rot_z(delta_angle), vec(0, 0, delta_angle, 0), 0);
-			trace->start_zangle = angle;
 		}
+		return (0);
 	}
 	else if (trace->dragging && cont.pos_open)//position dials
 	{
@@ -732,26 +832,27 @@ int mouse_move(int x, int y, t_trace *trace)
 		
 		if (knob == 14)
 		{
-			delta_angle = get_delta_translate(190 - y, x - 300, &trace->start_xangle);
+			delta_angle = get_delta_translate(190 - y, x - 300, &(trace->obj_control->knobs.posx.angle));
 			move = vec(delta_angle * ratio, 0, 0, 0);
+			trace->obj_control->knobs.posx = update_dial_knob(trace, con, cont.pos_dials, \
+			trace->obj_control->knobs.posx, control->knobs.posx.angle, 60, -(cont.dials_ys + 1));
 		}
 		else if (knob == 15)
 		{
-			delta_angle = get_delta_translate(335 - y, x - 300, &trace->start_yangle);
+			delta_angle = get_delta_translate(335 - y, x - 300, &(trace->obj_control->knobs.posy.angle));
 			move = vec(0, delta_angle * ratio, 0, 0);
+			trace->obj_control->knobs.posy = update_dial_knob(trace, con, cont.pos_dials, \
+			trace->obj_control->knobs.posy, control->knobs.posy.angle, 60, -(cont.dials_ys + 1));
 		}
 		else if (knob == 16)
 		{
-			delta_angle = get_delta_translate(480 - y, x - 300, &trace->start_zangle);
+			delta_angle = get_delta_translate(480 - y, x - 300, &(trace->obj_control->knobs.posz.angle));
 			move = vec(0, 0, delta_angle * ratio, 0);
+			trace->obj_control->knobs.posz = update_dial_knob(trace, con, cont.pos_dials, \
+			trace->obj_control->knobs.posz, control->knobs.posz.angle, 60, -(cont.dials_ys + 1));
 		}
-		else
-		{
-			delta_angle = get_delta_translate(190 - y, x - 300, &trace->start_xangle);
-			move = vec(delta_angle * ratio, 0, 0, 0);
-		}
-		trace->low_res = true;
 		translate_object(trace, trace->on, move, 0);
+		return (0);
 	}
 	else if (trace->dragging && trace->menu_open && trace->on->type == LIGHT)
 	{
@@ -771,6 +872,8 @@ int mouse_move(int x, int y, t_trace *trace)
 			if (knob == 0) set_rknob(&trace->img, *trace->obj_control, trace->on);
 			else if (knob == 1) set_gknob(&trace->img, *trace->obj_control, trace->on);
 			else if (knob == 2) set_bknob(&trace->img, *trace->obj_control, trace->on);
+//	reset_track_new(trace, con, panel, knob.img, oldx, oldy, newx, newy);
+
 		}
 		else if (knob == 17)
 		{
@@ -860,7 +963,7 @@ int mouse_move(int x, int y, t_trace *trace)
 		if (knob == 24)
 		{
 			new_val = handle_scale_knob(x, y, PI_SIXTHS, -0.3758, 1.423);
-			gui_scale_object(trace, trace->on, vec(new_val / control->sca2.x, control->sca1.y, control->sca1.z, 0));
+			gui_scale_object(trace, trace->on, vec(new_val * control->sca2.x, control->sca1.y, control->sca1.z, 0));
 		}
 		else if (knob == 25)
 		{
@@ -871,17 +974,18 @@ int mouse_move(int x, int y, t_trace *trace)
 				new_val = set_newval_big(angle, 3.5174, FIVE_PI_SIXTHS);
 			else
 				new_val = set_newval_small(angle, 1.7186, FIVE_PI_SIXTHS);
-			gui_scale_object(trace, trace->on, vec(control->sca1.x, new_val / control->sca2.y, control->sca1.z, 0));
+
+			gui_scale_object(trace, trace->on, vec(control->sca1.x, new_val * control->sca2.y, control->sca1.z, 0));
 		}
 		else if (knob == 26)
 		{
 			new_val = handle_scale_knob(x, y, -PI_HALVES,  -2.4702, -0.6714);
-			gui_scale_object(trace, trace->on, vec(control->sca1.x, control->sca1.y, new_val / control->sca2.z, 0));
+			gui_scale_object(trace, trace->on, vec(control->sca1.x, control->sca1.y, new_val * control->sca2.z, 0));
 		}
 		else if (knob == 27)
 		{
 			new_val = handle_scale_knob(x, y, -PI_SIXTHS, -1.423, 0.3758);
-			gui_scale_object(trace, trace->on, vec(new_val / control->sca2.x, control->sca1.y, new_val / control->sca2.z, 0));
+			gui_scale_object(trace, trace->on, vec(new_val * control->sca2.x, control->sca1.y, new_val * control->sca2.z, 0));
 		}
 		else if (knob == 28)
 		{
@@ -892,12 +996,12 @@ int mouse_move(int x, int y, t_trace *trace)
 				new_val = set_newval_big(angle, -1.7186, -FIVE_PI_SIXTHS);
 			else
 				new_val = set_newval_small(angle, -3.5174, -FIVE_PI_SIXTHS);
-			gui_scale_object(trace, trace->on, vec(control->sca1.x, new_val / control->sca2.y, new_val / control->sca2.z, 0));
+			gui_scale_object(trace, trace->on, vec(control->sca1.x, new_val * control->sca2.y, new_val * control->sca2.z, 0));
 		}
 		else if (knob == 29)
 		{
 			new_val = handle_scale_knob(x, y, PI_HALVES,  0.6714, 2.4702);
-			gui_scale_object(trace, trace->on, vec(new_val / control->sca2.x, new_val / control->sca2.y, control->sca1.z, 0));
+			gui_scale_object(trace, trace->on, vec(new_val * control->sca2.x, new_val * control->sca2.y, control->sca1.z, 0));
 		}
 		else if (knob == 30)
 		{
@@ -1030,7 +1134,6 @@ int mouse_move(int x, int y, t_trace *trace)
 			move = add_vec(scale_vec(delta_x * factor, trace->pix_delta_rht), 
 						scale_vec(delta_y * factor, trace->pix_delta_down));
 		}
-		trace->low_res = true;
 		trace->start_x = x;
 		trace->start_y = y;
 		translate_object(trace, trace->on, move, 0);

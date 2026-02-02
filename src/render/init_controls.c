@@ -30,6 +30,45 @@ void	null_init2(t_control *new)
 	new->fov = NULL;
 }
 
+t_knob		init_knob(t_img *png, int cx, int cy, int w, int h)
+{
+	t_knob	knob;
+	
+	knob.img = png;
+	knob.cx = cx;
+	knob.cy = cy;
+	knob.angle = 0;
+	knob.posx = cx + 60;
+	knob.posy = cy;
+	knob.w = w;
+	knob.h = h;
+	
+	return (knob);
+}
+
+
+
+void		init_knobs(t_control *new, t_knobs *knobs)
+{
+	knobs->posx = init_knob(new->b, 292, 182, 8, 8);
+	knobs->posy = init_knob(new->b, 292, 327, 8, 8);
+	knobs->posz = init_knob(new->b, 292, 472, 8, 8);
+	
+	knobs->rotx = init_knob(new->r, 92, 182, 8, 8);
+	knobs->roty = init_knob(new->r, 92, 327, 8, 8);
+	knobs->rotz = init_knob(new->r, 92, 472, 8, 8);
+
+	knobs->scalex = init_knob(new->g, 191, 371, 8, 8);
+	knobs->scaley = init_knob(new->g, 191, 371, 8, 8);
+	knobs->scalez = init_knob(new->g, 191, 371, 8, 8);
+
+	knobs->scalexy = init_knob(new->g, 191, 371, 8, 8);
+	knobs->scalexz = init_knob(new->g, 191, 371, 8, 8);
+	knobs->scaleyz = init_knob(new->g, 191, 371, 8, 8);
+
+	knobs->scalexyz = init_knob(new->g, 191, 371, 8, 8);
+}
+
 t_control	*make_controls(void *con)
 {
 	t_control	*new;
@@ -59,7 +98,7 @@ t_control	*make_controls(void *con)
 	if (!new->b)
 		return (NULL);
 	new->bron = import_png(con, \
-	"src/events/menu/images/bronze.png", &new->k_width, &new->k_height);
+	"src/events/menu/images/silver.png", &new->k_width, &new->k_height);
 	if (!new->bron)
 		return (NULL);
 	new->sil = import_png(con, \
@@ -77,7 +116,7 @@ t_control	*make_controls(void *con)
 
 	//rotation
 	new->rot = import_png(con, \
-	"src/events/menu/images/rotknob.png", &new->k_width, &new->k_height);
+	"src/events/menu/images/red.png", &new->k_width, &new->k_height);
 	if (!new->rot)
 		return (NULL);
 	new->dtx = import_png(con, \
@@ -97,11 +136,6 @@ t_control	*make_controls(void *con)
 	if (!new->pt)
 		return (NULL);
 
-	//position
-	new->pos = import_png(con, \
-	"src/events/menu/images/posknob.png", &new->k_width, &new->k_height);
-	if (!new->pos)
-		return (NULL);
 	new->dtpx = import_png(con, \
 	"src/events/menu/images/dtpx.png", &new->dt_width, &new->dt_height);
 	if (!new->dtpx)
@@ -120,7 +154,7 @@ t_control	*make_controls(void *con)
 		return (NULL);
 	//scale
 	new->sca = import_png(con, \
-	"src/events/menu/images/scaknob.png", &new->k_width, &new->k_height);
+	"src/events/menu/images/green.png", &new->k_width, &new->k_height);
 	if (!new->sca)
 		return (NULL);
 	new->sca_dials = import_png(con, \
@@ -150,6 +184,7 @@ t_control	*make_controls(void *con)
 	if (!new->flash)
 		return (NULL);
 	
-
+	init_knobs(new, &new->knobs);
+	
 	return (new);
 }
