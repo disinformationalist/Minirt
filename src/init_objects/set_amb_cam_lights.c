@@ -41,7 +41,17 @@ bool	set_cam(t_cam **cam, char **line)
 		return (1);
 	(*cam)->center = get_coordinates(line[1], 1.0);
 	(*cam)->orient = norm_vec(get_coordinates(line[2], 0.0));
-	(*cam)->fov = ft_atoi(line[3]);
+	if (line[4])
+	{
+		(*cam)->true_up = norm_vec(get_coordinates(line[3], 0.0));
+		(*cam)->has_true_up = true;
+		(*cam)->fov = ft_atoi(line[4]);
+	}
+	else
+	{
+		(*cam)->has_true_up = false;
+		(*cam)->fov = ft_atoi(line[3]);
+	}
 	return (0);
 }
 

@@ -1,0 +1,40 @@
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z                 FOV
+C           0.002,0.002,-6.002         0.000,0.000,1.000                     70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           7.819,0.435,-2.257                                    0.610                   255,255,255
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          1.463,1.153,-1.081         0.334,-0.924,-0.186        0.410                   255,255,255     15           53
+SL          16.324,0.916,-7.090        -1.000,-0.000,-0.002       0.520                   255,255,255     22           37
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
+sp          -2.354,1.338,1.240                                    2.000                   220,155,43
+sp          2.059,-0.604,0.000                                    2.000                   220,155,43
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
+pl          -1.868,-1.681,5.500        0.000,0.000,-1.000                                 112,127,142
+
+
+#Textures:  Image                      Height Map
+tx          sun.png
+tx          earth4k.png                earth_bump4k.png
+tx          moon_rgb.png
+tx          buddha_2.png
+tx          soft.png
+tx          ice.png
+tx          chaos_17.png
+tx          stone.png
+tx          neb.png
+tx          carina.png
+tx          aluminum.png               aluminum_height.png
+
+

@@ -38,30 +38,6 @@ int	rotation_press(int x, int y, t_trace *trace, t_control con)
 
 int	scale_press(int x, int y, t_trace *trace, t_control con)
 {
-/* 	int scale_ceny = 380;
-
-	if (in_circle(x, y, control.sca1x.i + 200, -control.sca1x.j + scale_ceny, 8))
-		set_dial_knob(trace, 24);
-	else if (in_circle(x, y, control.sca1y.i + 200, -control.sca1y.j + scale_ceny, 8))
-		set_dial_knob(trace, 25);
-	else if (in_circle(x, y, control.sca1z.i + 200, -control.sca1z.j + scale_ceny, 8))
-		set_dial_knob(trace, 26);
-	else if (in_circle(x, y, control.sca2x.i + 200, -control.sca2x.j + scale_ceny, 8))
-		set_dial_knob(trace, 27);
-	else if (in_circle(x, y, control.sca2y.i + 200, -control.sca2y.j + scale_ceny, 8))
-		set_dial_knob(trace, 28);
-	else if (in_circle(x, y, control.sca2z.i + 200, -control.sca2z.j + scale_ceny, 8))
-		set_dial_knob(trace, 29);
-	else if (in_circle(x, y, control.scale_xyz.i + 200, -control.scale_xyz.j + scale_ceny, 8))
-		set_dial_knob(trace, 30);
-	else if (trace->on->type == HYPERBOLOID)
-	{
-		if (in_circle(x, y, 149 + (((t_hyperboloid *)(trace->curr_hy))->waist_val + 1) * 50, 534, 8))
-		{
-			trace->start_x = x;
-			set_dial_knob(trace, 31);
-		}
-	} */
 
 	if (in_circle(x, y, con.knobs.scalex.posx + 9, con.knobs.scalex.posy + 9, 8))
 		set_dial_knob(trace, 24);
@@ -69,11 +45,11 @@ int	scale_press(int x, int y, t_trace *trace, t_control con)
 		set_dial_knob(trace, 25);
 	else if (in_circle(x, y, con.knobs.scalez.posx + 9, con.knobs.scalez.posy + 9, 8))
 		set_dial_knob(trace, 26);
-		else if (in_circle(x, y, con.knobs.scalexz.posx + 9, con.knobs.scalexz.posy + 9, 8))
+	else if (in_circle(x, y, con.knobs.scalexz.posx + 9, con.knobs.scalexz.posy + 9, 8))
 		set_dial_knob(trace, 27);
-		else if (in_circle(x, y, con.knobs.scaleyz.posx + 9, con.knobs.scaleyz.posy + 9, 8))
+	else if (in_circle(x, y, con.knobs.scaleyz.posx + 9, con.knobs.scaleyz.posy + 9, 8))
 		set_dial_knob(trace, 28);
-		else if (in_circle(x, y, con.knobs.scalexy.posx + 9, con.knobs.scalexy.posy + 9, 8))
+	else if (in_circle(x, y, con.knobs.scalexy.posx + 9, con.knobs.scalexy.posy + 9, 8))
 		set_dial_knob(trace, 29);
 	else if (in_circle(x, y, con.knobs.scalexyz.posx + 9, con.knobs.scalexyz.posy + 9, 8))
 		set_dial_knob(trace, 30);

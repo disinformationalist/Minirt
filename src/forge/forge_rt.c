@@ -42,23 +42,61 @@ as well and set in rt_file */
 
 void	write_cam(t_cam *cam, int fd)
 {
-	char	line[200];
+	char	line[300];
 	t_point	cen;
 	t_vec3	ori;
+	t_vec3	up;
 	int		sp;
 	int		sp2;
+	int		sp3;
 
 	cen = cam->center;
 	ori = cam->orient;
-	ft_putstr_fd("#Camera:    Cen_x | Cen_y | Cen_z      "\
-		"Ori_x | Ori_y | Ori_z                 FOV\n", fd);
+	up = cam->true_up;
+
+	ft_putstr_fd("#Camera:    Cen_x | Cen_y | Cen_z      "
+		"Ori_x | Ori_y | Ori_z      "
+		"Up_x | Up_y | Up_z         FOV\n", fd);
+
 	sp = 13 - count_chars(cen.x) - count_chars(cen.y) - count_chars(cen.z);
-	sp2 = 24 - count_chars(ori.x) - count_chars(ori.y) - count_chars(ori.z);
-	snprintf(line, sizeof(line), \
-		"C           %.3f,%.3f,%.3f%*s%.3f,%.3f,%.3f%*s%d", \
-		cen.x, cen.y, cen.z, sp, "", ori.x, ori.y, ori.z, sp2, "", cam->fov);
+	sp2 = 13 - count_chars(ori.x) - count_chars(ori.y) - count_chars(ori.z);
+	sp3 = 13 - count_chars(up.x) - count_chars(up.y) - count_chars(up.z);
+
+	snprintf(line, sizeof(line),
+		"C           %.3f,%.3f,%.3f%*s"
+		"%.3f,%.3f,%.3f%*s"
+		"%.3f,%.3f,%.3f%*s"
+		"%d",
+		cen.x, cen.y, cen.z, sp, "",
+		ori.x, ori.y, ori.z, sp2, "",
+		up.x, up.y, up.z, sp3, "",
+		cam->fov);
+
 	write(fd, line, ft_strlen(line));
 	write(fd, "\n\n\n", 3);
+}
+
+void	write_key(int fd)
+{
+
+ft_putstr_fd("#Material and option string usage key:\n\n\
+#A D S H R T I B Q P O F (C S) Xf\n\n\
+#A = ambient, 00–100 \n\
+#D = diffuse, 00–100 \n\
+#S = specular, 00–100 \n\
+#H = shine, 000–1000 \n\
+#R = reflective, 00–100 \n\
+#T = transparent, 00–100 \n\
+#I = refractive index, store (value - 1.0) * 100 → 000–400 \n\
+#B = bump level, 000–100 \n\
+#Q = object casts shadow, 0 or 1 \n\
+#P = bump enabled, 0 or 1 \n\
+#O = which option active(color, texture, checker)  0,1,2 \n\
+#F = frost 0 or 1 \n\n\
+#W = wave(planes only) \n\
+#C = caps for cylinder and hyperboloid \n\
+#S = single or double for the hyperboid/cone 0 0r 1 \n\n\
+#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime), \n\n\n", fd);
 }
 
 void	forge_rt(const char *path, t_trace *trace)
@@ -71,6 +109,7 @@ void	forge_rt(const char *path, t_trace *trace)
 		perror("Error creating file");
 		return ;
 	}
+	write_key(fd);
 	write_amb(trace->amb, fd);
 	write_cam(trace->cam, fd);
 	write_lights(trace->lights, fd);

@@ -29,6 +29,7 @@ void	check_al(char **line, char ***rt_file)
 	int		len;
 	char	*wid_str;
 	char	*len_str;
+	
 
 	len = ft_matrix_len(line);
 	bright_ratio = line[3];

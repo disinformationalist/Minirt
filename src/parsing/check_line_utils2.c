@@ -68,7 +68,7 @@ int	check_param_num(char **line, int num)
 	i = 0;
 	while (line[i] != NULL)
 		i++;
-	if (i != num)
+	if (i != num && i != num + 1)
 		return (1);
 	return (0);
 }

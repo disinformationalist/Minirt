@@ -15,6 +15,10 @@ pl          0.000,-1.000,0.000         0.000,1.000,0.000                        
 pl          0.000,1.500,5.500          0.000,0.000,-1.000                                 112,127,142
 
 #Textures:  Image                      Height Map
+tx			sun.png
+tx			earth4k.png                earth_bump4k.png
+tx			moon_rgb.png             
+
 tx			buddha_2.png
 tx			soft.png
 tx			ice.png	
@@ -24,13 +28,11 @@ tx			chaos_17.png
 tx			stone.png
 #tx         sky.png
 #tx			chaos_1.png
-tx			sun.png
 tx			neb.png
 #tx			chaos_2.png
 #tx			chaos_3.png
 tx			carina.png
 tx			aluminum.png               aluminum_height.png
-tx			earth4k.png                earth_bump4k.png
 #tx			chaos_4.png
 #tx			pillars.png
 #tx			julia.png	

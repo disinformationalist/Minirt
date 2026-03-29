@@ -1,21 +1,29 @@
 #include "minirt.h"
 
-void	set_pltrans(t_plane *curr_pl)
+static inline void	build_pl_transforms(t_plane *curr_pl)
 {
-	t_mat4	inv_trans;
-	t_mat4	inv_rot;
+	t_mat4		inv_trans;
+	t_mat4		inv_rot;
 
 	inv_trans = translation(-curr_pl->point.x, \
 	-curr_pl->point.y, -curr_pl->point.z);
 	inv_rot = rot_to(curr_pl->norm, vec(0, 1, 0, 0));
 	curr_pl->curr_scale = scaling(1.0, 1.0, 1.0);
 	curr_pl->curr_rottran = mat_mult(inv_rot, inv_trans);
+}
+
+void	set_pltrans(t_plane *curr_pl)
+{
+	if (curr_pl->params == 0)
+		build_pl_transforms(curr_pl);
+	curr_pl->init_scale = vec(1.0 / curr_pl->curr_scale.mat[0], 1.0 / curr_pl->curr_scale.mat[5], 1.0 / curr_pl->curr_scale.mat[10], 0);
 	curr_pl->transform = (mat_mult(curr_pl->curr_scale, \
 	curr_pl->curr_rottran));
 	curr_pl->t_transform = transpose(curr_pl->transform);
 	curr_pl->i_transform = inverse(curr_pl->transform);
-	curr_pl->rots = extract_rot(inv_rot);
+	curr_pl->rots = extract_rot(curr_pl->curr_rottran);
 }
+
 
 void	set_pl_transforms(t_trace *trace)
 {
@@ -31,7 +39,9 @@ void	set_pl_transforms(t_trace *trace)
 			vec(0, 1, 0, 0)));
 			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), \
 			color(255, 255, 255));
-			curr_pl->texture = trace->textures;
+			curr_pl->texture = get_tx(curr_pl->i_name, trace->textures);
+			if (curr_pl->i_name)
+				free(curr_pl->i_name);
 			//add_child(trace->group, curr_pl, PLANE, curr_pl->transform, curr_pl->i_transform, NULL);
 			curr_pl = curr_pl->next;
 			if (curr_pl == trace->planes)
@@ -40,10 +50,10 @@ void	set_pl_transforms(t_trace *trace)
 	}
 }
 
-void	set_cytrans(t_cylinder *curr_cy)
+static inline void	build_cy_transforms(t_cylinder *curr_cy)
 {
-	t_mat4	inv_trans;
-	t_mat4	inv_rot;
+	t_mat4		inv_trans;
+	t_mat4		inv_rot;
 
 	inv_trans = translation(-curr_cy->center.x, \
 	-curr_cy->center.y, -curr_cy->center.z);
@@ -51,10 +61,25 @@ void	set_cytrans(t_cylinder *curr_cy)
 	curr_cy->curr_scale = inv_scaling(curr_cy->radius, \
 	curr_cy->height / 2, curr_cy->radius);
 	curr_cy->curr_rottran = mat_mult(inv_rot, inv_trans);
+}
+
+void	set_cytrans(t_cylinder *curr_cy)
+{
+
+	if (curr_cy->params == 0)
+		build_cy_transforms(curr_cy);
+
+	curr_cy->init_scale = vec(1.0 / curr_cy->curr_scale.mat[0], 1.0 / curr_cy->curr_scale.mat[5], 1.0 / curr_cy->curr_scale.mat[10], 0);
+
+	/* 	printf("set rottran\n");
+			print_mat4(curr_cy->curr_rottran);
+			printf("set scale\n");
+			print_mat4(curr_cy->curr_scale); */
+
 	curr_cy->transform = mat_mult(curr_cy->curr_scale, curr_cy->curr_rottran);
 	curr_cy->t_transform = transpose(curr_cy->transform);
 	curr_cy->i_transform = inverse(curr_cy->transform);
-	curr_cy->rots = extract_rot(inv_rot);
+	curr_cy->rots = extract_rot(curr_cy->curr_rottran);
 }
 
 void	set_cy_transforms(t_trace *trace)
@@ -69,7 +94,11 @@ void	set_cy_transforms(t_trace *trace)
 			set_cytrans(curr_cy);
 			curr_cy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
 			color(255, 255, 255));
-			curr_cy->texture = trace->textures;
+			curr_cy->texture = get_tx(curr_cy->i_name, trace->textures);
+
+		
+			if (curr_cy->i_name)
+				free(curr_cy->i_name);
 			add_child(trace->bvh, curr_cy, CYLINDER, curr_cy->transform, curr_cy->i_transform, NULL);
 			curr_cy = curr_cy->next;
 			if (curr_cy == trace->cylinders)

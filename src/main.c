@@ -41,6 +41,7 @@ int	get_num_cores(void)
 
 bool	run_trace(t_trace *trace)
 {
+
 	trace->num_cols = 1;
 	trace->num_rows = get_num_cores();
 	trace->threads = (pthread_t *)malloc(trace->num_rows \
@@ -51,6 +52,7 @@ bool	run_trace(t_trace *trace)
 		printf("Error\n Thread Malloc failed\n");
 		return (1);
 	}
+
 	trace_init(trace);
 	render(trace);
 	mlx_loop(trace->mlx_connect);
@@ -72,14 +74,18 @@ int	main(int ac, char **av)
 	if (!file)
 		return (free_exit(NULL, "Error\n ft_strjoin malloc failed", NULL), 1);
 	rt_file = split_file(file);
+	//print_3d_array(rt_file);
+
 	free(file);
 	if (!rt_file)
 		return (1);
 	parse_rt(&trace, rt_file);
+
 	free_3d_array_i(rt_file, ft_3darray_len(rt_file));
 	ft_putstr_color_fd(1, "\n  ***************** PRESS [F2] FOR KEYHOOK GUIDE *****************\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, "   ******************* PRESS [F5] FOR GUI GUIDE *****************\n", BRIGHT_GREEN);
 	ft_putstr_color_fd(1, " **************** PRESS [F4] TO OPEN/CLOSE THE GUI ****************\n\n", BRIGHT_BLUE);
+	
 	if (run_trace(&trace))
 		return (1);
 	return (0);

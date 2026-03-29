@@ -25,10 +25,14 @@ void	check_hy2(char **line, char ***rt_file)
 
 void	check_hy(char **line, char ***rt_file)
 {
-	if (check_param_num(line, 7))
+/* 	int		len;
+	int		n = 8;	
+
+	len = ft_matrix_len(line);
+	if (len != n  && len != n - 1)
 		free_exit(rt_file, "Error\n Invalid hyperboloid parameters\n", \
 	"Hyperboloid must be in the format <type id> <x,y,z> <x,y,z>" \
-	"<rad> <waist> <height> <r,g,b>\n");
+	"<rad> <waist> <height> <r,g,b>\n"); */
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid hyperboloid coordinates\n", \
 	" Hyperboloid coordinates must be in the format x,y,z\n");
@@ -57,14 +61,17 @@ void	check_cu(char **line, char ***rt_file)
 {
 	char	*width_str;
 	char	*height_str;
-	char	*depth_str;	
+	char	*depth_str;
+	/* int		len;
+	int		n = 8; */
 
 	width_str = line[3];
 	height_str = line[4];
 	depth_str = line[5];
-	if (check_param_num(line, 7))
+	/* len = ft_matrix_len(line);
+	if (len != n  && len != n - 1)
 		free_exit(rt_file, "Error\n Invalid Cube parameters\n Cube ", \
-	"must be in the format <type id> <x,y,z> <x,y,z> <w> <h> <d> <r,g,b>\n");
+	"must be in the format <type id> <x,y,z> <x,y,z> <w> <h> <d> <r,g,b>\n"); */
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid cube coordinates\n", \
 	"Cube coordinates must be in the format x,y,z\n");

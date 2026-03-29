@@ -26,7 +26,8 @@
 void	info_init(t_trace *trace)
 {
 	trace->width = 1080;
-	trace->height = (int)((double)trace->width / ASPECT);
+	trace->aspect_r = 1;//1.7778;
+	trace->height = (int)((double)trace->width / trace->aspect_r);
 	//trace->height = 1080;
 	trace->color_i = 0;
 	trace->num_colors = 384;
@@ -93,14 +94,16 @@ static void	events_init(t_trace *trace)
 
 void	init_transforms(t_trace *trace)
 {
+	if (import_textures(trace->mlx_connect, trace->textures))
+		clear_all(trace);
+	
+
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);
 	set_hy_transforms(trace);
 	set_cu_transforms(trace);
 	build_hierarchy(trace->bvh);
-	if (import_textures(trace->mlx_connect, trace->textures))
-		clear_all(trace);
 	trace->obj_control = make_controls(trace->mlx_connect);
 	if (!trace->obj_control)
 		clear_all(trace);

@@ -1020,7 +1020,7 @@ int mouse_move(int x, int y, t_trace *trace)
 				angle = -PI_HALVES - angle;
 				new_val = 1 - (angle * 0.334);
 			}
-			gui_scale_object(trace, trace->on, vec(new_val / control->sca2.x, new_val / control->sca2.y, new_val / control->sca2.z, 0));
+			gui_scale_object(trace, trace->on, vec(new_val * control->sca2.x, new_val * control->sca2.y, new_val * control->sca2.z, 0));
 		}
 		else if (knob == 31)
 		{

@@ -20,7 +20,7 @@ void	check_str_len(char **line, char ***rt_file)
 	i = -1;
 	while (line[++i])
 	{
-		if (ft_strlen(line[i]) > 30)
+		if (ft_strlen(line[i]) > 60)
 			free_exit(rt_file, "Error\n Parameter string too long\n", NULL);
 	}
 }

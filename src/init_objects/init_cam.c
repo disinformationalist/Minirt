@@ -29,7 +29,13 @@ static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, \
 	t_vec3	vertical_move;
 	t_vec3	right;
 
-	if (!veccmp(trace->cam->orient, vec(0, 1, 0, 0)))
+	if (trace->cam->has_true_up)
+	{
+		trace->cam->true_up = norm_vec(trace->cam->true_up);
+		right = norm_vec(cross_prod(trace->cam->true_up, trace->cam->orient));
+		trace->cam->true_up = norm_vec(cross_prod(trace->cam->orient, right));
+	}
+	else if (!veccmp(trace->cam->orient, vec(0, 1, 0, 0)))
 	{
 		right = vec(1, 0, 0, 0);
 		trace->cam->true_up = vec(0, 0, -1, 0);
@@ -44,6 +50,8 @@ static inline void	set_view_topleft(t_trace *trace, t_vec3 view_center, \
 		right = norm_vec(cross_prod(vec(0, 1, 0, 0), trace->cam->orient));
 		trace->cam->true_up = norm_vec(cross_prod(trace->cam->orient, right));
 	}
+
+
 	horizontal_move = scale_vec(view_width / 2.0, right);
 	vertical_move = scale_vec(view_height / 2.0, trace->cam->true_up);
 	view_topleft = add_vec(view_center, vertical_move);
@@ -65,7 +73,7 @@ void	init_viewing(t_trace *trace)
 	view_center = add_vec(cam_cen, \
 		scale_vec(1.0 / focal_len, trace->cam->orient));
 	view_width = 2.0 * tan((double)(trace->cam->fov / 2.0) * DEG_TO_RAD);
-	view_height = view_width / ASPECT;
+	view_height = view_width / trace->aspect_r;
 	trace->pixel_width = view_width / (double)trace->width;
 	trace->pixel_height = view_height / (double)trace->height;
 	set_view_topleft(trace, view_center, view_width, view_height);
@@ -85,8 +93,10 @@ static inline void	reset_topleft(t_trace *trace, t_vec3 view_center, \
 	t_vec3	right;
 	t_vec3	true_up;
 
-	true_up = trace->cam->true_up;
+	true_up = norm_vec(trace->cam->true_up);
 	right = norm_vec(cross_prod(true_up, trace->cam->orient));
+	true_up = norm_vec(cross_prod(trace->cam->orient, right));
+	trace->cam->true_up = true_up;
 	horizontal_move = scale_vec(view_width / 2.0, right);
 	vertical_move = scale_vec(view_height / 2.0, true_up);
 	view_topleft = add_vec(view_center, vertical_move);
@@ -108,7 +118,7 @@ void	reinit_viewing(t_trace *trace)
 	view_center = add_vec(trace->cam->center, \
 		scale_vec(1.0 / focal_len, trace->cam->orient));
 	view_width = 2.0 * tan((double)(trace->cam->fov / 2.0) * DEG_TO_RAD);
-	view_height = view_width / ASPECT;
+	view_height = view_width / trace->aspect_r;
 	trace->pixel_width = view_width / (double)trace->width;
 	trace->pixel_height = view_height / (double)trace->height;
 	reset_topleft(trace, view_center, view_width, view_height);

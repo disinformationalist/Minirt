@@ -16,11 +16,14 @@ void	forge_or_export(int keycode, t_trace *trace)
 	if (keycode == F1)
 	{
 		forge_rt(name, trace);
-		ft_putstr_color_fd(1, "RT FILE READY\n", BOLD_BRIGHT_BLUE);
+		ft_putstr_color_fd(1, "RT FILE ", BOLD_BRIGHT_BLUE);
+		ft_putstr_color_fd(1, name + 9, BOLD_BRIGHT_GREEN);
+		ft_putstr_color_fd(1, " READY\n", BOLD_BRIGHT_BLUE);
+
 	}
 	else if (keycode == F3)
 	{
-		if (export_png(name, &trace->img, trace->width, trace->height) == -1)
+		if (export_png(name, &trace->img, trace->width, trace->height, NULL, RGBA) == -1)
 		{
 			free(name);
 			close_win(trace);

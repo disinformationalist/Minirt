@@ -22,12 +22,15 @@ typedef struct s_sphere
 {
 	t_type			type;
 	int				id;
+	int				params;
+	char*			i_name;
 	bool			shadow;
 	bool			bump;
 	double			bump_level;
 	double			fuzz_lev;
 	t_point			center;
 	double			radius;
+	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
 	t_mat4			transform;
@@ -36,6 +39,7 @@ typedef struct s_sphere
 	t_mat4			curr_scale;
 	t_mat4			curr_rottran;
 	t_vec3			rots;
+	t_vec3			init_scale;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -49,8 +53,10 @@ typedef struct s_plane
 {
 	t_type			type;
 	int				id;
+	int				params;
 	bool			shadow;
 	bool			bump;
+	char*			i_name;
 	double			bump_level;
 	double			fuzz_lev;
 	t_point			point;
@@ -63,6 +69,7 @@ typedef struct s_plane
 	t_mat4			curr_scale;
 	t_mat4			curr_rottran;
 	t_vec3			rots;
+	t_vec3			init_scale;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -77,6 +84,9 @@ typedef struct s_cylinder
 {
 	t_type				type;
 	int					id;
+	int					params;
+	char*				i_name;
+
 	bool				caps;
 	bool				shadow;
 	bool				bump;
@@ -94,6 +104,7 @@ typedef struct s_cylinder
 	t_mat4				curr_scale;
 	t_mat4				curr_rottran;
 	t_vec3				rots;
+	t_vec3				init_scale;
 	t_tx				*texture;
 	int					option;
 	t_pattern			pattern;
@@ -106,6 +117,9 @@ typedef struct s_hyperboloid
 {
 	t_type					type;
 	int						id;
+	int						params;
+	char*					i_name;
+
 	bool					caps;
 	bool					shadow;
 	bool					bump;
@@ -126,6 +140,7 @@ typedef struct s_hyperboloid
 	t_mat4					curr_scale;
 	t_mat4					curr_rottran;
 	t_vec3					rots;
+	t_vec3					init_scale;
 	t_tx					*texture;
 	t_pattern				pattern;
 	bool					w_frost;
@@ -139,6 +154,9 @@ typedef struct s_cube
 {
 	t_type			type;
 	int				id;
+	int				params;
+	char*			i_name;
+
 	bool			shadow;
 	bool			bump;
 	double			bump_level;
@@ -156,6 +174,7 @@ typedef struct s_cube
 	t_mat4			curr_scale;
 	t_mat4			curr_rottran;
 	t_vec3			rots;
+	t_vec3			init_scale;
 	t_tx			*texture;
 	t_pattern		pattern;
 	int				option;
@@ -171,6 +190,9 @@ typedef struct s_cube
 typedef struct s_tri
 {
 	int				id;
+	int				params;
+	char*			i_name;
+
 	bool			shadow;
 	t_point			p1;
 	t_point			p2;
@@ -180,6 +202,7 @@ typedef struct s_tri
 	t_vec3			norm;
 	t_norm_color	color;
 	t_mat			mat;
+	t_vec3			init_scale;
 	struct s_tri	*prev;
 	struct s_tri	*next;
 }	t_tri;
@@ -193,6 +216,7 @@ typedef struct s_light
 	t_norm_color		color;
 	t_ltype				type;
 	int					id;
+	int					params;
 	t_vec3				dir;
 	int					photons;
 	double				inner_cone;
@@ -282,11 +306,13 @@ typedef struct s_trace
 	double			start_zangle;
 	double			m_raydist;
 
+	double			aspect_r;
+
+	t_control		*obj_control;
 	bool			low_flag;
 	int				m_lowinc;
 	bool			menu_open;
 	bool			stash;
-	t_control		*obj_control;
 	bool			on_menu;
 	int				knob;
 
@@ -588,6 +614,7 @@ t_norm_color	color(double r, double g, double b);
 
 //texture utils
 
+t_tx			*get_tx(char *i_name, t_tx *textures);
 t_norm_color	texture_plane_at(t_point obj_pnt, t_plane plane, \
 				t_comps *comps);
 t_norm_color	texture_sp_at(t_point obj_pnt, t_sphere sphere, t_comps *comps);
@@ -776,6 +803,11 @@ void			write_cubes(t_cube *cubes, int fd);
 void			write_textures(t_tx *textures, int fd);
 int				count_chars(double n);
 void			check_tolerance(t_vec3 *vec);
+
+uint32_t		read_bits(const uint8_t *buf, int *bit_pos, int bits);
+int				decode_base64_no_pad_40(const char *in, uint8_t out[40]);
+void			base64_no_pad_40(const uint8_t in[40], char out[55]);
+void			write_bits(uint8_t *buf, int *bit_pos, uint32_t value, int bits);
 
 
 /***TESTING***/

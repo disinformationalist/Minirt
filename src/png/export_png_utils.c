@@ -8,9 +8,39 @@ int	error_1(t_png_io *png_img, const char *msg)
 	return (-1);
 }
 
-void	init_vars(t_png_io *png_img)
+static inline int pixel_size(t_png_io *png_img, t_pixel_format fmt)
 {
-	png_img->pixel_size = 4;
+    switch (fmt)
+    {
+		//palette type currently not supported
+        case PALETTE:
+            png_img->color_type = PNG_COLOR_TYPE_PALETTE;
+            return -1;
+
+        case GRAY:
+            png_img->color_type = PNG_COLOR_TYPE_GRAY;
+            return 1;
+
+        case GRAY_A:
+            png_img->color_type = PNG_COLOR_TYPE_GRAY_ALPHA;
+            return 2;
+
+        case RGB:
+            png_img->color_type = PNG_COLOR_TYPE_RGB;
+            return 3;
+
+        case RGBA:
+            png_img->color_type = PNG_COLOR_TYPE_RGBA;
+            return 4;
+
+        default:
+            return -1; // invalid / forbidden combination / unsupported
+    }
+}
+
+void	init_vars(t_png_io *png_img, t_pixel_format fmt)
+{	
+	png_img->pixel_size = pixel_size(png_img, fmt);
 	png_img->depth = 8;
 	png_img->png_ptr = NULL;
 	png_img->info = NULL;
@@ -33,12 +63,10 @@ void	clean_memory(t_png_io *png_img, int j, bool export)
 	if (export)
 		png_destroy_write_struct(&png_img->png_ptr, &png_img->info);
 	else
-		png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
+    	png_destroy_read_struct(&png_img->png_ptr, &png_img->info, NULL);
 	fclose(png_img->fp);
 	free(png_img);
 }
-
-// for using the alpha channel , row 4...*row++ = png_img->temp_pixel.alpha;
 
 void	get_pixel(t_pixel *pix_t, t_img *img, int x, int y)
 {
@@ -47,7 +75,7 @@ void	get_pixel(t_pixel *pix_t, t_img *img, int x, int y)
 
 	offset = y * img->line_len + (x * (img->bpp / 8));
 	pixel = *(unsigned int *)(img->pixels_ptr + offset);
-	pix_t->alpha = (pixel >> 24) & 0xFF;
+	pix_t->alpha = pixel >> 24;
 	pix_t->red = (pixel >> 16) & 0xFF;
 	pix_t->green = (pixel >> 8) & 0xFF;
 	pix_t->blue = (pixel & 0xFF);

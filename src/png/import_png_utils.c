@@ -1,5 +1,6 @@
 #include "minirt.h"
 
+
 /* //not using handle types broken somehow, may revisit.
 if using then only need to set img pix rgba
 void	handle_types(t_png_io *png_img)

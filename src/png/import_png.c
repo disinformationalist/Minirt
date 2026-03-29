@@ -89,7 +89,7 @@ void	set_pixels(t_png_io *png_img, t_img *image, int width, int height)
 addresses of the width and height variables. It returns a pointer to a 
 malloced t_img struct (defined in image_processing.h), automatically 
 setting values of width and height variables declared in the using 
-program and passed by pointer into import_png() */
+program and passed by reference into import_png() */
 
 t_img	*import_png(void *mlx_ptr, const char *file, int *width, int *height)
 {

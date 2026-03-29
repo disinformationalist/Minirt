@@ -24,6 +24,22 @@
 // (M_PI / 180.0)
 # define DEG_TO_RAD  0.01745329251
 
+typedef enum e_pix_flags
+{
+    PIX_PALETTE = 1 << 0,   // 001
+    PIX_COLOR   = 1 << 1,   // 010 (RGB vs gray)
+    PIX_ALPHA   = 1 << 2    // 100
+} t_pix_flags;
+
+typedef enum s_pixel_format
+{
+    GRAY       = 0,                              // 000
+    RGB        = PIX_COLOR,                      // 010
+    PALETTE   = PIX_COLOR | PIX_PALETTE,        // 011
+    GRAY_A     = PIX_ALPHA,                      // 100
+    RGBA       = PIX_COLOR | PIX_ALPHA           // 110
+} t_pixel_format;
+
 typedef struct s_norm_color
 {
 	double	r;
@@ -163,6 +179,7 @@ typedef struct s_cam
 	t_vec3			center;
 	t_vec3			orient;
 	t_vec3			true_up;
+	bool			has_true_up;
 	int				fov;
 	t_mat4			transform;
 	t_mat4			transform_up;

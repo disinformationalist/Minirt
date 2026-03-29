@@ -181,12 +181,13 @@ typedef struct s_control
 /***PNG IMPORT/EXPORT***/
 
 //export lossless png image
-int				export_png(const char *filename, \
-				t_img *img, int width, int height);
+int				export_png(const char *filename, t_img *img, int width, \
+							int height, png_text *text, t_pixel_format fmt);
+
 void			get_pixel(t_pixel *pix_t, t_img *img, int x, int y);
 void			clean_memory(t_png_io *png_img, int j, bool export);
 char			*get_nxt_name(char *name);
-void			init_vars(t_png_io *png_img);
+void			init_vars(t_png_io *png_img, t_pixel_format fmt);
 
 //export/import utils
 int				error_1(t_png_io *png_img, const char *msg);

@@ -20,7 +20,7 @@ t_norm_color	get_obj_color2(t_on *on)
 		return (color(0, 0, 0));
 }
 
-char	*get_tx(t_on *on)
+static inline char	*get_curr_tx(t_on *on)
 {
 	if (on->type == SPHERE)
 		return (((t_sphere *)on->object)->texture->i_name);
@@ -64,7 +64,7 @@ void	set_color(void *mlx_con, void *mlx_win, t_on *on)
 	opt = get_option(on);
 	color = get_obj_color2(on);
 	if (opt == 1)
-		copy_till(ft_strchr(get_tx(on), '/') + 1, hex, '.');
+		copy_till(ft_strchr(get_curr_tx(on), '/') + 1, hex, '.');
 	else if (opt == 2)
 		ft_strcpy(hex, "Checker");
 	else

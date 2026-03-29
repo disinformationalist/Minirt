@@ -1,7 +1,7 @@
 #ifndef SCALE_H
 # define SCALE_H
 
-/****Funtions****/
+/****Functions****/
 /*
 void			set_sca_vals(void *mlx_con, void *win, t_trace *trace);
 t_vec3			get_scale(t_on *on, t_trace *trace);
@@ -44,30 +44,17 @@ static inline t_vec3	get_init_scale(t_on *on, t_trace *trace)
 {
 	t_vec3			temp;
 	t_type			type = on->type;
-	double			val;
 
 	if (type == PLANE || !trace->on->object)
-		temp = vec(1, 1, 1, 0);
+		temp = trace->curr_pl->init_scale;
 	else if (type == SPHERE)
-	{
-		val = trace->curr_sp->radius;
-		temp = vec(val, val, val, 0);
-	}
+		temp = trace->curr_sp->init_scale;
 	else if (type == CYLINDER)
-	{
-		val = trace->curr_cy->radius;
-		temp = vec(val, trace->curr_cy->height / 2, val, 0);
-	}
+		temp = trace->curr_cy->init_scale;
 	else if (type == HYPERBOLOID)
-	{
-		val = trace->curr_hy->rad;
-		temp = vec(val, trace->curr_hy->height / 2, val, 0);
-	}
+		temp = trace->curr_hy->init_scale;
 	else if (type == CUBE)
-	{
-		t_cube *cube = trace->curr_cu;
-		temp = vec(cube->h_width, cube->h_height, cube->h_depth, 0);
-	}
+		temp = trace->curr_cu->init_scale;
 	return (temp);
 }
 
@@ -75,6 +62,7 @@ static inline t_vec3	get_scale(t_on *on, t_trace *trace)
 {
 	t_mat4			scale;
 	t_vec3			temp;
+
 
 	scale = get_curr_scale(on->type, trace);
 	temp = vec(scale.mat[0], scale.mat[5], scale.mat[10], 0);
@@ -95,10 +83,10 @@ static inline void	set_sca_vals(void *mlx_con, void *win, t_trace *trace)
 
 	shifty = 225;
 	//y
-	sprintf(val, "%.2f", pos.x);
+	sprintf(val, "%.2f", pos.y);
 	mlx_string_put(mlx_con, win, 86, shifty, color, val);
 	//x
-	sprintf(val, "%.2f", pos.y);
+	sprintf(val, "%.2f", pos.x);
 	mlx_string_put(mlx_con, win, 191, shifty, color, val);
 	//z
 	sprintf(val, "%.2f", pos.z);

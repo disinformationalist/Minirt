@@ -73,6 +73,7 @@ void	parse_rt(t_trace *trace, char ***rt_file)
 
 	init_counts(&counts);
 	count_ids(&counts, rt_file);
+	//print_3d_array(rt_file);
 	counts.light_count += counts.sl_count + counts.al_count;
 	if (counts.cam_count == 0)
 		free_exit(rt_file, "Error\n Scene must contain a camera\n", \

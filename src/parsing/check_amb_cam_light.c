@@ -19,9 +19,17 @@ void	check_amb(char **line, char ***rt_file)
 
 void	check_cam(char **line, char ***rt_file)
 {
+	char	*fov_str;
+	
+	
 	if (check_param_num(line, 4))
 		free_exit(rt_file, "Error\n Invalid camera parameters\n", \
 	" Camera must be in the format <type id> <x,y,z> <x,y,z> <fov>\n");
+	if (line[4])
+		fov_str = line[4];
+	else
+		fov_str = line[3];
+		
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid camera coordinates\n", \
 	" Camera coordinates must be in the format x,y,z\n");
@@ -29,7 +37,11 @@ void	check_cam(char **line, char ***rt_file)
 		free_exit(rt_file, "Error\n Invalid camera orientation\n", \
 	" Camera orientation must be in the format x,y,z," \
 	" with values between zero and one\n");
-	if (check_fov(line[3]))
+	if (line[4] && check_orientation(line[3]))
+		free_exit(rt_file, "Error\n Invalid camera UP orientation\n", \
+	" Camera orientation must be in the format x,y,z," \
+	" with values between zero and one\n");
+	if (check_fov(fov_str))
 		free_exit(rt_file, "Error\n Invalid camera FOV\n", \
 	" Camera FOV must be between 0 and 180\n");
 }

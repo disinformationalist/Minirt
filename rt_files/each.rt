@@ -1,3 +1,21 @@
+
+#Material string usage key:
+
+# A%dD%dS%dH%dR%dT%dI%dB%dQ%dP%d
+
+#A = ambient, 00–100
+#D = diffuse, 00–100
+#S = specular, 00–100
+#H = shine, 000–1000
+#R = reflective, 00–100
+#T = transparent, 00–100
+#I = refractive index, store (value - 1.0) * 100 → 000–400
+#B = bump level, 000–100
+#Q = object casts shadow, 0 or 1
+#P = bump enabled, 0 or 1
+
+
+
 #Ambient:   Intensity 																      R | G | B
 A           0.200                                                                         255,255,255
 
@@ -15,30 +33,32 @@ SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900         
 
 
 #ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells
-AL          0.000,6.000,12.000          0.000,-1.000,0.000        0.65       4.5  4.5     255,255,255     4        4
+#AL          0.000,6.000,12.000          0.000,-1.000,0.000        0.65       4.5  4.5    255,255,255     4        4
 
 
-#Spheres:   Cen_x | Cen_y | Cen_z                                 Diameter      		  R | G | B
-sp          -5.500,1.000,4.500                                    2.000                   220,155,43
-
+#Spheres:   Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter      		  R | G | B		  Texture              			A   D   S   H    R   T  I    B   Q  P 
+sp          -5.500,1.000,4.500         0.000,1.000,0.000          2.000                   220,155,43      moon_rgb.png					
+#97  85  40  250  10  0  133  12  1  0
 
 #Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z      			 	  		  R | G | B
-pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  175,196,221
+pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  175,196,221	  moon_rgb.png
 
 
 #Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B
-cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.000        79,0,173
+cy          -2.000,1.000,5.500         0.000,0.966,0.259          2.000      2.000        79,0,173		  moon_rgb.png
 
 
 #Cubes:     Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      W_(x)   H_(y)   D_(z)   R | G | B
-cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,120,210
+cu          5.500,1.000,5.500          -0.354,0.707,0.612         2.000   2.000   2.000   0,120,210		  moon_rgb.png
 
 
 #Hypes:		Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Radius  Waist  Height   R | G | B
-hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   1.000  2.000    28,114,45
+hy          1.500,1.000,5.000          0.000,0.966,0.259          1.000   1.000  2.000    28,114,45	      moon_rgb.png
 
 
 #Textures:  Image                      Height Map
+tx			chaos_1.png
+tx			moon_rgb.png             
 tx			soft.png
 tx			aluminum.png               aluminum_height.png
 tx			earth2k.png                earthbump2k.png
@@ -46,7 +66,6 @@ tx			ice.png
 tx			wood.png
 tx			stone.png
 tx          sky.png
-tx			chaos_1.png
 tx			sun.png
 tx			neb.png
 tx			chaos_2.png

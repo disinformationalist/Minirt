@@ -23,6 +23,7 @@ void	set_next_tx(int button, t_tx *textures, t_on *on)
 	t_tx		*curr_tx;
 	t_tx		*tx;
 
+	
 	if (textures == NULL || on == NULL)
 		return ;
 	tx = textures;

@@ -100,10 +100,13 @@ void	set_sca(t_trace *trace)
 
 	scale = get_scale(on, trace);
 	init_scale = get_init_scale(on, trace);
+	
+
 	scale = vec(1 / scale.x, 1 / scale.y, 1 / scale.z, 0);
 	
 	con->sca1 = scale;
 	con->sca2 = init_scale;
+
 	//divide out init
 	scale = vec(scale.x / init_scale.x, scale.y / init_scale.y, scale.z / init_scale.z, 0);
 	//xz, yz, xy, leave amount common to pair
@@ -166,22 +169,3 @@ void	set_sca_dials(t_trace *trace)
 		set_waistknob(&trace->img, control, trace->on);
 	}
 }
-
-	//1st circle
-	/* con->sca1x.i = ft_round(60 * cos(scale.x));//rad*cos(angle)
-	con->sca1x.j = ft_round(60 * sin(scale.x));
-	con->sca1y.i = ft_round(60 * cos(scale.y));
-	con->sca1y.j = ft_round(60 * sin(scale.y));
-	con->sca1z.i = ft_round(60 * cos(scale.z));
-	con->sca1z.j = ft_round(60 * sin(scale.z));
-	//2nd
-	con->sca2x.i = ft_round(90 * cos(scale_2.x));
-	con->sca2x.j = ft_round(90 * sin(scale_2.x));
-	con->sca2y.i = ft_round(90 * cos(scale_2.y));
-	con->sca2y.j = ft_round(90 * sin(scale_2.y));
-	con->sca2z.i = ft_round(90 * cos(scale_2.z));
-	con->sca2z.j = ft_round(90 * sin(scale_2.z));
-	//3rd
-	con->scale_xyz.i = ft_round(120 * cos(scale_3));
-	con->scale_xyz.j = ft_round(120 * sin(scale_3));
- */
