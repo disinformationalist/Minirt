@@ -35,6 +35,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->i_transform = transform;
 	new->curr_scale = transform;
 	new->mat = get_mat(DEFAULT);
+	new->init_scale = vec(1.0, 1.0, 1.0, 0);
 	*start = new;
 	new->id = 1;
 	new->shadow = true;

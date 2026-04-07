@@ -25,10 +25,15 @@
 
 void	info_init(t_trace *trace)
 {
-	trace->width = 1080;
-	trace->aspect_r = 1;//1.7778;
-	trace->height = (int)((double)trace->width / trace->aspect_r);
-	//trace->height = 1080;
+	if (!trace->display)
+	{
+		trace->width = 1080;
+		trace->aspect_r = 1.7778;
+		trace->height = (int)((double)trace->width / trace->aspect_r);
+		//trace->height = 1080;
+	}
+	else
+		trace->aspect_r = (double)trace->width / (double)trace->height;
 	trace->color_i = 0;
 	trace->num_colors = 384;
 	trace->curr_sp = trace->spheres;
@@ -96,8 +101,6 @@ void	init_transforms(t_trace *trace)
 {
 	if (import_textures(trace->mlx_connect, trace->textures))
 		clear_all(trace);
-	
-
 	set_sp_transforms(trace);
 	set_pl_transforms(trace);
 	set_cy_transforms(trace);

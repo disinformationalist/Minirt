@@ -202,6 +202,21 @@ typedef struct s_boxes
 	//int		axis;//0 = x, 1 = y, 2 = z 
 }	t_boxes;
 
+
+typedef enum e_csgop
+{
+	UNION,
+	INTERSECTION,
+	DIFFERENCE
+}	t_csgop;
+
+/* typedef struct s_csg//maybe need these params just inside of the s_shape type
+{
+	t_shape	*left;
+	t_shape	*right;
+	t_csgop			op;
+}	t_csg; */
+
 //using ll for this
 
 typedef struct s_shape
@@ -217,9 +232,16 @@ typedef struct s_shape
 	void			*shape;
 	void			*parent;
 	t_mat4			i_tran;
+
 	struct s_shape	*next;
 	struct s_shape	*prev;
+
+	/* bool			is_csg;//or just make *csg = NULL?
+	t_csg			*csg;  */
 }	t_shape;
+
+
+
 
 typedef t_shape	t_group;
 
@@ -302,6 +324,7 @@ typedef struct s_obj_counts
 	int				cube_count;
 	int				tx_count;
 	int				tri_count;
+	int				display_count;
 }	t_obj_counts;
 
 typedef struct 

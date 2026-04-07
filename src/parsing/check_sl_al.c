@@ -103,3 +103,20 @@ void	check_sl(char **line, char ***rt_file)
 	" Light brightness must be between 0.0 and 1.0\n");
 	check_sl2(line, rt_file, len);
 }
+
+void	check_display(char **line, char ***rt_file)
+{
+	int		len;
+
+	len = ft_matrix_len(line);
+	if (len > 3)
+		free_exit(rt_file, "Error\n Invalid display parameters\n", \
+		" Display has the format <type id> <width> <height>\n");
+	if (check_int(line[1], 0, 10000))
+		free_exit(rt_file, "Error\n Invalid sidth\n", \
+	" light inner cone angle must be between 0 and 10000\n");
+	if (check_int(line[2], 0, 10000))
+		free_exit(rt_file, "Error\n Invalid height\n", \
+	" height must be between 0 and 10000\n");
+}
+

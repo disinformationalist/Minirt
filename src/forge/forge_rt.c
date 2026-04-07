@@ -96,12 +96,13 @@ ft_putstr_fd("#Material and option string usage key:\n\n\
 #W = wave(planes only) \n\
 #C = caps for cylinder and hyperboloid \n\
 #S = single or double for the hyperboid/cone 0 0r 1 \n\n\
-#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime), \n\n\n", fd);
+#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime). \n\n\n", fd);
 }
 
 void	forge_rt(const char *path, t_trace *trace)
 {
 	int			fd;
+	char	line[300];
 
 	fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -110,6 +111,10 @@ void	forge_rt(const char *path, t_trace *trace)
 		return ;
 	}
 	write_key(fd);
+	ft_putstr_fd("#Display:   Width       Height      \n", fd);
+	snprintf(line, 300, "D%*s%-12d%-5d", 11, "", trace->width, trace->height);
+	write(fd, line, ft_strlen(line));
+	write(fd, "\n\n\n", 3);
 	write_amb(trace->amb, fd);
 	write_cam(trace->cam, fd);
 	write_lights(trace->lights, fd);

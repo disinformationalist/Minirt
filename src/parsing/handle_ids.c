@@ -38,6 +38,9 @@ void	count_ids(t_obj_counts *counts, char ***rt_file)
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			count_check(&counts->cam_count,
 				"Error\n Only one camera allowed\n", rt_file);
+		else if (!ft_strcmp(*(rt_file[k]), "D"))
+			count_check(&counts->display_count,
+				"Error\n Only one display allowed\n", rt_file);
 		else
 			increment_id_count(counts, rt_file, k);
 	}
@@ -71,6 +74,8 @@ void	check_ids(char ***rt_file)
 			check_amb(rt_file[k], rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			check_cam(rt_file[k], rt_file);
+		else if (!ft_strcmp(*(rt_file[k]), "D"))
+			check_display(rt_file[k], rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
 			check_light(rt_file[k], rt_file);
 		else if (!ft_strcmp(*(rt_file[k]), "SL"))

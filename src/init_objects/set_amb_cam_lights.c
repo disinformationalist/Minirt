@@ -69,3 +69,10 @@ bool	set_light(t_light **light, char **line)
 		(*light)->color = get_color(line[3], 255.0);
 	return (0);
 }
+
+bool	set_display(t_trace *trace, char **line)
+{
+	trace->width = ft_atoi(line[1]);
+	trace->height = ft_atoi(line[2]);
+	return (0);
+}

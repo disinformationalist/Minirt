@@ -1,0 +1,68 @@
+#Material and option string usage key:
+
+#A D S H R T I B Q P O F (C S) Xf
+
+#A = ambient, 00–100 
+#D = diffuse, 00–100 
+#S = specular, 00–100 
+#H = shine, 000–1000 
+#R = reflective, 00–100 
+#T = transparent, 00–100 
+#I = refractive index, store (value - 1.0) * 100 → 000–400 
+#B = bump level, 000–100 
+#Q = object casts shadow, 0 or 1 
+#P = bump enabled, 0 or 1 
+#O = which option active(color, texture, checker)  0,1,2 
+#F = frost 0 or 1 
+
+#W = wave(planes only) 
+#C = caps for cylinder and hyperboloid 
+#S = single or double for the hyperboid/cone 0 0r 1 
+
+#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime). 
+
+
+#Display:   Width       Height      
+D           1080        607  
+
+
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Up_x | Up_y | Up_z         FOV
+C           0.002,0.002,-6.002         0.000,0.000,1.000          0.000,1.000,0.000          70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           7.819,0.435,-2.257                                    0.610                   255,255,255
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          1.463,1.153,-1.081         0.334,-0.924,-0.186        0.410                   255,255,255     15           53
+SL          16.324,0.916,-7.090        -1.000,0.000,-0.002        0.520                   255,255,255     22           37
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter      		  R | G | B		  Texture              	 A   D   S   H    R   T  I    B   Q  P O F      Xf
+sp          -2.363,1.329,1.240         0.398,0.917,0.000          2.000                   220,155,43      moon_rgb.png           69  90  46  7    9   0  100  18  0  1 1 0      efkz0POeiBb0OZei6r0F5egJj0JAefbzzuNeglL0u2ejFD0YoejFAA
+sp          2.073,-0.604,0.000         0.398,0.917,0.000          2.000                   220,155,43      earth4k.png            69  90  46  7    9   0  100  51  0  1 1 0      egOr0POefkz0MHei6r0OZei0T0JAegJj0ZvegmL0l/ejFD0YoejFAA
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z                              R | G | B       Texture                A   D   S   H    R   T  I    B   Q  P O F W    Xf
+pl          -1.868,-1.681,5.500        0.000,0.000,-1.000                                 112,127,142     carina.png             69  90  46  7    9   0  100  30  1  0 1 0 0    ejFD0JAehID0JAehID0YoehIDz5YehID0mMer3j0jRehgD0YrehgAA
+
+
+#Textures:  Image                      Height Map
+tx          sun.png
+tx          earth4k.png                earth_bump4k.png
+tx          moon_rgb.png
+tx          buddha_2.png
+tx          soft.png
+tx          ice.png
+tx          chaos_17.png
+tx          stone.png
+tx          neb.png
+tx          carina.png
+tx          aluminum.png               aluminum_height.png
+
+

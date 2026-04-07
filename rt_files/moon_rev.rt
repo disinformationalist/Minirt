@@ -1,0 +1,77 @@
+#Material and option string usage key:
+
+#A D S H R T I B Q P O F (C S) Xf
+
+#A = ambient, 00–100 
+#D = diffuse, 00–100 
+#S = specular, 00–100 
+#H = shine, 000–1000 
+#R = reflective, 00–100 
+#T = transparent, 00–100 
+#I = refractive index, store (value - 1.0) * 100 → 000–400 
+#B = bump level, 000–100 
+#Q = object casts shadow, 0 or 1 
+#P = bump enabled, 0 or 1 
+#O = which option active(color, texture, checker)  0,1,2 
+#F = frost 0 or 1 
+
+#W = wave(planes only) 
+#C = caps for cylinder and hyperboloid 
+#S = single or double for the hyperboid/cone 0 0r 1 
+
+#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime). 
+
+
+
+#Display:   Width       Height
+D			1080		1080
+
+
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Up_x | Up_y | Up_z         FOV
+C           0.002,1.078,-17.964        0.000,0.000,1.000          0.000,1.000,-0.000         70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           0.883,3.436,-1.268                                    0.750                   255,255,255
+
+
+#SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
+SL          -0.062,1.134,-5.348        0.425,-0.103,0.899         0.170                   255,255,255     13           25
+SL          16.324,8.801,-9.831        -0.894,-0.016,0.448        0.450                   255,255,255     15           34
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter      		  R | G | B		  Texture              	 A   D   S   H    R   T  I    B   Q  P O F      Xf
+sp          -7.489,0.021,0.012         0.398,0.917,0.000          1.994                   220,155,43      earth4k.png            69  90  46  7    9   0  100  30  0  1 1 0      ei2z0POehlr0DAei6r0HZegnr0JAejAz1w1em6T0koejFb0YrejFYA
+sp          -9.989,-0.504,-0.000       0.398,0.917,0.000          0.993                   220,155,43      moon_rgb.png           69  90  46  7    9   0  100  30  0  1 1 0      ei2z0POehlr0DAei6r0HZegnr0JAejAz2QOepyz0tPelDz0oeelDwA
+sp          -4.989,0.496,-0.000        0.398,0.917,0.000          0.993                   220,155,43      moon_rgb.png           69  90  46  7    9   0  100  30  0  1 1 0      ei2z0POehlr0DAei6r0HZegnr0JAejAz1RCekHb0cTelDz0oeelDwA
+sp          7.586,0.017,0.020          0.399,0.917,0.000          1.994                   220,155,43      earth4k.png            69  90  46  7    9   0  100  49  0  1 1 0      ei2z0POehlr0C/ei6r0HZegnr0JAejAzygLebMrzspejFb0YrejFYA
+sp          10.086,0.505,-0.000        0.399,0.917,0.000          1.002                   220,155,43      moon_rgb.png           69  90  46  7    9   0  100  11  0  1 1 0      ei2z0POehlr0C/ei6r0HZegnr0JAejAzyAaeYYbzkeelBb0oLelBYA
+sp          5.086,-0.504,-0.000        0.399,0.917,0.000          1.002                   220,155,43      moon_rgb.png           69  90  46  7    9   0  100  11  0  1 1 0      ei2z0POehlr0C/ei6r0HZegnr0JAejAzy/keeEzz1XelBb0oLelBYA
+sp          1.549,-0.001,0.500         0.041,0.946,0.321          3.407                   255,170,0       sun.png                69  90  46  7    9   0  100  12  0  1 1 0      egcD0Jpei870N6ei+T0KNefZz0OBegcz0YaegsLz1FeiRb0SLeiRYA
+
+
+#Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B       Texture                A   D   S   H    R   T  I    B   Q  P O F C    Xf
+cy          0.000,0.000,0.000          0.000,1.000,0.000          11.111     0.023        79,0,173        sun.png                42  13  18  7    0   68 100  30  0  0 2 0 1    ejFD0JAehID0JAejFD0JAehID0JAejFD0JAehID0JAehY8JeAehegA
+cy          7.519,-0.001,0.000         0.398,0.917,0.000          0.089      3.899        79,0,173        sun.png                69  90  46  7    9   0  100  30  0  0 0 0 1    ei6r0POehID0Cyei6r0JAehID0JAejFDydRebSD0JAfNBD0RBfNBAA
+cy          -7.487,-0.000,0.000        0.398,0.917,0.000          0.073      3.945        79,0,173        sun.png                69  90  46  7    9   0  100  30  0  0 0 0 1    ei6r0POehID0Cyei6r0JAehID0JAejFD10Rem8j0JAfWor0Q7fWooA
+
+
+#Textures:  Image                      Height Map
+tx          sun.png
+tx          earth4k.png                earth_bump4k.png
+tx          moon_rgb.png
+tx          hexcomb3.png
+tx          buddha_2.png
+tx          soft.png
+tx          ice.png
+tx          chaos_17.png
+tx          stone.png
+tx          neb.png
+tx          carina.png
+tx          aluminum.png               aluminum_height.png
+
+

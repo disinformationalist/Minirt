@@ -586,7 +586,7 @@ void	prelim_buttons(int x, int y, t_trace *trace)
 			update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 		}
 	}
-	else if ((y > 510 && y <= 534) && (x >= 258 && x <= 362))
+	else if ((y > 510 && y <= 534) && (x >= 258 && x <= 362))//Create Button
 	{
 		buttons1(trace, trace->on, push_new_object);
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);

@@ -33,6 +33,8 @@ bool	build_lists(t_trace *trace, char ***rt_file)
 			status = set_amb(&trace->amb, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "C"))
 			status = set_cam(&trace->cam, rt_file[k]);
+		else if (!ft_strcmp(*(rt_file[k]), "D"))
+			status = set_display(trace, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "L"))
 			status = append_light(trace, &trace->lights, rt_file[k]);
 		else if (!ft_strcmp(*(rt_file[k]), "SL"))
@@ -63,6 +65,7 @@ void	count_ints(t_trace *trace, t_obj_counts counts)
 	trace->total_ints = total_intersects;
 	trace->sl_count = counts.sl_count;
 	trace->al_count = counts.al_count;
+	trace->display = counts.display_count;
 }
 
 //parsing test: print_all_objects(trace);

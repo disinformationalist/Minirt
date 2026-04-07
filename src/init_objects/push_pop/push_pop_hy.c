@@ -37,6 +37,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->transform = transform;
 	new->t_transform = transform;
 	new->i_transform = transform;
+	new->init_scale = vec(1.0, 1.0, 1.0, 0);
 	new->mat = get_mat(ENAMEL);
 	*start = new;
 	new->shadow = true;

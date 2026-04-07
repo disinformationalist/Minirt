@@ -31,6 +31,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->t_transform = transform;
 	new->i_transform = transform;
 	new->curr_scale = transform;
+	new->init_scale = vec(1.0, 1.0, 1.0, 0);
 	new->curr_rottran = transform;
 	new->transform = transform;
 	new->mat = get_mat(ENAMEL);

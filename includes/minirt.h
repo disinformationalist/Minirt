@@ -317,6 +317,7 @@ typedef struct s_trace
 	int				knob;
 
 	bool			sp_box;
+	int				display;
 }	t_trace;
 
 //thread info
@@ -395,6 +396,7 @@ int				ft_3darray_len(char ***array);
 //check lines
 void			check_amb(char **line, char ***rt_file);
 void			check_cam(char **line, char ***rt_file);
+void			check_display(char **line, char ***rt_file);
 void			check_light(char **line, char ***rt_file);
 void			check_sp(char **line, char ***rt_file);
 void			check_pl(char **line, char ***rt_file);
@@ -431,6 +433,7 @@ t_norm_color	get_color(char *color_str, double val);
 double			get_double(char **str);
 bool			set_amb(t_amb **amb, char **line);
 bool			set_cam(t_cam **cam, char **line);
+bool			set_display(t_trace *trace, char **line);
 bool			set_light(t_light **light, char **line);
 bool			set_empty_amb(t_amb **amb);
 
