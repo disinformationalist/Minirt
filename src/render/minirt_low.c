@@ -1,84 +1,5 @@
 #include "minirt.h"
-
-//***---------------Repeated functions for inline opti-----------------***/
-
-static inline void	my_pixel_put1(int x, int y, t_img *img, unsigned int color)
-{
-	int	offset;
-
-	offset = (y * img->line_len) + (x * (img->bpp / 8));
-	*(unsigned int *)(img->pixels_ptr + offset) = color;
-}
-
-static inline t_vec3	add_vec1(t_vec3 vec1, t_vec3 vec2)
-{
-	t_vec3	res;
-
-	res.x = vec1.x + vec2.x;
-	res.y = vec1.y + vec2.y;
-	res.z = vec1.z + vec2.z;
-	res.w = vec1.w + vec2.w;
-	return (res);
-}
-
-static inline t_vec3	scale_vec1(double scalar, t_vec3 vec)
-{
-	t_vec3	res;
-
-	res.x = scalar * vec.x;
-	res.y = scalar * vec.y;
-	res.z = scalar * vec.z;
-	res.w = 0;
-	return (res);
-}
-
-static inline t_vec3	norm_vec1(t_vec3 vec)
-{
-	t_vec3	normed;
-	double	length;
-
-	length = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	if (!length)
-		return (vec);
-	normed.x = vec.x / length;
-	normed.y = vec.y / length;
-	normed.z = vec.z / length;
-	normed.w = 0;
-	return (normed);
-}
-
-static inline uint8_t	clamp_color1(double color)
-{
-	if (color >= 255)
-		return (255);
-	if (color < 0)
-		return (0);
-	else
-		return ((uint8_t)(color));
-}
-
-static inline t_vec3	subtract_vec1(t_vec3 vec1, t_vec3 vec2)
-{
-	t_vec3	res;
-
-	res.x = vec1.x - vec2.x;
-	res.y = vec1.y - vec2.y;
-	res.z = vec1.z - vec2.z;
-	res.w = vec1.w - vec2.w;
-	return (res);
-}
-
-static inline t_norm_color	color1(double r, double g, double b)
-{
-	t_norm_color	col;
-
-	col.r = r;
-	col.g = g;
-	col.b = b;
-	return (col);
-}
-
-//***---------------------------End repeats----------------------------***/
+#include "mainloop_fts.h"
 
 //low resolution mode for speed
 
@@ -91,16 +12,10 @@ void	find_closest_l(t_trace *trace, t_ray ray, t_intersects *intersects)
 	intersects->closest->object = NULL;
 	intersects->closest->object_type = VOID;
 	intersects->count = 0;
-	/* check_spheres(trace->spheres, intersects, ray);
-	check_cylinders(trace->cylinders, intersects, ray);
-	check_hyperboloids(trace->hyperboloids, intersects, ray);
-	check_cubes(trace->cubes, intersects, ray);
-	check_planes(trace->planes, intersects, ray); */
-
 
 	check_hierarchy(trace->bvh, intersects, ray);
 	check_planes(trace->planes, intersects, ray);
-	check_arealts(trace->lights, intersects, ray);
+	//check_arealts(trace->lights, intersects, ray);
 	if (trace->sp_box)
 		ray_sphere_intersect(trace->spheres, ray, intersects);
 	while (i < intersects->count && intersects->hits[i].t <= 0)
@@ -109,15 +24,6 @@ void	find_closest_l(t_trace *trace, t_ray ray, t_intersects *intersects)
 		*(intersects->closest) = intersects->hits[i];
 }
 
-static inline unsigned int	clamped_col_l(t_norm_color col)
-{
-	t_color	clamped;
-
-	clamped.r = clamp_color1(col.r);
-	clamped.g = clamp_color1(col.g);
-	clamped.b = clamp_color1(col.b);
-	return (clamped.r << 16 | clamped.g << 8 | clamped.b);
-}
 
 //checking for the closest intersection and computing color
 //if switch obj colors to norm_col, color_out = mult_color(255.0, color_out);
@@ -128,8 +34,8 @@ t_norm_color	check_intersects_l(t_trace *trace, t_ray r, \
 	t_norm_color	color_out;
 	t_track_hits	*closest;
 
-	if (depths.refl <= 0 && depths.refr <= 0)
-		return (color1(0, 0, 0));
+/* 	if (depths.refl <= 0 && depths.refr <= 0)
+		return (color1(0, 0, 0)); */
 	find_closest_l(trace, r, intersects);
 	closest = intersects->closest;
 
@@ -180,7 +86,7 @@ static inline void	set_pixels(t_trace *trace, t_position pos,
 static inline void	set_lastx_pixels(t_trace *trace, t_position pos, t_ray r, t_intersects *intersects, t_point curr_pix, unsigned int color, int xlim, int ylim)
 {
 	r.dir = norm_vec1(subtract_vec1(curr_pix, r.origin));
-	color = clamped_col_l(check_intersects_l(trace, r, intersects, \
+	color = clamped_col1(check_intersects_l(trace, r, intersects, \
 	trace->depths));
 	set_pixels(trace, pos, color, xlim, ylim);
 }
@@ -222,7 +128,7 @@ static inline void	compute_pixels_l(t_trace *trace, t_piece *piece, \
 		while (++l < x_blocks)
 		{
 			r.dir = norm_vec1(subtract_vec1(current_pixel, r.origin));
-			color = clamped_col_l(check_intersects_l(trace, r, intersects, trace->depths));
+			color = clamped_col1(check_intersects_l(trace, r, intersects, trace->depths));
 			set_pixels(trace, pos, color, incx, incy);
 			current_pixel = add_vec1(current_pixel, pix_delta_rh);
 			pos.i += incx;
@@ -238,7 +144,7 @@ static inline void	compute_pixels_l(t_trace *trace, t_piece *piece, \
 	while (++l < x_blocks)
 	{
 		r.dir = norm_vec1(subtract_vec1(current_pixel, r.origin));
-		color = clamped_col_l(check_intersects_l(trace, r, intersects, trace->depths));
+		color = clamped_col1(check_intersects_l(trace, r, intersects, trace->depths));
 		set_pixels(trace, pos, color, incx, y_remain);
 		current_pixel = add_vec1(current_pixel, pix_delta_rh);
 		pos.i += incx;

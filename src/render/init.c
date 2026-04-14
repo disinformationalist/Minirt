@@ -55,11 +55,17 @@ void	info_init(t_trace *trace)
 	trace->n = 4.0;
 	trace->low_inc = 10;
 	trace->stash = false;
-	trace->depths.refl = 6;
-	trace->depths.refr = 6;
+	trace->depths.refl = 30;
+	trace->depths.refr = 16;
+	trace->depths.weight = 1.0f;
 	trace->m_lowinc = 10;
 	trace->knob = -1;
-	trace->sp_box = false;
+	if (trace->spheres && trace->spheres->is_box)
+		trace->sp_box = true;
+	else
+		trace->sp_box = false;
+
+	trace->bvh_testing = 0;//true;
 	init_viewing(trace);
 }
 
@@ -107,10 +113,17 @@ void	init_transforms(t_trace *trace)
 	set_hy_transforms(trace);
 	set_cu_transforms(trace);
 	build_hierarchy(trace->bvh);
+	//print_hierarchy(trace->bvh);
+
 	trace->obj_control = make_controls(trace->mlx_connect);
 	if (!trace->obj_control)
 		clear_all(trace);
 }
+
+//test
+	//trace->mesh = parse_obj("simple_dia.obj");
+	//trace->mesh = parse_obj("dodecahedron.obj");
+	//trace->mesh = parse_obj("simple_diamond.obj");
 
 void	trace_init(t_trace *trace)
 {

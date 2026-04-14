@@ -89,9 +89,10 @@ void	add_cu_color(t_cube *cu, char *line)
 	int	b;
 	int	spaces_3;
 
-	r = cu->color.r;
-	g = cu->color.g;
-	b = cu->color.b;
+	
+	r = ft_round(cu->color.r * 255);
+	g = ft_round(cu->color.g * 255);
+	b = ft_round(cu->color.b * 255);
 	snprintf(line + ft_strlen(line),
 		500 - ft_strlen(line), "%d,%d,%d", r, g, b);
 	spaces_3 = 14 - count_chars(r) - count_chars(g) - count_chars(b);
@@ -148,8 +149,11 @@ void	write_cubes(t_cube *cubes, int fd)
 	curr_cu = cubes;
 	while (true)
 	{
-		line = build_cu_line(curr_cu);
-		write(fd, line, ft_strlen(line));
+		if (!curr_cu->emitter)
+		{
+			line = build_cu_line(curr_cu);
+			write(fd, line, ft_strlen(line));
+		}
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
 			break ;

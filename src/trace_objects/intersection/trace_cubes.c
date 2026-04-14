@@ -35,7 +35,7 @@ double *min, double *max)
 
 	t_min_num = -(1 + origin);
 	t_max_num = (1 - origin);
-	if (fabs(dir) > 0)
+	if (fabs(dir) > 1e-9)
 	{
 		status = true;
 		*min = t_min_num / dir;
@@ -82,7 +82,8 @@ void	check_cubes(t_cube *cubes, t_intersects *intersects, t_ray ray)
 	curr_cu = cubes;
 	while (true)
 	{
-		ray_cube_intersect(curr_cu, ray, intersects);
+		if (!curr_cu->emitter || curr_cu->show_emitter)
+			ray_cube_intersect(curr_cu, ray, intersects);
 		curr_cu = curr_cu->next;
 		if (curr_cu == cubes)
 			break ;

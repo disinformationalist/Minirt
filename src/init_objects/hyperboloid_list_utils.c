@@ -88,7 +88,7 @@ void	set_hy_vals(t_hyperboloid *new, char **line)
 	new->waist3 = new->waist_val * new->waist_val * new->waist_val;
 	new->height = get_double(&height_str);
 	new->half_h = new->height / 2.0;
-	new->color = get_color(line[6], 1.0);
+	new->color = get_color(line[6], 255.0);
 	if (line[7])
 		new->i_name = ft_strdup(line[7]);
 	else 

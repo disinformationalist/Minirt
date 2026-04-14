@@ -84,7 +84,7 @@ void	set_cu_vals(t_cube *new, char **line)
 	new->h_width = get_double(&width_str) / 2.0;
 	new->h_height = get_double(&height_str) / 2.0;
 	new->h_depth = get_double(&depth_str) / 2.0;
-	new->color = get_color(line[6], 1.0);
+	new->color = get_color(line[6], 255.0);
 	if (line[7])
 		new->i_name = ft_strdup(line[7]);
 	else 

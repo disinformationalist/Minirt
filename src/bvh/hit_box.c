@@ -8,7 +8,7 @@ static inline void	check_axis_box(double origin, double dir, \
 
 	t_min_num = cmm.x - origin;
 	t_max_num = cmm.y - origin;
-	if (fabs(dir) > 0)
+	if (fabs(dir) > 1e-9)
 	{
 		*min = t_min_num / dir;
 		*max = t_max_num / dir;
@@ -44,7 +44,7 @@ bool	ray_box_intersect(t_box *box, t_mat4 ctransform, t_ray ray)
 	check_axis_box(ray.origin.z, ray.dir.z, &mins.z, &maxs.z, cmm);
 	t_min = fmax(fmax(mins.x, mins.y), mins.z);
 	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
-	return (t_min <= t_max  && t_max >= 0);
+	return (t_min <= t_max  && t_max >= 1e-6);
 }
 
 //cube intersect check 

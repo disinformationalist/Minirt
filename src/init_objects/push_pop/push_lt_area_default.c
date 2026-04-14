@@ -38,7 +38,7 @@ static inline t_cube	*set_lt_cube2(t_light *new, double wid, double len)
 	cube->h_width = wid / 2.0;
 	cube->h_height = 0.05;
 	cube->h_depth = len / 2.0;
-	cube->color = mult_color(new->brightness * 255.0, new->color);
+	cube->color = mult_color(new->brightness , new->color);
 	cube->bright = new->brightness;
 	cube->mat = get_mat(DEFAULT);
 	set_lt_cube_transform2(cube);

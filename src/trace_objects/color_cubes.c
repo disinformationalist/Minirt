@@ -103,13 +103,51 @@ t_intersects *intersects, t_depths depths)
 		return (cube->color);
 	lt_color = color(0, 0, 0);
 	comps = set_cucomps(cube, intersects, r);
+	comps.weight = depths.weight;
+	comps.reflectance = schlick(comps);
+	comps.transmittance = 1.0 - comps.reflectance;
 	if (trace->lights)
 	{
+	
 		lt = trace->lights;
 		while (true)
 		{
 			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
-			handle_light(trace, &comps, &lt_color, lt);
+			handle_light(trace, &comps, &lt_color, lt, intersects);
+			lt = lt->next;
+			if (lt == trace->lights)
+				break ;
+		}
+	}
+	comps.refl_col = get_reflected(trace, comps, intersects, depths);
+	comps.refr_col = get_refracted(trace, comps, intersects, depths);
+	return (get_final_color4(trace, comps, lt_color));
+}
+
+t_norm_color	color_cube_testing(t_trace *trace, t_ray r, \
+t_intersects *intersects, t_depths depths)
+{
+	t_cube			*cube;
+	t_comps			comps;
+	t_norm_color	lt_color;
+	t_light			*lt;
+
+	cube = (t_cube *)intersects->closest->object;
+	if (cube->emitter)
+		return (cube->color);
+	lt_color = color(0, 0, 0);
+	comps = set_cucomps(cube, intersects, r);
+	comps.weight = depths.weight;
+	comps.reflectance = schlick(comps);
+	comps.transmittance = 1.0 - comps.reflectance;
+	if (trace->lights)
+	{
+	
+		lt = trace->lights;
+		while (true)
+		{
+			comps.light_dir = norm_vec(subtract_vec(lt->center, comps.point));
+			handle_light_testing(trace, &comps, &lt_color, lt, intersects);
 			lt = lt->next;
 			if (lt == trace->lights)
 				break ;

@@ -89,9 +89,9 @@ void	add_pl_color(t_plane *plane, char *line)
 	int	b;
 	int	spaces_3;
 
-	r = plane->color.r;
-	g = plane->color.g;
-	b = plane->color.b;
+	r = ft_round(plane->color.r * 255);
+	g = ft_round(plane->color.g * 255);
+	b = ft_round(plane->color.b * 255);
 	snprintf(line + ft_strlen(line),
 		500 - ft_strlen(line), "%d,%d,%d", r, g, b);
 	spaces_3 = 14 - count_chars(r) - count_chars(g) - count_chars(b);

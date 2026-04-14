@@ -1,5 +1,12 @@
 #include "minirt.h"
 
+//threshold comparison tool
+
+static inline float get_diff(t_norm_color f, t_norm_color s)
+{
+	return (fabs(f.r - s.r) + fabs(f.g - s.g) + fabs(f.b - s.b));
+}
+
 static inline t_vec3	reflect(t_vec3 in, t_vec3 normal)
 {
 	double	cos_a;
@@ -14,15 +21,31 @@ t_norm_color	get_reflected(t_trace *trace, t_comps comps, \
 t_intersects *intersects, t_depths depths)
 {
 	t_norm_color	ref_col;
+	float			new_weight;
 
+	ref_col = color(0, 0, 0);
 	if (comps.mat.ref && depths.refl > 0)
 	{
 		//other fuzzing method
 		//comps.reflectv = norm_vec(add_vec(reflect(comps.ray.dir, comps.normal), scale_vec(.08, random_unit_vec())));
-		comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
+
+		/* comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
 		depths.refl--;
+		
 		ref_col = check_intersects(trace, ray(comps.reflectv, \
-		comps.over_pnt), intersects, depths);
+		comps.over_pnt), intersects, depths); */
+
+		new_weight = depths.weight * comps.mat.ref;// * comps.reflectance;
+		if (comps.mat.transp > 0.0)
+			new_weight *= comps.reflectance;
+		if (new_weight > .03)
+		{
+			comps.reflectv = norm_vec(reflect(comps.ray.dir, comps.normal));
+			depths.refl--;
+			depths.weight = new_weight;
+			ref_col = check_intersects(trace, ray(comps.reflectv,
+						comps.over_pnt), intersects, depths);
+		}
 	}
 	else
 		ref_col = color(0, 0, 0);
@@ -47,27 +70,6 @@ t_vec3 normal, t_vec3 *refr_dir)
 	return (true);
 }
 
-t_norm_color	get_refracted(t_trace *trace, t_comps comps, \
-t_intersects *intersects, t_depths depths)
-{
-	t_norm_color	refr_col;
-	t_vec3			refractv;
-	bool			refracted;
-
-	if (comps.mat.transp && depths.refr > 0)
-	{
-		refracted = refract(comps.n1 / comps.n2, comps.eyev, \
-		comps.normal, &refractv);
-		if (!refracted)
-			return (color(0, 0, 0));
-		depths.refr--;
-		refr_col = check_intersects(trace, ray(refractv, \
-		comps.under_pnt), intersects, depths);
-	}
-	else
-		refr_col = color(0, 0, 0);
-	return (refr_col);
-}
 
 double	schlick(t_comps comps)
 {
@@ -93,3 +95,58 @@ double	schlick(t_comps comps)
 	res = res + (1 - res) * cos2 * cos2 * cos;
 	return (res);
 }
+
+
+t_norm_color	get_refracted(t_trace *trace, t_comps comps,
+	t_intersects *intersects, t_depths depths)
+{
+	t_norm_color	refr_col;
+	t_vec3			refractv;
+	bool			refracted;
+	double			new_weight;
+
+	refr_col = color(0, 0, 0);
+	if (comps.mat.transp > 0.0 && depths.refr > 0)
+	{
+		refracted = refract(comps.n1 / comps.n2, comps.eyev,
+				comps.normal, &refractv);
+		if (!refracted)
+			return (color(0, 0, 0));
+		//reflectance = schlick(comps);//store value for use in final color
+		new_weight = depths.weight * comps.mat.transp;
+		if (comps.mat.ref > 0.0)
+			new_weight *= comps.transmittance;
+		if (new_weight > .01)
+		{
+			depths.refr--;
+			depths.weight = new_weight;
+			refr_col = check_intersects(trace, ray(refractv,
+						comps.under_pnt), intersects, depths);
+		}
+	}
+	return (refr_col);
+}
+
+
+//orig non adaptive
+/* t_norm_color	get_refracted(t_trace *trace, t_comps comps, \
+t_intersects *intersects, t_depths depths)
+{
+	t_norm_color	refr_col;
+	t_vec3			refractv;
+	bool			refracted;
+
+	if (comps.mat.transp && depths.refr > 0)
+	{
+		refracted = refract(comps.n1 / comps.n2, comps.eyev, \
+		comps.normal, &refractv);
+		if (!refracted)
+			return (color(0, 0, 0));
+		depths.refr--;
+		refr_col = check_intersects(trace, ray(refractv, \
+		comps.under_pnt), intersects, depths);
+	}
+	else
+		refr_col = color(0, 0, 0);
+	return (refr_col);
+} */

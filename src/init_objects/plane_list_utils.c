@@ -75,7 +75,7 @@ void	set_pl_vals(t_plane *new, char **line)
 {
 	new->point = get_coordinates(line[1], 1.0);
 	new->norm = norm_vec(get_coordinates(line[2], 0.0));
-	new->color = get_color(line[3], 1.0);
+	new->color = get_color(line[3], 255.0);
 	if (line[4])
 		new->i_name = ft_strdup(line[4]);
 	else 
@@ -84,7 +84,7 @@ void	set_pl_vals(t_plane *new, char **line)
 		set_pl_material(new, line);
 	else
 	{
-		new->mat = get_mat(ENAMEL);
+		new->mat = get_mat(DEFAULT);
 		new->shadow = true;
 		new->bump = false;
 		new->bump_level = DEFAULT_BUMP;

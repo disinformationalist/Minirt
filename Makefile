@@ -43,6 +43,7 @@ SRCS := ./src/main.c \
 ./src/parsing/check_sp_pl_cy.c \
 ./src/parsing/check_line_utils.c \
 ./src/parsing/check_line_utils2.c \
+./src/parsing/parse_obj.c \
 ./src/init_objects/sphere_list_utils.c \
 ./src/init_objects/push_pop/push_pop_sp.c \
 ./src/init_objects/push_pop/push_pop_pl.c \

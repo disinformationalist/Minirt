@@ -26,7 +26,9 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 1;
-	new->color = color(220, 155, 43);
+//	new->color = color(220, 155, 43);
+	new->color = color(0.863,  0.60,  0.167);
+
 	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
@@ -44,7 +46,7 @@ static inline void	make_default_sp(t_sphere **start, t_sphere *new)
 	new->option = 0;
 	new->w_frost = false;
 	new->is_box = false;
-	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));
+	new->pattern = uv_checker(20, 10, color(.15, .15, .15), color(1, 1, 1));
 	new->bump_level = DEFAULT_BUMP;
 	new->fuzz_lev = new->bump_level / 1000;
 	new->rots = vec(0, 0, 0, 0);

@@ -28,7 +28,7 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->radius = 1;
 	new->height = 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(79, 0, 173);
+	new->color = color(.31, 0, .678);
 	transform = identity();
 	new->t_transform = transform;
 	new->i_transform = transform;
@@ -45,8 +45,8 @@ static inline void	make_default_cy(t_cylinder **start, t_cylinder *new)
 	new->option = 0;
 	new->next = new;
 	new->prev = new;
-	new->pattern = uv_checker(18, 9 / M_PI, \
-	color(40, 40, 40), color(255, 255, 255));
+	new->pattern = uv_checker(18, 9 / M_PI, color(.15, .15, .15), color(1, 1, 1));
+	
 	new->bump_level = DEFAULT_BUMP;
 	new->fuzz_lev = new->bump_level / 1000;
 	new->caps = true;

@@ -18,7 +18,7 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->h_height = 1.0;
 	new->h_depth = 1.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(0, 120, 210);
+	new->color = color(0, .471, .824);
 	transform = identity();
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
@@ -34,8 +34,8 @@ void	make_default_cu(t_cube **start, t_cube *new)
 	new->w_frost = false;
 	new->option = 0;
 	new->emitter = false;
-	new->pattern = uv_checker(6, 6, color(30, 30, 30), \
-		color(255, 255, 255));
+	new->pattern = uv_checker(6, 6, color(.118, .118, .118), \
+		color(1, 1, 1));
 	new->bump_level = DEFAULT_BUMP;
 	new->amp = new->bump_level / 1000;
 	new->fuzz_lev = new->bump_level / 1000;

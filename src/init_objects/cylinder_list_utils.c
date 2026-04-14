@@ -82,7 +82,7 @@ void	set_cy_vals(t_cylinder *new, char **line)
 	new->norm = norm_vec(get_coordinates(line[2], 0.0));
 	new->radius = get_double(&diam_str) / 2;
 	new->height = get_double(&height_str);
-	new->color = get_color(line[5], 1.0);
+	new->color = get_color(line[5], 255.0);
 	if (line[6])
 		new->i_name = ft_strdup(line[6]);
 	else 

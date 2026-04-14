@@ -6,7 +6,7 @@ static inline void	set_sp_box(t_sphere *new)
 
 	new->center = vec(0.0, 0.0, 0.0, 1.0);
 	new->radius = 500;
-	new->color = color(124, 162, 205);
+	new->color = color(.486, .635, .804);
 	transform = inv_scaling(new->radius, \
 			new->radius, new->radius);
 	new->curr_scale = transform;
@@ -23,7 +23,7 @@ static inline void	set_sp_box(t_sphere *new)
 	new->option = 0;
 	new->w_frost = false;
 	new->is_box = true;
-	new->pattern = uv_checker(20, 10, color(40, 40, 40), color(255, 255, 255));//adjust
+	new->pattern = uv_checker(20, 10, color(.15, .15, .15), color(1, 1, 1));
 	new->bump_level = DEFAULT_BUMP;
 	new->fuzz_lev = new->bump_level / 1000;
 	new->rots = vec(0, 0, 0, 0);
@@ -96,7 +96,6 @@ static int	base64_val(char c)
 		return (63);
 	return (-1);
 }
-
 
 int	decode_base64_no_pad_40(const char *in, uint8_t out[40])
 {
@@ -204,6 +203,7 @@ static void	set_sp_transform(t_sphere *new, char *token)
 
 void	set_sp_material(t_sphere *new, char **line)
 {
+
 	new->mat.amb = ft_atoi(line[6]) / 100.0;
 	new->mat.diff = ft_atoi(line[7]) / 100.0;
 	new->mat.spec = ft_atoi(line[8]) / 100.0;
@@ -216,14 +216,14 @@ void	set_sp_material(t_sphere *new, char **line)
 	new->bump = ft_atoi(line[15]);
 	new->option = ft_atoi(line[16]);
 	new->w_frost = ft_atoi(line[17]);
-	if (line[18])
+	new->is_box = ft_atoi(line[18]);
+	if (line[19])
 	{
-		set_sp_transform(new, line[18]);
+		set_sp_transform(new, line[19]);
 		new->params = 1;
 	}
 	else
 		new->params = 0;
-
 }
 
 void	set_sp_vals(t_sphere *new, char **line)
@@ -233,9 +233,10 @@ void	set_sp_vals(t_sphere *new, char **line)
 
 	diam_str = line[3], col_str = line[4];
 	new->norm = norm_vec(get_coordinates(line[2], 0.0));
+
 	new->center = get_coordinates(line[1], 1.0);
 	new->radius = get_double(&diam_str) / 2.0;
-		if (line[5])
+	if (line[5])
 		new->i_name = ft_strdup(line[5]);
 	else 
 		new->i_name = NULL;
@@ -250,17 +251,39 @@ void	set_sp_vals(t_sphere *new, char **line)
 		new->option = 0;
 		new->w_frost = false;
 	}
+	/* new->mat = get_mat(MIRROR);
+	new->mat.spec = 0.0;
+	new->mat.shine = 9;
+	new->shadow = false; */
+
+
 	//new->mat = get_mat(DEFAULT);
-	//new->mat = get_mat(MIRROR);
 	//new->mat = get_mat(GLASS);
 	//new->mat = get_mat(METAL);
-	//new->color = color(220, 155, 43);//pure gold used in spflake
-	//new->color = color(220, 130, 35); //gold brown used in spflake
-	//new->color = color(255, 255, 255);
-	//new->mat.spec = 0;
-	//new->shadow = false;
-	new->color = get_color(col_str, 1.0);
-	new->is_box = false;
+	//new->color = mult_color(1.0f / 255.0f, color(220, 155, 43));//pure gold used in spflake
+	//new->color = mult_color(1.0f / 255.0f, color(220, 130, 35)); //gold brown used in spflake
+	//new->color = mult_color(1.0f / 255.0f, color(255, 255, 255));
+	//new->mat.ref = 1.0;
+	new->color = get_color(col_str, 255.0);
+	if (new->is_box)
+	{
+		/* new->mat = get_mat(DEFAULT);
+		new->mat.spec = 1.0;
+		new->mat.amb = .05;
+		new->mat.diff = .5;
+		new->mat.shine = 1000; */
+		new->id = 1;
+		new->shadow = false;
+		new->bump = false;
+		new->next = new;
+		new->prev = new;
+		//printf("here\n");
+	}
+	else
+	{
+		;
+		//	new->color = mult_color(1.0f / 255.0f, color(255, 255, 255));
+	}
 	new->fuzz_lev = new->bump_level / 1000;
 	new->texture = NULL;
 }

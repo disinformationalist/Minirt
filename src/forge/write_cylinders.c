@@ -90,9 +90,9 @@ void	add_cy_color(t_cylinder *cyl, char *line)
 	int	b;
 	int	spaces_3;
 
-	r = cyl->color.r;
-	g = cyl->color.g;
-	b = cyl->color.b;
+	r = ft_round(cyl->color.r * 255);
+	g = ft_round(cyl->color.g * 255);
+	b = ft_round(cyl->color.b * 255);
 	snprintf(line + ft_strlen(line),
 		500 - ft_strlen(line), "%d,%d,%d", r, g, b);
 	spaces_3 = 14 - count_chars(r) - count_chars(g) - count_chars(b);

@@ -509,11 +509,11 @@ void	check_knobs(int x, int y, t_trace *trace)
 	else
 		s_val = mat.shine;
 	//color
-	if (in_circle(x, y, 23 + (int)obj_col.r, 112, 8))
+	if (in_circle(x, y, 23 + ft_round(obj_col.r), 112, 8))
 		set_drag(trace, x, 0);
-	else if (in_circle(x, y, 23 + (int)obj_col.g, 137, 8))
+	else if (in_circle(x, y, 23 + ft_round(obj_col.g), 137, 8))
 		set_drag(trace, x, 1);
-	else if (in_circle(x, y, 23 + (int)obj_col.b, 162, 8))
+	else if (in_circle(x, y, 23 + ft_round(obj_col.b), 162, 8))
 		set_drag(trace, x, 2);
 	//props
 	else if (in_circle(x, y, 173 + mat.amb * 100, 221 , 8))// 167 + 6 + start val
@@ -645,11 +645,11 @@ int lt_press(int x, int y, t_trace *trace)
 		open_dials(trace, &trace->obj_control->rot_open, set_rot_dials);
 	else if ((y > 480 && y <= 504) && (x >= 258 && x <= 362))
 		open_dials(trace, &trace->obj_control->pos_open, set_pos_dials);
-	else if (in_circle(x, y, 23 + (int)obj_col.r, 112, 8))
+	else if (in_circle(x, y, 23 + ft_round(obj_col.r), 112, 8))
 		set_drag(trace, x, 0);
-	else if (in_circle(x, y, 23 + (int)obj_col.g, 137, 8))
+	else if (in_circle(x, y, 23 + ft_round(obj_col.g), 137, 8))
 		set_drag(trace, x, 1);
-	else if (in_circle(x, y, 23 + (int)obj_col.b, 162, 8))
+	else if (in_circle(x, y, 23 + ft_round(obj_col.b), 162, 8))
 		set_drag(trace, x, 2);
 	else if (in_circle(x, y, 173 + lt->brightness * 100, 191 , 8))
 		set_drag(trace, x, 17);
@@ -756,9 +756,6 @@ int menu_press(int x, int y, t_trace *trace)
 	else if ((y > 70 && y <= 93) && (x >= 21 && x <= 99))//color
 	{
 		set_option(trace, trace->on, 0);
-		/* press_button(trace, 21, 71, 79, 23);//to start button press effect
-		mlx_put_image_to_window(trace->mlx_connect, trace->mlx_win, trace->img.img_ptr, 0, 0);
-		set_menu_vals(trace, trace->on); */
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
 	}
 	else if ((y > 70 && y <= 93) && (x >= 104 && x <= 189))
@@ -829,11 +826,16 @@ void	set_con_vals(void *con, void *win, t_trace *trace)
 		set_sca_vals(con, win, trace);
 		set_type(con, win, trace->on->type);
 	}
+	else if (trace->obj_control->lt_con_open)
+	{
+		set_light_vals(trace, trace->on);
+	}
 	else
 	{
 		set_pos_vals(con, win, trace);
 		set_type(con, win, trace->on->type);
 	}
+	
 }
 
 void	manage_windows(t_trace *trace, t_control control)

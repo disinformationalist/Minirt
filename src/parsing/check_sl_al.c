@@ -26,19 +26,19 @@ void	check_al2(char **line, char ***rt_file, \
 void	check_al(char **line, char ***rt_file)
 {
 	char	*bright_ratio;
-	int		len;
+	//int		len;
 	char	*wid_str;
 	char	*len_str;
 	
 
-	len = ft_matrix_len(line);
+	//len = ft_matrix_len(line);
 	bright_ratio = line[3];
 	wid_str = line[4];
 	len_str = line[5];
-	if (len != 9)
+	/* if (len != 9)
 		free_exit(rt_file, "Error\n Invalid area light parameters\n", \
 			" Area Lt has the format <type id> <x,y,z> <x,y,z> <brightness>\n"
-			" <w> <l> <rgb> <w_cells> <l_cells>\n");
+			" <w> <l> <rgb> <w_cells> <l_cells>\n"); */
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid area light coordinates\n", \
 	" Area light coordinates must be in the format x,y,z\n");

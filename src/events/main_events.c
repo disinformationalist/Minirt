@@ -144,7 +144,10 @@ int	key_press_2layer(int keycode, t_trace *trace)
 	else
 		key_press_3(keycode, trace);
 	if (trace->menu_open)
+	{
 		update_no_low(trace->mlx_connect, trace->mlx_win, trace);
+		set_con_vals(trace->mlx_connect, trace->mlx_win, trace);
+	}
 	else
 		render(trace);
 	return (0);
@@ -177,9 +180,9 @@ void	set_knobs(t_img *img, t_control control, int k_width, t_on *on)
 	obj_col = get_obj_color2(on);
 	start = 22 - k_width / 2;
 
-	x_startr = start + (int)obj_col.r;
-	x_startg = start + (int)obj_col.g;
-	x_startb = start + (int)obj_col.b;
+	x_startr = start + ft_round(obj_col.r);
+	x_startg = start + ft_round(obj_col.g);
+	x_startb = start + ft_round(obj_col.b);
 	y_startr = start + 89;
 	y_startg = y_startr + 25;
 	y_startb = y_startg + 25;
@@ -307,7 +310,7 @@ int	key_press_2(int keycode, t_trace *trace)
 		translate_object(trace, trace->on, vec(0, 0, .5, 0), 1);
 	else if (keycode == O)
 		translate_object(trace, trace->on, vec(0, 0, -.5, 0), 1);
-	else if (keycode == 93)
+	else if (keycode == 93)//plus key
 	{
 		trace->sp_box = !trace->sp_box;
 		if (trace->sp_box)
@@ -366,6 +369,7 @@ int	key_press_2(int keycode, t_trace *trace)
 			set_rotknobs(trace, *trace->obj_control);
 		}
 		update_no_low(con, win, trace);
+		set_con_vals(con, win, trace);
 		return (0);
 	}
 	else

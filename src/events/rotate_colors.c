@@ -2,14 +2,15 @@
 
 static inline double	get_diff(t_norm_color c1, t_norm_color c2)
 {
-	double	diff_sqr;
+	/* double	diff_sqr;
 	double	diff_sqg;
 	double	diff_sqb;
 
 	diff_sqr = (c1.r - c2.r) * (c1.r - c2.r);
 	diff_sqg = (c1.g - c2.g) * (c1.g - c2.g);
 	diff_sqb = (c1.b - c2.b) * (c1.b - c2.b);
-	return (sqrt(diff_sqr + diff_sqg + diff_sqb));
+	return (sqrt(diff_sqr + diff_sqg + diff_sqb)); */
+	return(fabs(c1.r - c2.r) + fabs(c1.g - c2.g) + fabs(c1.b - c2.b));
 }
 
 static inline int	match_index(int num_colors, t_norm_color *colors, \
@@ -40,15 +41,15 @@ t_norm_color	get_obj_color(t_on *on)
 	if (on->type == LIGHT)
 		return (((t_light *)on->object)->color);
 	else if (on->type == SPHERE)
-		return (mult_color(1 / 255.0, ((t_sphere *)on->object)->color));
+		return (((t_sphere *)on->object)->color);
 	else if (on->type == PLANE)
-		return (mult_color(1 / 255.0, ((t_plane *)on->object)->color));
+		return (((t_plane *)on->object)->color);
 	else if (on->type == CYLINDER)
-		return (mult_color(1 / 255.0, ((t_cylinder *)on->object)->color));
+		return (((t_cylinder *)on->object)->color);
 	else if (on->type == CUBE)
-		return (mult_color(1 / 255.0, ((t_cube *)on->object)->color));
+		return (((t_cube *)on->object)->color);
 	else if (on->type == HYPERBOLOID)
-		return (mult_color(1 / 255.0, ((t_hyperboloid *)on->object)->color));
+		return (((t_hyperboloid *)on->object)->color);
 	else
 		return (color(0, 0, 0));
 }
@@ -62,18 +63,18 @@ void	set_obj_color(t_on *on, t_norm_color new_col)
 		lt = (t_light *)on->object;
 		lt->color = new_col;
 		if (lt->type == AREA)
-			lt->emitter->color = mult_color(255.0, new_col);
+			lt->emitter->color = new_col;
 	}
 	else if (on->type == SPHERE)
-		((t_sphere *)on->object)->color = mult_color(255.0, new_col);
+		((t_sphere *)on->object)->color = new_col;
 	else if (on->type == PLANE)
-		((t_plane *)on->object)->color = mult_color(255.0, new_col);
+		((t_plane *)on->object)->color = new_col;
 	else if (on->type == CYLINDER)
-		((t_cylinder *)on->object)->color = mult_color(255.0, new_col);
+		((t_cylinder *)on->object)->color = new_col;
 	else if (on->type == CUBE)
-		((t_cube *)on->object)->color = mult_color(255.0, new_col);
+		((t_cube *)on->object)->color = new_col;
 	else if (on->type == HYPERBOLOID)
-		((t_hyperboloid *)on->object)->color = mult_color(255.0, new_col);
+		((t_hyperboloid *)on->object)->color = new_col;
 	else
 		return ;
 }
@@ -85,7 +86,7 @@ void	rotate_colors(t_trace *trace, int button, t_norm_color *curr)
 	if (!trace->layer)
 	{
 		*curr = get_obj_color(trace->on);
-		if (get_diff(*curr, trace->w_colors[trace->color_i]) > .5)
+		if (get_diff(*curr, trace->w_colors[trace->color_i]) > .05)
 			trace->color_i = match_index(trace->num_colors, \
 			trace->w_colors, *curr);
 		if (button == 5)
@@ -98,7 +99,7 @@ void	rotate_colors(t_trace *trace, int button, t_norm_color *curr)
 	else
 	{
 		*curr = get_obj_color(trace->on);
-		if (get_diff(*curr, trace->m_colors[trace->color_i % 19]) > .5)
+		if (get_diff(*curr, trace->m_colors[trace->color_i % 19]) > .05)
 			trace->color_i = match_index(19, trace->m_colors, *curr);
 		if (button == 5)
 			trace->color_i = (trace->color_i + 1) % 19;

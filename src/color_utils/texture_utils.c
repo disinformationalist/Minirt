@@ -10,9 +10,9 @@ static inline t_norm_color	pixel_color_get1(int x, int y, t_img *img)
 
 	offset = y * img->line_len + (x * (img->bpp / 8));
 	pixcolor = *(unsigned int *)(img->pixels_ptr + offset);
-	pixel_color.r = (pixcolor >> 16) & 0xFF;
-	pixel_color.g = (pixcolor >> 8) & 0xFF;
-	pixel_color.b = pixcolor & 0xFF;
+	pixel_color.r = ((pixcolor >> 16) & 0xFF) / 255.0;
+	pixel_color.g = ((pixcolor >> 8) & 0xFF) / 255.0;
+	pixel_color.b = (pixcolor & 0xFF) / 255.0;
 	return (pixel_color);
 }
 

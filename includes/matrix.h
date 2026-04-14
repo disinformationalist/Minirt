@@ -2,6 +2,7 @@
 # define MATRIX_H
 
 #include <immintrin.h> // For AVX SIMD intrinsics
+#include "types.h"
 
 //using single dimension representation for opimization. column major order
 
@@ -23,16 +24,6 @@ typedef struct s_mat2
 	double	mat[4];
 }	t_mat2;
 
-typedef struct s_vec3
-{
-	double	x;
-	double	y;
-	double	z;
-	double	w;
-}	t_vec3;
-
-typedef t_vec3	t_point;
-typedef	t_vec3	t_quat;
 
 typedef struct s_rots
 {

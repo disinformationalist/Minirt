@@ -13,7 +13,6 @@
 # include <X11/keysym.h>
 # include "ansi_colors.h"
 # include "limits.h"
-# include <stdint.h>//uint8_t
 
 # include "matrix.h"
 # include "materials.h"
@@ -21,8 +20,31 @@
 # include <pthread.h>
 # include <png.h>
 
+# include "xoro128.h"
+# include "types.h"
+
+
+
 // (M_PI / 180.0)
 # define DEG_TO_RAD  0.01745329251
+
+//bvh efficiency test tool
+
+typedef struct s_bvh_stats
+{
+	long long	box_tests;
+	long long	box_hits;
+	long long	group_visits;
+	long long	prim_tests;
+	long long	shadow_box_tests;
+	long long	shadow_box_hits;
+	long long	shadow_group_visits;
+	long long	shadow_prim_tests;
+	long long	max_group_depth;
+	long long	shadow_max_group_depth;
+	long long 	camera_rays;
+	long long	shadow_rays;
+}	t_bvh_stats;
 
 typedef enum e_pix_flags
 {
@@ -40,13 +62,6 @@ typedef enum s_pixel_format
     RGBA       = PIX_COLOR | PIX_ALPHA           // 110
 } t_pixel_format;
 
-typedef struct s_norm_color
-{
-	double	r;
-	double	g;
-	double	b;
-}	t_norm_color;
-
 typedef struct s_vec2
 {
 	double	x;
@@ -55,8 +70,10 @@ typedef struct s_vec2
 
 typedef struct s_depths
 {
-	int	refl;
-	int	refr;
+	int		refl;
+	int		refr;
+	float	weight;
+
 }	t_depths;
 
 typedef struct s_position
@@ -119,21 +136,6 @@ typedef enum e_ltype
 
 /***UTILS***/
 
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*pixels_ptr;
-	int		bpp;
-	int		endian;
-	int		line_len;
-}	t_img;
-
-typedef struct s_color
-{
-	uint8_t	r;
-	uint8_t	g;
-	uint8_t	b;
-}	t_color;
 
 typedef struct s_on
 {
@@ -164,6 +166,9 @@ typedef struct s_intersects
 	int				count;
 	int				size;
 	t_track_hits	*closest;
+	t_bvh_stats		stats;//bvh_tracking
+	Xoro128			rng;//thread unique random state
+
 }	t_intersects;
 
 /***SINGLE OBJECTS***/
@@ -215,6 +220,7 @@ typedef enum e_csgop
 	t_shape	*left;
 	t_shape	*right;
 	t_csgop			op;
+	int			csg_id;
 }	t_csg; */
 
 //using ll for this
@@ -236,8 +242,8 @@ typedef struct s_shape
 	struct s_shape	*next;
 	struct s_shape	*prev;
 
-	/* bool			is_csg;//or just make *csg = NULL?
-	t_csg			*csg;  */
+	/* bool			is_csg;//or just make *csg = NULL?//NO MAKE type CSG, already using t_type for stuff like this
+	t_csg			*csg;  *///can re
 }	t_shape;
 
 

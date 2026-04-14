@@ -11,10 +11,12 @@ void	build_group(t_trace *trace)
 	if (trace->spheres)
 	{
 		curr_sp = trace->spheres;
+		if (curr_sp->is_box)
+			curr_sp = curr_sp->next;
 		while (true)
 		{
-			if (!curr_sp->is_box)
-				add_child(trace->bvh, curr_sp, SPHERE, curr_sp->transform, curr_sp->i_transform, NULL);
+			
+			add_child(trace->bvh, curr_sp, SPHERE, curr_sp->transform, curr_sp->i_transform, NULL);
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break ;
@@ -47,7 +49,8 @@ void	build_group(t_trace *trace)
 		curr_cu = trace->cubes;
 		while (true)
 		{
-			add_child(trace->bvh, curr_cu, CUBE, curr_cu->transform, curr_cu->i_transform, NULL);
+			if (!curr_cu->emitter || (curr_cu->show_emitter))
+				add_child(trace->bvh, curr_cu, CUBE, curr_cu->transform, curr_cu->i_transform, NULL);
 			curr_cu = curr_cu->next;
 			if (curr_cu == trace->cubes)
 				break ;
@@ -126,6 +129,37 @@ void	check_hierarchy(t_group *top, t_intersects *intersects, t_ray ray)
 			check_hierarchy((t_group *)curr, intersects, ray);
 		else
 			ray_obj_intersect(curr, ray, intersects);
+		curr = curr->next;
+		if (curr == top->shapes)
+			break ;
+	}
+}
+
+//bvh stat tracking version for testing bvh
+
+void	check_hierarchy_testing(t_group *top, t_intersects *intersects, t_ray ray)
+{
+	t_shape	*curr;
+
+	if (!top || !top->shapes)
+		return ;
+	intersects->stats.group_visits++;
+	intersects->stats.box_tests++;
+	if (top->depth > intersects->stats.max_group_depth)
+		intersects->stats.max_group_depth = top->depth;
+	if (!ray_box_intersect(top->box, top->tran, ray))
+		return ;
+	intersects->stats.box_hits++;
+	curr = top->shapes;
+	while (true)
+	{
+		if (curr->type == GROUP)
+			check_hierarchy_testing((t_group *)curr, intersects, ray);
+		else
+		{
+			intersects->stats.prim_tests++;
+			ray_obj_intersect(curr, ray, intersects);
+		}
 		curr = curr->next;
 		if (curr == top->shapes)
 			break ;

@@ -1,5 +1,4 @@
 #include "minirt.h"
-
 //random between -1 and 1
 //precomp hrmax?
 

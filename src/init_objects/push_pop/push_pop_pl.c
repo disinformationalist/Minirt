@@ -26,7 +26,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 
 	new->point = vec(0.0, -1.0, 0.0, 1.0);
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(175, 196, 221);
+	new->color = color(.686, .769, .867);
 	transform = translation(-new->point.x, -new->point.y, -new->point.z);
 	new->curr_rottran = transform;
 	new->transform = transform;
@@ -43,7 +43,7 @@ static inline void	make_default_pl(t_plane **start, t_plane *new)
 	new->w_frost = false;
 	new->sine = false;
 	new->option = 0;
-	new->pattern = uv_checker(2, 2, color(30, 30, 30), color(255, 255, 255));
+	new->pattern = uv_checker(2, 2, color(.18, .18, .18), color(1, 1, 1));
 	new->next = new;
 	new->prev = new;
 	new->texture = NULL;

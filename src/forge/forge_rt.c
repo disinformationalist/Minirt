@@ -93,6 +93,7 @@ ft_putstr_fd("#Material and option string usage key:\n\n\
 #P = bump enabled, 0 or 1 \n\
 #O = which option active(color, texture, checker)  0,1,2 \n\
 #F = frost 0 or 1 \n\n\
+#+ = used as a scene box(sphere only currently) places outside of hierarchy  \n\
 #W = wave(planes only) \n\
 #C = caps for cylinder and hyperboloid \n\
 #S = single or double for the hyperboid/cone 0 0r 1 \n\n\

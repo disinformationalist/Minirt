@@ -69,10 +69,12 @@ void	free_cu_list(t_cube **start)
 	while (curr != *start)
 	{
 		temp = curr->next;
-		free(curr);
+		if (!curr->emitter)
+			free(curr);
 		curr = temp;
 	}
-	free(curr);
+	if (!curr->emitter)
+		free(curr);
 	*start = NULL;
 }
 
@@ -153,9 +155,9 @@ void	free_all_objects(t_trace *trace)
 	free_sp_list(&trace->spheres);
 	free_pl_list(&trace->planes);
 	free_cy_list(&trace->cylinders);
-	free_lt_list(&trace->lights);
 	free_cu_list(&trace->cubes);
 	free_hy_list(&trace->hyperboloids);
+	free_lt_list(&trace->lights);
 	free_tx_list(trace->mlx_connect, &trace->textures);
 	if (trace->amb)
 		free(trace->amb);

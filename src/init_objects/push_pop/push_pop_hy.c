@@ -30,7 +30,7 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->waist3 = 1.0;
 	new->height = 2.0;
 	new->norm = vec(0.0, 1.0, 0.0, 0.0);
-	new->color = color(28, 114, 45);
+	new->color = color(.11, .447, .176);
 	transform = identity();
 	new->curr_scale = transform;
 	new->curr_rottran = transform;
@@ -48,8 +48,8 @@ static inline void	make_default_hy(t_hyperboloid **start, t_hyperboloid *new)
 	new->next = new;
 	new->prev = new;
 	new->waist_val = 1;
-	new->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
-	color(255, 255, 255));
+	new->pattern = uv_checker(18, 9 / M_PI, color(.15, .15, .15), \
+	color(1, 1, 1));
 	new->bump_level = DEFAULT_BUMP;
 	new->fuzz_lev = new->bump_level / 1000;
 	new->caps = true;

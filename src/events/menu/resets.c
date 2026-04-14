@@ -124,11 +124,5 @@ void	update_pos(t_trace *trace)
 		reset_postracks(img, cont);
 		set_posknobs(trace, *trace->obj_control);
 	}
-	if (!trace->stash)
-	{
-		trace->low_res = true;
-		render(trace);
-	}
-	else
-		mlx_put_image_to_window(con, win, trace->img.img_ptr, 0, 0);
+	update(con, win, trace);
 }

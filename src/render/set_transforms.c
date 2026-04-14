@@ -4,11 +4,13 @@ t_tx		*get_tx(char *i_name, t_tx *textures)
 {
 	
 	t_tx *curr_tx = NULL;
+	char *name = NULL;
+
 	if (textures)
 	{
 		if (!i_name)
 			return (textures);
-		char *name = ft_strjoin("textures/", i_name);
+		name = ft_strjoin("textures/", i_name);
 		curr_tx = textures;
 		while (true)
 		{
@@ -58,14 +60,17 @@ void	set_sp_transforms(t_trace *trace)
 			curr_sp->t_transform = transpose(curr_sp->transform);
 			curr_sp->i_transform = inverse(curr_sp->transform);
 
-			curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
-			color(255, 255, 255));
+			/* curr_sp->pattern = uv_checker(20, 10, color(40, 40, 40), \
+			color(255, 255, 255)); */
+			curr_sp->pattern = uv_checker(20, 10, color(.15, .15, .15), color(1, 1, 1));
+
 			curr_sp->texture = get_tx(curr_sp->i_name, trace->textures);
 			if (curr_sp->i_name)
 				free(curr_sp->i_name);
 
 			curr_sp->rots = vec(0, 0, 0, 0);
-			add_child(trace->bvh, curr_sp, SPHERE, curr_sp->transform, curr_sp->i_transform, NULL);
+			if (!curr_sp->is_box)
+				add_child(trace->bvh, curr_sp, SPHERE, curr_sp->transform, curr_sp->i_transform, NULL);
 			curr_sp = curr_sp->next;
 			if (curr_sp == trace->spheres)
 				break ;
@@ -96,8 +101,10 @@ void	set_curr_hy(t_trace *trace, t_hyperboloid *curr_hy)
 			curr_hy->curr_rottran);
 	curr_hy->i_transform = inverse(curr_hy->transform);
 	curr_hy->t_transform = transpose(curr_hy->transform);
-	curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
-	color(255, 255, 255));
+	/* curr_hy->pattern = uv_checker(18, 9 / M_PI, color(40, 40, 40), \
+	color(255, 255, 255)); */
+	curr_hy->pattern = uv_checker(18, 9 / M_PI, color(.15, .15, .15), \
+	color(1, 1, 1));
 	curr_hy->texture = get_tx(curr_hy->i_name, trace->textures);
 	if (curr_hy->i_name)
 		free(curr_hy->i_name);
@@ -130,9 +137,10 @@ void	set_cu_transforms2(t_trace *trace, t_cube *curr_cu)
 {
 	curr_cu->i_transform = inverse(curr_cu->transform);
 	curr_cu->t_transform = transpose(curr_cu->transform);
-	curr_cu->pattern = uv_checker(6, 6, color(30, 30, 30), \
-	color(255, 255, 255));
-	add_child(trace->bvh, curr_cu, CUBE, curr_cu->transform, curr_cu->i_transform, NULL);
+	curr_cu->pattern = uv_checker(6, 6, color(.118, .118, .118), \
+	color(1, 1, 1));
+	if (!curr_cu->emitter || (curr_cu->show_emitter))
+		add_child(trace->bvh, curr_cu, CUBE, curr_cu->transform, curr_cu->i_transform, NULL);
 }
 
 static inline void	build_cu_transforms(t_cube *curr_cu)

@@ -5,6 +5,7 @@
 # include "keyboard.h"
 # include <sys/time.h>
 # include "extras.h"
+
 //# define ASPECT (16.0 / 9.0)
 # define ASPECT 1.7778
 # define DEFAULT_BUMP 30
@@ -179,6 +180,7 @@ typedef struct s_cube
 	t_pattern		pattern;
 	int				option;
 	bool			emitter;
+	bool			show_emitter;
 	bool			sine;
 	bool			w_frost;
 	double			bright;
@@ -248,6 +250,10 @@ typedef struct s_trace
 {
 	t_group			*group;
 	t_group			*bvh;
+	t_mesh			*mesh;
+	t_bvh_stats		stats;
+	bool			bvh_testing;
+
 	t_box			*box;
 	int				total_ints;
 	t_depths		depths;
@@ -281,11 +287,7 @@ typedef struct s_trace
 	int				al_count;
 	int				height;
 	int				width;
-	double			pixel_width;
-	double			pixel_height;
-	t_point			pixel00;
-	t_vec3			pix_delta_down;
-	t_vec3			pix_delta_rht;
+	
 	bool			supersample;
 	double			n;
 	t_vec3			move_x;
@@ -318,7 +320,20 @@ typedef struct s_trace
 
 	bool			sp_box;
 	int				display;
+
+	t_norm_color 	*centers;//used in 2 pass adaptive super
+
+	double			pixel_width;
+	double			pixel_height;
+	t_point			pixel00;
+	t_vec3			pix_delta_down;
+	t_vec3			pix_delta_rht;
+
+	t_point			view_topleft;
+	t_vec3			move;
+	
 }	t_trace;
+
 
 //thread info
 
@@ -338,6 +353,7 @@ typedef struct s_piece
 	int				y_e2;
 
 	unsigned int	thread_color;
+
 }	t_piece;
 
 typedef struct t_comps
@@ -370,6 +386,11 @@ typedef struct t_comps
 	t_norm_color	color;
 	t_norm_color	refr_col;
 	t_norm_color	refl_col;
+
+	double			reflectance;//reflectance values for use in final coloring
+	double			transmittance;
+
+	float			weight;
 }	t_comps;
 
 /***PARSING***/
@@ -476,6 +497,9 @@ void			*ray_trace(void *arg);
 //super
 void			*ray_trace_s(void *arg);
 
+void			*ray_trace_centers(void *arg);
+
+
 //low resolution
 void			*ray_trace_l(void *arg);
 
@@ -573,9 +597,10 @@ void			check_arealts(t_light *lights, \
 int				set_al_vals(t_trace *trace, t_light *new, char **line);
 void			update_light_ids(t_light *light);
 
-// reflect, refract
 void			handle_light(t_trace *trace, t_comps *comps, \
-				t_norm_color *lt_color, t_light *curr_lt);
+				t_norm_color *lt_color, t_light *curr_lt, t_intersects *intersects);
+				
+// reflect, refract
 double			schlick(t_comps comps);
 void			set_indicies(t_intersects *intersects, double *n1, double *n2);
 t_norm_color	get_reflected(t_trace *trace, t_comps comps, \
@@ -812,6 +837,10 @@ int				decode_base64_no_pad_40(const char *in, uint8_t out[40]);
 void			base64_no_pad_40(const uint8_t in[40], char out[55]);
 void			write_bits(uint8_t *buf, int *bit_pos, uint32_t value, int bits);
 
+//todo: finish and move obj handling / triangle mesh
+t_mesh			*parse_obj(char *filename);
+
+
 
 /***TESTING***/
 void			print_all_objects(t_trace *trace);
@@ -829,4 +858,30 @@ void			set_thread_colors(t_trace *trace, t_piece piece[][trace->num_cols]);
 void			print_threads(t_trace *trace, t_piece piece[][trace->num_cols]);
 void			print_thread (t_piece piece);
 
+/*BVH TESTING */
+void			init_bvh_stats(t_bvh_stats *s);
+t_norm_color	color_plane_testing(t_trace *trace, t_ray r, \
+									t_intersects *intersects, t_depths depths);
+t_norm_color	color_cube_testing(t_trace *trace, t_ray r, \
+								   t_intersects *intersects, t_depths depths);
+t_norm_color	color_cylinder_testing(t_trace *trace, t_ray r, \
+									   t_intersects *intersects, \
+									   t_depths depths);
+t_norm_color	color_hyperboloid_testing(t_trace *trace, t_ray r, \
+										  t_intersects *intersects, \
+										  t_depths depths);
+t_norm_color	color_sphere_testing(t_trace *trace, t_ray r, \
+									 t_intersects *intersects, \
+									 t_depths depths);
+void			check_hierarchy_testing(t_group *top, \
+										t_intersects *intersects, t_ray ray);
+void			handle_light_testing(t_trace *trace, t_comps *comps, \
+									 t_norm_color *lt_color, t_light *curr_lt, \
+									 t_intersects *intersects);
+bool			obscured_b_testing(t_trace *trace, t_point lt_pos, \
+								   t_comps comps, t_intersects *intersects);
+bool			check_hier_dist_testing(t_group *top, double dist, t_ray ray, \
+								   t_intersects *intersects);
+
 #endif
+

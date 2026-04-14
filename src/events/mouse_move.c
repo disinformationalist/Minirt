@@ -34,9 +34,9 @@ void	set_color_chan(t_on *on, int chan, double new_col)
 	if (on->type == LIGHT)
 	{
 		lt = (t_light *)on->object;
-		if (chan == 0) lt->color.r= new_col / 255;
-		else if (chan == 1)lt->color.g= new_col / 255;
-		else if (chan == 2)lt->color.b= new_col / 255;
+		if (chan == 0) lt->color.r= new_col;
+		else if (chan == 1)lt->color.g= new_col;
+		else if (chan == 2)lt->color.b= new_col;
 
 		if (lt->type == AREA)
 		{
@@ -176,7 +176,7 @@ void	set_rknob(t_img *img, t_control control, t_on *on)
 	t_norm_color	obj_col;
 
 	obj_col = get_obj_color2(on);
-	x_startr = 14 + (int)obj_col.r;
+	x_startr = 14 + ft_round(obj_col.r);
 	y_startr = 103;
 	j = -1;
 	while (++j < 17)
@@ -201,7 +201,7 @@ void	set_gknob(t_img *img, t_control control, t_on *on)
 	t_norm_color	obj_col;
 
 	obj_col = get_obj_color2(on);
-	x_startr = 14 + (int)obj_col.g;
+	x_startr = 14 + ft_round(obj_col.g);
 	y_startr = 128;
 	j = -1;
 	while (++j < 17)
@@ -226,7 +226,7 @@ void	set_bknob(t_img *img, t_control control, t_on *on)
 	t_norm_color	obj_col;
 
 	obj_col = get_obj_color2(on);
-	x_startr = 14 + (int)obj_col.b;
+	x_startr = 14 + ft_round(obj_col.b);
 	y_startr = 153;
 	j = -1;
 	while (++j < 17)
@@ -862,12 +862,12 @@ int mouse_move(int x, int y, t_trace *trace)
 		if (knob >= 0 && knob < 3)
 		{
 			obj_col = get_obj_color2(trace->on);
-			if (knob == 0) current_knob_pos = 16 + (int)(obj_col.r);
-			else if (knob == 1) current_knob_pos = 16 + (int)(obj_col.g);
-			else if (knob == 2) current_knob_pos = 16 + (int)(obj_col.b);
+			if (knob == 0) current_knob_pos = 16 + ft_round(obj_col.r);
+			else if (knob == 1) current_knob_pos = 16 + ft_round(obj_col.g);
+			else if (knob == 2) current_knob_pos = 16 + ft_round(obj_col.b);
      		new_knob_pos= fmax(16, fmin(271, current_knob_pos + delta_x));
      		new_val = new_knob_pos - 16;
-			set_color_chan(trace->on, trace->knob, new_val);	
+			set_color_chan(trace->on, trace->knob, new_val / 255.0f);	
 			reset_track(&trace->img, *trace->obj_control, 103 + trace->knob * 25);
 			if (knob == 0) set_rknob(&trace->img, *trace->obj_control, trace->on);
 			else if (knob == 1) set_gknob(&trace->img, *trace->obj_control, trace->on);
@@ -1056,12 +1056,12 @@ int mouse_move(int x, int y, t_trace *trace)
 		if (knob >= 0 && knob < 3)
 		{
 			obj_col = get_obj_color2(trace->on);
-			if (knob == 0) current_knob_pos = 16 + (int)(obj_col.r);
-			else if (knob == 1) current_knob_pos = 16 + (int)(obj_col.g);
-			else if (knob == 2) current_knob_pos = 16 + (int)(obj_col.b);
+			if (knob == 0) current_knob_pos = 16 + ft_round(obj_col.r);
+			else if (knob == 1) current_knob_pos = 16 + ft_round(obj_col.g);
+			else if (knob == 2) current_knob_pos = 16 + ft_round(obj_col.b);
      		new_knob_pos= fmax(16, fmin(271, current_knob_pos + delta_x));
      		new_val = new_knob_pos - 16;
-			set_color_chan(trace->on, trace->knob, new_val);	
+			set_color_chan(trace->on, trace->knob, new_val / 255.0);	
 			reset_track(&trace->img, *trace->obj_control, 103 + trace->knob * 25);
 			if (knob == 0) set_rknob(&trace->img, *trace->obj_control, trace->on);
 			else if (knob == 1) set_gknob(&trace->img, *trace->obj_control, trace->on);

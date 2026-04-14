@@ -39,7 +39,7 @@ double	clamp(double val, double bot, double top)
 }
 
 /* combines color components, balances reflect and refract
-current in use, 0 - 255 object color, 0 - 1 light colors */
+current in use, 0 - 1 object color, 0 - 1 light colors */
 
 t_norm_color	get_final_color4(t_trace *trace, t_comps comps, \
 	t_norm_color lt_color)
@@ -55,8 +55,12 @@ t_norm_color	get_final_color4(t_trace *trace, t_comps comps, \
 	color_out.b = comps.color.b * (lt_color.b + m.amb * trace->amb->color.b);
 	if (m.ref > 0 && m.transp > 0)
 	{
-		r = schlick(comps) * m.ref;
-		r2 = (1.0 - r) * m.transp;
+		r = comps.reflectance * m.ref;
+		r2 = comps.transmittance * m.transp;
+		/* r = schlick(comps);
+		r2 = (1 - r) * m.transp;
+		r *= m.ref; */
+		//comps.transmittance = 1.0 - comps.reflectance;
 		color_out.r += r * comps.refl_col.r + r2 * comps.refr_col.r;
 		color_out.g += r * comps.refl_col.g + r2 * comps.refr_col.g;
 		color_out.b += r * comps.refl_col.b + r2 * comps.refr_col.b;

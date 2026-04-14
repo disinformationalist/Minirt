@@ -36,11 +36,11 @@ L           -0.502,7.002,-3.502                                   0.700         
 
 
 #SpLights:  Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity			      R | G | B       INNERANGLE   OUTERANGLE
-SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900                   0,89,255        15           22
+SL          0.000,4.000,0.000          0.000,-1.000,0.000         0.900                   0,89,255        15           22		  
 
 
-#ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells
-#AL          0.000,6.000,12.000          0.000,-1.000,0.000        0.65       4.5  4.5    255,255,255     4        4
+#ALights:   Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B    	  W_cells  L_cells  Show
+AL          0.000,6.000,12.000          0.000,-1.000,0.000        0.65       4.5  4.5     255,255,255     6        6        1
 
 
 #Spheres:   Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter      		  R | G | B		  Texture              			A   D   S   H    R   T  I    B   Q  P 

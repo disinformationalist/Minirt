@@ -155,7 +155,7 @@ double *min, double *max)
 
 	t_min_num = -(1 + origin);
 	t_max_num = (1 - origin);
-	if (fabs(dir) > 0)
+	if (fabs(dir) > 1e-9)
 	{
 		*min = t_min_num / dir;
 		*max = t_max_num / dir;
@@ -185,7 +185,7 @@ t_ray ray, double dist)
 	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
 	if (t_min > t_max)
 		return (false);
-	if ((t_min > 0 && t_min < dist) || (t_max > 0 && t_max < dist))
+	if ((t_min > 1e-6 && t_min < dist) || (t_max > 1e-6 && t_max < dist))
 		return (true);
 	return (false);
 }
@@ -242,7 +242,10 @@ bool	check_group_dist(t_group *group, double dist, t_ray ray)
 	while (true)
 	{
 		if (curr->type == GROUP)
+		{
 			check_group_dist((t_group *)curr, dist, ray);
+				return (true);
+		}
 		else if (ray_obj_dist(curr, ray, dist))
 			return (true);
 		curr = curr->next;
@@ -252,6 +255,62 @@ bool	check_group_dist(t_group *group, double dist, t_ray ray)
 	return (false);
 }
 
+
+//below two functions so we only check hierarchy boxes within the light dist.
+
+static inline void	check_axis_box(double origin, double dir,
+	double *min, double *max, t_vec2 cmm)
+{
+	double	t_min_num;
+	double	t_max_num;
+
+	t_min_num = cmm.x - origin;
+	t_max_num = cmm.y - origin;
+	if (fabs(dir) > 1e-9)
+	{
+		*min = t_min_num / dir;
+		*max = t_max_num / dir;
+	}
+	else
+	{
+		*min = t_min_num * INFINITY;
+		*max = t_max_num * INFINITY;
+	}
+	if (*min > *max)
+		ft_swap(min, max);
+}
+
+static inline bool	ray_box_intersect_dist(t_box *box, t_ray ray, double dist)
+{
+	t_vec3	mins;
+	t_vec3	maxs;
+	t_vec2	cmm;
+	double	t_min;
+	double	t_max;
+	double	eps;
+
+	eps = 1e-6;
+	cmm.x = box->min.x;
+	cmm.y = box->max.x;
+	check_axis_box(ray.origin.x, ray.dir.x, &mins.x, &maxs.x, cmm);
+	cmm.x = box->min.y;
+	cmm.y = box->max.y;
+	check_axis_box(ray.origin.y, ray.dir.y, &mins.y, &maxs.y, cmm);
+	cmm.x = box->min.z;
+	cmm.y = box->max.z;
+	check_axis_box(ray.origin.z, ray.dir.z, &mins.z, &maxs.z, cmm);
+	t_min = fmax(fmax(mins.x, mins.y), mins.z);
+	t_max = fmin(fmin(maxs.x, maxs.y), maxs.z);
+	if (t_min > t_max)
+		return (false);
+	if (t_max < eps)
+		return (false);
+	if (t_min >= dist)
+		return (false);
+	return (true);
+}
+
+
 //check_hierarchy() recursively shadow checks on a bvh.
 
 bool	check_hier_dist(t_group *top, double dist, t_ray ray)
@@ -260,7 +319,7 @@ bool	check_hier_dist(t_group *top, double dist, t_ray ray)
 
 	if (!top || !top->shapes)
 		return (false);
-	if (!ray_box_intersect(top->box, top->tran, ray))
+	if (!ray_box_intersect_dist (top->box, ray, dist))
 		return (false);
 	curr = top->shapes;
 	while (true)
@@ -272,6 +331,42 @@ bool	check_hier_dist(t_group *top, double dist, t_ray ray)
 		}
 		else if (ray_obj_dist(curr, ray, dist))
 			return (true);
+		curr = curr->next;
+		if (curr == top->shapes)
+			break ;
+	}
+	return (false);
+}
+
+//for checking bvh
+
+bool	check_hier_dist_testing(t_group *top, double dist, t_ray ray, t_intersects *intersects)
+{
+	t_shape	*curr;
+
+	if (!top || !top->shapes)
+		return (false);
+	intersects->stats.shadow_group_visits++;
+	intersects->stats.shadow_box_tests++;
+	if (top->depth > intersects->stats.shadow_max_group_depth)
+		intersects->stats.shadow_max_group_depth = top->depth;
+	if (!ray_box_intersect_dist(top->box, ray, dist))
+		return (false);
+	intersects->stats.shadow_box_hits++;
+	curr = top->shapes;
+	while (true)
+	{
+		if (curr->type == GROUP)
+		{
+			if (check_hier_dist_testing((t_group *)curr, dist, ray, intersects))
+				return (true);
+		}
+		else
+		{
+			intersects->stats.shadow_prim_tests++;
+			if (ray_obj_dist(curr, ray, dist))
+				return (true);
+		}
 		curr = curr->next;
 		if (curr == top->shapes)
 			break ;

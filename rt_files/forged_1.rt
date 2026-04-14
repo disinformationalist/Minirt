@@ -1,0 +1,68 @@
+#Material and option string usage key:
+
+#A D S H R T I B Q P O F (C S) Xf
+
+#A = ambient, 00–100 
+#D = diffuse, 00–100 
+#S = specular, 00–100 
+#H = shine, 000–1000 
+#R = reflective, 00–100 
+#T = transparent, 00–100 
+#I = refractive index, store (value - 1.0) * 100 → 000–400 
+#B = bump level, 000–100 
+#Q = object casts shadow, 0 or 1 
+#P = bump enabled, 0 or 1 
+#O = which option active(color, texture, checker)  0,1,2 
+#F = frost 0 or 1 
+
+#W = wave(planes only) 
+#C = caps for cylinder and hyperboloid 
+#S = single or double for the hyperboid/cone 0 0r 1 
+
+#Xf = used to store base64 packed transform matrices(rottran and scale, others are derived from these at runtime). 
+
+
+#Display:   Width       Height      
+D           1080        607  
+
+
+#Ambient:   Intensity 																      R | G | B
+A           0.300                                                                         255,255,255
+
+
+#Camera:    Cen_x | Cen_y | Cen_z      Ori_x | Ori_y | Ori_z      Up_x | Up_y | Up_z         FOV
+C           0.002,0.002,-6.002         0.000,0.000,1.000          0.000,1.000,0.000          70
+
+
+#Lights:    Cen_x | Cen_y | Cen_z 								  Intensity               R | G | B
+L           0.001,3.001,-3.001                                    0.750                   255,255,255
+
+
+#Spheres:   Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter      		  R | G | B		  Texture              	 A   D   S   H    R   T  I    B   Q  P O F +     Xf
+sp          -0.773,0.059,1.877         0.000,1.000,0.000          2.000                   255,0,0         sun.png                20  70  10  5    5   0  100  30  1  0 0 0 0    ejFD0JAehID0JAejFD0JAehID0JAejFD0VFehArzrrejFD0YoejFAA
+
+
+#Planes:    Pnt_x | Pnt_y | Pnt_z      Nrm_x | Nrm_y | Nrm_z                              R | G | B       Texture                A   D   S   H    R   T  I    B   Q  P O F W    Xf
+pl          0.000,-1.000,0.000         0.000,1.000,0.000                                  0,0,255           sun.png                80  90  90  200  0   0  100  30  1  0 2 0 0    ejFD0JAehID0JAejFD0JAehID0JAejFD0JAejFD0JAejFD0YoejFAA
+pl          0.000,1.500,5.500          0.000,0.000,-1.000                                 0,0,255           sun.png                80  90  90  200  0   0  100  30  1  0 2 0 0    ejFD0JAehID0JAehID0YoehIDz5YehID0JAer3jzxkejFD0YoejFAA
+
+
+#Cylinders: Cen_x | Cen_y | Cen_z      Nrm_x | Nrm_y | Nrm_z      Diameter   Height       R | G | B       Texture                A   D   S   H    R   T  I    B   Q  P O F C    Xf
+cy          -0.366,-0.050,-1.439       0.000,1.000,0.000          2.000      2.000        0,0,255           sun.png                2   5   90  200  30  80 152  30  0  0 0 0 1    ejFD0JAehID0JAejFD0JAehID0JAejFD0OuehOT0ffejFD0YoejFAA
+cy          3.246,-0.199,0.000         0.000,1.000,0.000          1.619      2.000        0,0,255           sun.png                80  90  90  200  0   0  100  30  0  0 0 0 1    ejFD0JAehID0JAejFD0JAehID0JAejFDzWSehg70JAejDj0YoejiYA
+
+
+#Textures:  Image                      Height Map
+tx          sun.png
+tx          earth4k.png                earth_bump4k.png
+tx          moon_rgb.png
+tx          buddha_2.png
+tx          soft.png
+tx          ice.png
+tx          chaos_17.png
+tx          stone.png
+tx          neb.png
+tx          carina.png
+tx          aluminum.png               aluminum_height.png
+
+

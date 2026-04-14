@@ -18,9 +18,9 @@ void	check_sp(char **line, char ***rt_file)
 	if (check_coordinates(line[1]))
 		free_exit(rt_file, "Error\n Invalid sphere coordinates\n", \
 	"sphere coordinates must be in the format x,y,z\n");
-	if (check_double(&diam_str, 0.001, 999.0))
+	if (check_double(&diam_str, 0.001, 1001.0))
 		free_exit(rt_file, "Error\n Invalid sphere diameter\n", \
-	"Sphere diameter must be between 0.001 and 999.0\n");
+	"Sphere diameter must be between 0.001 and 1001.0\n");
 	if (check_orientation(line[2]))
 		free_exit(rt_file, "Error\n Invalid Sphere orientation\n", \
 	"Spere orientation must be in the format x,y,z," \

@@ -140,13 +140,14 @@ static void	append_sp_material(t_sphere *sphere, char *line, int spaces)
 
 	snprintf(line + ft_strlen(line),
 		500 - ft_strlen(line),
-		"%*s%-4d%-4d%-4d%-5d%-4d%-3d%-5d%-4d%-3d%-2d%-2d%-6d",
+		"%*s%-4d%-4d%-4d%-5d%-4d%-3d%-5d%-4d%-3d%-2d%-2d%-2d%-4d",
 		spaces, "",
 		a, d, s, h, r, t, i, b,
 		sphere->shadow,
 		sphere->bump,
 		sphere->option,
-		sphere->w_frost);
+		sphere->w_frost,
+		sphere->is_box);
 
 	append_sp_transform(sphere, line);
 }
@@ -158,9 +159,9 @@ void	add_sp_color(t_sphere *sphere, char *line, int spaces2)
 	int	b;
 	int	spaces_3;
 
-	r = sphere->color.r;
-	g = sphere->color.g;
-	b = sphere->color.b;
+	r = ft_round(sphere->color.r * 255);
+	g = ft_round(sphere->color.g * 255);
+	b = ft_round(sphere->color.b * 255);
 	snprintf(line + ft_strlen(line), \
 		500 - ft_strlen(line), "%*s%d,%d,%d", \
 		spaces2, "", r, g, b);
@@ -211,7 +212,7 @@ void	write_spheres(t_sphere *spheres, int fd)
 		return ;
 	ft_putstr_fd("#Spheres:   Cen_x | Cen_y | Cen_z      "
 		"Nrm_x | Nrm_y | Nrm_z      "
-		"Diameter      		  R | G | B		  Texture              	 A   D   S   H    R   T  I    B   Q  P O F      Xf\n", fd);
+		"Diameter      		  R | G | B		  Texture              	 A   D   S   H    R   T  I    B   Q  P O F +    Xf\n", fd);
 	curr_sp = spheres;
 	while (true)
 	{

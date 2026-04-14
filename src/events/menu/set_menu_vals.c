@@ -5,17 +5,17 @@ t_norm_color	get_obj_color2(t_on *on)
 	if (on->object == NULL)
 		return (color(0, 0, 0));
 	if (on->type == LIGHT)
-		return (mult_color(255, (((t_light *)on->object)->color)));
+		return (mult_color(255, ((t_light *)on->object)->color));
 	else if (on->type == SPHERE)
-		return (((t_sphere *)on->object)->color);
+		return (mult_color(255, ((t_sphere *)on->object)->color));
 	else if (on->type == PLANE)
-		return (((t_plane *)on->object)->color);
+		return (mult_color(255,((t_plane *)on->object)->color));
 	else if (on->type == CYLINDER)
-		return (((t_cylinder *)on->object)->color);
+		return (mult_color(255,((t_cylinder *)on->object)->color));
 	else if (on->type == CUBE)
-		return (((t_cube *)on->object)->color);
+		return (mult_color(255,((t_cube *)on->object)->color));
 	else if (on->type == HYPERBOLOID)
-		return (((t_hyperboloid *)on->object)->color);
+		return (mult_color(255,((t_hyperboloid *)on->object)->color));
 	else
 		return (color(0, 0, 0));
 }

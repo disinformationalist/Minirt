@@ -110,7 +110,6 @@ void	translate_object(t_trace *trace, t_on *on, t_vec3 vec1, bool flag)
 	{
 		void	*con = trace->mlx_connect;
 		void	*win = trace->mlx_win;
-
 		update(con, win, trace);
 		set_con_vals(con, win, trace);
 	}

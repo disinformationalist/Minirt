@@ -28,7 +28,9 @@ void	forge_or_export(int keycode, t_trace *trace)
 			free(name);
 			close_win(trace);
 		}
-		ft_putstr_color_fd(1, "EXPORT COMPLETE\n", BOLD_BRIGHT_BLUE);
+		ft_putstr_color_fd(1, "EXPORT ", BOLD_BRIGHT_BLUE);
+		ft_putstr_color_fd(1, name, BOLD_BRIGHT_MAGENTA);
+		ft_putstr_color_fd(1, " COMPLETE\n ", BOLD_BRIGHT_BLUE);
 	}
 	free(name);
 }

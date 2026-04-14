@@ -37,7 +37,7 @@ void	set_lt_cube_transform(t_cube *cube)
 	cube->transform = (mat_mult(cube->curr_scale, cube->curr_rottran));
 }
 
-t_cube	*set_lt_cube(t_light *new, double wid, double len)
+t_cube	*set_lt_cube(t_light *new, double wid, double len, bool show)
 {
 	t_cube	*cube;
 
@@ -49,7 +49,7 @@ t_cube	*set_lt_cube(t_light *new, double wid, double len)
 	cube->h_width = wid / 2.0;
 	cube->h_height = 0.05;
 	cube->h_depth = len / 2.0;
-	cube->color = mult_color(new->brightness * 255.0, new->color);
+	cube->color = mult_color(new->brightness, new->color);
 	cube->bright = new->brightness;
 	cube->mat = get_mat(DEFAULT);
 	set_lt_cube_transform(cube);
@@ -57,7 +57,31 @@ t_cube	*set_lt_cube(t_light *new, double wid, double len)
 	cube->emitter = true;
 	cube->next = cube;
 	cube->prev = cube;
+	cube->show_emitter = show;
+
 	return (cube);
+}
+
+
+bool	set_al_in_cubes(t_cube **start, t_cube *new)
+{
+	t_cube	*last;
+
+	if (!new)
+		return (true);
+	if (*start == NULL)
+	{
+		*start = new;
+		new->id = 1;
+		return (false);
+	}
+	last = (*start)->prev;
+	new->id = last->id + 1;
+	new->next = *start;
+	(*start)->prev = new;
+	new->prev = last;
+	last->next = new;
+	return (false);
 }
 
 int	set_al_vals(t_trace *trace, t_light *new, char **line)
@@ -67,6 +91,7 @@ int	set_al_vals(t_trace *trace, t_light *new, char **line)
 	char	*len_str;
 	double	wid;
 	double	len;
+	bool	show;
 
 	wid_str = line[4];
 	len_str = line[5];
@@ -78,13 +103,21 @@ int	set_al_vals(t_trace *trace, t_light *new, char **line)
 	new->brightness = get_double(&bright_ratio);
 	new->center = get_coordinates(line[1], 1.0);
 	new->color = get_color(line[6], 255.0);
+	
+
 	new->usteps = ft_atoi(line[7]);
 	new->vsteps = ft_atoi(line[8]);
 	set_arealt_transform(new, wid, len);
 	set_arealt(new);
-	new->emitter = set_lt_cube(new, wid, len);
+
+	if (line[9])
+		show = ft_atoi(line[9]);
+	else
+		show = true;
+	new->emitter = set_lt_cube(new, wid, len, show);
 	if (!new->emitter)
 		return (1);
 	trace->total_ints += 2;
+	set_al_in_cubes(&trace->cubes, new->emitter);//add to the cubes list also for bvh
 	return (0);
 }

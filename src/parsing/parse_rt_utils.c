@@ -15,6 +15,7 @@ void	init_obs(t_trace *trace)
 	trace->cubes = NULL;
 	trace->textures = NULL;
 	trace->obj_control = NULL;
+	trace->mesh = NULL;
 }
 
 void	init_counts(t_obj_counts *counts)

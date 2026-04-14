@@ -37,8 +37,11 @@ void	set_pl_transforms(t_trace *trace)
 			set_pltrans(curr_pl);
 			curr_pl->norm = norm_vec(mat_vec_mult(curr_pl->t_transform, \
 			vec(0, 1, 0, 0)));
-			curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), \
-			color(255, 255, 255));
+			/* curr_pl->pattern = uv_checker(2, 2, color(30, 30, 30), \
+			color(255, 255, 255)); */
+			curr_pl->pattern = uv_checker(2, 2, color(.18, .18, .18), \
+			color(1, 1, 1));
+
 			curr_pl->texture = get_tx(curr_pl->i_name, trace->textures);
 			if (curr_pl->i_name)
 				free(curr_pl->i_name);
@@ -92,8 +95,10 @@ void	set_cy_transforms(t_trace *trace)
 		while (true)
 		{
 			set_cytrans(curr_cy);
-			curr_cy->pattern = uv_checker(12, 9 / M_PI, color(40, 40, 40), \
-			color(255, 255, 255)); //was uv_checker(18, 9 / M_PI
+			/* curr_cy->pattern = uv_checker(12, 9 / M_PI, color(40, 40, 40), \
+			color(255, 255, 255)); //was uv_checker(18, 9 / M_PI */
+			curr_cy->pattern = uv_checker(12, 9 / M_PI, color(.15, .15, .15), color(1, 1, 1));
+
 			curr_cy->texture = get_tx(curr_cy->i_name, trace->textures);
 
 		

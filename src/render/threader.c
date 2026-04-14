@@ -1,5 +1,10 @@
 #include "minirt.h"
 
+void	init_bvh_stats(t_bvh_stats *s)
+{
+	memset(s, 0, sizeof(*s));
+}
+
 void	thread_error(t_trace *trace, int i)
 {
 	while (--i >= 0)
@@ -41,16 +46,19 @@ t_intersects	*create_ints(int total)
 
 int	set_pieces_menu(t_trace *trace, t_piece piece[][trace->num_cols])
 {
-	int total_pix;
-	int ppt;
-	int small_len;
-	int small_height;
-	int short_sets;
-	int top_bridge_h;
-	int bot_bridge_h;
-	int i;
-	int h_left;
-	int heights;
+	int			total_pix;
+	int			ppt;
+	int			small_len;
+	int 		small_height;
+	int 		short_sets;
+	int 		top_bridge_h;
+	int 		bot_bridge_h;
+	int 		i;
+	int			h_left;
+	int 		heights;
+	uint64_t	glob_seed;
+	
+	glob_seed = 0xFABDECAF;
 
 	total_pix = trace->height * trace->width - 228000;
 	ppt = total_pix / trace->num_rows;
@@ -69,6 +77,9 @@ int	set_pieces_menu(t_trace *trace, t_piece piece[][trace->num_cols])
 		if (!piece[i][0].intersects)
 			return (1);	
 		piece[i][0].bridge = false;
+		if (trace->bvh_testing)
+			init_bvh_stats(&piece[i][0].intersects->stats);//bvh tracking
+		sxoro128(&piece[i][0].intersects->rng, glob_seed + i * 142857);	
 	}
 	top_bridge_h = 570 % small_height;
 	bot_bridge_h = (ppt - top_bridge_h * small_len) / trace->width;
@@ -88,6 +99,9 @@ int	set_pieces_menu(t_trace *trace, t_piece piece[][trace->num_cols])
 	if (!piece[i][0].intersects)
 		return (1);	
 	piece[i][0].bridge = true;
+	if (trace->bvh_testing)
+		init_bvh_stats(&piece[i][0].intersects->stats);//bvh tracking
+	sxoro128(&piece[i][0].intersects->rng, glob_seed + i * 142857);
 	h_left = trace->height - (short_sets * small_height + top_bridge_h + bot_bridge_h);
 	if (trace->num_rows - short_sets - 1 <= 0)
 		return (0);
@@ -109,6 +123,9 @@ int	set_pieces_menu(t_trace *trace, t_piece piece[][trace->num_cols])
 		if (!piece[i][0].intersects)
 			return (1);	
 		piece[i][0].bridge = false;
+		if (trace->bvh_testing)
+			init_bvh_stats(&piece[i][0].intersects->stats);//bvh tracking
+		sxoro128(&piece[i][0].intersects->rng, glob_seed + i * 142857);
 	}
 	return (0);
 }
@@ -117,6 +134,10 @@ int	set_pieces_menu(t_trace *trace, t_piece piece[][trace->num_cols])
 
 int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 {
+	uint64_t	glob_seed;
+	
+	glob_seed = 0xFABDECAF;
+	
 	piece[i][j].x_s = j * (trace->width / trace->num_cols);
 	if (j == trace->num_cols - 1)
 		piece[i][j].x_e = trace->width;
@@ -132,6 +153,9 @@ int	set_pieces(t_trace *trace, t_piece piece[][trace->num_cols], int i, int j)
 	if (!piece[i][j].intersects)
 		return (1);	
 	piece[i][j].bridge = false;
+	if (trace->bvh_testing)
+		init_bvh_stats(&piece[i][0].intersects->stats);//bvh tracking
+	sxoro128(&piece[i][0].intersects->rng, glob_seed + i * 142857);
 	return (0);
 }
 

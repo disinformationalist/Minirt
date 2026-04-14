@@ -25,7 +25,7 @@ void	add_lt_cells(t_light *light, char *line)
 	l_cells = light->vsteps;
 	spaces7 = 10 - count_chars(w_cells);
 	snprintf(line + ft_strlen(line), \
-		200 - ft_strlen(line), "%d%*s%d\n", w_cells, spaces7, "", l_cells);
+		200 - ft_strlen(line), "%d%*s%d%-2d\n", w_cells, spaces7, "", l_cells, light->emitter->show_emitter);
 }
 
 char	*build_alt_line(t_light *light)
@@ -73,7 +73,7 @@ int	count_alights(t_light *lights)
 	return (count);
 }
 
-//go through light list adding each light to the file.
+//go through light list adding each light to the file. //ADD show or not to write
 
 void	write_arealights(t_light *lights, int fd)
 {
@@ -84,7 +84,7 @@ void	write_arealights(t_light *lights, int fd)
 		return ;
 	ft_putstr_fd("#ALights:   Cen_x | Cen_y | Cen_z      "
 		"Ori_x | Ori_y | Ori_z      Intensity	 W_(x) L_(z)  R | G | B"
-		"    	  W_cells  L_cells\n", fd);
+		"    	  W_cells  L_cells  Show\n", fd);
 	curr_lt = lights;
 	while (true)
 	{
